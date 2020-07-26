@@ -50,8 +50,18 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/style-resources'],
+  modules: [
+    '@nuxtjs/style-resources',
+    '@nuxtjs/axios',
+    '@nuxtjs/auth'
+  ],
 
+  auth: {
+    // Options
+  // $auth.user & $auth.loggedIn kunt ge gebruiken hiermee
+
+  },
+  
   styleResources: {
     scss: ['~/assets/sass/global.scss'],
   },
