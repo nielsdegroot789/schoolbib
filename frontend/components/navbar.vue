@@ -6,7 +6,7 @@
     </div>
     <div class="floatRight">
       <div v-if="$auth.loggedIn">
-        <router-link class="navItemsFloatRight" text> logout</router-link>
+        <router-link class="navItems" text> logout</router-link>
 
         <!-- Username -->
         <!-- logout button -->
@@ -16,17 +16,18 @@
               {{ $auth.user.surname }} & {{ $auth.user.lastname }} -->
       </div>
       <div v-else>
-        <router-link class="navItemsFloatRight" text to="/signup"
-          >Login</router-link
-        >
-        <router-link class="navItemsFloatRight" text to="/signup"
-          >register</router-link
+        <router-link class="navItems" text to="/signup"
+          >Login/register</router-link
         >
 
         <!-- Login -->
         <!-- logout -->
       </div>
     </div>
+    <div v-if="currentUser.name">
+      {{ currentUser.name }}
+    </div>
+    <div v-else></div>
   </v-app-bar>
 </template>
 
@@ -39,17 +40,11 @@ export default {};
   display: flex;
   width: 100%;
   justify-content: space-between;
-}
-.navbar {
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #333;
-}
-
-[class*='navItems'] {
-  float: left;
+  background-color: rgb(131, 169, 74);
 }
 
 [class*='navItems'] {
@@ -58,12 +53,6 @@ export default {};
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-}
-
-[class*='navItems']s:hover {
-  background-color: #111;
-}
-.floatRight {
-  float: right;
+  float: left;
 }
 </style>
