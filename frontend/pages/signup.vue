@@ -1,6 +1,5 @@
 <template>
-  
-  <v-app>
+  <article>
     <navbar />
     <div class="container" :class="{ 'sign-up-active': signUp }">
       <div class="overlay-container">
@@ -24,8 +23,18 @@
       <form class="sign-up" action="#">
         <h2>Create login</h2>
         <div>Use your email for registration</div>
-        <input type="text" placeholder="Name" />
-        <input type="email" placeholder="Email" />
+        <input
+          v-model="user.name"
+          v-validate="'required'"
+          type="text"
+          placeholder="Name"
+        />
+        <input
+          v-model="user.email"
+          v-validate="'required'"
+          type="email"
+          placeholder="Email"
+        />
         <input type="password" placeholder="Password" />
         <button>Sign Up</button>
       </form>
@@ -33,18 +42,29 @@
         <h2>Sign In</h2>
         <div>Use your account</div>
         <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
+        <input
+          v-model="user.password"
+          v-validate="{ required: true, min: 6 }"
+          type="password"
+          name="password"
+          placeholder="Password"
+        />
         <a href="#">Forgot your password?</a>
         <button>Sign Up</button>
       </form>
     </div>
- <v-app>
+  </article>
 </template>
 
 <script>
 export default {
   data: () => {
     return {
+      user: {
+        name: '',
+        password: '',
+        email: '',
+      },
       signUp: false,
     };
   },
