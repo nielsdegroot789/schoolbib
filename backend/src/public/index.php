@@ -1,4 +1,9 @@
 <?php 
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: X-Requested-With");
+
+
 use Psr\Http\Message\ResponseInterface as Response;                                       
 use Psr\Http\Message\ServerRequestInterface as Request; 
 
@@ -27,11 +32,12 @@ $app = AppFactory::create();
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::createFromContainer($app));
 
-$app->map(['GET', 'POST'], '/login', \skoolBiep\Controller\UserController::class . ':login');
+// $app->map(['GET', 'POST'], '/login', \skoolBiep\Controller\UserController::class . ':login');
 
-$app->map(['GET', 'POST'], '/create', \skoolBiep\Controller\UserController::class . ':create');
+// $app->map(['GET', 'POST'], '/create', \skoolBiep\Controller\UserController::class . ':create');
+$app->get('/', \skoolBiep\Controller\BookMetaController::class . ':getAllBooks');
 
-
+  
 // $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
 //     $this->get('db');
 //     if ($request->getMethod() == 'GET') {

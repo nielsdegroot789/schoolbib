@@ -2,16 +2,23 @@
   <div class="container">
     <div class="travelContainer">
       <div class="elementContainer bold">
-        <span>name</span>
-        <span>description</span>
-        <span>destination</span>
-        <span>activities</span>
-        <span>travel by</span>
+        <span>title</span>
+        <span>isbn</span>
+        <span>publishDate</span>
         <span>rating</span>
-        <span>start date</span>
-        <span>end date</span>
+        <span>totalPages</span>
+        <span>sticker</span>
+        <span>language</span>
+        <span>readingLevel</span>
+        <span>authors</span>
+        <span>publishers</span>
+        <span>status</span>
+        <span>stock</span>
+        <span>authorsId</span>
+        <span>categories</span>
       </div>
-      <div v-for="(item, index) in filteredTravels" :key="index" class="elementContainer">
+
+      <div v-for="(item, index) in books" :key="index" class="elementContainer">
         <span>{{ item.title }}</span>
         <span>{{ item.isbn }}</span>
         <span>{{ item.publishDate }}</span>
@@ -30,21 +37,33 @@
 
         <!-- <router-link :to="{ path: '/edit/' + item.id }">
           <font-awesome-icon :icon="['fas', 'edit']" />
-        </router-link>-->
+        </router-link>
 
         <div @click="deleteItem(item.id)">
           <font-awesome-icon :icon="['fas', 'trash-alt']" />
-        </div>
+        </div> -->
       </div>
     </div>
-    <router-link to="/NewForm">
+    <!-- <router-link to="/NewForm">
       <font-awesome-icon class="addNewButton" :icon="['fas', 'plus-square']" />
-    </router-link>
+    </router-link> -->
   </div>
 </template>
 
 <script>
-export default {};
+import axios from 'axios';
+export default {
+  data() {
+    return {
+      books: ['test'],
+    };
+  },
+  mounted() {
+    axios
+      .get('http://localhost:8080/')
+      .then((response) => (this.books = response.data));
+  },
+};
 </script>
 
 <style>
@@ -77,5 +96,21 @@ export default {};
 
 .links {
   padding-top: 15px;
+}
+
+.travelContainer {
+  width: 100%;
+}
+
+.travelContainer > :nth-child(odd) {
+  background-color: lightgray;
+}
+
+.elementContainer {
+  display: grid;
+  grid-template-columns: repeat(14, calc(100% / 14));
+  justify-items: center;
+  align-items: center;
+  margin: 5px 0;
 }
 </style>
