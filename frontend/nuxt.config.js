@@ -25,6 +25,7 @@ export default {
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    
   },
   /*
    ** Global CSS
@@ -57,9 +58,15 @@ export default {
   ],
 
   auth: {
-    // Options
-  // $auth.user & $auth.loggedIn kunt ge gebruiken hiermee
-
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'login', method: 'post', propertyName: 'data.token' },
+          user: { url: 'me', method: 'get', propertyName: 'data' },
+          logout: false
+        }
+      }
+    }
   },
   
   styleResources: {

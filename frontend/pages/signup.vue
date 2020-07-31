@@ -1,57 +1,60 @@
 <template>
   <article>
     <navbar />
-    <div class="container" :class="{ 'sign-up-active': signUp }">
-      <div class="overlay-container">
-        <div class="overlay">
-          <div class="overlay-left">
-            <h2>Welcome Back!</h2>
-            <p>Please login with your personal info</p>
-            <button id="signIn" class="invert" @click="signUp = !signUp">
-              Sign In
-            </button>
-          </div>
-          <div class="overlay-right">
-            <h2>Hello, Friend!</h2>
-            <p>Please enter your personal details</p>
-            <button id="signUp" class="invert" @click="signUp = !signUp">
-              Sign Up
-            </button>
+    <div id="signForm">
+      <div class="container" :class="{ 'sign-up-active': signUp }">
+        <div class="overlay-container">
+          <div class="overlay">
+            <div class="overlay-left">
+              <h2>Welcome Back!</h2>
+              <p>Please login with your personal info</p>
+              <button id="signIn" class="invert" @click="signUp = !signUp">
+                Sign In
+              </button>
+            </div>
+            <div class="overlay-right">
+              <h2>Hello, Friend!</h2>
+              <p>Please enter your personal details</p>
+              <button id="signUp" class="invert" @click="signUp = !signUp">
+                Sign Up
+              </button>
+            </div>
           </div>
         </div>
+        <form class="sign-up" action="#">
+          <h2>Create login</h2>
+          <div>Use your email for registration</div>
+          <input
+            v-model="user.name"
+            v-validate="'required'"
+            type="text"
+            placeholder="Name"
+          />
+          <input
+            v-model="user.email"
+            v-validate="'required'"
+            type="email"
+            placeholder="Email"
+          />
+          <input type="password" placeholder="Password" />
+          <button>Sign Up</button>
+        </form>
+        <form class="sign-in" action="#">
+          <h2>Sign In</h2>
+          <div>Use your account</div>
+          <input type="name" placeholder="Name" />
+
+          <input
+            v-model="user.password"
+            v-validate="{ required: true, min: 6 }"
+            type="password"
+            name="password"
+            placeholder="Password"
+          />
+          <a href="#">Forgot your password?</a>
+          <button>Sign Up</button>
+        </form>
       </div>
-      <form class="sign-up" action="#">
-        <h2>Create login</h2>
-        <div>Use your email for registration</div>
-        <input
-          v-model="user.name"
-          v-validate="'required'"
-          type="text"
-          placeholder="Name"
-        />
-        <input
-          v-model="user.email"
-          v-validate="'required'"
-          type="email"
-          placeholder="Email"
-        />
-        <input type="password" placeholder="Password" />
-        <button>Sign Up</button>
-      </form>
-      <form class="sign-in" action="#">
-        <h2>Sign In</h2>
-        <div>Use your account</div>
-        <input type="email" placeholder="Email" />
-        <input
-          v-model="user.password"
-          v-validate="{ required: true, min: 6 }"
-          type="password"
-          name="password"
-          placeholder="Password"
-        />
-        <a href="#">Forgot your password?</a>
-        <button>Sign Up</button>
-      </form>
     </div>
   </article>
 </template>
@@ -60,18 +63,38 @@
 export default {
   data: () => {
     return {
+      signUp: false,
       user: {
-        name: '',
         password: '',
+        name: '',
         email: '',
       },
-      signUp: false,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#signForm {
+  font-family: Tahoma;
+  font-size: 1rem;
+  color: rgb(0, 0, 0);
+  background-color: #a0a2a2;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .container {
   position: relative;
   width: 768px;
@@ -80,7 +103,6 @@ export default {
   overflow: hidden;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2);
   background: linear-gradient(to bottom, #efefef, #ccc);
-  margin: 100px auto;
 
   .overlay-container {
     position: absolute;
@@ -92,6 +114,7 @@ export default {
     transition: transform 0.5s ease-in-out;
     z-index: 100;
   }
+
   .overlay {
     position: relative;
     left: -100%;
@@ -102,6 +125,7 @@ export default {
     transform: translateX(0);
     transition: transform 0.5s ease-in-out;
   }
+
   @mixin overlays($property) {
     position: absolute;
     top: 0;
@@ -116,26 +140,32 @@ export default {
     transform: translateX($property);
     transition: transform 0.5s ease-in-out;
   }
+
   .overlay-left {
     @include overlays(-20%);
   }
+
   .overlay-right {
     @include overlays(0);
     right: 0;
   }
 }
+
 h2 {
   margin: 0;
 }
+
 p {
   margin: 20px 0 30px;
 }
+
 a {
   color: #222;
   text-decoration: none;
   margin: 15px 0;
   font-size: 1rem;
 }
+
 button {
   border-radius: 20px;
   border: 1px solid #009345;
@@ -148,17 +178,21 @@ button {
   text-transform: uppercase;
   cursor: pointer;
   transition: transform 0.1s ease-in;
+
   &:active {
     transform: scale(0.9);
   }
+
   &:focus {
     outline: none;
   }
 }
+
 button.invert {
   background-color: transparent;
   border-color: #fff;
 }
+
 form {
   position: absolute;
   top: 0;
@@ -172,9 +206,11 @@ form {
   text-align: center;
   background: linear-gradient(to bottom, #efefef, #ccc);
   transition: all 0.5s ease-in-out;
+
   div {
     font-size: 1rem;
   }
+
   input {
     background-color: #eee;
     border: none;
@@ -186,44 +222,54 @@ form {
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4), 0 -1px 1px #fff,
       0 1px 0 #fff;
     overflow: hidden;
+
     &:focus {
       outline: none;
       background-color: #fff;
     }
   }
 }
+
 .sign-in {
   left: 0;
   z-index: 2;
 }
+
 .sign-up {
   left: 0;
   z-index: 1;
   opacity: 0;
 }
+
 .sign-up-active {
   .sign-in {
     transform: translateX(100%);
   }
+
   .sign-up {
     transform: translateX(100%);
     opacity: 1;
     z-index: 5;
     animation: show 0.5s;
   }
+
   .overlay-container {
     transform: translateX(-100%);
   }
+
   .overlay {
     transform: translateX(50%);
   }
+
   .overlay-left {
     transform: translateX(0);
   }
+
   .overlay-right {
     transform: translateX(20%);
   }
 }
+
 @keyframes show {
   0% {
     opacity: 0;
@@ -236,6 +282,35 @@ form {
   50% {
     opacity: 1;
     z-index: 10;
+  }
+}
+
+/* Youtube Link */
+#yt_link {
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: -200px;
+  display: block;
+  width: 160px;
+  text-align: center;
+  color: red;
+  font-size: 15px;
+  text-decoration: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  padding: 10px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 2px;
+  animation: showYtLink 1.5s ease 3s forwards;
+}
+
+@keyframes showYtLink {
+  0% {
+    bottom: -200px;
+  }
+  100% {
+    bottom: 20px;
   }
 }
 </style>
