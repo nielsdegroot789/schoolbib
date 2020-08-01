@@ -12,15 +12,12 @@
         <span>readingLevel</span>
         <span>authors</span>
         <span>publishers</span>
-        <span>status</span>
-        <span>stock</span>
-        <span>authorsId</span>
         <span>categories</span>
       </div>
 
       <div v-for="(item, index) in books" :key="index" class="elementContainer">
         <span>{{ item.title }}</span>
-        <span>{{ item.isbn }}</span>
+        <span>{{ item.isbnCode }}</span>
         <span>{{ item.publishDate }}</span>
         <span>{{ item.rating }}</span>
         <span>{{ item.totalPages }}</span>
@@ -30,9 +27,6 @@
         <span>{{ item.readingLevel }}</span>
         <span>{{ item.authors }}</span>
         <span>{{ item.publishers }}</span>
-        <span>{{ item.status }}</span>
-        <span>{{ item.stock }}</span>
-        <span>{{ item.authorsId }}</span>
         <span>{{ item.categories }}</span>
 
         <!-- <router-link :to="{ path: '/edit/' + item.id }">
@@ -41,12 +35,12 @@
 
         <div @click="deleteItem(item.id)">
           <font-awesome-icon :icon="['fas', 'trash-alt']" />
-        </div> -->
+        </div>-->
       </div>
     </div>
     <!-- <router-link to="/NewForm">
       <font-awesome-icon class="addNewButton" :icon="['fas', 'plus-square']" />
-    </router-link> -->
+    </router-link>-->
   </div>
 </template>
 
@@ -108,7 +102,7 @@ export default {
 
 .elementContainer {
   display: grid;
-  grid-template-columns: repeat(14, calc(100% / 14));
+  grid-template-columns: repeat(11, calc(100% / 11));
   justify-items: center;
   align-items: center;
   margin: 5px 0;

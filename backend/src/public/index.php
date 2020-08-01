@@ -1,6 +1,6 @@
 <?php 
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: *"); //Hier enkel calls van frontend maken
 header("Access-Control-Allow-Headers: X-Requested-With");
 
 

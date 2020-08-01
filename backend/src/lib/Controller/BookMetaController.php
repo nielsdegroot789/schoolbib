@@ -39,8 +39,10 @@ class BookMetaController
         // }
         // return $response;
 
-        $data = array(array('title' => 'Rob', 'isbn' => 586383840, 'publishDate' => '20/41/8477', 'rating' => 4, 'totalPages'=>500, 'sticker'=>'idk', 'language'=>'nl', 'readingLevel' => 'easy', 'authors' => 'autheur' , 'publishers' => 'publisher', 'status' => 'ok', 'stock' => 2, 'authorsId' => 1, 'categories' => 'comedy' ),
-        array('title' => 'titirtrt', 'isbn' => 8646546, 'publishDate' => '2/1/1495', 'rating' => 2, 'totalPages'=>4100, 'sticker'=>'idk', 'language'=>'en', 'readingLevel' => 'hard', 'authors' => 'autheur2' , 'publishers' => 'publisher2', 'status' => 'ok', 'stock' => 0, 'authorsId' => 5, 'categories' => 'fiction' ));
+        $db = new DB();
+        $data = $db->getBooksMeta();
+        // $data = array(array('title' => 'Rob', 'isbn' => 586383840, 'publishDate' => '20/41/8477', 'rating' => 4, 'totalPages'=>500, 'sticker'=>'idk', 'language'=>'nl', 'readingLevel' => 'easy', 'authors' => 'autheur' , 'publishers' => 'publisher', 'status' => 'ok', 'stock' => 2, 'authorsId' => 1, 'categories' => 'comedy' ),
+        // array('title' => 'titirtrt', 'isbn' => 8646546, 'publishDate' => '2/1/1495', 'rating' => 2, 'totalPages'=>4100, 'sticker'=>'idk', 'language'=>'en', 'readingLevel' => 'hard', 'authors' => 'autheur2' , 'publishers' => 'publisher2', 'status' => 'ok', 'stock' => 0, 'authorsId' => 5, 'categories' => 'fiction' ));
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
