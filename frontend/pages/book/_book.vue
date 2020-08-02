@@ -45,17 +45,21 @@
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   data() {
-    return {
-      books: ['test'],
-    };
+    return {};
+  },
+  computed: {
+    books() {
+      return this.$store.state.books;
+    },
   },
   mounted() {
-    axios
-      .get('http://localhost:8080/')
-      .then((response) => (this.books = response.data));
+    //   axios
+    //     .get('http://localhost:8080/')
+    //     .then((response) => (this.books = response.data));
+    // },
+    this.$store.dispatch('getBooks');
   },
 };
 </script>
