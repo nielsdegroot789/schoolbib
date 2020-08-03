@@ -2,7 +2,7 @@
   <nav class="navbar is-light">
     <div class="container">
       <div class="navbar-brand">
-        <nuxt-link class="navbar-item" to="/">Nuxt Auth</nuxt-link>
+        <nuxt-link class="navbar-item" to="/">Library</nuxt-link>
         <button class="button navbar-burger">
           <span></span>
           <span></span>
@@ -35,7 +35,7 @@
 export default {};
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .navbar {
   display: flex;
   width: 100%;

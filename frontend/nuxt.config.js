@@ -24,7 +24,7 @@ export default {
         content: process.env.npm_package_description || '',
       },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css' }],
     
   },
   /*
@@ -61,10 +61,14 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: 'login', method: 'post', propertyName: 'data.token' },
-          user: { url: 'me', method: 'get', propertyName: 'data' },
-          logout: false
-        }
+          login: { url: '/students', method: 'post', propertyName: 'token' },
+          logout: { url: '/auth/logout', method: 'post' },
+          user: { url: '/students/user', method: 'get', propertyName: 'user' }
+        },
+        // tokenRequired: true,
+        tokenType: 'bearer',
+        // globalToken: true,
+        // autoFetchUser: true
       }
     }
   },
@@ -76,6 +80,10 @@ export default {
    ** Build configuration
    ** See https://nuxtjs.org/api/configuration-build/
    */
+  axios:{
+    baseURL:'http://localhost:3000/api'
+
+  },
   build: {
     extend(config, ctx) {
       config.module.rules.push({
