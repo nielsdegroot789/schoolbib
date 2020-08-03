@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <div class="travelContainer">
-      <div class="elementContainer bold">
+    <div>
+      <div class="headerContainer bold">
         <span>title</span>
         <span>isbn</span>
         <span>publishDate</span>
@@ -15,32 +15,23 @@
         <span>categories</span>
       </div>
 
-      <div v-for="(item, index) in books" :key="index" class="elementContainer">
-        <span>{{ item.title }}</span>
-        <span>{{ item.isbnCode }}</span>
-        <span>{{ item.publishDate }}</span>
-        <span>{{ item.rating }}</span>
-        <span>{{ item.totalPages }}</span>
-        <span>{{ item.sticker }}</span>
-        <!-- //cover? -->
-        <span>{{ item.language }}</span>
-        <span>{{ item.readingLevel }}</span>
-        <span>{{ item.authors }}</span>
-        <span>{{ item.publishers }}</span>
-        <span>{{ item.categories }}</span>
-
-        <!-- <router-link :to="{ path: '/edit/' + item.id }">
-          <font-awesome-icon :icon="['fas', 'edit']" />
-        </router-link>
-
-        <div @click="deleteItem(item.id)">
-          <font-awesome-icon :icon="['fas', 'trash-alt']" />
-        </div>-->
+      <div v-for="(item, index) in books" :key="index" class="booksContainer">
+        <nuxt-link :to="/book/ + item.id">
+          <span>{{ item.title }}</span>
+          <span>{{ item.isbnCode }}</span>
+          <span>{{ item.publishDate }}</span>
+          <span>{{ item.rating }}</span>
+          <span>{{ item.totalPages }}</span>
+          <span>{{ item.sticker }}</span>
+          <!-- //cover? -->
+          <span>{{ item.language }}</span>
+          <span>{{ item.readingLevel }}</span>
+          <span>{{ item.authors }}</span>
+          <span>{{ item.publishers }}</span>
+          <span>{{ item.categories }}</span>
+        </nuxt-link>
       </div>
     </div>
-    <!-- <router-link to="/NewForm">
-      <font-awesome-icon class="addNewButton" :icon="['fas', 'plus-square']" />
-    </router-link>-->
   </div>
 </template>
 
@@ -104,7 +95,16 @@ export default {
   background-color: lightgray;
 }
 
-.elementContainer {
+.headerContainer {
+  display: grid;
+  grid-template-columns: repeat(11, calc(100% / 11));
+  justify-items: center;
+  align-items: center;
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.booksContainer a {
   display: grid;
   grid-template-columns: repeat(11, calc(100% / 11));
   justify-items: center;
