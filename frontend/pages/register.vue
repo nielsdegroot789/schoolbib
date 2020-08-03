@@ -1,6 +1,5 @@
 <template>
   <div>
-    <navbar />
     <section class="section">
       <div class="container">
         <div class="columns">
@@ -89,16 +88,24 @@ export default {
   mounted() {},
 
   methods: {
-    registerIt() {
-      axios.post('/register', this.register).then((response) => {
-        console.log(response);
+    // registerIt() {
+    //   axios.post('/register', this.register).then((response) => {
+    //     console.log(response);
 
-        const token = response.data.user.api_token;
+    //     const token = response.data.user.api_token;
 
-        localStorage.setItem('token', token);
+    //     localStorage.setItem('token', token);
 
-        this.$router.push('/');
-      });
+    //     this.$router.push('/');
+    //   });
+    // },
+    async registerUser(registrationInfo) {
+      const user = await this.$store.dispatch('registerUser', registrationInfo);
+      if (user.error) {
+        alert(user.error);
+      } else {
+        alert('Welcme to our app, ' + user.name);
+      }
     },
   },
 };

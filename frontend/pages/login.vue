@@ -1,7 +1,5 @@
 <template>
   <div>
-    <navbar />
-
     <section class="section">
       <div class="container">
         <div class="columns">

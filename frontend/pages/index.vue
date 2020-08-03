@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <navbar />
     <v-content>
       <nuxt />
     </v-content>

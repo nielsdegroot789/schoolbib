@@ -54,7 +54,7 @@ export default {
   modules: [
     '@nuxtjs/style-resources',
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
   ],
 
   auth: {
