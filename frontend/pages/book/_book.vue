@@ -1,44 +1,13 @@
 <template>
-  <div class="container">
-    <div>
-      <div class="headerContainer bold">
-        <span>title</span>
-        <span>isbn</span>
-        <span>publishDate</span>
-        <span>rating</span>
-        <span>totalPages</span>
-        <span>sticker</span>
-        <span>language</span>
-        <span>readingLevel</span>
-        <span>authors</span>
-        <span>publishers</span>
-        <span>categories</span>
-      </div>
-
-      <div v-for="(item, index) in books" :key="index" class="booksContainer">
-        <nuxt-link :to="/book/ + item.id">
-          <span>{{ item.title }}</span>
-          <span>{{ item.isbnCode }}</span>
-          <span>{{ item.publishDate }}</span>
-          <span>{{ item.rating }}</span>
-          <span>{{ item.totalPages }}</span>
-          <span>{{ item.sticker }}</span>
-          <!-- //cover? -->
-          <span>{{ item.language }}</span>
-          <span>{{ item.readingLevel }}</span>
-          <span>{{ item.authors }}</span>
-          <span>{{ item.publishers }}</span>
-          <span>{{ item.categories }}</span>
-        </nuxt-link>
-      </div>
-    </div>
-  </div>
+  <div class="container">this is specific for book {{ bookId }}</div>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      bookId: 0,
+    };
   },
   computed: {
     books() {
@@ -46,11 +15,7 @@ export default {
     },
   },
   mounted() {
-    //   axios
-    //     .get('http://localhost:8080/')
-    //     .then((response) => (this.books = response.data));
-    // },
-    this.$store.dispatch('getBooks');
+    this.bookId = this.$route.params.book;
   },
 };
 </script>
@@ -85,30 +50,5 @@ export default {
 
 .links {
   padding-top: 15px;
-}
-
-.travelContainer {
-  width: 100%;
-}
-
-.travelContainer > :nth-child(odd) {
-  background-color: lightgray;
-}
-
-.headerContainer {
-  display: grid;
-  grid-template-columns: repeat(11, calc(100% / 11));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
-  font-weight: bold;
-}
-
-.booksContainer a {
-  display: grid;
-  grid-template-columns: repeat(11, calc(100% / 11));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
 }
 </style>

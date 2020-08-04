@@ -3,7 +3,6 @@
 header("Access-Control-Allow-Origin: *"); //Hier enkel calls van frontend maken
 header("Access-Control-Allow-Headers: X-Requested-With");
 
-
 use Psr\Http\Message\ResponseInterface as Response;                                       
 use Psr\Http\Message\ServerRequestInterface as Request; 
 
@@ -35,7 +34,9 @@ $app->add(TwigMiddleware::createFromContainer($app));
 // $app->map(['GET', 'POST'], '/login', \skoolBiep\Controller\UserController::class . ':login');
 
 // $app->map(['GET', 'POST'], '/create', \skoolBiep\Controller\UserController::class . ':create');
-$app->get('/', \skoolBiep\Controller\BookMetaController::class . ':getAllBooks');
+$app->get('/getMetaBooks', \skoolBiep\Controller\BookController::class . ':getMetaBooks');
+
+$app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
 
   
 // $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
