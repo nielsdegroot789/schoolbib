@@ -18,15 +18,5 @@
 </template>
 
 <script>
-import axios from 'axios';
-
-export default {
-  mounted() {
-    const token = localStorage.getItem('token');
-    console.log(token);
-    axios
-      .get('/profile?api_token=' + token)
-      .then((response) => console.log(response));
-  },
-};
+export default {};
 </script>
