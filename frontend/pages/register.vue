@@ -6,9 +6,9 @@
           <div class="column is-4 is-offset-4">
             <h2 class="title has-text-centered">Register!</h2>
 
-            <Notification v-if="error" :message="error" />
+            <!-- <Notification v-if="error" :message="error" /> -->
 
-            <form method="post" @submit.prevent="register">
+            <form method="post">
               <div class="field">
                 <label class="label">Username</label>
                 <div class="control">
@@ -48,7 +48,13 @@
                 </div>
               </div>
               <div class="control">
+                <<<<<<< HEAD
                 <button type="submit" @click="registerIt">Register</button>
+                =======
+                <button type="submit" class="button is-dark is-fullwidth">
+                  Register
+                </button>
+                >>>>>>> master
               </div>
             </form>
 
@@ -66,12 +72,7 @@
 <style lang="scss"></style>
 
 <script>
-// import Notification from '..Notification';
-
-// import axios from 'axios';
 export default {
-  components: {},
-
   data() {
     return {
       register: {
@@ -79,33 +80,7 @@ export default {
         email: '',
         password: '',
       },
-      error: 'false',
-      // so no console warnings
     };
-  },
-
-  mounted() {},
-
-  methods: {
-    // registerIt() {
-    //   axios.post('/register', this.register).then((response) => {
-    //     console.log(response);
-
-    //     const token = response.data.user.api_token;
-
-    //     localStorage.setItem('token', token);
-
-    //     this.$router.push('/');
-    //   });
-    // },
-    async registerUser(registrationInfo) {
-      const user = await this.$store.dispatch('registerUser', registrationInfo);
-      if (user.error) {
-        alert(user.error);
-      } else {
-        alert('Welcme to our app, ' + user.name);
-      }
-    },
   },
 };
 </script>

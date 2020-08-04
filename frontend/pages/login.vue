@@ -6,9 +6,9 @@
           <div class="column is-4 is-offset-4">
             <h2 class="title has-text-centered">Welcome back!</h2>
 
-            <Notification v-if="error" :message="error" />
+            <!-- <Notification v-if="error" :message="error" /> -->
 
-            <form @submit="login">
+            <form>
               <div class="field">
                 <label class="label">Name</label>
                 <div class="control">
@@ -48,36 +48,12 @@
 <style lang="scss"></style>
 
 <script>
-// import Notification from '~/components/Notification';
-
 export default {
-  components: {},
-
   data() {
     return {
-      valid: false,
-      showPassword: false,
-      hasName: false,
-      userInfo: {
-        name: 'benno',
-        password: 'benno',
-      },
       name: '',
       password: '',
     };
-  },
-
-  methods: {
-    async login() {
-      try {
-        const response = await this.$auth.loginWith('local', {
-          data: this.login,
-        });
-        console.log(response);
-      } catch (err) {
-        console.log(err);
-      }
-    },
   },
 };
 </script>
