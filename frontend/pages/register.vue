@@ -48,13 +48,10 @@
                 </div>
               </div>
               <div class="control">
-                <<<<<<< HEAD
                 <button type="submit" @click="registerIt">Register</button>
-                =======
                 <button type="submit" class="button is-dark is-fullwidth">
                   Register
                 </button>
-                >>>>>>> master
               </div>
             </form>
 
