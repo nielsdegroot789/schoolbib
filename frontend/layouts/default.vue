@@ -1,55 +1,59 @@
 <template>
   <div>
+    <nav class="navbar is-light">
+      <div class="container">
+        <div class="navbar-brand">
+          <nuxt-link class="navbar-item" to="/">Library</nuxt-link>
+          <button class="button navbar-burger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+        <div class="navbar-menu">
+          <div class="navbar-end">
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link">
+                My Account
+              </a>
+              <div class="navbar-dropdown">
+                <nuxt-link class="navbar-item" to="/profile"> </nuxt-link>
+                <hr class="navbar-divider" />
+                <a class="navbar-item">Logout</a>
+              </div>
+            </div>
+            <nuxt-link class="navbar-item" to="/register">Register</nuxt-link>
+            <nuxt-link class="navbar-item" to="/login">Log In</nuxt-link>
+          </div>
+        </div>
+      </div>
+    </nav>
     <Nuxt />
   </div>
 </template>
 
-<style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
+<script>
+export default {};
+</script>
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+<style lang="scss">
+.navbar {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  list-style-type: none;
   margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: rgb(224, 224, 224);
 }
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
+[class*='navItems'] {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
   text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+  float: left;
 }
 </style>

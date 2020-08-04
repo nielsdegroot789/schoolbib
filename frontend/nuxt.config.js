@@ -24,7 +24,8 @@ export default {
         content: process.env.npm_package_description || '',
       },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css' }],
+    
   },
   /*
    ** Global CSS
@@ -50,8 +51,28 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/style-resources'],
+  modules: [
+    '@nuxtjs/style-resources',
+    '@nuxtjs/axios',
+    '@nuxtjs/auth',
+  ],
 
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/students', method: 'post', propertyName: 'token' },
+          logout: { url: '/auth/logout', method: 'post' },
+          user: { url: '/students/user', method: 'get', propertyName: 'user' }
+        },
+        // tokenRequired: true,
+        tokenType: 'bearer',
+        // globalToken: true,
+        // autoFetchUser: true
+      }
+    }
+  },
+  
   styleResources: {
     scss: ['~/assets/sass/global.scss'],
   },
@@ -59,5 +80,21 @@ export default {
    ** Build configuration
    ** See https://nuxtjs.org/api/configuration-build/
    */
-  build: {},
+  axios:{
+    baseURL:'http://localhost:3000/api'
+
+  },
+  build: {
+    extend(config, ctx) {
+      config.module.rules.push({
+        enforce: "pre",
+        test: /\.(js|vue)$/,
+        loader: "eslint-loader",
+        exclude: /(node_modules)/,
+        options: {
+          fix: true
+        }
+      })
+    }
+  },
 }
