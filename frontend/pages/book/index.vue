@@ -16,7 +16,11 @@
         <span>categories</span>
       </div>
 
-      <div v-for="(item, index) in books" :key="index" class="booksContainer">
+      <div
+        v-for="(item, index) in bookMeta"
+        :key="index"
+        class="booksContainer"
+      >
         <nuxt-link :to="/book/ + item.id">
           <span>{{ item.title }}</span>
           <span>{{ item.isbnCode }}</span>
@@ -42,12 +46,13 @@ export default {
     return {};
   },
   computed: {
-    books() {
-      return this.$store.state.metaBooks;
+    bookMeta() {
+      return this.$store.state.bookMeta;
     },
   },
   mounted() {
-    this.$store.dispatch('getMetaBooks');
+    this.$store.dispatch('getBookMeta');
+    this.$store.dispatch('getBooks');
   },
 };
 </script>

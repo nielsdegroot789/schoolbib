@@ -21,11 +21,11 @@ class BookController
         $this->container = $container;
     }
 
-    public function getMetaBooks(Request $request, Response $response, array $args)
+    public function getBookMeta(Request $request, Response $response, array $args)
     {
         $this->response = $response;
         $db = new DB();
-        $data = $db->getBooksMeta();
+        $data = $db->getBookMeta();
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);

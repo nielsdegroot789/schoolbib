@@ -34,7 +34,7 @@ $app->add(TwigMiddleware::createFromContainer($app));
 // $app->map(['GET', 'POST'], '/login', \skoolBiep\Controller\UserController::class . ':login');
 
 // $app->map(['GET', 'POST'], '/create', \skoolBiep\Controller\UserController::class . ':create');
-$app->get('/getMetaBooks', \skoolBiep\Controller\BookController::class . ':getMetaBooks');
+$app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
 
 $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
 

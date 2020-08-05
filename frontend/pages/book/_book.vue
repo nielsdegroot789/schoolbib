@@ -1,7 +1,8 @@
 <template>
   <div>
-    this is specific for book {{ bookId }}
-    {{ books[0] }}
+    <p>this is specific for book {{ bookId }}</p>
+    <p>{{ bookMeta }}</p>
+    <p>{{ books }}</p>
   </div>
 </template>
 
@@ -14,10 +15,15 @@ export default {
     };
   },
   computed: {
+    bookMeta() {
+      return this.$store.getters.getBookMetaById(
+        parseInt(this.$route.params.book),
+      );
+    },
     books() {
-      return this.$store.state.metaBooks.filter((obj) => {
-        return (obj.id = this.bookId);
-      });
+      return this.$store.getters.getBooksByBookMetaId(
+        parseInt(this.$route.params.book),
+      );
     },
   },
   mounted() {

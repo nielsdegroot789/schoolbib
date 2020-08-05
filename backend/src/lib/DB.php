@@ -16,7 +16,7 @@ class DB extends \SQLite3
         return $this->tableName;
     }
 
-    function getBooksMeta(){
+    function getBookMeta(){
         $sql = "		
         select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel, 
 		authors.name as authors, publishers.name as publishers,  group_concat(categories.name, ', ') as categories from bookMeta
