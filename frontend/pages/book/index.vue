@@ -1,15 +1,16 @@
 <template>
-  <div class="container">
+  <div class="setup">
+    <h1 class="crudHeader crudTitle">Manage Books</h1>
     <div>
       <div class="headerContainer bold">
         <span>title</span>
         <span>isbn</span>
-        <span>publishDate</span>
+        <span>publish Date</span>
         <span>rating</span>
-        <span>totalPages</span>
+        <span>total Pages</span>
         <span>sticker</span>
         <span>language</span>
-        <span>readingLevel</span>
+        <span>reading Level</span>
         <span>authors</span>
         <span>publishers</span>
         <span>categories</span>
@@ -46,41 +47,26 @@ export default {
     },
   },
   mounted() {
-    //   axios
-    //     .get('http://localhost:8080/')
-    //     .then((response) => (this.books = response.data));
-    // },
     this.$store.dispatch('getMetaBooks');
   },
 };
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
+.crudTitle {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   display: block;
   font-weight: 300;
-  font-size: 100px;
+  font-size: 35px;
   color: #35495e;
   letter-spacing: 1px;
 }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
+.setup {
+  margin: 0 10%;
+  box-sizing: border-box;
+  height: 100%;
 }
 
 .links {

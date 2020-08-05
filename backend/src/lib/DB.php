@@ -17,12 +17,14 @@ class DB extends \SQLite3
     }
 
     function getBooksMeta(){
-        $sql = "select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel, authors.name as authors, publishers.name as publishers,  group_concat(categories.name) as categories from bookMeta
-        join authors on authors.id = bookMeta.authorsId
-        join publishers on publishers.id = bookMeta.publishersId
-        join categoriesInBooks on categoriesInBooks.bookMetaId = bookMeta.id 
-        join categories on categories.id = categoriesInBooks.categoriesId
-        group by bookMeta.id";
+        $sql = "		
+        select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel, 
+		authors.name as authors, publishers.name as publishers,  group_concat(categories.name, ', ') as categories from bookMeta
+		join authors on authors.id = bookMeta.authorsId
+		join publishers on publishers.id = bookMeta.publishersId
+        join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
+		join categories on categories.id = categoriesInBooks.categoriesId
+		GROUP by bookMeta.id";
         $res = $this->query($sql);
 
         $data = array();
