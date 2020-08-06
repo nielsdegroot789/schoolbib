@@ -1,13 +1,26 @@
 <template>
-  <v-app>
-    <v-content>
-      <nuxt />
-    </v-content>
-  </v-app>
+  <div>
+    <searchBar />
+    <introContainer />
+    <Carousel />
+    <Footer />
+  </div>
 </template>
 
 <script>
+import searchBar from '../components/SearchBar';
+import Footer from '../components/Footer';
+import Carousel from '../components/Carousel';
+import introContainer from '../components/IntroText';
+
 export default {
+  components: {
+    searchBar,
+    Footer,
+    Carousel,
+    introContainer,
+  },
+
   data: () => {
     return {};
   },
@@ -25,9 +38,5 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-}
-body {
-  padding: 0;
-  margin: 0;
 }
 </style>
