@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="container">
       <div class="inner-wrapper">
-        <input type="text" class="search" placeholder="Search for books" />
+        <input type="text" class="search" placeholder="Enter your search" />
         <button class="searchButton">Search</button>
       </div>
     </div>
