@@ -1,7 +1,7 @@
 <template>
   <div class="introContainer">
-    <div class="notifications"></div>
-    <div class="introText">Direct aan de slag</div>
+    <div class="notifications"><h3>Notifications</h3></div>
+    <div class="introText"><h2>Let's get started</h2></div>
   </div>
 </template>
 
