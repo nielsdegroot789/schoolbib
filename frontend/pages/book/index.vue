@@ -50,10 +50,6 @@ export default {
       return this.$store.state.bookMeta;
     },
   },
-  mounted() {
-    this.$store.dispatch('getBookMeta');
-    this.$store.dispatch('getBooks');
-  },
 };
 </script>
 

@@ -23,7 +23,6 @@ const createStore = () => {
         return state.bookMeta.filter((bookMeta) => bookMeta.id === id);
       },
       getBooksByBookMetaId: (state) => (id) => {
-        console.log(state.books);
         return state.books.filter((books) => books.bookMetaId === id);
       },
     },
