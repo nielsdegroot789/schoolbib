@@ -1,6 +1,7 @@
 <template>
   <div>
     <searchBar />
+    <frontNotification />
     <introContainer />
     <Carousel />
     <Footer />
@@ -12,6 +13,7 @@ import searchBar from '../components/SearchBar';
 import Footer from '../components/Footer';
 import Carousel from '../components/Carousel';
 import introContainer from '../components/IntroText';
+import frontNotification from '../components/frontNotification';
 
 export default {
   components: {
@@ -19,6 +21,7 @@ export default {
     Footer,
     Carousel,
     introContainer,
+    frontNotification,
   },
 
   data: () => {

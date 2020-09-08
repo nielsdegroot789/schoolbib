@@ -10,8 +10,6 @@
     <div class="carousel-book"></div>
     <div class="carousel-book"></div>
     <div class="carousel-book"></div>
-    <div class="carousel-book"></div>
-    <div class="carousel-book"></div>
     <button class="carousel-button">
       <font-awesome-icon :icon="['fas', 'angle-right']" />
     </button>

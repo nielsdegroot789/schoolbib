@@ -1,7 +1,6 @@
 <template>
-  <div class="introContainer">
-    <div class="notifications"><h3>Notifications</h3></div>
-    <div class="introText"><h2>Let's get started</h2></div>
+  <div class="intro-text-container">
+    <div class="intro-text"><h2>Let's get started</h2></div>
   </div>
 </template>
 
