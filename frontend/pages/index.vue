@@ -3,6 +3,7 @@
     <searchBar />
     <frontNotification />
     <introContainer />
+    <quickLinks />
     <Carousel />
     <Footer />
   </div>
@@ -14,6 +15,7 @@ import Footer from '../components/Footer';
 import Carousel from '../components/Carousel';
 import introContainer from '../components/IntroText';
 import frontNotification from '../components/frontNotification';
+import quickLinks from '../components/quickLinks';
 
 export default {
   components: {
@@ -22,6 +24,7 @@ export default {
     Carousel,
     introContainer,
     frontNotification,
+    quickLinks,
   },
 
   data: () => {
