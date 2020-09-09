@@ -2,13 +2,13 @@
   <div class="quick-links-container">
     <ul>
       <li>
-        <a href="" class="quick-link">Verleng uitleentermijn</a>
+        <a href="" class="quick-link">Extend loan period</a>
       </li>
       <li>
-        <a href="" class="quick-link">Openingsuren opzoeken</a>
+        <a href="" class="quick-link">Opening hours</a>
       </li>
       <li>
-        <a href="" class="quick-link">Mijn bibliotheek</a>
+        <a href="" class="quick-link">My library</a>
       </li>
     </ul>
   </div>
