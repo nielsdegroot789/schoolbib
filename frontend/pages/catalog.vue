@@ -1,5 +1,5 @@
 <template>
-  <div v-if="bookMeta">
+  <div v-if="bookMeta" class="body">
     <div>
       <img :src="bookMeta.image" />
     </div>
@@ -7,7 +7,7 @@
       <h1>title : {{ bookMeta.title }}</h1>
       <h3>rating :{{ bookMeta.rating }}</h3>
 
-      <button @click="addToCart()">Add to Cart</button>
+      <button @click="Reserve()">Reserve</button>
 
       <p>{{ bookMeta.description }}</p>
     </div>
@@ -15,23 +15,23 @@
 </template>
 
 <script>
-var application = new Vue({
-  el: '#catalogus',
-  data: {
-    allData: '',
+export default {
+  data() {
+    return {};
   },
-  methods: {
-    fetchAllData() {
-      axios
-        .get('BookController.php', {
-          action: 'fetchall',
-        })
-        .then(function (response) {
-          application.allData = response.data;
-        });
+  computed: {
+    bookMeta() {
+      return this.$store.state.bookMeta;
     },
   },
-});
+  method: {
+    reserve($id) {},
+  },
+};
 </script>
 
-<style></style>
+<style protected>
+.body {
+  margin: 50px;
+}
+</style>
