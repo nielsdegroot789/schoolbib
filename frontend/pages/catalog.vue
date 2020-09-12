@@ -3,7 +3,7 @@
     <div>
       <img :src="bookMeta.image" />
     </div>
-    <div class="col-8">
+    <div>
       <h1>title : {{ bookMeta.title }}</h1>
       <h3>rating :{{ bookMeta.rating }}</h3>
 
@@ -15,19 +15,23 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-export default {
-  components: {},
-  computed: {
-    ...mapState('bookMeta', ['bookMeta']),
-  },
-  mounted() {
-    this.getbookMeta();
+var application = new Vue({
+  el: '#catalogus',
+  data: {
+    allData: '',
   },
   methods: {
-    ...mapActions('bookMeta', ['getbookMeta']),
+    fetchAllData() {
+      axios
+        .get('BookController.php', {
+          action: 'fetchall',
+        })
+        .then(function (response) {
+          application.allData = response.data;
+        });
+    },
   },
-};
+});
 </script>
 
 <style></style>

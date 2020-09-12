@@ -1,6 +1,6 @@
 <?php
 
-namespace skoolBiep\Controller;
+namespace skoolBiep\Controller; 
 
 use skoolBiep\DB;
 use skoolBiep\Form;
@@ -8,6 +8,13 @@ use skoolBiep\Entity\BookMeta;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+
+$Reactie = json_decode(file_get_contents(
+    "php://input"
+));
+
+$data = array();
+
 
 
 class BookController
@@ -67,3 +74,5 @@ class BookController
         return $this->id;
     }
 }
+
+
