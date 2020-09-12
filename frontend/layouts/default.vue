@@ -12,6 +12,7 @@
         </div>
         <div class="navbar-menu">
           <div class="navbar-end">
+            <nuxt-link class="navbar-item" to="/catalog">catalog</nuxt-link>
             <div class="navbar-item has-dropdown is-hoverable">
               <a class="navbar-link">My Account</a>
               <div class="navbar-dropdown">

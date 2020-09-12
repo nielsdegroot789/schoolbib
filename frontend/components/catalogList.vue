@@ -1,34 +1,27 @@
 <template>
-  <div v-if="bookMeta" id="myapp">
-    <img :src="bookMeta.sticker" alt="" />
-    <td>{{ bookMeta.title }}</td>
-    <td>{{ bookMeta.rating }}</td>
+  <div class="d-flex align-items-stretch flex-wrap">
+    <catalog-card v-for="bookMeta in bookMeta" :key="bookMeta.id" :bookMeta="bookMeta" />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
-import ProductCard from "./ProductCard";
 export default {
   components: {
-    ProductCard
   },
-  computed: {
-    ...mapState("bookMeta", ["bookMeta"])
-  },
+  // computed: {
+  //   ...mapState("books", ["bookMeta"])
+  // },
   mounted() {
     this.getbookMeta();
   },
-  methods: {
-    ...mapActions("books", ["bookMeta"])
-  }
+  // methods: {
+  //   ...mapActions("bookMeta", ["bookMeta"])
+  // }
 };
 </script>
 
 
 
 <style>
-
-
-
 </style>
