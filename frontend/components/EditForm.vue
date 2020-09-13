@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BookForm v-if="ready" :bookData="bookData" />
+    <BookForm v-if="ready" :book-data="bookData" />
   </div>
 </template>
 
@@ -9,8 +9,29 @@ import BookForm from '../components/BookForm.vue';
 export default {
   name: 'EditForm',
   components: { BookForm },
+  data() {
+    return {
+      ready: false,
+      bookData: {},
+    };
+  },
+  computed: {
+    bookMeta() {
+      return this.$store.getters.getBookMetaById(
+        parseInt(this.$route.params.book),
+      );
+    },
+    books() {
+      return this.$store.getters.getBooksByBookMetaId(
+        parseInt(this.$route.params.book),
+      );
+    },
+  },
   created() {
-    //todo this needs to be remade with actual backend
+    // check if book is already fetched
+    this.bookData = this.bookMeta;
+
+    // todo this needs to be remade with actual backend
     // this.$root.directusClient
     //   .getItems('travel', {
     //     filter: {
@@ -38,12 +59,6 @@ export default {
     //       });
     //     }.bind(this),
     //   );
-  },
-  data() {
-    return {
-      ready: false,
-      travelData: {},
-    };
   },
   methods: {},
 };

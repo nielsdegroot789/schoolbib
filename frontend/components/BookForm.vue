@@ -1,7 +1,13 @@
 <template>
-  <FormulateForm :values="bookData" @submit="saveEvent">
+  <!-- @submit="saveBook" -->
+  <FormulateForm :values="bookData">
     <FormulateInput v-if="bookData.id" type="hidden" name="id" />
-    <FormulateInput label="title" type="text" name="title" validation="required|max:200" />
+    <FormulateInput
+      label="title"
+      type="text"
+      name="title"
+      validation="required|max:200"
+    />
     <FormulateInput label="isbn" type="text" name="isbn" />
     <FormulateInput label="publish Date" type="date" name="publishDate" />
     <FormulateInput label="rating" type="text" name="rating" />
@@ -23,15 +29,16 @@ export default {
   props: {
     bookData: {
       type: Object,
-      default: function () {
+      default() {
         return {};
       },
     },
   },
-  data() {},
+  data() {
+    return {};
+  },
   methods: {},
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

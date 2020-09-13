@@ -11,7 +11,7 @@ export default {
   data() {
     return {
       bookId: 0,
-      bookData: [],
+      bookData: {},
     };
   },
   computed: {
@@ -28,6 +28,9 @@ export default {
   },
   mounted() {
     this.bookId = this.$route.params.book;
+  },
+  created() {
+    console.log(this.bookMeta);
   },
   methods: {},
 };
