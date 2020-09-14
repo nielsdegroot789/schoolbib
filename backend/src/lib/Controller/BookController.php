@@ -45,25 +45,33 @@ class BookController
             ->withHeader('Content-Type', 'application/json');
     }
 
-    function saveBook()
+    public function saveBook(Request $request, Response $response, array $args)
     {
-        $title = $_POST["title"];
-        $isbn = $_POST["isbn"];
-        $publishDate = $_POST["publishDate"];
-        $rating = $_POST["rating"];
-        $totalPages = $_POST["totalPages"];
-        $sticker = $_POST["sticker"];
-        $language = $_POST["language"];
-        $authors = $_POST["authors"];
-        $readingLevel = $_POST["readingLevel"];
-        $publishers = $_POST["publishers"];
-        $categories = $_POST["categories"];
-        if($_POST['id']){
-            //update
+        //https://stackoverflow.com/questions/49070403/how-to-retrieve-variables-in-php-sent-by-axios-post-request/49070841
+        $data = json_decode(file_get_contents("php://input"), TRUE);
+        $this->response = $response;
+
+        $db = new DB();
+
+        $title = $data["title"];
+        $isbn = $data["isbn"];
+        // $publishDate = $data["publishDate"];
+        $rating = $data["rating"];
+        $totalPages = $data["totalPages"];
+        $sticker = $data["sticker"];
+        $language = $data["language"];
+        $readingLevel = $data["readingLevel"];
+        if($data['id']){
+            $id = $data['id'];
+            $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $id );
         }
         else {
-            //create
+            $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel );
         }
+        // $authors = $_POST["authors"];
+        // $publishers = $_POST["publishers"];
+        // $categories = $_POST["categories"];
+        return $response;
     }
 
     function setUserName($user)

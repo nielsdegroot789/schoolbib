@@ -40,18 +40,9 @@ const createStore = () => {
           .then((response) => context.commit('getBooks', response.data));
       },
       saveBook(context, payload) {
-        const axiosConfig = {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'X-Requested-With',
-          },
-        };
-
-        axios
-          .post('http://localhost:8080/saveBook', payload, axiosConfig)
-          .catch((error) => {
-            console.log(error);
-          });
+        axios.post('http://localhost:8080/saveBook', payload).catch((error) => {
+          console.log(error);
+        });
 
         // .then((response) => context.commit('getBooks', response.data));
       },

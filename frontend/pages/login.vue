@@ -32,7 +32,7 @@
                 </button>
               </div>
             </form>
-            <div class="has-text-centered" style="margin-top: 20px;">
+            <div class="has-text-centered" style="margin-top: 20px">
               <p>
                 Don't have an account?
                 <nuxt-link to="/register">Register</nuxt-link>
