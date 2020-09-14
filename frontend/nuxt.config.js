@@ -35,12 +35,15 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['~/assets/sass/main.scss'],
+  css: [
+    '~/assets/sass/main.scss',
+    '@fortawesome/fontawesome-svg-core/styles.css',
+  ],
   /*
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
    */
-  plugins: ['~/plugins/vue-formulate'],
+  plugins: ['~/plugins/vue-formulate', '~/plugins/fontawesome.js'],
   /*
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components
