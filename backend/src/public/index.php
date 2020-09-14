@@ -15,8 +15,8 @@ use skoolBiep\User;
  
 require __DIR__ . '/../vendor/autoload.php'; 
 
-$container = new Container();
-AppFactory::setContainer($container);
+$container = new Container;
+AppFactory::setContainer($container->build());
 
 $container->set('db', function () {
   return new DB();

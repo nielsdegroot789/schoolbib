@@ -3,4 +3,6 @@ export default {
   books: [],
   users: [],
   currentUser: {},
+  cartBookMeta: [],
+  currentbookMeta: {},
 };

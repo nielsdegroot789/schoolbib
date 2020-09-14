@@ -12,11 +12,14 @@ export default {
       .then((response) => context.commit('getBooks', response.data));
   },
 
-  addItem(context, id) {
-    context.commit('ADD_Item', id);
+  addBookMeta(context, id) {
+    context.commit('ADD_bookMeta', id);
   },
 
-  removeItem(context, index) {
-    context.commit('REMOVE_Item', index);
+  removeBookMeta(context, index) {
+    context.commit('REMOVE_bookMeta', index);
+  },
+  currentProduct: (context, bookMeta) => {
+    context.commit('CURRENT_bookMeta', bookMeta);
   },
 };
