@@ -55,11 +55,6 @@ const createStore = () => {
 
         // .then((response) => context.commit('getBooks', response.data));
       },
-      createBook(context) {
-        // axios
-        //   .get('http://localhost:8080/getBooks')
-        //   .then((response) => context.commit('getBooks', response.data));
-      },
     },
   });
 };

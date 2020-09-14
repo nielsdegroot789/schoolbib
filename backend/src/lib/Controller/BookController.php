@@ -47,8 +47,23 @@ class BookController
 
     function saveBook()
     {
-
-       $i = 1;
+        $title = $_POST["title"];
+        $isbn = $_POST["isbn"];
+        $publishDate = $_POST["publishDate"];
+        $rating = $_POST["rating"];
+        $totalPages = $_POST["totalPages"];
+        $sticker = $_POST["sticker"];
+        $language = $_POST["language"];
+        $authors = $_POST["authors"];
+        $readingLevel = $_POST["readingLevel"];
+        $publishers = $_POST["publishers"];
+        $categories = $_POST["categories"];
+        if($_POST['id']){
+            //update
+        }
+        else {
+            //create
+        }
     }
 
     function setUserName($user)
