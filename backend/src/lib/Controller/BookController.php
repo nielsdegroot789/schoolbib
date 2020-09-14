@@ -47,14 +47,8 @@ class BookController
 
     function saveBook()
     {
-        $db = new DB();
-        $hashed_pass = password_hash($pass, CRYPT_SHA256);
-        $sql = "INSERT INTO USERS (surname, lastname, email, password) values ('$this->username','test','test' ,'$hashed_pass')";
-        if ($db->exec($sql)) {
-            return $db->lastInsertRowID();
-        } else {
-            return false;
-        }
+
+       $i = 1;
     }
 
     function setUserName($user)

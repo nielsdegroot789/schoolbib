@@ -1,6 +1,5 @@
 <template>
-  <!-- @submit="saveBook" -->
-  <FormulateForm :values="bookData">
+  <FormulateForm :values="bookData" @submit="saveBook">
     <FormulateInput v-if="bookData.id" type="hidden" name="id" />
     <FormulateInput
       label="title"
@@ -37,7 +36,11 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    saveBook(data) {
+      this.$store.dispatch('saveBook', this.bookData);
+    },
+  },
 };
 </script>
 

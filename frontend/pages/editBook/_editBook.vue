@@ -29,8 +29,6 @@ export default {
   },
   created() {
     // check if book is already fetched
-    console.log(this.$route.params.editBook);
-    console.log(this.bookMeta);
     this.bookData = this.bookMeta[0];
 
     // todo this needs to be remade with actual backend

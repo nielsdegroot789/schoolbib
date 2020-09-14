@@ -47,4 +47,30 @@ class DB extends \SQLite3
 
         return $data;
     }
+
+    function editBookMeta(){
+        $sql = "UPDATE group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
+        group by bookMetaId";
+        $res = $this->query($sql);
+
+        $data = array();
+        while($row = $res->fetchArray(SQLITE3_ASSOC)){ 
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
+
+    function editBook(){
+        $sql = "UPDATE group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
+        group by bookMetaId";
+        $res = $this->query($sql);
+
+        $data = array();
+        while($row = $res->fetchArray(SQLITE3_ASSOC)){ 
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
 }
