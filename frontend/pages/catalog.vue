@@ -2,13 +2,15 @@
   <div>
     <input v-model="search" type="text" placeholder="Search on title.." />
     <div class="containerCard">
-      <div v-for="(item, index) in bookMeta" :key="index">
+      <div v-for="(item, index) in filteredMetaBooks" :key="index">
         <n-link :to="/book/ + item.id">
           <div class="card">
             <div class="image">
               <img src="item.sticker" />
             </div>
-            <h1>{{ item.title }} booktitle</h1>
+            <div class="titleDiv">
+              <h1>{{ item.title }} booktitle</h1>
+            </div>
             <p class="price">4/5</p>
 
             <p>
@@ -40,6 +42,11 @@ export default {
 </script>
 
 <style>
+.titleDiv {
+  height: 50px;
+  text-align: center;
+  justify-content: center;
+}
 .containerCard {
   width: 90%;
   display: grid;
