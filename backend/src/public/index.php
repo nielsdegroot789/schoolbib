@@ -6,7 +6,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 use Psr\Http\Message\ResponseInterface as Response;                                       
 use Psr\Http\Message\ServerRequestInterface as Request; 
 
-use Slim\Factory\AppFactory;
+use \Slim\Factory\AppFactory;
 use DI\Container;
 use \Slim\Views\Twig;
 use \Slim\Views\TwigMiddleware; 
@@ -15,8 +15,8 @@ use skoolBiep\User;
  
 require __DIR__ . '/../vendor/autoload.php'; 
 
-$container = new Container;
-AppFactory::setContainer($container->build());
+$container = new Container();
+AppFactory::setContainer($container);
 
 $container->set('db', function () {
   return new DB();
@@ -29,7 +29,7 @@ $container->set('view', function () {
 $app = AppFactory::create(); 
 
 // Add Twig-View Middleware
-$app->add(TwigMiddleware::createFromContainer($app));
+// $app->add(TwigMiddleware::createFromContainer($app));
 
 // $app->map(['GET', 'POST'], '/login', \skoolBiep\Controller\UserController::class . ':login');
 

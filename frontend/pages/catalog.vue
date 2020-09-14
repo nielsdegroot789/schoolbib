@@ -7,12 +7,12 @@
             <img src="bookMeta.sticker" />
           </div>
           <h1>{{ bookMeta.title }} booktitle</h1>
-          <p class="price">4/ 5</p>
+          <p class="price">4/5</p>
           <p>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt est
             repudiandae recusandae rem. . {{ bookMeta.description }}
           </p>
-          <button @click.native="Borrow(currentBookMeta)">Add to cart</button>
+          <button @click="Borrow(currentBookMeta)">Add to cart</button>
         </div>
       </div>
     </n-link>
