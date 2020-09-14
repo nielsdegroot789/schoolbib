@@ -1,44 +1,20 @@
-// import Vue from 'vue';
+import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
+
+import state from './state';
+import getters from './getters';
+import mutations from './mutations';
+import actions from './actions';
+
+Vue.use(Vuex);
 
 const createStore = () => {
   return new Vuex.Store({
-    state: () => ({
-      bookMeta: [],
-      books: [],
-      users: [],
-      currentUser: {},
-    }),
-    mutations: {
-      getBookMeta(state, data) {
-        state.bookMeta = data;
-      },
-      getBooks(state, data) {
-        state.books = data;
-      },
-    },
-    getters: {
-      getBookMetaById: (state) => (id) => {
-        return state.bookMeta.filter((bookMeta) => bookMeta.id === id);
-      },
-      getBooksByBookMetaId: (state) => (id) => {
-        return state.books.filter((books) => books.bookMetaId === id);
-      },
-    },
-    actions: {
-      getBookMeta(context) {
-        axios
-          .get('http://localhost:8080/getBookMeta')
-          .then((response) => context.commit('getBookMeta', response.data));
-      },
-      getBooks(context) {
-        axios
-          .get('http://localhost:8080/getBooks')
-          .then((response) => context.commit('getBooks', response.data));
-      },
-    },
+    namespaced: true,
+    state,
+    getters,
+    mutations,
+    actions,
   });
 };
-
 export default createStore;

@@ -31,10 +31,10 @@ class DB extends \SQLite3
         while($row = $res->fetchArray(SQLITE3_ASSOC)){ 
             array_push($data, $row);
         }
-
+       
         return $data;
     }
-
+    
     function getBooks(){
         $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
         group by bookMetaId";
@@ -47,4 +47,5 @@ class DB extends \SQLite3
 
         return $data;
     }
+    
 }

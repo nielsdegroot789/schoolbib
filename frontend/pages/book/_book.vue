@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>this is specific for book {{ bookId }}</p>
-    <p>{{ bookMeta }}</p>
+    <p>this is specific for book {{ bookMeta.title }}</p>
     <p>{{ books }}</p>
   </div>
 </template>
