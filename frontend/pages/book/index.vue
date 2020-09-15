@@ -44,6 +44,9 @@
           </span>
         </nuxt-link>
       </div>
+      <button class="newBook">
+        <nuxt-link to="/book/new">new</nuxt-link>
+      </button>
     </div>
   </div>
 </template>

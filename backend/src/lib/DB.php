@@ -50,7 +50,9 @@ class DB extends \SQLite3
     function saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $id=-1){
         if($id != -1){
             //update
+            
             $sql = $this->prepare("UPDATE bookMeta SET isbnCode = :isbn, title = :title, rating = :rating, totalPages = :totalPages, language = :language, sticker = :sticker, readingLevel = :readingLevel WHERE id = :id");
+            var_dump($sql);
 
             $sql->bindValue(':isbn', $isbn);
             $sql->bindValue(':title', $title);
@@ -61,10 +63,15 @@ class DB extends \SQLite3
             $sql->bindValue(':readingLevel', $readingLevel);
             $sql->bindValue(':id', $id);
 
-            return $sql->execute();
+            $status = $sql->execute();
+
+            $res = $status ? "Success" : "Failed";
+            return $res;
         }
         else {
             //create
+
+            var_dump($title);
             $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel) 
             values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel)');
 
@@ -78,12 +85,12 @@ class DB extends \SQLite3
             // $sql->bindValue(':authorsId', $POST['authorsId']);
             // $sql->bindValue(':publishersId', $POST['publishersId']);
             // $sql->bindValue(':categories', $POST['categories']);
-            $res = $sql->execute();
-            $response->getBody()->write((string)json_encode($res));
 
-            return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus(201);
+            $status = $sql->execute();
+
+            $res = $status ? "Success" : "Failed";
+            return $res;
+
         }
 
     }

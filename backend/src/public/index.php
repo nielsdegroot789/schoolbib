@@ -1,14 +1,14 @@
 <?php
 
-header("Access-Control-Allow-Origin: *");
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
-header("Access-Control-Allow-Headers: *");
-header("Content-Type: Application/json");
+// header("Access-Control-Allow-Origin: *");
+// header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
+// header("Access-Control-Allow-Headers: *");
+// header("Content-Type: Application/json");
 
 use Slim\Factory\AppFactory;
 use DI\Container;
-use \Slim\Views\Twig;
-use \Slim\Views\TwigMiddleware;
+use Slim\Views\Twig;
+use Slim\Views\TwigMiddleware;
 use skoolBiep\DB;
 use skoolBiep\User;
 
@@ -37,7 +37,18 @@ $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks'
 
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+  return $response;
+});
+
+$app->add(function ($request, $handler) {
+  $response = $handler->handle($request);
+  return $response
+          ->withHeader('Access-Control-Allow-Origin', '*')
+          ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+          ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
+
 $app->run();
 
 ?>
-

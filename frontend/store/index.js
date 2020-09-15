@@ -40,13 +40,16 @@ const createStore = () => {
           .then((response) => context.commit('getBooks', response.data));
       },
       saveBook(context, payload) {
-        axios({
-          method: 'POST',
-          url: 'http://localhost:8080/saveBook',
-          data: payload,
-        }).catch((error) => {
+        axios.post('http://localhost:8080/saveBook', payload).catch((error) => {
           console.log(error);
         });
+        // axios({
+        //   method: 'POST',
+        //   url: 'http://localhost:8080/saveBook',
+        //   data: payload,
+        // }).catch((error) => {
+        //   console.log(error);
+        // });
         // .then((response) => context.commit('getBooks', response.data));
       },
     },

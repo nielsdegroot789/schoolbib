@@ -35,12 +35,10 @@ class BookController
 
     public function getBooks(Request $request, Response $response, array $args)
     {
-        $this->response = $response;
         $db = new DB();
         $data = $db->getBooks();
         $payload = json_encode($data);
 
-        $response->getBody()->write($payload);
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
@@ -52,7 +50,6 @@ class BookController
         $this->response = $response;
 
         $db = new DB();
-
         $title = $data["title"];
         $isbn = $data["isbnCode"];
         // $publishDate = $data["publishDate"];
@@ -71,11 +68,9 @@ class BookController
         // $authors = $_POST["authors"];
         // $publishers = $_POST["publishers"];
         // $categories = $_POST["categories"];
-        return $response
-                ->withHeader('Access-Control-Allow-Origin', '*')
-                ->withHeader('Access-Control-Allow-Headers', '*')
-                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-        }
+        $response->getBody()->write($data);
+        return $response;
+    }
 
     function setUserName($user)
     {
