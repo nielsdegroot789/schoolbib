@@ -35,8 +35,7 @@
 
                 <p>the different versions:</p>
                 <div v-for="(book, index) in books" :key="index">
-                  {{ book.status }} Drolhoofd
-                </div>
+                  {{ book.status }}
               </div>
               <div v-if="book.stock != 0" class="containerBookInfoRight">
                 <button @click="LendBook">Lend here!</button>
