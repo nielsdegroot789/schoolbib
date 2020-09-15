@@ -5,7 +5,6 @@
     <div class="containerCard">
       <div v-for="(item, index) in filteredMetaBooks" :key="index">
         <div class="card">
-          <button class="btnAddList">&hearts;</button>
           <n-link :to="/book/ + item.id">
             <div class="image">
               <img src="item.sticker" />
@@ -13,12 +12,13 @@
             <div class="titleDiv">
               <h1>{{ item.title }} booktitle</h1>
             </div>
-            <p class="rating">4/5</p>
+            <p class="rating">{{ item.rating }} / 5</p>
 
             <p>
               {{ item.description }}
             </p>
-
+          </n-link>
+          <n-link :to="/borrow/ + item.id">
             <button class="borrow">Borrow</button>
           </n-link>
         </div>
