@@ -4,6 +4,7 @@
     <frontNotification />
     <introContainer />
     <quickLinks />
+    <carouselLinks />
     <Carousel />
     <Footer />
   </div>
@@ -16,11 +17,13 @@ import Carousel from '../components/Carousel';
 import introContainer from '../components/IntroText';
 import frontNotification from '../components/frontNotification';
 import quickLinks from '../components/quickLinks';
+import carouselLinks from '../components/CarouselLinks';
 
 export default {
   components: {
     searchBar,
     Footer,
+    carouselLinks,
     Carousel,
     introContainer,
     frontNotification,

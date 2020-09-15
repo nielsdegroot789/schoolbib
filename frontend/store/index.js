@@ -9,6 +9,7 @@ const createStore = () => {
       books: [],
       users: [],
       currentUser: {},
+      notification: {},
     }),
     mutations: {
       getBookMeta(state, data) {
@@ -16,6 +17,9 @@ const createStore = () => {
       },
       getBooks(state, data) {
         state.books = data;
+      },
+      getNotification(state, data) {
+        state.notification = data;
       },
     },
     getters: {
@@ -36,6 +40,11 @@ const createStore = () => {
         axios
           .get('http://localhost:8080/getBooks')
           .then((response) => context.commit('getBooks', response.data));
+      },
+      getNotification({ commit }) {
+        axios
+          .get('http://localhost:8080/getNotification')
+          .then((response) => commit('getNotification', response.data));
       },
     },
   });

@@ -26,6 +26,10 @@ $container->set('view', function () {
   return Twig::create('../templates');
 });
 
+$container->set('client', function () {
+  return new GuzzleHttp\Client();
+});
+
 $app = AppFactory::create(); 
 
 // Add Twig-View Middleware
@@ -37,6 +41,8 @@ $app->add(TwigMiddleware::createFromContainer($app));
 $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
 
 $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
+
+$app->get('/getNotification',\skoolBiep\Controller\CockpitController::class . ':getNotification');
 
   
 // $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
