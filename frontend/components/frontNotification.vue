@@ -1,6 +1,6 @@
 <template>
   <div class="notification-container">
-    <h3>{{ notification.entries[1].Notification }})</h3>
+    <h3>{{ notification }}</h3>
   </div>
 </template>
 

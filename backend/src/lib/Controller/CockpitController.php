@@ -5,6 +5,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use GuzzleHttp\Client;
 
+use function GuzzleHttp\json_decode;
+
 class CockpitController {
     protected $container;
     protected $response;
@@ -31,7 +33,10 @@ class CockpitController {
             ]
         );
         $json = $res->getBody()->getContents();
-        $response->getBody()->write($json);
+        $data = json_decode($json);
+        $main = $data->entries[1]->Notification;
+        $result = json_encode($main);
+        $response->getBody()->write($result);
         return $response->withHeader('Content-type' , 'application/json');
     }   
 }
