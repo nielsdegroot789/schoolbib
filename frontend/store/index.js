@@ -5,30 +5,52 @@ import axios from 'axios';
 const createStore = () => {
   return new Vuex.Store({
     state: () => ({
-      metaBooks: [],
+      bookMeta: [],
       books: [],
       users: [],
       currentUser: {},
     }),
     mutations: {
-      getMetaBooks(state, data) {
-        state.metaBooks = data;
+      getBookMeta(state, data) {
+        state.bookMeta = data;
       },
       getBooks(state, data) {
-        state.getBooks = data;
+        state.books = data;
       },
     },
-    getters: {},
+    getters: {
+      getBookMetaById: (state) => (id) => {
+        // todo check if accessible, if not make new backend request
+        return state.bookMeta.filter((bookMeta) => bookMeta.id === id);
+      },
+      getBooksByBookMetaId: (state) => (id) => {
+        // todo check if accessible, if not make new backend request
+        return state.books.filter((books) => books.bookMetaId === id);
+      },
+    },
     actions: {
-      getMetaBooks(context) {
+      getBookMeta(context) {
         axios
-          .get('http://localhost:8080/getMetaBooks')
-          .then((response) => context.commit('getMetaBooks', response.data));
+          .get('http://localhost:8080/getBookMeta')
+          .then((response) => context.commit('getBookMeta', response.data));
       },
       getBooks(context) {
         axios
           .get('http://localhost:8080/getBooks')
           .then((response) => context.commit('getBooks', response.data));
+      },
+      saveBook(context, payload) {
+        axios.post('http://localhost:8080/saveBook', payload).catch((error) => {
+          console.log(error);
+        });
+        // axios({
+        //   method: 'POST',
+        //   url: 'http://localhost:8080/saveBook',
+        //   data: payload,
+        // }).catch((error) => {
+        //   console.log(error);
+        // });
+        // .then((response) => context.commit('getBooks', response.data));
       },
     },
   });

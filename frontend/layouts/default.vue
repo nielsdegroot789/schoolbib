@@ -13,11 +13,9 @@
         <div class="navbar-menu">
           <div class="navbar-end">
             <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link">
-                My Account
-              </a>
+              <a class="navbar-link">My Account</a>
               <div class="navbar-dropdown">
-                <nuxt-link class="navbar-item" to="/profile"> </nuxt-link>
+                <nuxt-link class="navbar-item" to="/profile"></nuxt-link>
                 <hr class="navbar-divider" />
                 <a class="navbar-item">Logout</a>
               </div>
@@ -33,7 +31,12 @@
 </template>
 
 <script>
-export default {};
+export default {
+  mounted() {
+    this.$store.dispatch('getBookMeta');
+    this.$store.dispatch('getBooks');
+  },
+};
 </script>
 
 <style lang="scss">
