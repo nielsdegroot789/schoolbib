@@ -67,7 +67,7 @@ class DB extends \SQLite3
             // $sql->bindValue(':publishersId', $POST['publishersId']);
             // $sql->bindValue(':categories', $POST['categories']);
             $res = $sql->execute();
-            $response->getBody()->write((string)json_encode($res));
+            $response->getBody()->write($res);
 
             return $response
             ->withHeader('Content-Type', 'application/json')
