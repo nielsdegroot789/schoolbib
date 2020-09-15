@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     saveBook(data) {
-      this.$store.dispatch('saveBook', this.bookData);
+      this.$store.dispatch('saveBook', data);
     },
   },
 };
