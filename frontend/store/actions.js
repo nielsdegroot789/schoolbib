@@ -11,4 +11,9 @@ export default {
       .get('http://localhost:8080/getBooks')
       .then((response) => context.commit('getBooks', response.data));
   },
+  saveBook(context, payload) {
+    axios.post('http://localhost:8080/saveBook', payload).catch((error) => {
+      console.log(error);
+    });
+  },
 };
