@@ -55,7 +55,7 @@
               </div>
             </form>
 
-            <div class="has-text-centered" style="margin-top: 20px;">
+            <div class="has-text-centered" style="margin-top: 20px">
               Already got an account?
               <nuxt-link to="/login">Login</nuxt-link>
             </div>
