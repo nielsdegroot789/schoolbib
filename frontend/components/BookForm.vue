@@ -7,7 +7,7 @@
       name="title"
       validation="required|max:200"
     />
-    <FormulateInput label="isbn" type="text" name="isbn" />
+    <FormulateInput label="isbn" type="text" name="isbnCode" />
     <FormulateInput label="publish Date" type="date" name="publishDate" />
     <FormulateInput label="rating" type="text" name="rating" />
     <FormulateInput label="total Pages" type="text" name="totalPages" />
