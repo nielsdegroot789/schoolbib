@@ -1,8 +1,10 @@
 <template>
   <div>
-    <p>this is specific for book {{ bookId }}</p>
-    <p>{{ bookMeta }}</p>
-    <p>{{ books }}</p>
+    <div class="BookInfoContainer">
+      <p>this is specific for book {{ bookMeta.title }}</p>
+      <p>{{ books }}</p>
+    </div>
+    <carousel />
   </div>
 </template>
 
@@ -33,4 +35,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.BookInfoContainer {
+  height: 400px;
+}
+</style>
