@@ -54,7 +54,7 @@ class BookController
         $db = new DB();
 
         $title = $data["title"];
-        $isbn = $data["isbn"];
+        $isbn = $data["isbnCode"];
         // $publishDate = $data["publishDate"];
         $rating = $data["rating"];
         $totalPages = $data["totalPages"];
@@ -71,8 +71,11 @@ class BookController
         // $authors = $_POST["authors"];
         // $publishers = $_POST["publishers"];
         // $categories = $_POST["categories"];
-        return $response;
-    }
+        return $response
+                ->withHeader('Access-Control-Allow-Origin', '*')
+                ->withHeader('Access-Control-Allow-Headers', '*')
+                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+        }
 
     function setUserName($user)
     {

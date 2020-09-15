@@ -7,8 +7,7 @@ class DB extends \SQLite3
     protected $client;
     function __construct()
     {
-        $this->open('../db/db.sqlite');
-
+        parent::__construct('../db/db.sqlite');
     }
 
     function getTableName()
@@ -28,7 +27,7 @@ class DB extends \SQLite3
         $res = $this->query($sql);
 
         $data = array();
-        while($row = $res->fetchArray(SQLITE3_ASSOC)){ 
+        while($row = $res->fetchArray(SQLITE3_ASSOC)){
             array_push($data, $row);
         }
 
@@ -41,7 +40,7 @@ class DB extends \SQLite3
         $res = $this->query($sql);
 
         $data = array();
-        while($row = $res->fetchArray(SQLITE3_ASSOC)){ 
+        while($row = $res->fetchArray(SQLITE3_ASSOC)){
             array_push($data, $row);
         }
 
@@ -51,9 +50,8 @@ class DB extends \SQLite3
     function saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $id=-1){
         if($id != -1){
             //update
-            $sql = $this->prepare('update bookMeta set isbnCode = :isbn, title = :title, rating = :rating, totalPages = :totalPages, language = :language, sticker = :sticker, readingLevel = :readingLevel) 
-            where id = :id');
-    
+            $sql = $this->prepare("UPDATE bookMeta SET isbnCode = :isbn, title = :title, rating = :rating, totalPages = :totalPages, language = :language, sticker = :sticker, readingLevel = :readingLevel WHERE id = :id");
+
             $sql->bindValue(':isbn', $isbn);
             $sql->bindValue(':title', $title);
             $sql->bindValue(':rating', $rating);
@@ -63,21 +61,13 @@ class DB extends \SQLite3
             $sql->bindValue(':readingLevel', $readingLevel);
             $sql->bindValue(':id', $id);
 
-            // $sql->bindValue(':authorsId', $POST['authorsId']);
-            // $sql->bindValue(':publishersId', $POST['publishersId']);
-            // $sql->bindValue(':categories', $POST['categories']);
-            $res = $sql->execute();
-            $response->getBody()->write($res);
-
-            return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus(201);
+            return $sql->execute();
         }
         else {
             //create
             $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel) 
             values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel)');
-    
+
             $sql->bindValue(':isbn', $isbn);
             $sql->bindValue(':title', $title);
             $sql->bindValue(':rating', $rating);
@@ -104,7 +94,7 @@ class DB extends \SQLite3
         $res = $this->query($sql);
 
         $data = array();
-        while($row = $res->fetchArray(SQLITE3_ASSOC)){ 
+        while($row = $res->fetchArray(SQLITE3_ASSOC)){
             array_push($data, $row);
         }
 
