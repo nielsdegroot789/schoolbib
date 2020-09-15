@@ -1,8 +1,13 @@
 <template>
-  <FormulateForm :values="travelData" @submit="saveEvent">
-    <FormulateInput v-if="travelData.id" type="hidden" name="id" />
-    <FormulateInput label="title" type="text" name="title" validation="required|max:200" />
-    <FormulateInput label="isbn" type="text" name="isbn" />
+  <FormulateForm :values="bookData" @submit="saveBook">
+    <FormulateInput v-if="bookData.id" type="hidden" name="id" />
+    <FormulateInput
+      label="title"
+      type="text"
+      name="title"
+      validation="required|max:200"
+    />
+    <FormulateInput label="isbn" type="text" name="isbnCode" />
     <FormulateInput label="publish Date" type="date" name="publishDate" />
     <FormulateInput label="rating" type="text" name="rating" />
     <FormulateInput label="total Pages" type="text" name="totalPages" />
@@ -19,19 +24,24 @@
 
 <script>
 export default {
-  name: 'TravelForm',
+  name: 'Bookform',
   props: {
     bookData: {
       type: Object,
-      default: function () {
+      default() {
         return {};
       },
     },
   },
-  data() {},
-  methods: {},
+  data() {
+    return {};
+  },
+  methods: {
+    saveBook(data) {
+      this.$store.dispatch('saveBook', data);
+    },
+  },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -16,4 +16,9 @@ export default {
       .get('http://localhost:8080/getNotification')
       .then((response) => context.commit('getNotification', response.data));
   },
+  saveBook(context, payload) {
+    axios.post('http://localhost:8080/saveBook', payload).catch((error) => {
+      console.log(error);
+    });
+  },
 };

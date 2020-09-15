@@ -1,19 +1,18 @@
-<?php 
+<?php
 
-header("Access-Control-Allow-Origin: *"); //Hier enkel calls van frontend maken
-header("Access-Control-Allow-Headers: X-Requested-With");
-
-use Psr\Http\Message\ResponseInterface as Response;                                       
-use Psr\Http\Message\ServerRequestInterface as Request; 
+// header("Access-Control-Allow-Origin: *");
+// header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
+// header("Access-Control-Allow-Headers: *");
+// header("Content-Type: Application/json");
 
 use Slim\Factory\AppFactory;
 use DI\Container;
-use \Slim\Views\Twig;
-use \Slim\Views\TwigMiddleware; 
+use Slim\Views\Twig;
+use Slim\Views\TwigMiddleware;
 use skoolBiep\DB;
 use skoolBiep\User;
- 
-require __DIR__ . '/../vendor/autoload.php'; 
+
+require __DIR__ . '/../vendor/autoload.php';
 
 $container = new Container();
 AppFactory::setContainer($container);
@@ -35,9 +34,7 @@ $app = AppFactory::create();
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::createFromContainer($app));
 
-// $app->map(['GET', 'POST'], '/login', \skoolBiep\Controller\UserController::class . ':login');
-
-// $app->map(['GET', 'POST'], '/create', \skoolBiep\Controller\UserController::class . ':create');
+//routes
 $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
 
 $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
@@ -62,9 +59,20 @@ $app->get('/getNotification',\skoolBiep\Controller\CockpitController::class . ':
 //     }
 //     return $response;
 // });
+$app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
+
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+  return $response;
+});
+
+$app->add(function ($request, $handler) {
+  $response = $handler->handle($request);
+  return $response
+          ->withHeader('Access-Control-Allow-Origin', '*')
+          ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+          ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
 
 $app->run();
- 
-?> 
 
-
+?>
