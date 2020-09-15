@@ -1,24 +1,27 @@
 <template>
   <div>
     <input v-model="search" type="text" placeholder="Search on title.." />
+
     <div class="containerCard">
       <div v-for="(item, index) in filteredMetaBooks" :key="index">
-        <n-link :to="/book/ + item.id">
-          <div class="card">
+        <div class="card">
+          <button class="btnAddList">&hearts;</button>
+          <n-link :to="/book/ + item.id">
             <div class="image">
               <img src="item.sticker" />
             </div>
             <div class="titleDiv">
               <h1>{{ item.title }} booktitle</h1>
             </div>
-            <p class="price">4/5</p>
+            <p class="rating">4/5</p>
 
             <p>
               {{ item.description }}
             </p>
-            <button>Borrow</button>
-          </div>
-        </n-link>
+
+            <button class="borrow">Borrow</button>
+          </n-link>
+        </div>
       </div>
     </div>
   </div>
@@ -42,7 +45,11 @@ export default {
 </script>
 
 <style>
+.btnAddList {
+  float: left;
+}
 .titleDiv {
+  display: flex;
   height: 50px;
   text-align: center;
   justify-content: center;
@@ -53,23 +60,22 @@ export default {
   margin: 0 auto;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-auto-rows: 400px;
-  column-gap: 10px;
-  row-gap: 15px;
+  column-gap: 100px;
+  row-gap: 50px;
 }
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   max-width: 300px;
   text-align: center;
   font-family: arial;
-  margin: 50px;
 }
 
-.price {
+.rating {
   color: grey;
   font-size: 22px;
 }
 
-.card button {
+.borrow {
   border: none;
   outline: 0;
   padding: 12px;
@@ -81,7 +87,7 @@ export default {
   font-size: 18px;
 }
 
-.card button:hover {
+.borrow:hover {
   opacity: 0.7;
 }
 .image {
