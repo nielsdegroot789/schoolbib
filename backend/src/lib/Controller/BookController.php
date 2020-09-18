@@ -46,6 +46,8 @@ class BookController
         $data = $db->getBooks();
         $payload = json_encode($data);
 
+        $response->getBody()->write($payload);
+
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
