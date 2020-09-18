@@ -3,4 +3,5 @@ export default {
   books: [],
   users: [],
   currentUser: {},
+  notification: {},
 };

@@ -124,6 +124,16 @@ button {
   }
 }
 
+#carousel-links-container {
+  display: flex;
+  flex-direction: row;
+
+  .carousel-new-suggestions .carousel-link {
+    display: flex;
+    flex-direction: row;
+    background-color: hotpink;
+  }
+}
 .carousel-container {
   padding-top: 10px;
   background-color: $background-color;
