@@ -15,6 +15,8 @@ const createStore = () => {
         state.bookMeta = data;
       },
       getBooks(state, data) {
+        debugger;
+
         state.books = data;
       },
     },
@@ -25,6 +27,7 @@ const createStore = () => {
       },
       getBooksByBookMetaId: (state) => (id) => {
         // todo check if accessible, if not make new backend request
+
         return state.books.filter((books) => books.bookMetaId === id);
       },
     },

@@ -1,9 +1,9 @@
 <?php
 
-// header("Access-Control-Allow-Origin: *");
-// header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
-// header("Access-Control-Allow-Headers: *");
-// header("Content-Type: Application/json");
+header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
+header("Access-Control-Allow-Headers: *");
+header("Content-Type: Application/json");
 
 use Slim\Factory\AppFactory;
 use DI\Container;
@@ -45,8 +45,8 @@ $app->add(function ($request, $handler) {
   $response = $handler->handle($request);
   return $response
           ->withHeader('Access-Control-Allow-Origin', '*')
-          ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-          ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+          ->withHeader('Access-Control-Allow-Headers', '*')
+          ->withHeader('Access-Control-Allow-Methods', '*');
 });
 
 $app->run();
