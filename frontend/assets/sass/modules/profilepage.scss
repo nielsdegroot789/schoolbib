@@ -7,15 +7,34 @@
 }
 
 .profile-navigation-container {
-  border-radius:1rem;
+  border-radius: 1rem;
   background-color: whitesmoke;
   display: inline-block;
   width: 25%;
   height: 500px;
+
+  .dashboard-link {
+    position: relative;
+    border-bottom: white 2px solid;
+    height: 3rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    &:hover .fa-icon {
+      color: #28528A;
+    }
+    &:hover nuxt-link {
+      color: #28528A;
+    }
+    .fa-icon {
+      position: absolute;
+      left: 8%;
+    }
+  }
 }
 
 .main-profile-container {
-  border-radius:1rem;
+  border-radius: 1rem;
   background-color: whitesmoke;
   display: inline-block;
   position: absolute;
@@ -23,27 +42,25 @@
   height: 1000px;
   margin-left: 2rem;
   .information-container {
-      padding-left: 4rem;
-      padding-top: 1rem;
-      width: 90%;
-      height: 90%;
+    padding-left: 4rem;
+    padding-top: 1rem;
+    width: 90%;
+    height: 90%;
 
-      img {
-        height: 8rem;
-        border: 1px solid black;
-        margin: 1rem 0;
-
-      }
-      .profile-page-title {
-        font-weight: bold;
-      }
-      .profile-page-title:hover {
-       color: rgb(35, 216, 223);
-      }
-      .input-style {
-        border: #a8a8a8 1px solid;
-        border-radius: 3px;
-      }
-      
+    img {
+      height: 8rem;
+      border: 1px solid black;
+      margin: 1rem 0;
+    }
+    .profile-page-title {
+      font-weight: bold;
+    }
+    .profile-page-title:hover {
+      color: rgb(35, 216, 223);
+    }
+    .input-style {
+      border: #a8a8a8 1px solid;
+      border-radius: 3px;
+    }
   }
 }

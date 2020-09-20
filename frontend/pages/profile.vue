@@ -1,15 +1,15 @@
 <template>
   <div id="profile-page-container">
-    <div class="profile-navigation-container"></div>
-    <div class="main-profile-container">
-      <profileInformation />
+    <div class="profile-navigation-container">
+      <dashboard />
     </div>
+    <div class="main-profile-container"><NuxtChild /></div>
   </div>
 </template>
 
 <script>
-import profileInformation from '../components/profilePageInformation';
+import dashboard from '../components/Dashboard';
 export default {
-  components: { profileInformation },
+  components: { dashboard },
 };
 </script>
