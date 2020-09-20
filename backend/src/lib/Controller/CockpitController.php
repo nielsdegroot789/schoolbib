@@ -22,7 +22,9 @@ class CockpitController {
     public function getNotification(Request $request, Response $response, array $args) {
         $this->response = $response;
         $client = new Client();
+        $filter = ['fields' => 'Notification'];
         $url = 'http://skoolbiep.fullstacksyntra.be/cockpit/api/collections/get/Notifications?token=' . $this->token;
+        //filter toevoegen
         $res = $client->request(
             'POST',
             $url,
@@ -30,6 +32,8 @@ class CockpitController {
                 'headers' => [
                     'Content-Type' => 'application/json'
                 ],
+                'body' => json_encode($filter)
+
             ]
         );
         $json = $res->getBody()->getContents();
