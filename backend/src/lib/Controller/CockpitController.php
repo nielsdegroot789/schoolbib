@@ -23,7 +23,7 @@ class CockpitController {
         $this->response = $response;
         $client = new Client();
         $filter = ['fields' => 'Notification'];
-        $url = 'http://skoolbiep.fullstacksyntra.be/cockpit/api/collections/get/Notifications?token=' . $this->token;
+        $url = $_ENV['COCKPIT_URL'];
         //filter toevoegen
         $res = $client->request(
             'POST',

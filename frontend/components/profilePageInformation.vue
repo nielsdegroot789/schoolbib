@@ -1,6 +1,8 @@
 <template>
   <div class="information-container">
     <h2 class="profile-page-title">EDIT INFORMATION</h2>
+    <input type="file" @change="selectFile" />
+    <button @click="upload">Upload</button>
     <img src="../assets/pictures/default.png" alt="Standaard-afbeelding" />
     <h2 class="profile-page-title">ACOUNT INFORMATION</h2>
     <FormulateForm>
@@ -35,6 +37,17 @@
 <script>
 export default {
   name: 'Profileinformation',
+  data() {
+    return {
+      selectedFile: null,
+    };
+  },
+  methods: {
+    selectFile(event) {
+      this.selectedFile = event.target.file[0]; // vuex store sturen
+    },
+    upload() {}, // stuur naar db
+  },
 };
 </script>
 

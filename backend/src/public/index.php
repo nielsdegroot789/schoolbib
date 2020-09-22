@@ -12,6 +12,7 @@ use Slim\Views\TwigMiddleware;
 use skoolBiep\DB;
 use skoolBiep\User;
 
+
 require __DIR__ . '/../vendor/autoload.php';
 
 $container = new Container();
@@ -30,6 +31,10 @@ $container->set('client', function () {
 });
 
 $app = AppFactory::create(); 
+
+$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__. '/../');
+$dotenv->load();
+
 
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::createFromContainer($app));
