@@ -3,7 +3,9 @@ import axios from 'axios';
 export default {
   getBookMeta(context) {
     axios
-      .get('http://localhost:8080/getBookMeta')
+      .get('http://localhost:8080/getBookMeta', {
+        headers: { Authorization: `Bearer test` },
+      })
       .then((response) => context.commit('getBookMeta', response.data));
   },
   getBooks(context) {

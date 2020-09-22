@@ -16,43 +16,17 @@ class UserController
     protected $container;
     protected $response;
 
-    public function selectAllbutOne()
-    {
-    }
+
     public function __construct(\Psr\Container\ContainerInterface $container)
     {
         $this->container = $container;
-    }
-
-    protected function loginForm()
-    {
-        $fields = array();
-        $fields[] = array(
-            'type'  => 'text',
-            'name'  => 'username',
-            'id' => 'username'
-        );
-        $fields[] = array(
-            'type'  => 'password',
-            'name' => 'password',
-            'id'  => 'password'
-        );
-        $fields[] = array(
-            'type'  => 'submit',
-            'name' => 'login',
-            'value'  => 'Login'
-        );
-        $form = ['method' => 'POST', 'fields' => $fields];
-
-        return $form;
     }
 
     public function login(Request $request, Response $response, array $args)
     {
         $this->response = $response;
         if ($request->getMethod() == 'GET') {
-            $form =  $this->loginForm();
-            $twig = $this->container->get('view');
+           
             $res = Form::createForm($this->response, $twig, $form, 'loginform');
         } else {
             // verwerking form
@@ -62,23 +36,6 @@ class UserController
             $id = $this->validateUser($request->getParsedBody()['password']);
             echo "User has ID: $id";
             echo "tableName : " . $this->user->getTableName();
-        }
-        return $response;
-    }
-
-    public function create(Request $request, Response $response, array $args)
-    {
-        $this->response = $response;
-        if ($request->getMethod() == 'GET') {
-            $form =  $this->loginForm();
-            $twig = $this->container->get('view');
-            $res = Form::createForm($this->response, $twig, $form, 'loginform');
-        } else {
-            // verwerking form
-            $form =  $this->loginForm();
-            $this->user = new User();
-            $this->user->setUserName($request->getParsedBody()['username']);
-            $this->saveUser($request->getParsedBody()['password']);
         }
         return $response;
     }
@@ -108,13 +65,5 @@ class UserController
             return false;
         }
     }
-    function setUserName($user)
-    {
-        $this->username = $user;
-    }
 
-    function getUserID()
-    {
-        return $this->id;
-    }
 }
