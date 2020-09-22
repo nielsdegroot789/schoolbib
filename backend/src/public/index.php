@@ -15,6 +15,8 @@ use skoolBiep\User;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+Dotenv\Dotenv::createImmutable(__DIR__. '/../')->load();
+
 $container = new Container();
 AppFactory::setContainer($container);
 
@@ -32,8 +34,7 @@ $container->set('client', function () {
 
 $app = AppFactory::create(); 
 
-$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__. '/../');
-$dotenv->load();
+
 
 
 // Add Twig-View Middleware
