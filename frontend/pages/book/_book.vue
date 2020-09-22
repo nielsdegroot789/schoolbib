@@ -1,12 +1,13 @@
 <template>
   <div class="PageContainer">
-    <div v-for="(bookMeta, index) in bookMeta" :key="index">
-      <div v-for="(book, index) in books" :key="index">
+    <div v-for="bookMeta in bookMeta" :key="bookMeta.id">
+      <div v-for="item in books" :key="item.id">
         <div class="BookInfoContainer">
           <div class="InfoAboveBook">
             <n-link to="/">Home</n-link> >
-            <n-link to="/catalog">catalog</n-link> > {{ bookMeta.title }}
-            {{ book.stock }}
+            <n-link to="/catalog">catalog</n-link> >
+            {{ bookMeta.title }}
+            ( {{ book.stock + 1 }} )
           </div>
           <div class="containerBook">
             <div class="containerBookAbove">
@@ -32,17 +33,25 @@
                 <!-- <h3>{{ authors.name }} {author}</h3> -->
                 <!-- <h3>Genre: {{ catagory.name }}</h3> -->
                 <h5>amount in stock : {{ book.stock }}</h5>
+                <br />
 
                 <p>the different versions:</p>
-                <div v-for="(book, index) in books" :key="index">
+                <div v-for="book in books" :key="book.id">
+                  <br />
                   {{ book.status }}
-              </div>
-              <div v-if="book.stock != 0" class="containerBookInfoRight">
-                <button @click="LendBook">Lend here!</button>
-              </div>
-              <div v-else class="containerBookInfoRight">
-                This book isn't in the store anymore.
-                <button @click="reserve">reserve here!</button>
+                  <br />
+                </div>
+                <div v-if="book.stock != 0" class="containerBookInfoRight">
+                  <n-link to="/borrow/">
+                    <button>reserve here!</button>
+                  </n-link>
+                </div>
+                <div v-else class="containerBookInfoRight">
+                  This book isn't in the store anymore.
+                  <n-link to="/borrow/">
+                    <button>reserve here!</button>
+                  </n-link>
+                </div>
               </div>
             </div>
           </div>
