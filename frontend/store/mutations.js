@@ -8,4 +8,8 @@ export default {
   getNotification(state, data) {
     state.notification = data;
   },
+  setJWTtoken(state, data) {
+    debugger;
+    console.log(data);
+  },
 };

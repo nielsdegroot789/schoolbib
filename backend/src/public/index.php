@@ -1,9 +1,9 @@
 <?php
 
-// header("Access-Control-Allow-Origin: *");
-// header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
-// header("Access-Control-Allow-Headers: *");
-// header("Content-Type: Application/json");
+header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
+header("Access-Control-Allow-Headers: *");
+header("Content-Type: Application/json");
 
 use Slim\Factory\AppFactory;
 use DI\Container;
@@ -52,15 +52,18 @@ $mw = function ($request, $handler) {
   $signature = hash_hmac('sha256', $incomingHeader. '.' . $incomingPayload, $secret, true);
   $base64UrlSignature  =str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
 
-  if($base64UrlSignature == $incomingSignature)
+  if($base64UrlSignature != $incomingSignature)
   {
-    //great success, access granted
-    var_dump("test succeeded");
-  }
-  else {
-    //redirect to login screen
     var_dump("test failed");
+    //redirect to login screen
+    return $response;
   }
+  //todo check if token is not expired
+
+  //todo refresh token by generating new one?
+
+  //great success, access granted
+  var_dump("test succeeded");
 
   $response = $handler->handle($request);
   // $response->getBody()->write('World');
@@ -68,20 +71,17 @@ $mw = function ($request, $handler) {
   return $response;
 };
 
-$app->add($mw);
+// $app->add($mw);
 
 
 //routes
-// $app->get('/', function (Request $request, Response $response, array $args) {
-//   $response->getBody()->write("Hello");
-//   return $response;
-// })->add($$checkLoggedInMW);
-
 $app->get('/', function (Request $request, Response $response, $args) {
   $response->getBody()->write('Hello ');
 
   return $response;
-})->add($mw);
+});
+
+$app->get('/login', \skoolBiep\Controller\UserController::class . ':login');
 
 $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
 

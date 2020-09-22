@@ -27,7 +27,7 @@
                 </div>
               </div>
               <div class="control">
-                <button type="submit" class="button is-dark is-fullwidth">
+                <button class="button is-dark is-fullwidth" @click="login">
                   Log In
                 </button>
               </div>
@@ -54,6 +54,12 @@ export default {
       name: '',
       password: '',
     };
+  },
+  methods: {
+    login() {
+      debugger;
+      this.$store.dispatch('login');
+    },
   },
 };
 </script>
