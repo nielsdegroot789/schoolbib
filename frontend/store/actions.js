@@ -24,10 +24,10 @@ export default {
     });
   },
   login(context) {
+    debugger;
     axios
       .get('http://localhost:8080/login')
       .then((response) => {
-        debugger;
         context.commit('setJWTtoken');
       })
       .catch((error) => {
