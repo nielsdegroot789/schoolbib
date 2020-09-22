@@ -117,4 +117,17 @@ class UserController
     {
         return $this->id;
     }
+
+    public function SetReservations()
+    {
+        $db = new DB();
+        $startDate= ' ';
+        $endDate = ' ';
+        $sql = "INSERT INTO RESERVATIONS (reservationDateTime, accepted, usersId, booksId) values ('$this.reservationDateTime','boolean','$usersId' ,'$$bookId')";
+        if ($db->exec($sql)) {
+            return $db->lastInsertRowID();
+        } else {
+            return false;
+        }
+    }
 }
