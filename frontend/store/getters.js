@@ -8,4 +8,7 @@ export default {
   getProfileData: (state) => {
     return state.profileData;
   },
+  getNotification: (state) => {
+    return state.notification;
+  },
 };

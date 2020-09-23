@@ -9,11 +9,11 @@ export default {
   name: 'FrontNotification',
   computed: {
     notification() {
-      return this.$store.state.notification;
+      return this.$store.state.frontpageNnotification;
     },
   },
   created() {
-    this.$store.dispatch('getNotification');
+    this.$store.dispatch('getFrontpageNotification');
   },
 };
 </script>

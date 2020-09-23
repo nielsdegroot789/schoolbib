@@ -11,7 +11,7 @@ export default {
       .get('http://localhost:8080/getBooks')
       .then((response) => context.commit('getBooks', response.data));
   },
-  getNotification(context) {
+  getFrontpageNotification(context) {
     axios
       .get('http://localhost:8080/getNotification')
       .then((response) => context.commit('getNotification', response.data));
@@ -25,5 +25,8 @@ export default {
     axios
       .get('http://localhost:8080/getProfilePageData')
       .then((response) => context.commit('getProfileData', response.data));
+  },
+  displayNotification({ commit }, notification) {
+    commit('setNotification', notification);
   },
 };

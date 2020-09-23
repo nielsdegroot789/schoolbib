@@ -5,10 +5,13 @@ export default {
   getBooks(state, data) {
     state.books = data;
   },
-  getNotification(state, data) {
+  getFrontpageNotification(state, data) {
     state.notification = data;
   },
   getProfileData(state, profileData) {
     state.profileData = profileData;
+  },
+  setNotification(state, notification) {
+    state.notification = notification;
   },
 };
