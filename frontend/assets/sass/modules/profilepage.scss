@@ -5,13 +5,13 @@
   background-color: white;
   position: relative;
 }
-
 .profile-navigation-container {
   border-radius: 1rem;
   background-color: whitesmoke;
   display: inline-block;
   width: 25%;
   height: 500px;
+  border: 7px solid #28528a;
 
   .dashboard-link {
     position: relative;
@@ -21,10 +21,10 @@
     align-items: center;
     display: flex;
     &:hover .fa-icon {
-      color: #28528A;
+      color: #28528a;
     }
     &:hover nuxt-link {
-      color: #28528A;
+      color: #28528a;
     }
     .fa-icon {
       position: absolute;
@@ -41,26 +41,46 @@
   width: 73%;
   height: 1000px;
   margin-left: 2rem;
+  border: 7px solid #28528a;
   .information-container {
     padding-left: 4rem;
     padding-top: 1rem;
     width: 90%;
     height: 90%;
 
+    h2 {
+      padding: 20px 0;
+    }
+
     img {
+      display: block;
       height: 8rem;
       border: 1px solid black;
       margin: 1rem 0;
     }
     .profile-page-title {
       font-weight: bold;
-    }
-    .profile-page-title:hover {
-      color: rgb(35, 216, 223);
+      color: #28528a;
     }
     .input-style {
       border: #a8a8a8 1px solid;
       border-radius: 3px;
+    }
+    .formulate-input-label {
+      margin:1rem auto;
+    }
+
+    input[type='submit'] {
+      border: 1px solid #6050a8;
+      background-color: #7B5EC6;
+      padding: 15px 7px;
+      font-weight: bold;
+      color: #fff;
+      text-transform: uppercase;
+      border-radius: 16px;
+      margin-top:10px;
+      width: 9rem;
+      cursor: pointer;
     }
   }
 }

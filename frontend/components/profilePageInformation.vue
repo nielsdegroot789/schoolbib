@@ -1,9 +1,9 @@
 <template>
   <div class="information-container">
     <h2 class="profile-page-title">EDIT INFORMATION</h2>
+    <img src="../assets/pictures/default.png" alt="Standaard-afbeelding" />
     <input type="file" @change="selectPicture" />
     <button @click="upload">Upload</button>
-    <img src="../assets/pictures/default.png" alt="Standaard-afbeelding" />
     <h2 class="profile-page-title">ACOUNT INFORMATION</h2>
     <FormulateForm>
       <FormulateInput
@@ -25,11 +25,7 @@
       <FormulateInput label="Current password" input-class="input-style" />
       <FormulateInput label="New password" input-class="input-style" />
       <FormulateInput label="Confirm password" input-class="input-style" />
-      <FormulateInput
-        class="button-formulate"
-        type="submit"
-        label="Save Changes"
-      />
+      <input type="submit" label="Save Changes" />
     </FormulateForm>
   </div>
 </template>
