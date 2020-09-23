@@ -47,5 +47,17 @@ class DB extends \SQLite3
 
         return $data;
     }
+
+    public function GetReservations(){
+        $sql="select id, userId, bookId, reservationDateTime, accepted" ;
+        $res = $this->query($sql);
+        
+        $data = array();
+        while($row = $res->fetchArray(SQLITE3_ASSOC)){
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
     
 }
