@@ -118,12 +118,25 @@ class UserController
         return $this->id;
     }
 
-    public function SetReservations()
+    public function SetReservations($userId,$booksId,$reservationDateTime,$accepted)
     {
-        $db = new DB();
-        $startDate= ' ';
-        $endDate = ' ';
-        $sql = "INSERT INTO RESERVATIONS (reservationDateTime, accepted, usersId, booksId) values ('$this.reservationDateTime','boolean','$usersId' ,'$$bookId')";
+        if(isset($_POST['submit'])){
+
+        $sql = $this->prepare("INSERT INTO RESERVATIONS (userId,  booksId, reservationDateTime, accepted) 
+        values (:userId,:booksId,:reservationDateTime,:accepted)";
+        
+        $stmt = $this->prepare($sql);
+        $stmt->execute([
+            ':userId' => $userId,
+            ':booksId' => $booksId,
+            ':reservationDateTime' => $reservationDateTime,
+            ':accepted' => $accepted,
+        ]);
+
+        return $this->lastInsertId();
+    }
+
+
         if ($db->exec($sql)) {
             return $db->lastInsertRowID();
         } else {
