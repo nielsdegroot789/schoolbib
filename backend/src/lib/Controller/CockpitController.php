@@ -24,7 +24,6 @@ class CockpitController {
         $client = new Client();
         $filter = ['fields' => 'Notification'];
         $url = $_ENV['COCKPIT_URL'];
-        //filter toevoegen
         $res = $client->request(
             'POST',
             $url,

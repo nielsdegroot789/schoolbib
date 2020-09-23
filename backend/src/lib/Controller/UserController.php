@@ -24,6 +24,12 @@ class UserController
         $this->container = $container;
     }
 
+    public function getProfilePageData(Request $request, Response $response) {
+        $test = 'test';
+        $response->getBody()->write($test);
+        return $response;
+    }
+    
     protected function loginForm()
     {
         $fields = array();

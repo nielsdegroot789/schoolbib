@@ -47,6 +47,8 @@ $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks'
 
 $app->get('/getNotification',\skoolBiep\Controller\CockpitController::class . ':getNotification');
 
+$app->get('/getProfilePageData',\skoolBiep\Controller\UserController::class . ':getProfilePageData' );
+
   
 // $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
 //     $this->get('db');
