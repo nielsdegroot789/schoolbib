@@ -21,4 +21,9 @@ export default {
       console.log(error);
     });
   },
+  getProfileData(context) {
+    axios
+      .get('http://localhost:8080/getProfilePageData')
+      .then((response) => context.commit('getProfileData', response.data));
+  },
 };

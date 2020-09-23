@@ -1,7 +1,7 @@
 <template>
   <div class="information-container">
     <h2 class="profile-page-title">EDIT INFORMATION</h2>
-    <input type="file" @change="selectFile" />
+    <input type="file" @change="selectPicture" />
     <button @click="upload">Upload</button>
     <img src="../assets/pictures/default.png" alt="Standaard-afbeelding" />
     <h2 class="profile-page-title">ACOUNT INFORMATION</h2>
@@ -43,10 +43,9 @@ export default {
     };
   },
   methods: {
-    selectFile(event) {
+    selectPicture(event) {
       this.selectedFile = event.target.file[0]; // vuex store sturen
     },
-    upload() {}, // stuur naar db
   },
 };
 </script>

@@ -5,4 +5,7 @@ export default {
   getBooksByBookMetaId: (state) => (id) => {
     return state.books.filter((books) => books.bookMetaId === id);
   },
+  getProfileData: (state) => {
+    return state.profileData;
+  },
 };

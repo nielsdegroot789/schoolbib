@@ -4,4 +4,5 @@ export default {
   users: [],
   currentUser: {},
   notification: {},
+  profileData: {},
 };

@@ -8,4 +8,7 @@ export default {
   getNotification(state, data) {
     state.notification = data;
   },
+  getProfileData(state, profileData) {
+    state.profileData = profileData;
+  },
 };
