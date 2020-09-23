@@ -11,6 +11,5 @@ export default {
   setJWTtoken(state, data) {
     debugger;
     state.JWT = data;
-    console.log(data);
   },
 };

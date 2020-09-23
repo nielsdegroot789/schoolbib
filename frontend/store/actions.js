@@ -23,10 +23,9 @@ export default {
       console.log(error);
     });
   },
-  login(context) {
-    debugger;
+  login(context, payload) {
     axios
-      .get('http://localhost:8080/login')
+      .post('http://localhost:8080/login', payload)
       .then((response) => {
         context.commit('setJWTtoken');
       })

@@ -25,6 +25,14 @@ class UserController
     public function login(Request $request, Response $response, array $args)
     {
         $this->response = $response;
+
+        $data = json_decode(file_get_contents("php://input"), TRUE);
+        //todo check if these are filled in
+        $username = $data["name"];
+        $password = $data["password"];
+        $userId = validateUser($username, $password);
+        
+
         $params = [];
         $params['id'] = 1;
         $token = $this->createToken($params);
@@ -33,18 +41,24 @@ class UserController
         return $response->withHeader('Authorization', 'Bearer: '. $token);
     }
 
-    function validateUser($pass)
-    {
+    function validateUser($user, $pass)
+    {   
+        $user = null;
         $db = $this->container->get('db');
-        $sql = "select id, password_crypt from users where username = '" . $this->user->getUserName() . "'";
+        $sql = "select id, password_crypt from users where username = '" . $user . "'";
         $res = $db->query($sql);
         $data = $res->fetchArray(SQLITE3_ASSOC);
         if ($data) {
-            if (password_verify($pass, $data['password_crypt'])) {
+            if (password_verify($pass, $data['password'])) {
                 $this->user->setId($data['id']);
             }
         }
-        return $this->user->getId();
+        if($user){
+            return $this->user->getId();
+        }
+        else {
+            //throw exception? 
+        }
     }
 
     function createToken($payloadData){

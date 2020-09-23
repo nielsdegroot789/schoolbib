@@ -40,14 +40,20 @@ $app->add(TwigMiddleware::createFromContainer($app));
 
 
 
-$mw = function ($request, $handler) {
+$checkLoggedInMW = function ($request, $handler) {
   // $headers = $request->headers;
   $secret = "ABC";
   $JWTtoken = $request->getHeader('Authorization');
-  $explodedToken = explode('.', $JWTtoken[0]);
-  $incomingHeader  = $explodedToken[0];
-  $incomingPayload  = $explodedToken[1];
-  $incomingSignature =  $explodedToken[2];
+  try{
+
+    $explodedToken = explode('.', $JWTtoken[0]);
+    $incomingHeader  = $explodedToken[0];
+    $incomingPayload  = $explodedToken[1];
+    $incomingSignature =  $explodedToken[2];
+  }
+  catch(Exception $e){
+    echo "Exception:" . $e->getMessage();
+  }
 
   $signature = hash_hmac('sha256', $incomingHeader. '.' . $incomingPayload, $secret, true);
   $base64UrlSignature  =str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
@@ -71,7 +77,7 @@ $mw = function ($request, $handler) {
   return $response;
 };
 
-// $app->add($mw);
+$app->add($checkLoggedInMW);
 
 
 //routes
@@ -81,7 +87,7 @@ $app->get('/', function (Request $request, Response $response, $args) {
   return $response;
 });
 
-$app->get('/login', \skoolBiep\Controller\UserController::class . ':login');
+$app->post('/login', \skoolBiep\Controller\UserController::class . ':login');
 
 $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
 
