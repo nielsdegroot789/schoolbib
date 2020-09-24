@@ -60,8 +60,6 @@ class UserController
         $sql->bindValue(':email',$formEmail);
         $res =  $sql->execute();
         $data = $res->fetchArray(SQLITE3_ASSOC);
-        var_dump($data['password']);
-        var_dump(password_hash($formPassword, CRYPT_SHA256));
         if ($data) {
             if (password_verify($formPassword, $data['password'])) {
                 $user = $data['id'];

@@ -29,7 +29,7 @@ export default {
       .post('http://localhost:8080/login', payload)
       .then((response) => {
         debugger;
-        context.commit('setJWTtoken');
+        context.commit('setJWTtoken', response.data);
       })
       .catch((error) => {
         console.log(error);
