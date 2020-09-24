@@ -118,24 +118,46 @@ class UserController
         return $this->id;
     }
 
-    public function saveReservations($id,$userId,$booksId,$reservationDateTime,$accepted)
+    public function saveReservations($id,$usersId,$booksId,$reservationDateTime,$accepted)
     {            
-         $db = new DB();
-        $sql = $db->prepare("INSERT INTO RESERVATIONS (userId,  booksId, reservationDateTime, accepted) values (:userId,:booksId,:reservationDateTime,:accepted)");
+        $db = new DB();
+        $stock = "select stock from reservations";
 
-        if(isset($_POST['submit'])){
-            $stock = "select stock from reservations"
-           
-            if ($stock != 0) {
+        session_start();
+            $booksId = $_SESSION['bookId'];
+            $usersId = $_SESSION['userId'];
+
+
+        if(isset($_POST['submit']) || $stock != 0){
+            $booksId = trim($_POST['bookId']);
+            $reservationDateTime = trim($_POST['reservationDateTime']);
+            $accepted = trim($_POST['accepted']);
+            
+          
+          
+            $sql = $db->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime, accepted) 
+            values (:userId,:booksId,:reservationDateTime,:accepted)");
+            
+            
             
             $sql->bindValue(':id' , $id,);
-            $sql->bindValue(':userId' , $userId,);
+            $sql->bindValue(':userId' , $usersId,);
             $sql->bindValue(':booksId' , $booksId,);
             $sql->bindValue(':reservationDateTime' , $reservationDateTime,);
             $sql->bindValue(':accepted' , $accepted,);
         
-            }
-            return $sql->execute();
+            $error = false;
+                if($db){
+                    $error = true;
+                }
+                else {
+                    echo "
+                    <script>
+                    alert('Unsuccessful');
+                    </script>
+                ";
+                }
         }
+        return $sql->execute();
     }
 }
