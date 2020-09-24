@@ -5,6 +5,7 @@ namespace skoolBiep\Controller;
 use skoolBiep\DB;
 use skoolBiep\Form;
 use skoolBiep\Entity\User;
+use skoolBiep\Util\CreateJWT;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -25,23 +26,31 @@ class UserController
     public function login(Request $request, Response $response, array $args)
     {
         $this->response = $response;
-        var_dump($app);
-        $data = json_decode(file_get_contents("php://input"), TRUE);
         //todo check if these are filled in
-      
-        $formUsername = $data["email"];
-        $formPassword = $data["password"];
+        $data = json_decode(file_get_contents("php://input"), TRUE);
 
+        try{
+            $formUsername = $data["email"];
+            $formPassword = $data["password"];
+        } catch(Exception $e){
+            
+        }
+        var_dump($formUsername);
+        var_dump($formPassword);
+        
         $userId = $this->validateUser($formUsername, $formPassword);
-        var_dump($userId);
         if(!$userId){
             echo 'Caught exception: combo not found \n';
         }
-
-        $params = [];
-        $params['id'] = 1;
-        $token = $this->createToken($params);
+        var_dump($userId);
         
+        $payload = [];
+        $payload['id'] = $userId;
+        //todo this calls invoke?
+        $jwt = new CreateJWT($userId);
+        $token = $jwt();
+        var_dump($token);
+
         $response->getBody()->write($token);
         return $response->withHeader('Authorization', 'Bearer: '. $token);
     }
@@ -53,8 +62,6 @@ class UserController
         $sql = "select id, password from users where id = '1'";
         $res = $db->query($sql);
         $data = $res->fetchArray(SQLITE3_ASSOC);
-        var_dump($formPassword);
-        var_dump($data['password']);
         if ($data) {
             if (password_verify($formPassword, $data['password'] )) {
                 $user = $data['id'];
