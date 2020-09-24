@@ -8,7 +8,4 @@ export default {
   getPageCount(state) {
     return Math.ceil(state.totalItems / state.limit);
   },
-  getBookMetaCount: (state) => (count) => {
-    return state.bookMeta.filter((bookMeta) => bookMeta.count === count);
-  },
 };

@@ -1,33 +1,33 @@
 <template>
   <div>
-    <searchBar />
-    <frontNotification />
-    <introContainer />
-    <quickLinks />
-    <carouselLinks />
+    <SearchBar />
+    <FrontNotification />
+    <IntroContainer />
+    <QuickLinks />
+    <CarouselLinks />
     <Carousel />
     <Footer />
   </div>
 </template>
 
 <script>
-import searchBar from '../components/SearchBar';
+import SearchBar from '../components/SearchBar';
 import Footer from '../components/Footer';
 import Carousel from '../components/Carousel';
-import introContainer from '../components/IntroText';
-import frontNotification from '../components/frontNotification';
-import quickLinks from '../components/quickLinks';
-import carouselLinks from '../components/CarouselLinks';
+import IntroContainer from '../components/IntroText';
+import FrontNotification from '../components/frontNotification';
+import QuickLinks from '../components/QuickLinks';
+import CarouselLinks from '../components/CarouselLinks';
 
 export default {
   components: {
-    searchBar,
+    SearchBar,
     Footer,
-    carouselLinks,
+    CarouselLinks,
     Carousel,
-    introContainer,
-    frontNotification,
-    quickLinks,
+    IntroContainer,
+    FrontNotification,
+    QuickLinks,
   },
 
   data: () => {

@@ -9,6 +9,6 @@ export default {
     state.notification = data;
   },
   setTotalItems(state, payload) {
-    state.setTotalItems = payload;
+    state.totalItems = payload;
   },
 };

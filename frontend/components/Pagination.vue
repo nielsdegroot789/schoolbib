@@ -33,7 +33,7 @@ export default {
       return parseInt(this.$route.params.page);
     },
     totalPages() {
-      return this.totalBookMeta / this.limit;
+      return this.$store.getters.getPageCount;
     },
     pageButtons() {
       const start = Math.min(
