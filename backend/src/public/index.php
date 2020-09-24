@@ -56,6 +56,8 @@ $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks'
 //     }
 //     return $response;
 // });
+slim$app->post('/saveReservations', \skoolBiep\Controller\BookController::class . ':saveReservations');
+
 
 $app->run();
  
