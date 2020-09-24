@@ -118,12 +118,15 @@ class UserController
         return $this->id;
     }
 
-    public function SetReservations($id,$userId,$booksId,$reservationDateTime,$accepted)
-    {
-        if(isset($_POST['submit'])){
+    public function saveReservations($id,$userId,$booksId,$reservationDateTime,$accepted)
+    {            
+         $db = new DB();
+        $sql = $db->prepare("INSERT INTO RESERVATIONS (userId,  booksId, reservationDateTime, accepted) values (:userId,:booksId,:reservationDateTime,:accepted)");
 
-            $sql = $this->prepare("INSERT INTO RESERVATIONS (userId,  booksId, reservationDateTime, accepted) 
-            values (:userId,:booksId,:reservationDateTime,:accepted)");
+        if(isset($_POST['submit'])){
+            $stock = "select stock from reservations"
+           
+            if ($stock != 0) {
             
             $sql->bindValue(':id' , $id,);
             $sql->bindValue(':userId' , $userId,);
@@ -131,7 +134,7 @@ class UserController
             $sql->bindValue(':reservationDateTime' , $reservationDateTime,);
             $sql->bindValue(':accepted' , $accepted,);
         
-
+            }
             return $sql->execute();
         }
     }
