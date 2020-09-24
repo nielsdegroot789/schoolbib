@@ -10,25 +10,15 @@ use Lcobucci\JWT\Token;
 
 class CreateJWT
 {
-    /** @var User $user */
+
+    // https://git.fullstacksyntra.be/Simondb/Eindwerk-Projectopvolging-Facturatie/src/branch/feature/jwt-auth 
+    
     private $userId;
-
-    /** @var Builder $builder */
     private $builder;
-
-    /** @var Token $token */
     private $token;
-
-    /** @var Sha256  */
     private $signer;
-
-    /** @var Key  */
     private $secret;
 
-    /**
-     * CreateJWT constructor.
-     * @param $userId
-     */
     public function __construct($userId)
     {
         $this->userId = $userId;
@@ -38,9 +28,6 @@ class CreateJWT
         $this->secret = new Key('ABC');
     }
 
-    /**
-     * @return string
-     */
     public function __invoke()
     {
         return $this->getToken();
@@ -59,9 +46,6 @@ class CreateJWT
             ->getToken($this->signer, $this->secret); // Retrieves the generated token
     }
 
-    /**
-     * @return string
-     */
     public function getToken()
     {
         if (empty($this->token)) {

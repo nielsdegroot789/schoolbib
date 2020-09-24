@@ -30,71 +30,45 @@ class UserController
         $data = json_decode(file_get_contents("php://input"), TRUE);
 
         try{
-            $formUsername = $data["email"];
+            $formEmail = $data["email"];
             $formPassword = $data["password"];
         } catch(Exception $e){
             
         }
-        var_dump($formUsername);
-        var_dump($formPassword);
         
-        $userId = $this->validateUser($formUsername, $formPassword);
+        $userId = $this->validateUser($formEmail, $formPassword);
         if(!$userId){
             echo 'Caught exception: combo not found \n';
+            return $response->withStatus(400);
         }
-        var_dump($userId);
-        
-        $payload = [];
-        $payload['id'] = $userId;
-        //todo this calls invoke?
-        $jwt = new CreateJWT($userId);
-        $token = $jwt();
-        var_dump($token);
-
-        $response->getBody()->write($token);
-        return $response->withHeader('Authorization', 'Bearer: '. $token);
+        else {            
+            $payload = [];
+            $payload['id'] = $userId;
+            $jwt = new CreateJWT($userId);
+            $token = $jwt();
+            
+            $response->getBody()->write($token);
+            return $response->withHeader('Authorization', 'Bearer: '. $token);
+        }
     }
 
-    function validateUser($formUsername, $formPassword)
+    function validateUser($formEmail, $formPassword)
     {   
         $user = null;
         $db = $this->container->get('db');
-        $sql = "select id, password from users where id = '1'";
-        $res = $db->query($sql);
+        $sql = $db->prepare("select id, password from users where email = :email");
+        $sql->bindValue(':email',$formEmail);
+        $res =  $sql->execute();
         $data = $res->fetchArray(SQLITE3_ASSOC);
+        var_dump($data['password']);
+        var_dump(password_hash($formPassword, CRYPT_SHA256));
         if ($data) {
-            if (password_verify($formPassword, $data['password'] )) {
+            if (password_verify($formPassword, $data['password'])) {
                 $user = $data['id'];
             }
         }
+
        return $user;
-    }
-
-    function createToken($payloadData){
-        //https://dev.to/robdwaller/how-to-create-a-json-web-token-using-php-3gml
-
-        // Create token header as a JSON string
-        $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
-
-        // Create token payload as a JSON string
-        $payload = json_encode($payloadData);
-
-        // Encode Header to Base64Url String
-        $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
-
-        // Encode Payload to Base64Url String
-        $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
-
-        // Create Signature Hash
-        $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, 'ABC', true);
-
-        // Encode Signature to Base64Url String
-        $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
-
-        // Create JWT
-        $jwt = $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
-
-        return $jwt;
     }
 
 }

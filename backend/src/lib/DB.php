@@ -52,7 +52,6 @@ class DB extends \SQLite3
             //update
             
             $sql = $this->prepare("UPDATE bookMeta SET isbnCode = :isbn, title = :title, rating = :rating, totalPages = :totalPages, language = :language, sticker = :sticker, readingLevel = :readingLevel WHERE id = :id");
-            var_dump($sql);
 
             $sql->bindValue(':isbn', $isbn);
             $sql->bindValue(':title', $title);
