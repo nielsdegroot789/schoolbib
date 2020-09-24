@@ -1,19 +1,27 @@
 <template>
   <div>
-    <input v-model="search" type="text" placeholder="Search on title.." />
+    <div class="topContainer">
+      <input
+        v-model="search"
+        type="text"
+        placeholder="Search on title.."
+        @keydown="toSearch"
+      />
 
+      <Pagination />
+    </div>
     <div class="containerCard">
-      <div v-for="(item, index) in filteredMetaBooks" :key="index">
+      <div v-for="(item, index) in bookMeta" :key="index">
         <div class="card">
           <button class="btnAddList">&hearts;</button>
-          <n-link :to="/book/ + item.id">
+          <n-link :to="/catalog/ + /book/ + item.id">
             <div class="image">
               <img src="item.sticker" />
             </div>
             <div class="titleDiv">
-              <h1>{{ item.title }} booktitle</h1>
+              <h1>{{ item.title }}</h1>
             </div>
-            <p class="rating">4/5</p>
+            <p class="rating">{{ item.rating }} / 5</p>
 
             <p>
               {{ item.description }}
@@ -31,20 +39,52 @@ export default {
   data() {
     return {
       search: '',
+      timeoutId: null,
+      filterTimeOut: null,
     };
   },
   computed: {
+    changePageNumber() {
+      return this.$store.getters.pageNumber;
+    },
+    pageNumber() {
+      return parseInt(this.$route.params.page);
+    },
     bookMeta() {
       return this.$store.state.bookMeta;
     },
-    filteredMetaBooks() {
-      return this.bookMeta.filter((item) => item.title.includes(this.search));
+  },
+
+  watch: {
+    $route: {
+      immediate: true,
+      handler(route) {
+        this.search = route.query.name;
+        this.$store.dispatch('getBookMeta', {
+          pageNumber: this.pageNumber,
+          name: this.search,
+        });
+        console.log(route);
+      },
+    },
+  },
+  methods: {
+    toSearch() {
+      clearTimeout(this.filterTimeOut);
+      this.filterTimeOut = setTimeout(() => {
+        this.$router.push({ path: '/catalog/', query: { name: this.search } });
+      }, 1000);
+      console.log('search');
     },
   },
 };
 </script>
 
 <style>
+.topContainer {
+  display: flex;
+  justify-content: space-evenly;
+}
 .btnAddList {
   float: left;
 }
@@ -93,5 +133,23 @@ export default {
 .image {
   height: 150px;
   width: 50px;
+}
+input[type='text'] {
+  display: flex;
+  width: 600px;
+  justify-content: space-between;
+  text-align: center;
+  margin-bottom: 50px;
+  height: 4rem;
+  padding-left: 1rem;
+  background-color: #f9f9f9;
+  color: black;
+  width: 700px;
+  border: 0;
+  border-radius: 3px;
+  border-color: black;
+  border-width: 0.5px;
+  border-style: dotted;
+  padding: 10px;
 }
 </style>
