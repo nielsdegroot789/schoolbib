@@ -117,4 +117,4 @@ class UserController
     {
         return $this->id;
     }
-}
+};
