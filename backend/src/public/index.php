@@ -77,7 +77,7 @@ $checkLoggedInMW = function ($request, $handler) {
   return $response;
 };
 
-$app->add($checkLoggedInMW);
+// $app->add($checkLoggedInMW);
 
 
 //routes

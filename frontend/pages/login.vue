@@ -12,7 +12,12 @@
               <div class="field">
                 <label class="label">Name</label>
                 <div class="control">
-                  <input v-model="name" type="text" class="input" name="name" />
+                  <input
+                    v-model="email"
+                    type="text"
+                    class="input"
+                    name="email"
+                  />
                 </div>
               </div>
               <div class="field">
@@ -27,7 +32,10 @@
                 </div>
               </div>
               <div class="control">
-                <button class="button is-dark is-fullwidth" @click="login">
+                <button
+                  class="button is-dark is-fullwidth"
+                  @click="login({ email: email, password: password })"
+                >
                   Log In
                 </button>
               </div>
@@ -51,14 +59,13 @@
 export default {
   data() {
     return {
-      name: '',
+      email: '',
       password: '',
     };
   },
   methods: {
-    login() {
-      debugger;
-      this.$store.dispatch('login');
+    login(data) {
+      this.$store.dispatch('login', data);
     },
   },
 };

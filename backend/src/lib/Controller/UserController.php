@@ -25,13 +25,18 @@ class UserController
     public function login(Request $request, Response $response, array $args)
     {
         $this->response = $response;
-
+        var_dump($app);
         $data = json_decode(file_get_contents("php://input"), TRUE);
         //todo check if these are filled in
-        $username = $data["name"];
-        $password = $data["password"];
-        $userId = validateUser($username, $password);
-        
+      
+        $formUsername = $data["email"];
+        $formPassword = $data["password"];
+
+        $userId = $this->validateUser($formUsername, $formPassword);
+        var_dump($userId);
+        if(!$userId){
+            echo 'Caught exception: combo not found \n';
+        }
 
         $params = [];
         $params['id'] = 1;
@@ -41,24 +46,21 @@ class UserController
         return $response->withHeader('Authorization', 'Bearer: '. $token);
     }
 
-    function validateUser($user, $pass)
+    function validateUser($formUsername, $formPassword)
     {   
         $user = null;
         $db = $this->container->get('db');
-        $sql = "select id, password_crypt from users where username = '" . $user . "'";
+        $sql = "select id, password from users where id = '1'";
         $res = $db->query($sql);
         $data = $res->fetchArray(SQLITE3_ASSOC);
+        var_dump($formPassword);
+        var_dump($data['password']);
         if ($data) {
-            if (password_verify($pass, $data['password'])) {
-                $this->user->setId($data['id']);
+            if (password_verify($formPassword, $data['password'] )) {
+                $user = $data['id'];
             }
         }
-        if($user){
-            return $this->user->getId();
-        }
-        else {
-            //throw exception? 
-        }
+       return $user;
     }
 
     function createToken($payloadData){
