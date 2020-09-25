@@ -14,6 +14,8 @@
         <span>authors</span>
         <span>publishers</span>
         <span>categories</span>
+        <span>edit</span>
+        <span>delete</span>
       </div>
 
       <div
@@ -34,8 +36,17 @@
           <span>{{ item.authors }}</span>
           <span>{{ item.publishers }}</span>
           <span>{{ item.categories }}</span>
+          <span>
+            <nuxt-link :to="/editBook/ + item.id">edit</nuxt-link>
+          </span>
+          <span>
+            <nuxt-link :to="/deleteBook/ + item.id">delete</nuxt-link>
+          </span>
         </nuxt-link>
       </div>
+      <button class="newBook">
+        <nuxt-link to="/book/new">new</nuxt-link>
+      </button>
     </div>
   </div>
 </template>
@@ -84,7 +95,7 @@ export default {
 
 .headerContainer {
   display: grid;
-  grid-template-columns: repeat(11, calc(100% / 11));
+  grid-template-columns: repeat(11, calc(90% / 11)) 5% 5%;
   justify-items: center;
   align-items: center;
   margin: 5px 0;
@@ -93,7 +104,7 @@ export default {
 
 .booksContainer a {
   display: grid;
-  grid-template-columns: repeat(11, calc(100% / 11));
+  grid-template-columns: repeat(11, calc(90% / 11)) 5% 5%;
   justify-items: center;
   align-items: center;
   margin: 5px 0;

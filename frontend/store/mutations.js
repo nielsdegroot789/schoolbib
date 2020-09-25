@@ -5,4 +5,7 @@ export default {
   getBooks(state, data) {
     state.books = data;
   },
+  getNotification(state, data) {
+    state.notification = data;
+  },
 };
