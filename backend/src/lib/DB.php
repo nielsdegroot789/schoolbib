@@ -22,9 +22,10 @@ class DB extends \SQLite3
 		join authors on authors.id = bookMeta.authorsId
 		join publishers on publishers.id = bookMeta.publishersId
         join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
-		join categories on categories.id = categoriesInBooks.categoriesId
+        join categories on categories.id = categoriesInBooks.categoriesId
+        WHERE categories.name like 
         GROUP by bookMeta.id";
-        
+        //order by stellen
         $sql .= " limit '$limitNumber'";
         $sql .= " offset '$offsetNumber' * '$limitNumber'";
 

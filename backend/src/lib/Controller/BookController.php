@@ -33,10 +33,12 @@ class BookController
         $this->response = $response;
         $db = new DB();
         $arguments = json_decode(file_get_contents("php://input"), TRUE);
-        
+
+        $categories = isset($arguments["category"]) ? $arguments["category"] : "";
         $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
         $offsetNumber = isset($arguments["offset"]) ? $arguments["offset"] : 0;
 
+        
         $data = $db->getBookMeta($limitNumber,$offsetNumber);
         $payload = json_encode($data);
 
