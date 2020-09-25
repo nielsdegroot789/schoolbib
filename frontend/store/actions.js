@@ -24,14 +24,14 @@ export default {
     });
   },
   login(context, payload) {
-    debugger;
     axios
       .post('http://localhost:8080/login', payload)
       .then((response) => {
-        debugger;
+        localStorage.setItem('JWT', response.data);
         context.commit('setJWTtoken', response.data);
       })
       .catch((error) => {
+        // todo Show error messages
         console.log(error);
       });
   },

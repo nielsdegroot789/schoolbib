@@ -9,6 +9,7 @@ export default {
     state.notification = data;
   },
   setJWTtoken(state, data) {
+    debugger;
     state.JWT = data;
   },
 };

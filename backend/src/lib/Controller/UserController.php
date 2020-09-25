@@ -39,7 +39,7 @@ class UserController
         $userId = $this->validateUser($formEmail, $formPassword);
         if(!$userId){
             echo 'Caught exception: combo not found \n';
-            return $response->withStatus(400);
+            return $response->withStatus(401);
         }
         else {            
             $payload = [];
