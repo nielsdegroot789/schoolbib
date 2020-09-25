@@ -49,7 +49,7 @@ class DB extends \SQLite3
     }
 
     public function GetReservations(){
-        $sql="select id, userId, bookId, reservationDateTime, accepted from reservations group by userId" ;
+        $sql="select id, userId, bookId, reservationDateTime, accepted from reservations group by userId Order by datetime ascending" ;
         $res = $this->query($sql);
         
         $data = array();

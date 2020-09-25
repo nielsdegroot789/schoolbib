@@ -118,45 +118,67 @@ class UserController
         return $this->id;
     }
 
-    public function saveReservations($id,$usersId,$booksId,$reservationDateTime,$accepted)
+    public function saveReservationsUser($id,$usersId,$booksId,$reservationDateTime,$accepted)
     {            
         $db = new DB();
-        $stock = "select stock from reservations";
+        $stock = "select count id from bookMeta";
 
         session_start();
-            $booksId = $_SESSION['bookId'];
-            $usersId = $_SESSION['userId'];
+            $booksId = $_SESSION['booksId'];
+            $usersId = $_SESSION['usersId'];
 
 
         if(isset($_POST['submit']) || $stock != 0){
-            $booksId = trim($_POST['bookId']);
             $reservationDateTime = trim($_POST['reservationDateTime']);
-            $accepted = trim($_POST['accepted']);
+           
+           //$accepted = trim($_POST['accepted']);
             
           
-          
             $sql = $db->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime, accepted) 
-            values (:userId,:booksId,:reservationDateTime,:accepted)");
+            values (:userId,:booksId,:reservationDateTime)");
             
             
             
             $sql->bindValue(':id' , $id,);
-            $sql->bindValue(':userId' , $usersId,);
+            $sql->bindValue(':usersId' , $usersId,);
+            $sql->bindValue(':booksId' , $booksId,);
+            $sql->bindValue(':reservationDateTime' , $reservationDateTime,);
+        
+            if($sql->execute){
+               
+                // try{
+                //     $error = false;
+                // } catch($error){
+                //     $error = true;
+                //     echo $error; 
+                // } 
+            }
+        }
+        return $sql->execute();
+    }
+
+
+    public function saveCheckoutAdmin($id,$usersId,$booksId,$reservationDateTime,$accepted)
+    {            
+        $db = new DB();
+
+        session_start();
+            $booksId = $_SESSION['booksId'];
+            $usersId = $_SESSION['usersId'];
+
+
+        if(isset($_POST['submit'])){
+            $accepted = trim($_POST['accepted']);          
+          
+            $sql = $db->prepare("INSERT INTO checkouts (usersId,  booksId, reservationDateTime, accepted) 
+            Select (:userId,:booksId,:reservationDateTime, :accepted ) from reservations where booksId = booksId");
+            
+            $sql->bindValue(':id' , $id,);
+            $sql->bindValue(':usersId' , $usersId,);
             $sql->bindValue(':booksId' , $booksId,);
             $sql->bindValue(':reservationDateTime' , $reservationDateTime,);
             $sql->bindValue(':accepted' , $accepted,);
         
-            $error = false;
-                if($db){
-                    $error = true;
-                }
-                else {
-                    echo "
-                    <script>
-                    alert('Unsuccessful');
-                    </script>
-                ";
-                }
         }
         return $sql->execute();
     }
