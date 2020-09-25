@@ -32,6 +32,11 @@ class BookController
     {
         $this->response = $response;
         $db = new DB();
+        $arguments = json_decode(file_get_contents("php://input"), TRUE);
+        
+        $limitNumber = $arguments["limit"];
+        $offsetNumber = $arguments["offset"];
+
         $data = $db->getBookMeta();
         $payload = json_encode($data);
 
@@ -41,7 +46,7 @@ class BookController
     }
 
     public function getBooks(Request $request, Response $response, array $args)
-    {
+    {  
         $db = new DB();
         $data = $db->getBooks();
         $payload = json_encode($data);

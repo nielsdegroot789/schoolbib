@@ -15,7 +15,7 @@ class DB extends \SQLite3
         return $this->tableName;
     }
 
-    function getBookMeta(){
+    function getBookMeta($limitNumber = 20,$offsetNumber = 0){
         $sql = "		
         select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel, 
 		authors.name as authors, publishers.name as publishers,  group_concat(categories.name, ', ') as categories from bookMeta
@@ -23,7 +23,11 @@ class DB extends \SQLite3
 		join publishers on publishers.id = bookMeta.publishersId
         join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
 		join categories on categories.id = categoriesInBooks.categoriesId
-		GROUP by bookMeta.id";
+        GROUP by bookMeta.id";
+
+        $sql .= " limit '$limitNumber'";
+        $sql .= " offset '$offsetNumber' * '$limitNumber'";
+
         $res = $this->query($sql);
 
         $data = array();
@@ -37,6 +41,7 @@ class DB extends \SQLite3
     function getBooks(){
         $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
         group by bookMetaId";
+
         $res = $this->query($sql);
 
         $data = array();
