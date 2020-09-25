@@ -81,7 +81,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .topContainer {
   display: flex;
   justify-content: space-evenly;

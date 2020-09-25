@@ -75,7 +75,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .pagination-button {
   padding: 8px;
   margin: 2px;
