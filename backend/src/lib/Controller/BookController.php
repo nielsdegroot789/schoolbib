@@ -37,7 +37,7 @@ class BookController
         $limitNumber = $arguments["limit"];
         $offsetNumber = $arguments["offset"];
 
-        $data = $db->getBookMeta();
+        $data = $db->getBookMeta($limitNumber,$offsetNumber);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
