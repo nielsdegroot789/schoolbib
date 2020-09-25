@@ -11,6 +11,8 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use skoolBiep\DB;
 use skoolBiep\User;
+use skoolBiep\Util\ValidateJWT;
+
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -42,13 +44,14 @@ $app->add(TwigMiddleware::createFromContainer($app));
 
 $checkLoggedInMW = function ($request, $handler) {
   $authHeader = $request->getHeader('Authorization');
-  $response = new Response($handler->handle($request), new StreamFactory());
+
+  $response = $handler->handle($request);
 
   if (empty($authHeader)) {
       return $response->withStatus(404);
   }
 
-  $jwtString = substr($authHeader[0], 7);
+  $jwtString = $authHeader[0];
   $userId = (new ValidateJWT($jwtString))();
 
   if (empty($userId)) {
@@ -68,7 +71,7 @@ $app->get('/', function (Request $request, Response $response, $args) {
   $response->getBody()->write('Hello ');
 
   return $response;
-});
+})->add($checkLoggedInMW);
 
 $app->post('/login', \skoolBiep\Controller\UserController::class . ':login');
 
