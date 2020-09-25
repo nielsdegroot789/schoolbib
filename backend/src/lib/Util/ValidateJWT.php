@@ -1,8 +1,8 @@
 <?php
 
-namespace eindwerk\Util;
+namespace skoolBiep\Util;
 
-use eindwerk\Model\User;
+use skoolBiep\Model\User;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
@@ -28,12 +28,12 @@ class ValidateJWT
     {
         $this->token = (new Parser())->parse($jwtString);
         $this->signer = new Sha256();
-        $this->secret = new Key(getenv('JWT_SECRET'));
+        $this->secret = new Key("ABC");
     }
 
     public function __invoke()
     {
-        return $this->getUser();
+        return $this->getUserId();
     }
 
     /**
@@ -42,7 +42,7 @@ class ValidateJWT
     private function validationData()
     {
         $data = new ValidationData();
-        $data->setIssuer(getenv('DOMAIN'));
+        $data->setIssuer('Localhost:8080');
 
         return $data;
     }
@@ -55,13 +55,13 @@ class ValidateJWT
     /**
      * @return User|false
      */
-    public function getUser()
+    public function getUserId()
     {
         if (!$this->validateToken()) {
             return false;
         }
 
-        $username = $this->token->getClaim('username');
-        return User::fetchByUserName($username);
+        $userId = $this->token->getClaim('userId');
+        return $userId;
     }
 }

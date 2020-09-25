@@ -41,39 +41,22 @@ $app->add(TwigMiddleware::createFromContainer($app));
 
 
 $checkLoggedInMW = function ($request, $handler) {
-  // $headers = $request->headers;
-  $secret = "ABC";
-  $JWTtoken = $request->getHeader('Authorization');
-  try{
+  $authHeader = $request->getHeader('Authorization');
+  $response = new Response($handler->handle($request), new StreamFactory());
 
-    $explodedToken = explode('.', $JWTtoken[0]);
-    $incomingHeader  = $explodedToken[0];
-    $incomingPayload  = $explodedToken[1];
-    $incomingSignature =  $explodedToken[2];
-  }
-  catch(Exception $e){
-    echo "Exception:" . $e->getMessage();
+  if (empty($authHeader)) {
+      return $response->withStatus(404);
   }
 
-  $signature = hash_hmac('sha256', $incomingHeader. '.' . $incomingPayload, $secret, true);
-  $base64UrlSignature  =str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
+  $jwtString = substr($authHeader[0], 7);
+  $userId = (new ValidateJWT($jwtString))();
 
-  if($base64UrlSignature != $incomingSignature)
-  {
-    var_dump("test failed");
-    //redirect to login screen
-    return $response;
+  if (empty($userId)) {
+    return $response->withStatus(404);
   }
-  //todo check if token is not expired
 
-  //todo refresh token by generating new one?
-
-  //great success, access granted
-  var_dump("test succeeded");
-
-  $response = $handler->handle($request);
-  // $response->getBody()->write('World');
-
+  //todo ??
+  // $request->withAttribute('user', $user);
   return $response;
 };
 
