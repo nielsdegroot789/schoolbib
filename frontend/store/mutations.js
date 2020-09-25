@@ -8,4 +8,7 @@ export default {
   getNotification(state, data) {
     state.notification = data;
   },
+  setTotalItems(state, payload) {
+    state.setTotalItems = payload;
+  },
 };
