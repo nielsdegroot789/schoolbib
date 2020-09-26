@@ -3,7 +3,6 @@ export default {
   books: [],
   users: [],
   currentUser: {},
-  frontpageNotification: {},
-  profileData: {},
+  frontPageNotification: {},
   notification: {},
 };

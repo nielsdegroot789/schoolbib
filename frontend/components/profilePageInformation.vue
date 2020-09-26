@@ -3,7 +3,7 @@
     <h2 class="profile-page-title">EDIT INFORMATION</h2>
     <img src="../assets/pictures/default.png" alt="Standaard-afbeelding" />
     <input type="file" @change="selectPicture" />
-    <button @click="upload">Upload</button>
+    <button>Upload</button>
     <h2 class="profile-page-title">ACOUNT INFORMATION</h2>
     <FormulateForm>
       <FormulateInput
