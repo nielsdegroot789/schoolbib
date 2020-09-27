@@ -23,4 +23,8 @@ export default {
       state.showLoginError = false;
     }, 3000);
   },
+  logout(state) {
+    state.JWT = null;
+    state.currentUser = {};
+  },
 };

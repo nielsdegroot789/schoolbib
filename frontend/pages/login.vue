@@ -56,6 +56,13 @@
 
 <script>
 export default {
+  middleware({ store, redirect }) {
+    // If the user is not authenticated
+    if (store.state.JWT) {
+      return redirect('/');
+    }
+  },
+  // middleware: 'auth',
   data() {
     return {
       email: '',
