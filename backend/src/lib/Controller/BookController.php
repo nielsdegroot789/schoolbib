@@ -32,7 +32,15 @@ class BookController
     {
         $this->response = $response;
         $db = new DB();
-        $data = $db->getBookMeta();
+        $arguments = json_decode(file_get_contents("php://input"), TRUE);
+        $title = isset($arguments["title"]) ? '%' . $arguments["title"] : "%";
+        $author = isset($arguments["author"]) ? '%' . $arguments["author"] : "%";
+        $category = isset($arguments["category"]) ? $arguments["category"] : "%";
+        $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
+        $offsetNumber = isset($arguments["offset"]) ? $arguments["offset"] : 0;
+
+        
+        $data = $db->getBookMeta($limitNumber,$offsetNumber, $category,$author,$title);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
@@ -41,7 +49,7 @@ class BookController
     }
 
     public function getBooks(Request $request, Response $response, array $args)
-    {
+    {  
         $db = new DB();
         $data = $db->getBooks();
         $payload = json_encode($data);
