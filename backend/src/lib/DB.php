@@ -106,4 +106,16 @@ class DB extends \SQLite3
 
         return $data;
     }
+
+    function getUserByEmail($formEmail){
+        $sql = $this->prepare('SELECT users.id, users.surname ,password, roles.id as role from users
+                                join userRoles on userRoles.usersId = users.id 
+                                join roles on roles.id = userRoles.rolesId
+                                where users.email = :email;');
+        $sql->bindValue(':email', $formEmail);
+        $res =  $sql->execute();
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+
+        return $data;
+    }
 }

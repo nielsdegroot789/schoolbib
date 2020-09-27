@@ -36,15 +36,14 @@ class UserController
             
         }
         
-        $userId = $this->validateUser($formEmail, $formPassword);
-        if(!$userId){
+        $user = $this->validateUser($formEmail, $formPassword);
+        if(!$user){
             echo 'Caught exception: combo not found \n';
             return $response->withStatus(401);
         }
         else {            
-            $payload = [];
-            $payload['id'] = $userId;
-            $jwt = new CreateJWT($userId);
+            $this->setUser($user);
+            $jwt = new CreateJWT($user);
             $token = $jwt();
             
             $response->getBody()->write($token);
@@ -55,18 +54,24 @@ class UserController
     function validateUser($formEmail, $formPassword)
     {   
         $user = null;
+
         $db = $this->container->get('db');
-        $sql = $db->prepare("select id, password from users where email = :email");
-        $sql->bindValue(':email',$formEmail);
-        $res =  $sql->execute();
-        $data = $res->fetchArray(SQLITE3_ASSOC);
+        $user = $db->getUserByEmail($formEmail);
+
         if ($data) {
-            if (password_verify($formPassword, $data['password'])) {
-                $user = $data['id'];
+            if (password_verify($formPassword, $user['password'])) {
+                $user = $user['id'];
             }
         }
 
        return $user;
+    }
+
+    public function setUser(Array $user){
+        $this->user = $user;
+    }
+    public function getUser() : Array {
+        return $this->user;
     }
 
 }

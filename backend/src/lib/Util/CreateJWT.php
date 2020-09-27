@@ -13,15 +13,15 @@ class CreateJWT
 
     // https://git.fullstacksyntra.be/Simondb/Eindwerk-Projectopvolging-Facturatie/src/branch/feature/jwt-auth 
     
-    private $userId;
+    private $user;
     private $builder;
     private $token;
     private $signer;
     private $secret;
 
-    public function __construct($userId)
+    public function __construct($user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
         $this->builder = new Builder();
         $this->signer = new Sha256();
         //todo change this!
@@ -40,9 +40,8 @@ class CreateJWT
         $this->token = $this->builder
             ->issuedBy('localhost:8080')
             ->issuedAt($time) // Configures the time that the token was issue (iat claim)
-            ->canOnlyBeUsedAfter($time) // Configures the time that the token can be used (nbf claim)
-            ->expiresAt($time + 86400) // Configures the expiration time of the token (exp claim)
-            ->withClaim('userId', $this->userId) // Configures a new claim, called "username"
+            ->withClaim('userId', $this->user['id']) // Configures a new claim, called "username"
+            ->withClaim('role', $this->user['role'] ) // Configures a new claim, called "username"
             ->getToken($this->signer, $this->secret); // Retrieves the generated token
     }
 
