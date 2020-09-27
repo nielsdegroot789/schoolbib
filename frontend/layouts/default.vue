@@ -46,7 +46,9 @@ export default {
     this.$store.dispatch('getBookMeta');
     this.$store.dispatch('getBooks');
     if (!this.$store.state.jwt) {
-      this.$store.commit('setJWTtoken', localStorage.getItem('JWT'));
+      if (localStorage.getItem('JWT')) {
+        this.$store.commit('setJWTtoken', localStorage.getItem('JWT'));
+      }
     }
   },
   methods: {
