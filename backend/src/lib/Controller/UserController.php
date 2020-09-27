@@ -10,6 +10,8 @@ use skoolBiep\Util\CreateJWT;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
+use Exception;
+
 
 class UserController
 {
@@ -23,34 +25,35 @@ class UserController
         $this->container = $container;
     }
 
-    public function login(Request $request, Response $response, array $args)
-    {
-        $this->response = $response;
-        //todo check if these are filled in
+    public function login(Request $request, Response $response, array $args) : Response
+    {        
         $data = json_decode(file_get_contents("php://input"), TRUE);
-
         try{
             $formEmail = $data["email"];
+            if(!$formEmail) throw new Exception('Email not filled in correctly');
             $formPassword = $data["password"];
+            if(!$formPassword) throw new Exception('Password not filled in correctly');
+
         } catch(Exception $e){
-            
-        }
-        
-        $user = $this->validateUser($formEmail, $formPassword);
-        if(!$user){
-            echo 'Caught exception: combo not found \n';
+            $response->getBody()->write('Caught exception: '.  $e->getMessage(). "\n");
             return $response->withStatus(401);
         }
-        else {            
+        
+        try{
+            $user = $this->validateUser($formEmail, $formPassword);
             $jwt = new CreateJWT($user);
             $token = $jwt();
             
             $response->getBody()->write($token);
             return $response->withHeader('Authorization', 'Bearer: '. $token);
         }
+        catch(Exception $e){
+            $response->getBody()->write('Caught exception: '.  $e->getMessage(). "\n");
+            return $response->withStatus(401);
+        }
     }
 
-    function validateUser($formEmail, $formPassword)
+    function validateUser(String $formEmail, String $formPassword): Array
     {   
         $user = null;
 
@@ -59,11 +62,11 @@ class UserController
         if ($user) {
             if (password_verify($formPassword, $user['password'])) {
                 $this->setUser($user);
-
+                return $user;
             }
         }
-
-       return $user;
+       
+        throw new Exception("Combination not found");
     }
 
     public function setUser(Array $user){
