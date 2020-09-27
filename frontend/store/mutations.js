@@ -11,9 +11,14 @@ export default {
   setJWTtoken(state, data) {
     debugger;
     state.JWT = data;
-    const { header, payload, signature } = data.split('.');
-    state.header = atob(header);
-    state.role = atob(payload).role;
-    state.signature = signature;
+    const array = data.split('.');
+    console.log(array);
+    // console.log(payload);
+    // console.log(signature);
+
+    state.header = atob(array[0]);
+    state.payload = atob(array[1]);
+    state.role = JSON.parse(atob(array[1])).role;
+    state.signature = array[2];
   },
 };

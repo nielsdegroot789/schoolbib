@@ -56,7 +56,6 @@ class UserController
 
         $db = $this->container->get('db');
         $user = $db->getUserByEmail($formEmail);
-
         if ($user) {
             if (password_verify($formPassword, $user['password'])) {
                 $this->setUser($user);
