@@ -5,4 +5,5 @@ export default {
   currentUser: {},
   notification: {},
   JWT: null,
+  showLoginError: false,
 };

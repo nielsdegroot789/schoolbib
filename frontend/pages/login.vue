@@ -3,10 +3,12 @@
     <section class="section">
       <div class="container">
         <div class="columns">
-          <div class="column is-4 is-offset-4">
+          <div class="column is-6 is-offset-4">
             <h2 class="title has-text-centered">Welcome back!</h2>
 
-            <!-- <Notification v-if="error" :message="error" /> -->
+            <div v-if="showError" class="errorMessage">
+              Error: This combination is not found.
+            </div>
 
             <div class="field">
               <label class="label">Name</label>
@@ -46,7 +48,11 @@
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.errorMessage {
+  color: red;
+}
+</style>
 
 <script>
 export default {
@@ -55,6 +61,11 @@ export default {
       email: '',
       password: '',
     };
+  },
+  computed: {
+    showError() {
+      return this.$store.state.showLoginError;
+    },
   },
   methods: {
     login(data) {

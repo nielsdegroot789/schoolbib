@@ -30,8 +30,12 @@ export default {
         localStorage.setItem('JWT', response.data);
         context.commit('setJWTtoken', response.data);
       })
+      .then((response) => {
+        this.$router.push('/');
+      })
       .catch((error) => {
         // todo Show error messages
+        context.commit('setLoginError');
         console.log(error);
       });
   },
