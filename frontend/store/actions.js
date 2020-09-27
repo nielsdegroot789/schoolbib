@@ -39,4 +39,23 @@ export default {
         console.log(error);
       });
   },
+  getBookFromGoogleAPI(context) {
+    // https://www.googleapis.com/books/v1/volumes?q=isbn:9780553213102&key=AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs
+    axios({
+      method: 'GET',
+      url: 'https://www.googleapis.com/books/v1/volumes',
+      params: {
+        q: '',
+        isbn: '9780553213102',
+        key: 'AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs',
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        debugger;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
 };
