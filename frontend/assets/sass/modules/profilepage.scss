@@ -39,8 +39,10 @@
   display: inline-block;
   position: absolute;
   width: 73%;
-  height: 1000px;
+  height: auto;
+  min-height: 500px;
   margin-left: 2rem;
+  padding: 20px 5px;
   border: 7px solid #28528a;
   .information-container {
     padding-left: 4rem;

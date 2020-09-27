@@ -4,5 +4,6 @@ export default {
   users: [],
   currentUser: {},
   frontPageNotification: {},
-  notification: {},
+  notificationMessage: {},
+  show: false,
 };

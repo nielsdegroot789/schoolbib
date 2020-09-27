@@ -23,7 +23,14 @@ export default {
       console.log(error);
     });
   },
-  displayNotification({ commit }, notification) {
-    commit('setNotification', notification);
+  showNotification({ commit }, message) {
+    commit('showNotification');
+    commit('setNotification', message);
+    setTimeout(() => {
+      commit('deleteNotification');
+    }, 5000);
+  },
+  deleteNotification({ commit }) {
+    commit('deleteNotification');
   },
 };

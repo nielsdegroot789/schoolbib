@@ -11,4 +11,10 @@ export default {
   setNotification(state, notification) {
     state.notification = notification;
   },
+  showNotification(state) {
+    state.show = true;
+  },
+  deleteNotification(state) {
+    state.show = false;
+  },
 };

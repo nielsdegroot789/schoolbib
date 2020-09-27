@@ -25,7 +25,7 @@
       <FormulateInput label="Current password" input-class="input-style" />
       <FormulateInput label="New password" input-class="input-style" />
       <FormulateInput label="Confirm password" input-class="input-style" />
-      <input type="submit" label="Save Changes" />
+      <input type="submit" label="Save Changes" @click="save()" />
     </FormulateForm>
   </div>
 </template>
@@ -41,6 +41,9 @@ export default {
   methods: {
     selectPicture(event) {
       this.selectedFile = event.target.file[0]; // vuex store sturen
+    },
+    save() {
+      this.$store.dispatch('showNotification', 'Changes saved');
     },
   },
 };
