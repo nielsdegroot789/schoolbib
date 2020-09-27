@@ -42,7 +42,6 @@ class UserController
             return $response->withStatus(401);
         }
         else {            
-            $this->setUser($user);
             $jwt = new CreateJWT($user);
             $token = $jwt();
             
@@ -58,9 +57,10 @@ class UserController
         $db = $this->container->get('db');
         $user = $db->getUserByEmail($formEmail);
 
-        if ($data) {
+        if ($user) {
             if (password_verify($formPassword, $user['password'])) {
-                $user = $user['id'];
+                $this->setUser($user);
+
             }
         }
 
