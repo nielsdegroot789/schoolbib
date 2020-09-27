@@ -11,5 +11,9 @@ export default {
   setJWTtoken(state, data) {
     debugger;
     state.JWT = data;
+    const { header, payload, signature } = data.split('.');
+    state.header = atob(header);
+    state.role = atob(payload).role;
+    state.signature = signature;
   },
 };
