@@ -64,13 +64,21 @@
       font-weight: bold;
       color: #28528a;
     }
-    .input-style {
+    .input-style  {
       border: #a8a8a8 1px solid;
       border-radius: 3px;
     }
     .formulate-input-label {
       margin-top: 15%; 
     }
+
+    input[type="password"] {
+      border: #a8a8a8 1px solid;
+      border-radius: 3px;
+      width: 72%;
+      height: 2rem;
+    }
+    
 
     input[type='submit'] {
       border: 1px solid #6050a8;

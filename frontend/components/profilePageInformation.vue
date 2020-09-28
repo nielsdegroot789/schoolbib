@@ -5,7 +5,7 @@
     <input type="file" @change="selectPicture" />
     <button>Upload</button>
     <h2 class="profile-page-title">ACOUNT INFORMATION</h2>
-    <FormulateForm>
+    <FormulateForm @submit="save()">
       <FormulateInput
         label="First name"
         validation="required"
@@ -22,10 +22,27 @@
         input-class="input-style"
       />
       <h2 class="profile-page-title">CHANGE PASSWORD</h2>
-      <FormulateInput label="Current password" input-class="input-style" />
-      <FormulateInput label="New password" input-class="input-style" />
-      <FormulateInput label="Confirm password" input-class="input-style" />
-      <input type="submit" label="Save Changes" @click="save()" />
+      <FormulateInput
+        label="Current password"
+        type="password"
+        input-class="input-style"
+        validation="required"
+      />
+      <FormulateInput
+        label="New password"
+        input-class="input-style"
+        type="password"
+        name="password"
+        validation="required"
+      />
+      <FormulateInput
+        label="Confirm password"
+        type="password"
+        name="password_confirm"
+        validation="required|confirm"
+        validation-name="Password confirmation"
+      />
+      <input type="submit" label="Save Changes" />
     </FormulateForm>
   </div>
 </template>
