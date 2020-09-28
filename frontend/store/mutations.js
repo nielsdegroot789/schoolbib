@@ -8,14 +8,11 @@ export default {
   getFrontPageNotification(state, data) {
     state.frontPageNotification = data;
   },
-  setNotification(state, notification) {
-    state.notification = notification;
-  },
-  showNotification(state) {
-    state.show = true;
-  },
-  deleteNotification(state) {
-    state.show = false;
+  addNotification(state, notification) {
+    state.notifications.push({
+      ...notification,
+      id: Math.random().toString(36) + Date.now().toString(36).substr(2),
+    });
   },
   setJWTtoken(state, data) {
     state.JWT = data;

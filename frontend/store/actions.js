@@ -25,13 +25,10 @@ export default {
       console.log(error);
     });
   },
-  showNotification({ commit }, message) {
-    commit('showNotification');
-    commit('setNotification', message);
-    setTimeout(() => {
-      commit('deleteNotification');
-    }, 6000);
+  addNotification({ commit }, message) {
+    commit('addNotification', message);
   },
+
   deleteNotification({ commit }) {
     commit('deleteNotification');
   },
