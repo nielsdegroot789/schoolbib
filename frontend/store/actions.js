@@ -40,13 +40,17 @@ export default {
       });
   },
   getBookFromGoogleAPI(context) {
-    // https://www.googleapis.com/books/v1/volumes?q=isbn:9780553213102&key=AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs
+    // Example URL https://www.googleapis.com/books/v1/volumes?q=isbn:9780553213102+inauthor:jane&key=AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs
+    const filterParams = {
+      isbn: '9780553213102',
+      inauthor: 'jane',
+    };
+
     axios({
       method: 'GET',
       url: 'https://www.googleapis.com/books/v1/volumes',
       params: {
-        q: '',
-        isbn: '9780553213102',
+        q: filterParams,
         key: 'AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs',
       },
     })
