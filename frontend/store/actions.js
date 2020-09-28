@@ -29,9 +29,10 @@ export default {
     commit('addNotification', message);
   },
 
-  deleteNotification({ commit }) {
-    commit('deleteNotification');
+  deleteNotification({ commit }, message) {
+    commit('deleteNotification', message);
   },
+
   login(context, payload) {
     axios
       .post('http://localhost:8080/login', payload)

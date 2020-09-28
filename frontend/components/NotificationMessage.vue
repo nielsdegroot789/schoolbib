@@ -17,6 +17,11 @@ export default {
       return `alert-${this.notification.type}`;
     },
   },
+  methods: {
+    deleteNotification() {
+      this.$store.dispatch('deleteNotification', this.notification);
+    },
+  },
 };
 </script>
 

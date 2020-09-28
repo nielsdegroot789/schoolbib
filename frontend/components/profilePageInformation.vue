@@ -61,7 +61,7 @@ export default {
     },
     save() {
       this.$store.dispatch('addNotification', {
-        type: 'fail',
+        type: 'success',
         message: 'Form saved',
       });
     },

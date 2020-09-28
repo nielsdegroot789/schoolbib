@@ -14,6 +14,11 @@ export default {
       id: Math.random().toString(36) + Date.now().toString(36).substr(2),
     });
   },
+  deleteNotification(state, notificationRemove) {
+    state.notifications = state.notifications.filter((notification) => {
+      return notification.id !== notificationRemove.id;
+    });
+  },
   setJWTtoken(state, data) {
     state.JWT = data;
 
