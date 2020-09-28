@@ -41,6 +41,7 @@ import Notification from '../components/Notification';
 export default {
   components: {
     Notification,
+  },
   computed: {
     loggedIn() {
       return !!this.$store.state.JWT;
