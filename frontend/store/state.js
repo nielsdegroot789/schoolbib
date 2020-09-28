@@ -3,5 +3,7 @@ export default {
   books: [],
   users: [],
   currentUser: {},
-  notification: {},
+  frontPageNotification: {},
+  notificationMessage: {},
+  show: true,
 };

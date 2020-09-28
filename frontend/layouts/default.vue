@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Notification />
     <nav class="navbar is-light">
       <div class="container">
         <div class="navbar-brand">
@@ -31,7 +32,11 @@
   </div>
 </template>
 <script>
+import Notification from '../components/Notification';
 export default {
+  components: {
+    Notification,
+  },
   mounted() {
     this.$store.dispatch('getBookMeta');
     this.$store.dispatch('getBooks');
