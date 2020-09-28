@@ -7,7 +7,6 @@
             <n-link to="/">Home</n-link> >
             <n-link to="/catalog">catalog</n-link> >
             {{ bookMeta.title }}
-            ( {{ book.stock + 1 }} )
           </div>
           <div class="containerBook">
             <div class="containerBookAbove">
@@ -21,37 +20,56 @@
               <h3>book</h3>
               {{ bookMeta.language }}
             </div>
+
             <div class="containerBookInfo">
               <div class="containerBookInfoLeft">
+                <strong>
+                  <h1>{{ bookMeta.title }}</h1></strong
+                >
                 <div>{{ bookMeta.sticker }}</div>
                 <Button @click="addTofavoriteBooks">
                   &#10084; Place on list
                 </Button>
               </div>
               <div class="containerBookInfoMiddle">
-                <h1>{{ bookMeta.title }}</h1>
-                <!-- <h3>{{ authors.name }} {author}</h3> -->
-                <!-- <h3>Genre: {{ catagory.name }}</h3> -->
-                <h5>amount in stock : {{ book.stock }}</h5>
                 <br />
 
-                <p>the different versions:</p>
+                <p>Details:</p>
                 <div v-for="book in books" :key="book.id">
+                  <p><strong> Title : </strong>{{ bookMeta.title }}</p>
+                  <p><strong> Author :</strong> {{ bookMeta.authors }}</p>
+                  <p><strong> Language(s) :</strong> {{ bookMeta.language }}</p>
                   <br />
-                  {{ book.status }}
+                  <p><strong>Categorie(s)</strong> {{ bookMeta.categories }}</p>
                   <br />
+                  <p>-------</p>
+                  <br />
+                  <p><strong>rating :</strong>{{ bookMeta.rating }} / 5</p>
+                  <p><strong> Title : </strong>{{ bookMeta.title }}</p>
+                  <p>
+                    <strong> ReadingLevel : </strong>{{ bookMeta.readingLevel }}
+                  </p>
+                  <p>
+                    <strong> totalPages : </strong>{{ bookMeta.totalPages }}
+                  </p>
+                  <p>
+                    <strong> publishers : </strong>{{ bookMeta.publishers }}
+                  </p>
+                  <p>
+                    <strong> publishDate : </strong>{{ bookMeta.publishDate }}
+                  </p>
                 </div>
-                <div v-if="book.stock != 0" class="containerBookInfoRight">
+                <!-- <div v-if="book.stock != 0" class="containerBookInfoRight">
                   <n-link to="/borrow/">
                     <button>reserve here!</button>
                   </n-link>
-                </div>
-                <div v-else class="containerBookInfoRight">
+                </div> -->
+                <!-- <div v-else class="containerBookInfoRight">
                   This book isn't in the store anymore.
                   <n-link to="/borrow/">
                     <button>reserve here!</button>
                   </n-link>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -122,10 +140,10 @@ export default {
 .containerBookInfo {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  justify-content: left;
+  justify-content: center;
   background: rgb(209, 190, 183);
   height: 600px;
-  padding: 30px;
+  padding: 10px;
 }
 .containerBookInfoLeft {
   background: honeydew;

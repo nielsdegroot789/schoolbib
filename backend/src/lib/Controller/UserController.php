@@ -121,18 +121,15 @@ class UserController
     public function saveReservationsUser($id,$usersId,$booksId,$reservationDateTime,$accepted)
     {            
         $db = new DB();
-        $stock = "select count id from bookMeta";
 
         session_start();
             $booksId = $_SESSION['booksId'];
             $usersId = $_SESSION['usersId'];
 
 
-        if(isset($_POST['submit']) || $stock != 0){
+        if(isset($_POST['submit'])){
             $reservationDateTime = trim($_POST['reservationDateTime']);
            
-           //$accepted = trim($_POST['accepted']);
-            
           
             $sql = $db->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime, accepted) 
             values (:userId,:booksId,:reservationDateTime)");
@@ -146,37 +143,41 @@ class UserController
         
             if($sql->execute){
                
-                // try{
-                //     $error = false;
-                // } catch($error){
-                //     $error = true;
-                //     echo $error; 
-                // } 
+                
             }
         }
         return $sql->execute();
     }
+    public function ChangeAccepted($accepted){
+        $db = new DB();
+        $sql=$db->
+    }
 
-
-    public function saveCheckoutAdmin($id,$usersId,$booksId,$reservationDateTime,$accepted)
+    public function saveCheckoutAdmin($id,$usersId,$booksId,$checkoutDateTime,$returnDateTime,$accepted)
     {            
         $db = new DB();
-
+        $currentTime = time();
+        
         session_start();
             $booksId = $_SESSION['booksId'];
             $usersId = $_SESSION['usersId'];
 
 
         if(isset($_POST['submit'])){
-            $accepted = trim($_POST['accepted']);          
-          
+            $sql = $db->exec('UPDATE reservations SET accepted = 1 WHERE reservation.booksId = checkouts.booksId ');
+             
+
+            if ($accepted = 1){
+                $sql=$db->exec('UPDATE checkouts SET checkoutDateTime=$currentTime WHERE booksId=reservation.booksId');
+            }
+
             $sql = $db->prepare("INSERT INTO checkouts (usersId,  booksId, reservationDateTime, accepted) 
-            Select (:userId,:booksId,:reservationDateTime, :accepted ) from reservations where booksId = booksId");
+            Select (:userId,:booksId,:checkoutDateTime, :returnDateTime ) from reservations where reservations.booksId = checkouts.booksId");
             
             $sql->bindValue(':id' , $id,);
             $sql->bindValue(':usersId' , $usersId,);
             $sql->bindValue(':booksId' , $booksId,);
-            $sql->bindValue(':reservationDateTime' , $reservationDateTime,);
+            $sql->bindValue(':checkoutDateTime' , $checkoutDateTime,);
             $sql->bindValue(':accepted' , $accepted,);
         
         }

@@ -59,7 +59,7 @@ $app->get('/getNotification',\skoolBiep\Controller\CockpitController::class . ':
 //     }
 //     return $response;
 // });
-$app->post('/saveReservations', \skoolBiep\Controller\BookController::class . ':getReservation');
+$app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':getReservation');
 
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 

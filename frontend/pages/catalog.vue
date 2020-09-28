@@ -14,7 +14,7 @@
       <div v-for="(item, index) in bookMeta" :key="index">
         <div class="card">
           <button class="btnAddList">&hearts;</button>
-          <n-link :to="/catalog/ + /book/ + item.id">
+          <n-link :to="/book/ + item.id">
             <div class="image">
               <img src="item.sticker" />
             </div>
@@ -27,7 +27,7 @@
               {{ item.description }}
             </p>
           </n-link>
-          <n-link :to="/borrow/ + item.id">
+          <n-link :to="/book/ + item.id">
             <button class="borrow">Borrow</button>
           </n-link>
         </div>
