@@ -61,9 +61,7 @@ export default {
       return this.$store.state.bookMeta;
     },
   },
-  created() {
-    this.$store.dispatch('getBookFromGoogleAPI');
-  },
+  created() {},
 };
 </script>
 

@@ -39,27 +39,5 @@ export default {
         console.log(error);
       });
   },
-  getBookFromGoogleAPI(context) {
-    // Example URL https://www.googleapis.com/books/v1/volumes?q=isbn:9780553213102+inauthor:jane&key=AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs
-    const filterParams = {
-      isbn: '9780553213102',
-      inauthor: 'jane',
-    };
-
-    axios({
-      method: 'GET',
-      url: 'https://www.googleapis.com/books/v1/volumes',
-      params: {
-        q: filterParams,
-        key: 'AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs',
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        debugger;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   },
 };
