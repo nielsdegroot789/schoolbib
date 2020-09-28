@@ -5,5 +5,5 @@ export default {
   currentUser: {},
   frontPageNotification: {},
   notificationMessage: {},
-  show: false,
+  show: true,
 };

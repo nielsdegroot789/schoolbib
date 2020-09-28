@@ -28,7 +28,7 @@ export default {
     commit('setNotification', message);
     setTimeout(() => {
       commit('deleteNotification');
-    }, 5000);
+    }, 6000);
   },
   deleteNotification({ commit }) {
     commit('deleteNotification');

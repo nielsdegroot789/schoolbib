@@ -25,8 +25,10 @@ export default {
 
 <style>
 .notify-container {
+  border-radius: 1em;
+  padding-top: 5px;
   position: fixed;
-  background-color: grey;
+  background-color: rgb(119, 252, 130);
   width: 200px;
   height: 100px;
   bottom: 1rem;
@@ -37,7 +39,12 @@ export default {
   align-items: flex-end;
 }
 .close-button {
-  max-width: 100px;
+  border: none;
+  border-radius: 50%;
+  width: 12%;
+  height: 22%;
+  margin-right: 5px;
+  cursor: pointer;
 }
 .notification-text {
   margin-top: 1rem;
