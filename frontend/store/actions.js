@@ -3,7 +3,9 @@ import axios from 'axios';
 export default {
   getBookMeta(context) {
     axios
-      .get('http://localhost:8080/getBookMeta')
+      .get('http://localhost:8080/getBookMeta', {
+        headers: { Authorization: `Bearer test` },
+      })
       .then((response) => context.commit('getBookMeta', response.data));
   },
   getBooks(context) {
@@ -32,5 +34,20 @@ export default {
   },
   deleteNotification({ commit }) {
     commit('deleteNotification');
+  login(context, payload) {
+    axios
+      .post('http://localhost:8080/login', payload)
+      .then((response) => {
+        localStorage.setItem('JWT', response.data);
+        context.commit('setJWTtoken', response.data);
+      })
+      .then((response) => {
+        this.$router.push('/');
+      })
+      .catch((error) => {
+        // todo Show error messages
+        context.commit('setLoginError');
+        console.log(error);
+      });
   },
 };

@@ -3,35 +3,38 @@
     <section class="section">
       <div class="container">
         <div class="columns">
-          <div class="column is-4 is-offset-4">
+          <div class="column is-6 is-offset-4">
             <h2 class="title has-text-centered">Welcome back!</h2>
 
-            <!-- <Notification v-if="error" :message="error" /> -->
+            <div v-if="showError" class="errorMessage">
+              Error: This combination is not found.
+            </div>
 
-            <form>
-              <div class="field">
-                <label class="label">Name</label>
-                <div class="control">
-                  <input v-model="name" type="text" class="input" name="name" />
-                </div>
-              </div>
-              <div class="field">
-                <label class="label">Password</label>
-                <div class="control">
-                  <input
-                    v-model="password"
-                    type="password"
-                    class="input"
-                    name="password"
-                  />
-                </div>
-              </div>
+            <div class="field">
+              <label class="label">Name</label>
               <div class="control">
-                <button type="submit" class="button is-dark is-fullwidth">
-                  Log In
-                </button>
+                <input v-model="email" type="text" class="input" name="email" />
               </div>
-            </form>
+            </div>
+            <div class="field">
+              <label class="label">Password</label>
+              <div class="control">
+                <input
+                  v-model="password"
+                  type="password"
+                  class="input"
+                  name="password"
+                />
+              </div>
+            </div>
+            <div class="control">
+              <button
+                class="button is-dark is-fullwidth"
+                @click="login({ email: email, password: password })"
+              >
+                Log In
+              </button>
+            </div>
             <div class="has-text-centered" style="margin-top: 20px">
               <p>
                 Don't have an account?
@@ -45,15 +48,36 @@
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.errorMessage {
+  color: red;
+}
+</style>
 
 <script>
 export default {
+  middleware({ store, redirect }) {
+    // If the user is not authenticated
+    if (store.state.JWT) {
+      return redirect('/');
+    }
+  },
+  // middleware: 'auth',
   data() {
     return {
-      name: '',
+      email: '',
       password: '',
     };
+  },
+  computed: {
+    showError() {
+      return this.$store.state.showLoginError;
+    },
+  },
+  methods: {
+    login(data) {
+      this.$store.dispatch('login', data);
+    },
   },
 };
 </script>

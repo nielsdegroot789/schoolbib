@@ -2,13 +2,11 @@
 
 namespace skoolBiep\Controller;
 
-use skoolBiep\DB;
-use skoolBiep\Form;
-use skoolBiep\Entity\User;
-
+use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-
+use skoolBiep\Entity\User;
+use skoolBiep\Util\CreateJWT;
 
 class UserController
 {
@@ -16,111 +14,66 @@ class UserController
     protected $container;
     protected $response;
 
-    public function selectAllbutOne()
-    {
-    }
     public function __construct(\Psr\Container\ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    public function getProfilePageData(Request $request, Response $response) {
-        $test = 'test';
-        $response->getBody()->write($test);
-        return $response;
-    }
-    
-    protected function loginForm()
+    public function login(Request $request, Response $response, array $args): Response
     {
-        $fields = array();
-        $fields[] = array(
-            'type'  => 'text',
-            'name'  => 'username',
-            'id' => 'username'
-        );
-        $fields[] = array(
-            'type'  => 'password',
-            'name' => 'password',
-            'id'  => 'password'
-        );
-        $fields[] = array(
-            'type'  => 'submit',
-            'name' => 'login',
-            'value'  => 'Login'
-        );
-        $form = ['method' => 'POST', 'fields' => $fields];
+        $data = json_decode(file_get_contents("php://input"), true);
+        try {
+            $formEmail = $data["email"];
+            if (!$formEmail) {
+                throw new Exception('Email not filled in correctly');
+            }
 
-        return $form;
-    }
+            $formPassword = $data["password"];
+            if (!$formPassword) {
+                throw new Exception('Password not filled in correctly');
+            }
 
-    public function login(Request $request, Response $response, array $args)
-    {
-        $this->response = $response;
-        if ($request->getMethod() == 'GET') {
-            $form =  $this->loginForm();
-            $twig = $this->container->get('view');
-            $res = Form::createForm($this->response, $twig, $form, 'loginform');
-        } else {
-            // verwerking form
-            $form =  $this->loginForm();
-            $this->user = new User();
-            $this->user->setUserName($request->getParsedBody()['username']);
-            $id = $this->validateUser($request->getParsedBody()['password']);
-            echo "User has ID: $id";
-            echo "tableName : " . $this->user->getTableName();
+        } catch (Exception $e) {
+            $response->getBody()->write('Caught exception: ' . $e->getMessage() . "\n");
+            return $response->withStatus(401);
         }
-        return $response;
-    }
 
-    public function create(Request $request, Response $response, array $args)
-    {
-        $this->response = $response;
-        if ($request->getMethod() == 'GET') {
-            $form =  $this->loginForm();
-            $twig = $this->container->get('view');
-            $res = Form::createForm($this->response, $twig, $form, 'loginform');
-        } else {
-            // verwerking form
-            $form =  $this->loginForm();
-            $this->user = new User();
-            $this->user->setUserName($request->getParsedBody()['username']);
-            $this->saveUser($request->getParsedBody()['password']);
+        try {
+            $user = $this->validateUser($formEmail, $formPassword);
+            $jwt = new CreateJWT($user);
+            $token = $jwt();
+
+            $response->getBody()->write($token);
+            return $response->withHeader('Authorization', 'Bearer: ' . $token);
+        } catch (Exception $e) {
+            $response->getBody()->write('Caught exception: ' . $e->getMessage() . "\n");
+            return $response->withStatus(401);
         }
-        return $response;
     }
 
-    function validateUser($pass)
+    public function validateUser(String $formEmail, String $formPassword): array
     {
+        $user = null;
+
         $db = $this->container->get('db');
-        $sql = "select id, password_crypt from users where username = '" . $this->user->getUserName() . "'";
-        $res = $db->query($sql);
-        $data = $res->fetchArray(SQLITE3_ASSOC);
-        if ($data) {
-            if (password_verify($pass, $data['password_crypt'])) {
-                $this->user->setId($data['id']);
+        $user = $db->getUserByEmail($formEmail);
+        if ($user) {
+            if (password_verify($formPassword, $user['password'])) {
+                $this->setUser($user);
+                return $user;
             }
         }
-        return $this->user->getId();
+
+        throw new Exception("Combination not found");
     }
 
-    function saveUser($pass)
+    public function setUser(array $user)
     {
-        $db = new DB();
-        $hashed_pass = password_hash($pass, CRYPT_SHA256);
-        $sql = "INSERT INTO USERS (surname, lastname, email, password) values ('$this->username','test','test' ,'$hashed_pass')";
-        if ($db->exec($sql)) {
-            return $db->lastInsertRowID();
-        } else {
-            return false;
-        }
+        $this->user = $user;
     }
-    function setUserName($user)
+    public function getUser(): array
     {
-        $this->username = $user;
+        return $this->user;
     }
 
-    function getUserID()
-    {
-        return $this->id;
-    }
 }

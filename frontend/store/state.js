@@ -6,4 +6,7 @@ export default {
   frontPageNotification: {},
   notificationMessage: {},
   show: false,
+  notification: {},
+  JWT: null,
+  showLoginError: false,
 };

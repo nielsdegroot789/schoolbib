@@ -23,7 +23,12 @@
               </div>
             </div>
             <nuxt-link class="navbar-item" to="/register">Register</nuxt-link>
-            <nuxt-link class="navbar-item" to="/login">Log In</nuxt-link>
+            <nuxt-link v-if="!loggedIn" class="navbar-item" to="/login"
+              >Log In</nuxt-link
+            >
+            <div v-if="loggedIn" class="navbar-item" @click="logout">
+              Log out
+            </div>
           </div>
         </div>
       </div>
@@ -36,10 +41,25 @@ import Notification from '../components/Notification';
 export default {
   components: {
     Notification,
+  computed: {
+    loggedIn() {
+      return !!this.$store.state.JWT;
+    },
   },
   mounted() {
     this.$store.dispatch('getBookMeta');
     this.$store.dispatch('getBooks');
+    if (!this.$store.state.jwt) {
+      if (localStorage.getItem('JWT')) {
+        this.$store.commit('setJWTtoken', localStorage.getItem('JWT'));
+      }
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.commit('logout');
+      localStorage.removeItem('JWT');
+    },
   },
 };
 </script>
