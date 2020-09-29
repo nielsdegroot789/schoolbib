@@ -1,10 +1,12 @@
 <template>
   <div>
-    <div >
-      <img:src="product.image" alt />
+    <div>
+      <img:src ="product.image" alt />
       <div class="card-body">
         <h4 class="card-title">
-          <router-link :to="{name: 'books', params: {id: bookMeta.id}}">{{ bookMeta.title }}</router-link>
+          <router-link :to="{ name: 'books', params: { id: bookMeta.id } }">{{
+            bookMeta.title
+          }}</router-link>
         </h4>
         <strong>${{ bookMeta.price }}</strong>
         <p class="card-text">{{ bookMeta.description }}</p>
@@ -17,20 +19,19 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
 export default {
-  props: ["bookMeta"],
+  props: ['bookMeta'],
   methods: {
-    ...mapActions("cart", ["addProductToCart"]),
+    ...mapActions('cart', ['addProductToCart']),
     addToCart() {
       this.addProductToCart({
         product: this.product,
-        quantity: 1
+        quantity: 1,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

@@ -5,8 +5,17 @@ export default {
   getBooks(state, data) {
     state.books = data;
   },
-  getNotification(state, data) {
-    state.notification = data;
+  getFrontPageNotification(state, data) {
+    state.frontPageNotification = data;
+  },
+  setNotification(state, notification) {
+    state.notification = notification;
+  },
+  showNotification(state) {
+    state.show = true;
+  },
+  deleteNotification(state) {
+    state.show = false;
   },
   setJWTtoken(state, data) {
     state.JWT = data;
@@ -14,6 +23,7 @@ export default {
     const array = data.split('.');
     state.currentUser.header = atob(array[0]);
     state.currentUser.payload = atob(array[1]);
+    state.currentUser.id = JSON.parse(atob(array[1])).userId;
     state.currentUser.role = JSON.parse(atob(array[1])).role;
     state.currentUser.signature = array[2];
   },

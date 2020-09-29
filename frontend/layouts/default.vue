@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Notification />
     <nav class="navbar is-light">
       <div class="container">
         <div class="navbar-brand">
@@ -11,6 +12,10 @@
           </button>
         </div>
         <div class="navbar-menu">
+          <span v-if="loggedIn"
+            >Welcome nr: {{ currentUserId }}, you are now logged in as
+            {{ currentUserRole }}</span
+          >
           <div class="navbar-end">
             <nuxt-link class="navbar-item" to="/catalog">catalog</nuxt-link>
             <div class="navbar-item has-dropdown is-hoverable">
@@ -36,10 +41,20 @@
   </div>
 </template>
 <script>
+import Notification from '../components/Notification';
 export default {
+  components: {
+    Notification,
+  },
   computed: {
     loggedIn() {
       return !!this.$store.state.JWT;
+    },
+    currentUserId() {
+      return this.$store.state.currentUser.id;
+    },
+    currentUserRole() {
+      return this.$store.state.currentUser.role;
     },
   },
   mounted() {

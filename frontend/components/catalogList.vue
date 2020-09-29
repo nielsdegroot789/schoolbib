@@ -1,14 +1,17 @@
 <template>
   <div class="d-flex align-items-stretch flex-wrap">
-    <catalog-card v-for="bookMeta in bookMeta" :key="bookMeta.id" :bookMeta="bookMeta" />
+    <catalog-card
+      v-for="bookMeta in bookMeta"
+      :key="bookMeta.id"
+      :bookMeta="bookMeta"
+    />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex';
 export default {
-  components: {
-  },
+  components: {},
   // computed: {
   //   ...mapState("books", ["bookMeta"])
   // },
@@ -21,7 +24,4 @@ export default {
 };
 </script>
 
-
-
-<style>
-</style>
+<style></style>

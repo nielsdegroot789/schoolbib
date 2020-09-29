@@ -8,7 +8,10 @@ use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
+
 require __DIR__ . '/../vendor/autoload.php';
+
+Dotenv\Dotenv::createImmutable(__DIR__. '/../')->load();
 
 $container = new Container();
 AppFactory::setContainer($container);
@@ -26,6 +29,9 @@ $container->set('client', function () {
 });
 
 $app = AppFactory::create();
+
+
+
 
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::createFromContainer($app));
@@ -66,8 +72,28 @@ $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBoo
 
 $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
 
-$app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . ':getNotification');
+$app->get('/getNotification',\skoolBiep\Controller\CockpitController::class . ':getNotification');
 
+$app->get('/getProfilePageData',\skoolBiep\Controller\UserController::class . ':getProfilePageData' );
+
+  
+// $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
+//     $this->get('db');
+//     if ($request->getMethod() == 'GET') {
+//         $html = '<h1>Login</h1>
+// <form method="POST"><label for="username">Username:</label><input type="text" size="40" name="username" /><br />';
+//         $html = $html . '<label for="password">Password:</label><input type="password" size="40" name="password" /><br />';
+//         $html = $html . '<input type="submit" value="Create user" name="Save" /></form>';
+//         $response->getBody()->write($html);
+//     } else {
+//         // verwerking form
+//         $user = new User();
+//         $user->setUserName($request->getParsedBody()['username']);
+//         $id = $user->saveUser($request->getParsedBody()['password']);
+//         echo "User received ID: $id";
+//     }
+//     return $response;
+// });
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 
 $app->options('/{routes:.+}', function ($request, $response, $args) {
