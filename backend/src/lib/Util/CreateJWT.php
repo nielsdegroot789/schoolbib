@@ -2,17 +2,17 @@
 
 namespace skoolBiep\Util;
 
-use skoolBiep\Model\User;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Token;
+use skoolBiep\Model\User;
 
 class CreateJWT
 {
 
-    // https://git.fullstacksyntra.be/Simondb/Eindwerk-Projectopvolging-Facturatie/src/branch/feature/jwt-auth 
-    
+    // https://git.fullstacksyntra.be/Simondb/Eindwerk-Projectopvolging-Facturatie/src/branch/feature/jwt-auth
+
     private $user;
     private $builder;
     private $token;
@@ -24,8 +24,7 @@ class CreateJWT
         $this->user = $user;
         $this->builder = new Builder();
         $this->signer = new Sha256();
-        //todo change this!
-        $this->secret = new Key('ABC');
+        $this->secret = new Key(getenv('JWT_SECRET'));
     }
 
     public function __invoke()
@@ -36,12 +35,11 @@ class CreateJWT
     public function createToken()
     {
         $time = time();
-        //todo change this!
         $this->token = $this->builder
-            ->issuedBy('localhost:8080')
+            ->issuedBy(getenv('JWT_ISSUER'))
             ->issuedAt($time) // Configures the time that the token was issue (iat claim)
             ->withClaim('userId', $this->user['id']) // Configures a new claim, called "username"
-            ->withClaim('role', $this->user['role'] ) // Configures a new claim, called "username"
+            ->withClaim('role', $this->user['role']) // Configures a new claim, called "username"
             ->getToken($this->signer, $this->secret); // Retrieves the generated token
     }
 
