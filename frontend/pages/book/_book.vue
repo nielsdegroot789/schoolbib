@@ -10,15 +10,22 @@
           </div>
           <div class="containerBook">
             <div class="containerBookAbove">
-              <img
-                v-img
-                src="./book.png"
-                alt="bookPic"
-                height="50px"
-                width="50px"
-              />
-              <h3>book</h3>
-              {{ bookMeta.language }}
+              <div>
+                <img
+                  v-img
+                  src="./book.png"
+                  alt="bookPic"
+                  height="50px"
+                  width="50px"
+                />
+                <h3>book</h3>
+                {{ bookMeta.language }}
+              </div>
+              <div>
+                <Button method="post" class="reserveBook" @click="submitData">
+                  Reserve Now!
+                </Button>
+              </div>
             </div>
 
             <div class="containerBookInfo">
@@ -85,6 +92,7 @@ export default {
     return {
       bookId: 0,
       bookData: {},
+      timestamp: '',
     };
   },
   computed: {
@@ -104,8 +112,30 @@ export default {
   },
   created() {
     console.log(this.bookMeta);
+    setInterval(this.getNow, 1000);
   },
-  methods: {},
+  submitData() {
+    axios.post('userController.php', {
+      action: 'insert',
+      bookId: this.book.id,
+      reservationDateTime: this.getNow,
+    });
+  },
+  methods: {
+    getNow() {
+      const today = new Date();
+      const date =
+        today.getFullYear() +
+        '-' +
+        (today.getMonth() + 1) +
+        '-' +
+        today.getDate();
+      const time =
+        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+      const dateTime = date + ' ' + time;
+      this.timestamp = dateTime;
+    },
+  },
 };
 </script>
 
@@ -124,12 +154,20 @@ export default {
   padding: 10px;
 }
 .containerBookAbove {
+  display: flex;
+  justify-content: space-evenly;
   border-color: rgb(93, 93, 93);
   background-color: rgb(198, 194, 194);
   border: 1px solid #dbdbdb;
   border-radius: 6px;
   padding: 50px;
   margin-top: 50px;
+}
+.reserveBook {
+  background-color: black;
+  color: white;
+  border-radius: 25%;
+  cursor: pointer;
 }
 .containerBook {
   background: rgb(235, 235, 235);
