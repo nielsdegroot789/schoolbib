@@ -118,7 +118,7 @@ class UserController
         return $this->id;
     }
 
-    public function saveReservationsUser($id,$usersId,$booksId,$reservationDateTime,$accepted)
+    public function saveReservationsUser($id,$usersId,$booksId,$reservationDateTime)
     {            
         $db = new DB();
 
@@ -131,7 +131,7 @@ class UserController
             $reservationDateTime = trim($_POST['reservationDateTime']);
            
           
-            $sql = $db->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime, accepted) 
+            $sql = $db->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime) 
             values (:userId,:booksId,:reservationDateTime)");
             
             
@@ -148,9 +148,9 @@ class UserController
         }
         return $sql->execute();
     }
-    public function ChangeAccepted($accepted){
+    public function ChangeAccepted($booksId, $userId){
         $db = new DB();
-        $sql=$db->
+        $db->exec('UPDATE reservations Set accepted = 1 WHERE booksId = '. $booksId .' AND userId = '. $userId .'');
     }
 
     public function saveCheckoutAdmin($id,$usersId,$booksId,$checkoutDateTime,$returnDateTime,$accepted)
@@ -164,11 +164,8 @@ class UserController
 
 
         if(isset($_POST['submit'])){
-            $sql = $db->exec('UPDATE reservations SET accepted = 1 WHERE reservation.booksId = checkouts.booksId ');
-             
-
             if ($accepted = 1){
-                $sql=$db->exec('UPDATE checkouts SET checkoutDateTime=$currentTime WHERE booksId=reservation.booksId');
+               $db->exec('UPDATE checkouts SET checkoutDateTime= '. $currentTime .' WHERE booksId=reservation.booksId');
             }
 
             $sql = $db->prepare("INSERT INTO checkouts (usersId,  booksId, reservationDateTime, accepted) 
@@ -184,3 +181,4 @@ class UserController
         return $sql->execute();
     }
 }
+
