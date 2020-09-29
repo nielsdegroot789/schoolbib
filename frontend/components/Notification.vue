@@ -16,9 +16,6 @@ export default {
     notificationMessage,
   },
   computed: {
-    show() {
-      return this.$store.state.show;
-    },
     notifications() {
       return this.$store.state.notifications;
     },
