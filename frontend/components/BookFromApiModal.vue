@@ -13,14 +13,13 @@
       <p>sticker: {{ modalData.imageLinks.smallThumbnail }}</p>
       <p>language: {{ modalData.language }}</p>
       <p>authors: {{ modalData.authors }}</p>
-      <p>language: {{ modalData.language }}</p>
       <p>reading level: {{ modalData.maturityRating }}</p>
       <p>publisher: {{ modalData.publisher }}</p>
       <p>categories: {{ modalData.categories }}</p>
 
       <div class="buttonContainer">
-        <button @click="useData(data)">Use</button>
-        <button @click="useDataAndExit(data)">Use and exit</button>
+        <button @click="useData()">Use</button>
+        <button @click="useDataAndExit()">Use and exit</button>
         <button @click="closeModal">Cancel</button>
       </div>
     </div>
@@ -29,7 +28,7 @@
 
 <script>
 export default {
-  name: 'DeleteModal',
+  name: 'APIModal',
   props: {
     showModal: {
       type: Boolean,
@@ -43,31 +42,24 @@ export default {
     },
   },
   data() {
-    return {
-      travel: null,
-    };
+    return {};
   },
   computed: {
     shouldShowModal() {
       return this.showModal;
     },
   },
-  mounted() {
-    this.$root.$on('delete-travel', this.openModal);
-  },
   methods: {
-    openModal(travel) {
-      this.travel = travel;
-    },
     closeModal() {
-      this.showModal = false;
+      this.$emit('closeModal');
     },
     useData(id) {
-      this.travel = null;
-      this.$root.directusClient.deleteItem('travel', id).then(() => {
-        this.$root.$emit('notify', `Travel ${id} was deleted`);
-        this.$root.$emit('refresh-travels');
-      });
+      this.$emit('closeModal', this.modalData);
+      // todo fill in book data in form
+    },
+    useDataAndExit(id) {
+      this.$emit('closeModal', this.modalData, true);
+      // todo fill book data, save and return to main crud screen?
     },
   },
 };
@@ -95,28 +87,5 @@ export default {
   width: 50%;
   border-radius: 0.5rem;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
-}
-
-.delete-modal__window header {
-  font-size: 2rem;
-  border-bottom: 1px solid grey;
-  padding: 1rem;
-}
-
-.delete-modal__window main {
-  height: 10rem;
-  padding: 1rem;
-  border-bottom: 1px solid grey;
-}
-
-.delete-modal__window footer {
-  padding: 1rem;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.delete-modal__window footer button {
-  margin-bottom: 0;
-  margin-left: 2rem;
 }
 </style>

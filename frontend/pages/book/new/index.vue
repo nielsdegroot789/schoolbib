@@ -16,7 +16,9 @@ export default {
     };
   },
   computed: {},
-  created() {},
+  created() {
+    debugger;
+  },
   methods: {},
 };
 </script>

@@ -1,8 +1,12 @@
 <template>
   <div class="bookFormContainer">
-    <BookFromApiModal :show-modal="shouldShowModal" :modal-data="modalData" />
-    <FormulateForm :values="bookData" @submit="saveBook">
-      <FormulateInput v-if="bookData.id" type="hidden" name="id" />
+    <BookFromApiModal
+      :show-modal="shouldShowModal"
+      :modal-data="modalData"
+      @closeModal="handleCloseModal"
+    />
+    <FormulateForm :values="currentBookData" @submit="saveBook">
+      <FormulateInput v-if="currentBookData.id" type="hidden" name="id" />
       <FormulateInput
         label="title"
         type="text"
@@ -58,6 +62,11 @@ export default {
       shouldShowModal: false,
     };
   },
+  computed: {
+    currentBookData() {
+      return this.bookData;
+    },
+  },
   methods: {
     saveBook(data) {
       this.$store.dispatch('saveBook', data);
@@ -67,26 +76,22 @@ export default {
       const filterParams = {
         isbn: '9780553213102',
       };
+
       let string = '';
-      const key = 'AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs';
       for (const key in filterParams) {
         if (string !== '') string += '+';
         string += key + ':' + filterParams[key];
       }
 
-      // todo make params not url encode
       this.$axios({
         method: 'GET',
-        url:
-          'https://www.googleapis.com/books/v1/volumes?q=' +
-          string +
-          '&key=' +
-          key,
+        url: 'https://www.googleapis.com/books/v1/volumes?q=' + string,
+        params: {
+          key: 'AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs',
+        },
       })
         .then((response) => {
-          console.log(response.data.items);
           this.bookResults = response.data.items;
-          debugger;
         })
         .catch((error) => {
           console.log(error);
@@ -95,6 +100,27 @@ export default {
     showModal(info) {
       this.modalData = info;
       this.shouldShowModal = true;
+    },
+    handleCloseModal(modalData = {}, shouldRerouteDirectly = false) {
+      this.shouldShowModal = false;
+      if (modalData !== {}) {
+        const newDataObj = {
+          id: this.bookData.id,
+          authors: modalData.authors,
+          categories: modalData.categories,
+          isbnCode: modalData.industryIdentifiers[1].identifier,
+          language: modalData.language,
+          publishDate: modalData.publishedDate,
+          publishers: modalData.publisher,
+          rating: modalData.averageRating,
+          readingLevel: modalData.maturityRating,
+          sticker: modalData.imageLinks.smallThumbnail,
+          title: modalData.title,
+          totalPages: modalData.pageCount,
+        };
+        this.$emit('updateBookData', newDataObj);
+      }
+      console.log(shouldRerouteDirectly);
     },
   },
 };
