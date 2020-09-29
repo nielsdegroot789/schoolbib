@@ -51,10 +51,10 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$emit('closeModal');
+      this.$emit('closeModal', false, false);
     },
     useData(id) {
-      this.$emit('closeModal', this.modalData);
+      this.$emit('closeModal', this.modalData, false);
       // todo fill in book data in form
     },
     useDataAndExit(id) {

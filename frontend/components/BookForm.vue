@@ -104,22 +104,32 @@ export default {
       this.modalData = info;
       this.shouldShowModal = true;
     },
-    handleCloseModal(modalData = {}, shouldRerouteDirectly = false) {
+    handleCloseModal(modalData, shouldRerouteDirectly = false) {
       this.shouldShowModal = false;
-      if (modalData !== {}) {
+      if (modalData) {
         const newDataObj = {
-          id: this.bookData.id,
-          authors: modalData.authors.join(),
-          categories: modalData.categories.join(),
-          isbnCode: modalData.industryIdentifiers[1].identifier,
-          language: modalData.language,
-          publishDate: modalData.publishedDate,
-          publishers: modalData.publisher,
-          rating: modalData.averageRating,
-          readingLevel: modalData.maturityRating,
-          sticker: modalData.imageLinks.smallThumbnail,
-          title: modalData.title,
-          totalPages: modalData.pageCount,
+          ...(this.bookData.id && { id: this.bookData.id }),
+          ...(modalData.authors && { authors: modalData.authors.join() }),
+          ...(modalData.categories && {
+            categories: modalData.categories.join(),
+          }),
+          ...(modalData.industryIdentifiers && {
+            isbnCode: modalData.industryIdentifiers[1].identifier,
+          }),
+          ...(modalData.language && { language: modalData.language }),
+          ...(modalData.publishedDate && {
+            publishDate: modalData.publishedDate,
+          }),
+          ...(modalData.publisher && { publishers: modalData.publisher }),
+          ...(modalData.averageRating && { rating: modalData.averageRating }),
+          ...(modalData.maturityRating && {
+            readingLevel: modalData.maturityRating,
+          }),
+          ...(modalData.smallThumbnail && {
+            sticker: modalData.imageLinks.smallThumbnail,
+          }),
+          ...(modalData.title && { title: modalData.title }),
+          ...(modalData.pageCount && { totalPages: modalData.pageCount }),
         };
         this.$emit('updateBookData', newDataObj);
       }
