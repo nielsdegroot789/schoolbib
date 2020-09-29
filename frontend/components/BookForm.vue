@@ -5,16 +5,16 @@
       :modal-data="modalData"
       @closeModal="handleCloseModal"
     />
-    <FormulateForm :values="currentBookData" @submit="saveBook">
+    <FormulateForm v-model="bookData" :values="bookData" @submit="saveBook">
       <FormulateInput v-if="currentBookData.id" type="hidden" name="id" />
+      <FormulateInput label="isbn" type="text" name="isbnCode" />
       <FormulateInput
         label="title"
         type="text"
         name="title"
         validation="required|max:200"
       />
-      <FormulateInput label="isbn" type="text" name="isbnCode" />
-      <FormulateInput label="publish Date" type="date" name="publishDate" />
+      <FormulateInput label="publish Date" type="text" name="publishDate" />
       <FormulateInput label="rating" type="text" name="rating" />
       <FormulateInput label="total Pages" type="text" name="totalPages" />
       <FormulateInput label="sticker" type="text" name="sticker" />
@@ -60,6 +60,7 @@ export default {
       bookResults: [],
       modalData: null,
       shouldShowModal: false,
+      // currentBookData: this.bookData,
     };
   },
   computed: {
@@ -71,10 +72,11 @@ export default {
     saveBook(data) {
       this.$store.dispatch('saveBook', data);
     },
+
     searchForBook() {
       // Example URL https://www.googleapis.com/books/v1/volumes?q=isbn:9780553213102+inauthor:jane&key=AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs
       const filterParams = {
-        isbn: '9780553213102',
+        isbn: this.currentBookData.isbnCode,
       };
 
       let string = '';
@@ -82,7 +84,7 @@ export default {
         if (string !== '') string += '+';
         string += key + ':' + filterParams[key];
       }
-
+      debugger;
       this.$axios({
         method: 'GET',
         url: 'https://www.googleapis.com/books/v1/volumes?q=' + string,
@@ -97,6 +99,7 @@ export default {
           console.log(error);
         });
     },
+
     showModal(info) {
       this.modalData = info;
       this.shouldShowModal = true;
@@ -106,8 +109,8 @@ export default {
       if (modalData !== {}) {
         const newDataObj = {
           id: this.bookData.id,
-          authors: modalData.authors,
-          categories: modalData.categories,
+          authors: modalData.authors.join(),
+          categories: modalData.categories.join(),
           isbnCode: modalData.industryIdentifiers[1].identifier,
           language: modalData.language,
           publishDate: modalData.publishedDate,
