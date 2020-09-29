@@ -1,5 +1,6 @@
 <template>
   <div class="bookFormContainer">
+    <BookFromApiModal :show-modal="shouldShowModal" :modal-data="modalData" />
     <FormulateForm :values="bookData" @submit="saveBook">
       <FormulateInput v-if="bookData.id" type="hidden" name="id" />
       <FormulateInput
@@ -23,16 +24,25 @@
     </FormulateForm>
     <div class="possibleBookResults">
       <button @click="searchForBook">Search</button>
-      <div v-for="result in bookResults" :key="result.id">
+      <div
+        v-for="result in bookResults"
+        :key="result.id"
+        @click="showModal(result.volumeInfo)"
+      >
         {{ result.volumeInfo.title }}
+        <button>View book details</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import BookFromApiModal from '~/components/BookFromApiModal';
 export default {
   name: 'Bookform',
+  components: {
+    BookFromApiModal,
+  },
   props: {
     bookData: {
       type: Object,
@@ -44,6 +54,8 @@ export default {
   data() {
     return {
       bookResults: [],
+      modalData: null,
+      shouldShowModal: false,
     };
   },
   methods: {
@@ -61,7 +73,6 @@ export default {
         if (string !== '') string += '+';
         string += key + ':' + filterParams[key];
       }
-      console.log(string);
 
       // todo make params not url encode
       this.$axios({
@@ -80,6 +91,10 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    showModal(info) {
+      this.modalData = info;
+      this.shouldShowModal = true;
     },
   },
 };
