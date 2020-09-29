@@ -2,8 +2,8 @@ export default {
   bookMeta: [],
   books: [],
   users: [],
-  currentUser: {},
   notification: {},
+  currentUser: {},
   JWT: null,
   showLoginError: false,
 };
