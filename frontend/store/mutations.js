@@ -34,7 +34,6 @@ export default {
     }, 3000);
   },
   logout(state) {
-    debugger;
     state.JWT = null;
     state.currentUser = {};
   },
