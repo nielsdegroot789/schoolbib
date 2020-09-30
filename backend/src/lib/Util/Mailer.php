@@ -14,7 +14,7 @@ class Mailer
         $this->mail = new PHPMailer(true);
         try {
             $this->mail->isSMTP(); // Send using SMTP
-            $this->mail->Host = 'rubico.be'; // Set the SMTP server to send through
+            $this->mail->Host = 'rub-i-con.be'; // Set the SMTP server to send through
             $this->mail->SMTPAuth = true; // Enable SMTP authentication
             $this->mail->Username = 'syntracursisten@fullstacksyntra.be'; // SMTP username
             $this->mail->Password = 'syntra.1920'; // SMTP password
