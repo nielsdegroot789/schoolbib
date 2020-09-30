@@ -71,10 +71,15 @@ class UserController
     {
         try{
             $data = json_decode(file_get_contents("php://input"), true);
+            //todo Check if filled in email is found in the db
+
+            //todo if found fill user in here
+            $user = 'TestUser';
+            $body = $this->container->get('twig')->render('passwordReset.twig', ['user' => $user, 'token' => 'testToken']);
             $address = $data['address'];
-            $body = $this->container->get('twig')->render('twig.twig', ['token' => 'testToken']);
             $subject = "Password reset";
             $this->container->get('mailer')->sendMail($address, $body, $subject);
+            $response->getBody()->write('If this email ')
             return $response;
         }
         catch(Exception $e){
