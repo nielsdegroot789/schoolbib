@@ -41,7 +41,10 @@ $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks'
 
 $app->get('/getNotification',\skoolBiep\Controller\CockpitController::class . ':getNotification');
 
-  
+$app->get('/getReservation',\skoolBiep\Controller\UserController::class . ':getReservation');
+
+$app->get('/getCheckout',\skoolBiep\Controller\UserController::class . ':getCheckout');
+
 // $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
 //     $this->get('db');
 //     if ($request->getMethod() == 'GET') {
@@ -59,7 +62,11 @@ $app->get('/getNotification',\skoolBiep\Controller\CockpitController::class . ':
 //     }
 //     return $response;
 // });
-$app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':getReservation');
+
+$app->post('/saveReservationsUser',\skoolBiep\Controller\UserController::class . ':saveReservationsUser');
+
+$app->post('/saveCheckoutAdmin',\skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
+
 
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 

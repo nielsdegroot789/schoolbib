@@ -180,5 +180,29 @@ class UserController
         }
         return $sql->execute();
     }
+
+    public function getReservation(Request $request, Response $response, array $args)
+    {
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->getReservation();
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
+
+    public function getCheckout(Request $request, Response $response, array $args)
+    {
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->getCheckout();
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
 }
 

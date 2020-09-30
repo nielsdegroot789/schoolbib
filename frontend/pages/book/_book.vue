@@ -22,7 +22,7 @@
                 {{ bookMeta.language }}
               </div>
               <div>
-                <Button method="post" class="reserveBook" @click="submitData">
+                <Button class="reserveBook" @click="submitData">
                   Reserve Now!
                 </Button>
               </div>
@@ -95,23 +95,10 @@ export default {
       timestamp: '',
     };
   },
-  computed: {
-    bookMeta() {
-      return this.$store.getters.getBookMetaById(
-        parseInt(this.$route.params.book),
-      );
-    },
-    books() {
-      return this.$store.getters.getBooksByBookMetaId(
-        parseInt(this.$route.params.book),
-      );
-    },
-  },
   mounted() {
     this.bookId = this.$route.params.book;
   },
   created() {
-    console.log(this.bookMeta);
     setInterval(this.getNow, 1000);
   },
   submitData() {
