@@ -132,7 +132,7 @@ export default {
           ...(modalData.maturityRating && {
             readingLevel: modalData.maturityRating,
           }),
-          ...(modalData.smallThumbnail && {
+          ...(modalData.imageLinks.smallThumbnail && {
             sticker: modalData.imageLinks.smallThumbnail,
           }),
           ...(modalData.title && { title: modalData.title }),
