@@ -7,12 +7,17 @@
     />
     <FormulateForm v-model="bookData" :values="bookData" @submit="saveBook">
       <FormulateInput v-if="currentBookData.id" type="hidden" name="id" />
-      <FormulateInput label="isbn" type="text" name="isbnCode" />
+      <FormulateInput
+        label="isbn"
+        type="text"
+        name="isbnCode"
+        validation="required"
+      />
       <FormulateInput
         label="title"
         type="text"
         name="title"
-        validation="required|max:200"
+        validation="required"
       />
       <FormulateInput label="publish Date" type="text" name="publishDate" />
       <FormulateInput label="rating" type="text" name="rating" />
@@ -27,7 +32,13 @@
       <FormulateInput type="submit" label="Save" />
     </FormulateForm>
     <div class="possibleBookResults">
-      <button @click="searchForBook">Search</button>
+      <button @click="searchForBook({ isbn: currentBookData.isbnCode })">
+        Search by isbn
+      </button>
+      <button @click="searchForBook({ title: currentBookData.title })">
+        Search by title
+      </button>
+
       <div
         v-for="result in bookResults"
         :key="result.id"
@@ -73,16 +84,12 @@ export default {
       this.$store.dispatch('saveBook', data);
     },
 
-    searchForBook() {
+    searchForBook(searchObj) {
       // Example URL https://www.googleapis.com/books/v1/volumes?q=isbn:9780553213102+inauthor:jane&key=AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs
-      const filterParams = {
-        isbn: this.currentBookData.isbnCode,
-      };
-
       let string = '';
-      for (const key in filterParams) {
+      for (const key in searchObj) {
         if (string !== '') string += '+';
-        string += key + ':' + filterParams[key];
+        string += key + ':' + searchObj[key];
       }
       debugger;
       this.$axios({

@@ -63,12 +63,13 @@ class BookController
         $db = new DB();
         $title = $data["title"];
         $isbn = $data["isbnCode"];
-        // $publishDate = $data["publishDate"];
+        $publishDate = $data["publishDate"];
         $rating = $data["rating"];
         $totalPages = $data["totalPages"];
         $sticker = $data["sticker"];
         $language = $data["language"];
         $readingLevel = $data["readingLevel"];
+
         if ($data['id']) {
             $id = $data['id'];
             $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $id);
