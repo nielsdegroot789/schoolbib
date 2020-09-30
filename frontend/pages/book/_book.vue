@@ -21,11 +21,13 @@
                 <h3>book</h3>
                 {{ bookMeta.language }}
               </div>
-              <div>
-                <Button class="reserveBook" @click="submitData">
-                  Reserve Now!
-                </Button>
-              </div>
+              <n-link :to="/catalog/">
+                <div>
+                  <Button v-onclick="submitReserveData" class="reserveBook">
+                    Reserve Now!
+                  </Button>
+                </div>
+              </n-link>
             </div>
 
             <div class="containerBookInfo">
@@ -34,9 +36,7 @@
                   <h1>{{ bookMeta.title }}</h1></strong
                 >
                 <div>{{ bookMeta.sticker }}</div>
-                <Button @click="addTofavoriteBooks">
-                  &#10084; Place on list
-                </Button>
+                <Button> &#10084; Place on list </Button>
               </div>
               <div class="containerBookInfoMiddle">
                 <br />
@@ -94,9 +94,21 @@ export default {
       bookId: 0,
       bookData: {},
       timestamp: '',
-      books: [],
-      bookMeta: [],
+      reserveData: {},
+      reservationDateTime: null,
     };
+  },
+  computed: {
+    bookMeta() {
+      return this.$store.getters.getBookMetaById(
+        parseInt(this.$route.params.book),
+      );
+    },
+    books() {
+      return this.$store.getters.getBooksByBookMetaId(
+        parseInt(this.$route.params.book),
+      );
+    },
   },
   mounted() {
     this.bookId = this.$route.params.books;
@@ -104,14 +116,15 @@ export default {
   created() {
     setInterval(this.getNow, 1000);
   },
-  submitData() {
-    axios.post('userController.php', {
-      action: 'insert',
-      bookId: this.book.id,
-      reservationDateTime: this.getNow,
-    });
-  },
+
   methods: {
+    submitReserveData() {
+      axios.post('http://localhost:8080/saveReservationsUser', {
+        bookId: this.book.id,
+        userId: this.userId,
+        reservationDateTime: this.getNow,
+      });
+    },
     getNow() {
       const today = new Date();
       const date =
