@@ -69,7 +69,7 @@ class UserController
 
     public function resetPassword(Request $request, Response $response, array $args)
     {
-        try{
+        try {
             $data = json_decode(file_get_contents("php://input"), true);
             //todo Check if filled in email is found in the db
 
@@ -79,10 +79,9 @@ class UserController
             $address = $data['address'];
             $subject = "Password reset";
             $this->container->get('mailer')->sendMail($address, $body, $subject);
-            $response->getBody()->write('If this email ')
+            $response->getBody()->write('If this email ');
             return $response;
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             $response->getBody()->write('Caught exception: ' . $e->getMessage() . "\n");
             return $response->withStatus(401);
         }
