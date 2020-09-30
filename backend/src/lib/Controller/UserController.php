@@ -106,7 +106,7 @@ class UserController
         $reservationDateTime = $data["reservationDateTime"];
         if($data['id']){
             $id = $data['id'];
-            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime);
+            $data = $db->saveReservationsUser($id, $usersId, $booksId, $reservationDateTime);
         }
         else {
             $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime);

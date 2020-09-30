@@ -109,7 +109,6 @@ $app->post('/saveReservationsUser',\skoolBiep\Controller\UserController::class .
 
 $app->post('/saveCheckoutAdmin',\skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
 
-
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 
 $app->post('/resetPassword', \skoolBiep\Controller\UserController::class . ':resetPassword');
