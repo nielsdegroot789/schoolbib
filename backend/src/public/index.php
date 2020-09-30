@@ -13,7 +13,6 @@ use Twig\Loader\FilesystemLoader;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
 
 $container = new Container();
 AppFactory::setContainer($container);
@@ -84,6 +83,10 @@ $app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . '
 
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
 
+$app->get('/getReservation',\skoolBiep\Controller\UserController::class . ':getReservation');
+
+$app->get('/getCheckout',\skoolBiep\Controller\UserController::class . ':getCheckout');
+
 // $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
 //     $this->get('db');
 //     if ($request->getMethod() == 'GET') {
@@ -101,6 +104,12 @@ $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . '
 //     }
 //     return $response;
 // });
+
+$app->post('/saveReservationsUser',\skoolBiep\Controller\UserController::class . ':saveReservationsUser');
+
+$app->post('/saveCheckoutAdmin',\skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
+
+
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 
 $app->post('/resetPassword', \skoolBiep\Controller\UserController::class . ':resetPassword');

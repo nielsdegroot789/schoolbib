@@ -8,4 +8,13 @@ export default {
   getNotification: (state) => {
     return state.notification;
   },
+  getPageCount(state) {
+    return Math.ceil(state.totalItems / state.limit);
+  },
+  getBookMetaCount: (state) => (count) => {
+    return state.bookMeta.filter((bookMeta) => bookMeta.count === count);
+  },
+  getReservationById: (state) => (id) => {
+    return state.reservation.filter((reservation) => reservation.id === id);
+  },
 };
