@@ -56,12 +56,16 @@ class DB extends \SQLite3
         return $data;
     }
 
-    public function saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $id = -1)
+    public function saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories, $id = -1)
     {
         if ($id != -1) {
             //update
 
-            $sql = $this->prepare("UPDATE bookMeta SET isbnCode = :isbn, title = :title, rating = :rating, totalPages = :totalPages, language = :language, sticker = :sticker, readingLevel = :readingLevel WHERE id = :id");
+            $sql = $this->prepare(
+                "UPDATE bookMeta
+                SET isbnCode = :isbn, title = :title, rating = :rating, totalPages = :totalPages, language = :language,
+                sticker = :sticker, readingLevel = :readingLevel, publishersId = :publishersId, authorsId = :authorsIds
+                WHERE id = :id");
 
             $sql->bindValue(':isbn', $isbn);
             $sql->bindValue(':title', $title);
@@ -71,16 +75,22 @@ class DB extends \SQLite3
             $sql->bindValue(':sticker', $sticker);
             $sql->bindValue(':readingLevel', $readingLevel);
             $sql->bindValue(':id', $id);
+            $publisherId = getPublisherId($publishers);
+            $sql->bindValue(':publishersId', $publisherId);
+            $authorsIds = getAuthorsIds($authors);
+            $sql->bindValue(':authorsIds', $publisherId);
 
             $status = $sql->execute();
+            $categoriesArr = explode(',', $categories);
 
             $res = $status ? "Success" : "Failed";
+            setCategories($id, $categories);
             return $res;
         } else {
             //create
 
-            $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel)
-            values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel)');
+            $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
+            values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
 
             $sql->bindValue(':isbn', $isbn);
             $sql->bindValue(':title', $title);
@@ -89,13 +99,15 @@ class DB extends \SQLite3
             $sql->bindValue(':language', $language);
             $sql->bindValue(':sticker', $sticker);
             $sql->bindValue(':readingLevel', $readingLevel);
-            // $sql->bindValue(':authorsId', $POST['authorsId']);
-            // $sql->bindValue(':publishersId', $POST['publishersId']);
-            // $sql->bindValue(':categories', $POST['categories']);
+            $publisherId = getPublisherId($publishers);
+            $sql->bindValue(':publishersId', $publisherId);
+            $authorsIds = getAuthorsIds($authors);
+            $sql->bindValue(':authorsIds', $publisherId);
 
             $status = $sql->execute();
-            var_dump($status);
             $res = $status ? "Success" : "Failed";
+            //todo get the newly created id here
+            setCategories(1, $categories);
             return $res;
 
         }
@@ -130,5 +142,71 @@ class DB extends \SQLite3
         }
 
         return $data[0];
+    }
+
+    private function getPublisherId(String $publisherName): String
+    {
+        $sql = $this->prepare("select id from publishers WHERE name = :name");
+        $sql->bindValue(':name', $publisherName);
+        $res = $sql->execute();
+
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+
+        if ($data) {
+            return $data;
+        } else {
+            //create new publisher and return the new id
+        }
+    }
+
+    private function getAuthorsIds(String $authors): String
+    {
+        $authorsArr = explode(',', $authors);
+        $authorsIdArr = [];
+        foreach ($authorsArr as $author) {
+            $sql = $this->prepare("select id from authors WHERE name = :name");
+            $sql->bindValue(':name', $author);
+            $res = $sql->execute();
+
+            $data = $res->fetchArray(SQLITE3_ASSOC);
+
+            if ($data) {
+                array_push($authorsIdArr, $data);
+            } else {
+                //create new author and push the new id
+
+            }
+        }
+        $idString = implode(',', $authorsIdArr);
+        return $idString;
+    }
+
+    private function setCategories($bookMetaId, $categories)
+    {
+        $sql = $this->prepare("select id from categories WHERE name = :name");
+        $sql->bindValue(':name', $categories);
+        $res = $sql->execute();
+
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+
+        if ($data) {
+            $sql = $this->prepare(
+                "insert into categoriesInBooks(categoriesId, bookMetaId)
+                values (:categoriesId, :bookMetaId)");
+            $sql->bindValue(':categoriesId', $data);
+            $sql->bindValue(':bookMetaId', $bookMetaId);
+
+        } else {
+            //create new category 
+            $sql = $this->prepare(
+                "insert into categoriesInBooks(categoriesId, bookMetaId)
+                values (:categoriesId, :bookMetaId)");
+            $sql->bindValue(':categoriesId', 1);
+            $sql->bindValue(':bookMetaId', $bookMetaId);
+
+        }
+
+        $idString = implode(',', $authorsIdArr);
+        return $idString;
     }
 }
