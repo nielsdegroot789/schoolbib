@@ -11,4 +11,7 @@ export default {
   getBookMetaCount: (state) => (count) => {
     return state.bookMeta.filter((bookMeta) => bookMeta.count === count);
   },
+  getReservationById: (state) => (id) => {
+    return state.reservation.filter((reservation) => reservation.id === id);
+  },
 };

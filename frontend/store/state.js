@@ -5,4 +5,5 @@ export default {
   currentUser: {},
   notification: {},
   limit: 20,
+  reservation: [],
 };

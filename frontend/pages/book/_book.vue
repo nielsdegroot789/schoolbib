@@ -87,16 +87,19 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
       bookId: 0,
       bookData: {},
       timestamp: '',
+      books: [],
+      bookMeta: [],
     };
   },
   mounted() {
-    this.bookId = this.$route.params.book;
+    this.bookId = this.$route.params.books;
   },
   created() {
     setInterval(this.getNow, 1000);

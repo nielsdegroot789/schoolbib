@@ -21,9 +21,9 @@ export default {
       console.log(error);
     });
   },
-  GetReservations(context) {
+  getReservation(context) {
     axios
-      .get('http://localhost:8080/GetReservations')
-      .then((response) => context.commit('GetReservations', response.data));
+      .get('http://localhost:8080/getReservation')
+      .then((response) => context.commit('getReservation', response.data));
   },
 };

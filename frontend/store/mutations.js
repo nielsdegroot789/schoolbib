@@ -11,4 +11,7 @@ export default {
   setTotalItems(state, payload) {
     state.setTotalItems = payload;
   },
+  getReservations(state, reservation) {
+    state.reservation = reservation;
+  },
 };
