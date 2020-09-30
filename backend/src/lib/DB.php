@@ -139,10 +139,10 @@ class DB extends \SQLite3
         return $data;
     }
     //(accepted? apparte functie fnie?)
-    function saveCheckoutAdmin($usersId,$booksId,$checkoutDateTime,$returnDateTime,$accepted,$maxAllowedDate) {
+    function saveCheckoutAdmin($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate) {
       
         $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate) 
-        Select (:userId,:booksId,:checkoutDateTime, :returnDateTime ) from reservations where reservations.booksId = checkouts.booksId");
+        Select (:userId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate ) from reservations where reservations.booksId = checkouts.booksId");
         
         $sql->bindValue(':usersId' , $usersId,);
         $sql->bindValue(':booksId' , $booksId,);

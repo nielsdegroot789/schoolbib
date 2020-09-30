@@ -118,67 +118,56 @@ class UserController
         return $this->id;
     }
 
-    public function saveReservationsUser($id,$usersId,$booksId,$reservationDateTime)
+    public function saveReservationsUser(Request $request, Response $response, array $args)
     {            
+        $data = json_decode(file_get_contents("php://input"), TRUE);
+        $this->response = $response;
+
         $db = new DB();
-
-        session_start();
-            $booksId = $_SESSION['booksId'];
-            $usersId = $_SESSION['usersId'];
-
-
-        if(isset($_POST['submit'])){
-            $reservationDateTime = trim($_POST['reservationDateTime']);
-           
-          
-            $sql = $db->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime) 
-            values (:userId,:booksId,:reservationDateTime)");
-            
-            
-            
-            $sql->bindValue(':id' , $id,);
-            $sql->bindValue(':usersId' , $usersId,);
-            $sql->bindValue(':booksId' , $booksId,);
-            $sql->bindValue(':reservationDateTime' , $reservationDateTime,);
-        
-            if($sql->execute){
-               
-                
-            }
+        $usersId = $data["usersId"];
+        $booksId = $data["booksId"];
+        $reservationDateTime = $data["reservationDateTime"];
+        if($data['id']){
+            $id = $data['id'];
+            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime);
         }
-        return $sql->execute();
+        else {
+            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime);
+        }
+        $response->getBody()->write($data);
+        return $response;
+      
     }
     public function ChangeAccepted($booksId, $userId){
         $db = new DB();
-        $db->exec('UPDATE reservations Set accepted = 1 WHERE booksId = '. $booksId .' AND userId = '. $userId .'');
+        $sql=$db->exec('UPDATE reservations Set accepted = 1 WHERE booksId = '. $booksId .' AND userId = '. $userId .'');
+        if ($db->exec($sql)) {
+            return $db->lastInsertRowID();
+        } else {
+            return false;
+        } 
     }
 
-    public function saveCheckoutAdmin($id,$usersId,$booksId,$checkoutDateTime,$returnDateTime,$accepted)
+    public function saveCheckoutAdmin(Request $request, Response $response, array $args)
     {            
+        $data = json_decode(file_get_contents("php://input"), TRUE);
+        $this->response = $response;
+
         $db = new DB();
-        $currentTime = time();
-        
-        session_start();
-            $booksId = $_SESSION['booksId'];
-            $usersId = $_SESSION['usersId'];
-
-
-        if(isset($_POST['submit'])){
-            if ($accepted = 1){
-               $db->exec('UPDATE checkouts SET checkoutDateTime= '. $currentTime .' WHERE booksId=reservation.booksId');
-            }
-
-            $sql = $db->prepare("INSERT INTO checkouts (usersId,  booksId, reservationDateTime, accepted) 
-            Select (:userId,:booksId,:checkoutDateTime, :returnDateTime ) from reservations where reservations.booksId = checkouts.booksId");
-            
-            $sql->bindValue(':id' , $id,);
-            $sql->bindValue(':usersId' , $usersId,);
-            $sql->bindValue(':booksId' , $booksId,);
-            $sql->bindValue(':checkoutDateTime' , $checkoutDateTime,);
-            $sql->bindValue(':accepted' , $accepted,);
-        
+        $usersId = $data["usersId"];
+        $booksId = $data["booksId"];
+        $checkoutDateTime = $data["checkoutDateTime"];
+        $returnDateTime = $data["reservationDateTime"];
+        $maxAllowedDate = $data["maxAllowedDate"];
+        if($data['id']){
+            $id = $data['id'];
+            $data = $db->saveCheckoutAdmin($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate);
         }
-        return $sql->execute();
+        else {
+            $data = $db->saveCheckoutAdmin($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate);
+        }
+        $response->getBody()->write($data);
+        return $response;
     }
 
     public function getReservation(Request $request, Response $response, array $args)
