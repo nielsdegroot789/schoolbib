@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 export default {
   name: 'NotificationMessage',
   props: ['notification'],
@@ -27,11 +26,8 @@ export default {
   },
   created() {
     this.timeOut = setTimeout(() => {
-      this.deleteNotification(this.notification);
+      this.$store.dispatch('deleteNotification', this.notification);
     }, 3000);
-  },
-  methods: {
-    ...mapActions(['deleteNotification']),
   },
 };
 </script>
