@@ -71,15 +71,17 @@ class UserController
     {
         try {
             $data = json_decode(file_get_contents("php://input"), true);
-            //todo Check if filled in email is found in the db
-
-            //todo if found fill user in here
-            $user = 'TestUser';
-            $body = $this->container->get('twig')->render('passwordReset.twig', ['user' => $user, 'token' => 'testToken']);
             $address = $data['address'];
-            $subject = "Password reset";
-            $this->container->get('mailer')->sendMail($address, $body, $subject);
-            $response->getBody()->write('If this email ');
+            $user = $this->container->get('db')->getUserByEmail($address);
+            if ($user) {
+                //todo generate random token and add it to the db
+                $randomToken = '123456755589';
+                $this->container->get('db')->addTokenToAccount($randomToken, $user['id']);
+                $body = $this->container->get('twig')->render('passwordReset.twig', ['user' => $user['surname'], 'token' => $randomToken]);
+                $subject = "Password reset";
+                $this->container->get('mailer')->sendMail($address, $body, $subject);
+            }
+            $response->getBody()->write('If this email has an account registered to it, an email will be send with the information needed.');
             return $response;
         } catch (Exception $e) {
             $response->getBody()->write('Caught exception: ' . $e->getMessage() . "\n");

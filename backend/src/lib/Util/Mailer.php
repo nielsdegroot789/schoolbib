@@ -32,7 +32,8 @@ class Mailer
         try {
             //Recipients
             $this->mail->setFrom('skoolbib@skoolbib.be');
-            $this->mail->addAddress($address);
+            //todo change with $address
+            $this->mail->addAddress('emieldkr@gmail.com');
 
             // Content
             $this->mail->isHTML(true);

@@ -132,4 +132,18 @@ class DB extends \SQLite3
 
         return $data[0];
     }
+    public function addTokenToAccount($randomToken, $userId)
+    {
+        $expireDate = time() + 60 * 60; //adds one hour
+
+        $sql = $this->prepare('insert into tokens (id, users_id, expireDate)
+        values (:randomToken, :userId, :expireDate)');
+        $sql->bindValue(':randomToken', $randomToken);
+        $sql->bindValue(':userId', $userId);
+        $sql->bindValue(':expireDate', $expireDate);
+        $status = $sql->execute();
+
+        $res = $status ? "Success" : "Failed";
+        return $res;
+    }
 }
