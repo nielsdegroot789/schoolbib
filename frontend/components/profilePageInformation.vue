@@ -60,7 +60,10 @@ export default {
       this.selectedFile = event.target.file[0]; // vuex store sturen
     },
     save() {
-      this.$store.dispatch('showNotification', 'Changes saved');
+      this.$store.dispatch('addNotification', {
+        type: 'success',
+        message: 'Form saved',
+      });
     },
   },
 };

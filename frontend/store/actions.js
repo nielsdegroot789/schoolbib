@@ -25,16 +25,14 @@ export default {
       console.log(error);
     });
   },
-  showNotification({ commit }, message) {
-    commit('showNotification');
-    commit('setNotification', message);
-    setTimeout(() => {
-      commit('deleteNotification');
-    }, 6000);
+  addNotification({ commit }, message) {
+    commit('addNotification', message);
   },
-  deleteNotification({ commit }) {
-    commit('deleteNotification');
+
+  deleteNotification({ commit }, message) {
+    commit('deleteNotification', message);
   },
+
   login(context, payload) {
     axios
       .post('http://localhost:8080/login', payload)
