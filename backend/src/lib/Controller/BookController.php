@@ -69,16 +69,20 @@ class BookController
         $sticker = $data["sticker"];
         $language = $data["language"];
         $readingLevel = $data["readingLevel"];
+        $authors = $data["authors"];
+        $publishers = $data["publishers"];
+        $categories = $data["categories"];
+
+        var_dump($authors);
+        var_dump($publishers);
+        var_dump($categories);
 
         if ($data['id']) {
             $id = $data['id'];
-            $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $id);
+            $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories, $id);
         } else {
-            $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel);
+            $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories);
         }
-        // $authors = $_POST["authors"];
-        // $publishers = $_POST["publishers"];
-        // $categories = $_POST["categories"];
         $response->getBody()->write($data);
         return $response;
     }
