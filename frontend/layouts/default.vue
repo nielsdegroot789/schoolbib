@@ -12,6 +12,10 @@
           </button>
         </div>
         <div class="navbar-menu">
+          <span v-if="loggedIn"
+            >Welcome nr: {{ currentUserId }}, you are now logged in as
+            {{ currentUserRole }}</span
+          >
           <div class="navbar-end">
             <nuxt-link class="navbar-item" to="/catalog">catalog</nuxt-link>
             <div class="navbar-item has-dropdown is-hoverable">
@@ -45,6 +49,12 @@ export default {
   computed: {
     loggedIn() {
       return !!this.$store.state.JWT;
+    },
+    currentUserId() {
+      return this.$store.state.currentUser.id;
+    },
+    currentUserRole() {
+      return this.$store.state.currentUser.role;
     },
   },
   mounted() {

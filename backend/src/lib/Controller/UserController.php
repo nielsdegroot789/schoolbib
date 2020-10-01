@@ -67,6 +67,22 @@ class UserController
         throw new Exception("Combination not found");
     }
 
+    public function resetPassword(Request $request, Response $response, array $args)
+    {
+        try{
+            $data = json_decode(file_get_contents("php://input"), true);
+            $address = $data['address'];
+            $body = $this->container->get('twig')->render('twig.twig', ['token' => 'testToken']);
+            $subject = "Password reset";
+            $this->container->get('mailer')->sendMail($address, $body, $subject);
+            return $response;
+        }
+        catch(Exception $e){
+            $response->getBody()->write('Caught exception: ' . $e->getMessage() . "\n");
+            return $response->withStatus(401);
+        }
+    }
+
     public function setUser(array $user)
     {
         $this->user = $user;
