@@ -12,7 +12,6 @@
             <div class="containerBookAbove">
               <div>
                 <img
-                  v-img
                   src="./book.png"
                   alt="bookPic"
                   height="50px"
@@ -21,9 +20,9 @@
                 <h3>book</h3>
                 {{ bookMeta.language }}
               </div>
-              <n-link :to="/catalog/">
+              <n-link to="/catalog/">
                 <div>
-                  <Button v-onclick="submitReserveData" class="reserveBook">
+                  <Button class="reserveBook" @click="submitReserveData">
                     Reserve Now!
                   </Button>
                 </div>
@@ -120,7 +119,7 @@ export default {
   methods: {
     submitReserveData() {
       axios.post('http://localhost:8080/saveReservationsUser', {
-        bookId: this.book.id,
+        bookId: this.book,
         userId: this.userId,
         reservationDateTime: this.getNow,
       });

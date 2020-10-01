@@ -15,7 +15,7 @@ class DB extends \SQLite3
         return $this->tableName;
     }
 
-    function getBookMeta(){
+    function getBookMeta() {
         $sql = "		
         select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel, 
 		authors.name as authors, publishers.name as publishers,  group_concat(categories.name, ', ') as categories from bookMeta
@@ -34,7 +34,7 @@ class DB extends \SQLite3
         return $data;
     }
     
-    function getBooks(){
+    function getBooks() {
         $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
         group by bookMetaId";
         $res = $this->query($sql);
@@ -47,10 +47,8 @@ class DB extends \SQLite3
         return $data;
     }
 
-    
-
         
-    function saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $id=-1){
+    function saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $id=-1) {
         if($id != -1){
             //update
             
@@ -98,7 +96,7 @@ class DB extends \SQLite3
 
     }
 
-    function editBook(){
+    function editBook() {
         $sql = "UPDATE group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
         group by bookMetaId";
         $res = $this->query($sql);
@@ -121,13 +119,12 @@ class DB extends \SQLite3
         $sql->bindValue(':booksId' , $booksId,);
         $sql->bindValue(':reservationDateTime' , $reservationDateTime,);
 
-            $status = $sql->execute();
+        $status = $sql->execute();
 
-            return $status;
-
+        return $status;
     }
     
-    public function getReservation(){
+    public function getReservation() {
         $sql="select id, usersId, booksId, reservationDateTime, accepted FROM reservations GROUP by reservations.id ORDER by reservationDateTime DESC" ;
         $res = $this->query($sql);
 
@@ -151,12 +148,12 @@ class DB extends \SQLite3
         $sql->bindValue(':maxAllowedDate' , $maxAllowedDate,);
 
         $status = $sql->execute();
-
+        
         return $status;
     }
 
 
-    public function getCheckout(){
+    public function getCheckout() {
         $sql="select id, usersId, booksId, checkoutDateTime, returnDateTime, maxAllowedDate, fine, isPaid, paidDate FROM checkouts GROUP by checkouts.id ORDER by checkoutDateTime DESC" ;
         $res = $this->query($sql);
 
