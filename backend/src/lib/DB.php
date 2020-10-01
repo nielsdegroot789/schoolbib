@@ -167,30 +167,23 @@ class DB extends \SQLite3
 
     private function getAuthorsIds(String $authors): String
     {
-        $authorsArr = explode(',', $authors);
-        $authorsIdArr = [];
-        foreach ($authorsArr as $author) {
-            $sql = $this->prepare("select id from authors WHERE name = :name");
-            $sql->bindValue(':name', $author);
+        $sql = $this->prepare("select id from authors WHERE name = :name");
+        $sql->bindValue(':name', $authors);
+        $res = $sql->execute();
+
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+
+        if ($data) {
+            return $data['id'];
+        } else {
+            //create new author and push the new id
+            $sql = $this->prepare(
+                "INSERT into authors(name)
+                values (:name)");
+            $sql->bindValue(':name', $authors);
             $res = $sql->execute();
-
-            $data = $res->fetchArray(SQLITE3_ASSOC);
-
-            if ($data) {
-                array_push($authorsIdArr, $data['id']);
-            } else {
-                //create new author and push the new id
-                $sql = $this->prepare(
-                    "INSERT into authors(name)
-                    values (:name)");
-                $sql->bindValue(':name', $author);
-                $res = $sql->execute();
-                array_push($authorsIdArr, $this->lastInsertRowID());
-            }
+            return $this->lastInsertRowID();
         }
-        var_dump($authorsIdArr);
-        $idString = implode(',', $authorsIdArr);
-        return $idString;
     }
 
     private function setCategories($bookMetaId, $categories)
