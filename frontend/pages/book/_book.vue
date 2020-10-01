@@ -12,7 +12,7 @@
             <div class="containerBookAbove">
               <div>
                 <img
-                  src="./book.png"
+                  src="../../assets/pictures/book.png"
                   alt="bookPic"
                   height="50px"
                   width="50px"
@@ -20,7 +20,7 @@
                 <h3>book</h3>
                 {{ bookMeta.language }}
               </div>
-              <n-link to="/catalog/">
+              <n-link to="/books/">
                 <div>
                   <Button class="reserveBook" @click="submitReserveData">
                     Reserve Now!
