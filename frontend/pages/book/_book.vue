@@ -91,9 +91,8 @@ export default {
   data() {
     return {
       bookId: 0,
-      bookData: {},
+      reservationData: {},
       timestamp: '',
-      reserveData: {},
       reservationDateTime: null,
     };
   },
