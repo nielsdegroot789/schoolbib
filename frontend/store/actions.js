@@ -48,6 +48,7 @@ export default {
         context.commit('setLoginError');
         console.log(error);
       });
+  },
   getReservation(context) {
     axios
       .get('http://localhost:8080/getReservation')

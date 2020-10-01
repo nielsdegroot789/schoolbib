@@ -2,12 +2,13 @@
 
 namespace skoolBiep\Controller;
 
+
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use skoolBiep\Entity\User;
 use skoolBiep\Util\CreateJWT;
-
+use skoolBiep\DB;
 
 $data = array();
 class UserController
