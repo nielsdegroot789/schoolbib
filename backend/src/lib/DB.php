@@ -186,4 +186,16 @@ class DB extends \SQLite3
 
         return $data;
     }
+
+    public function getProfilePageData($id) {
+        $sql = $this->prepare("select surname, lastname, email from users where id = :id");
+        $sql->bindvalue(':id', $id);
+        $res = $sql->execute();
+
+        $data = array();
+        while($row = $res->fetchArray(SQLITE3_ASSOC)){
+            array_push($data, $row);
+        }
+        return $data;
+    }
 }

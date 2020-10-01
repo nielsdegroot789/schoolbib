@@ -55,6 +55,23 @@ export default {
       selectedFile: null,
     };
   },
+  computed: {
+    UserId() {
+      return this.$store.state.currentUser.id;
+    },
+    JWT() {
+      return this.$store.state.JWT;
+    },
+  },
+  created() {
+    console.log(this.userId);
+    /* axios.get('http://localhost:8080/getProfilePageData', {
+      headers: {
+        'Access-Control-Allow-Credentials': true,
+      },
+    });
+    */
+  },
   methods: {
     selectPicture(event) {
       this.selectedFile = event.target.file[0]; // vuex store sturen
