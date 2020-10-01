@@ -1,7 +1,6 @@
 <template>
   <div>
-    BookForm:
-    <BookForm />
+    <BookForm :book-data="bookData" @updateBookData="updateBookData" />
   </div>
 </template>
 
@@ -16,9 +15,11 @@ export default {
       bookData: {},
     };
   },
-  computed: {},
-  created() {},
-  methods: {},
+  methods: {
+    updateBookData(newDataObj) {
+      this.bookData = newDataObj;
+    },
+  },
 };
 </script>
 

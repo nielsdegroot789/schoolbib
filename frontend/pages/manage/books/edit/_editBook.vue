@@ -1,7 +1,6 @@
 <template>
   <div>
-    EditForm
-    <BookForm :book-data="bookData" />
+    <BookForm :book-data="bookData" @updateBookData="updateBookData" />
   </div>
 </template>
 
@@ -32,7 +31,11 @@ export default {
     // check if book is already fetched
     this.bookData = this.bookMeta[0];
   },
-  methods: {},
+  methods: {
+    updateBookData(newDataObj) {
+      this.bookData = newDataObj;
+    },
+  },
 };
 </script>
 

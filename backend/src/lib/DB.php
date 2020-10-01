@@ -79,7 +79,6 @@ class DB extends \SQLite3
         } else {
             //create
 
-            var_dump($title);
             $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel)
             values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel)');
 
@@ -95,7 +94,7 @@ class DB extends \SQLite3
             // $sql->bindValue(':categories', $POST['categories']);
 
             $status = $sql->execute();
-
+            var_dump($status);
             $res = $status ? "Success" : "Failed";
             return $res;
 
