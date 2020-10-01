@@ -3,8 +3,8 @@ use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use skoolBiep\DB;
-use skoolBiep\Util\ValidateJWT;
 use skoolBiep\Util\Mailer;
+use skoolBiep\Util\ValidateJWT;
 use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
@@ -84,36 +84,19 @@ $app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . '
 
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
 
-$app->get('/getReservation',\skoolBiep\Controller\UserController::class . ':getReservation');
+$app->get('/getReservation', \skoolBiep\Controller\UserController::class . ':getReservation');
 
-$app->get('/getCheckout',\skoolBiep\Controller\UserController::class . ':getCheckout');
+$app->get('/getCheckout', \skoolBiep\Controller\UserController::class . ':getCheckout');
 
-// $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
-//     $this->get('db');
-//     if ($request->getMethod() == 'GET') {
-//         $html = '<h1>Login</h1>
-// <form method="POST"><label for="username">Username:</label><input type="text" size="40" name="username" /><br />';
-//         $html = $html . '<label for="password">Password:</label><input type="password" size="40" name="password" /><br />';
-//         $html = $html . '<input type="submit" value="Create user" name="Save" /></form>';
-//         $response->getBody()->write($html);
-//     } else {
-//         // verwerking form
-//         $user = new User();
-//         $user->setUserName($request->getParsedBody()['username']);
-//         $id = $user->saveUser($request->getParsedBody()['password']);
-//         echo "User received ID: $id";
-//     }
-//     return $response;
-// });
+$app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':saveReservationsUser');
 
-$app->post('/saveReservationsUser',\skoolBiep\Controller\UserController::class . ':saveReservationsUser');
-
-$app->post('/saveCheckoutAdmin',\skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
-
+$app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
 
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 
 $app->post('/resetPassword', \skoolBiep\Controller\UserController::class . ':resetPassword');
+
+$app->post('/confirmPasswordReset', \skoolBiep\Controller\UserController::class . ':resetPassword');
 
 $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;

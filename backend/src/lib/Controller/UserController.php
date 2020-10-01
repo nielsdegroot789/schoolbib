@@ -2,13 +2,12 @@
 
 namespace skoolBiep\Controller;
 
-
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use skoolBiep\DB;
 use skoolBiep\Entity\User;
 use skoolBiep\Util\CreateJWT;
-use skoolBiep\DB;
 
 $data = array();
 class UserController
@@ -95,6 +94,29 @@ class UserController
         }
     }
 
+    public function confirmPasswordReset(Request $request, Response $response, array $args)
+    {
+        try {
+            $data = json_decode(file_get_contents("php://input"), true);
+            $password = $data['password'];
+            $token = $data['token'];
+
+            //todo make this function
+            //check if current time < the token.expTime 
+            $isValid = $this->container->get('db')->checkIfTokenValid($token);
+            if ($isValid) {
+                //todo make this function
+                
+                //encrypt the new password and store in the db
+                return $response;
+            }
+            throw new Exception('This link has already expired, please request another password reset.');
+        } catch (Exception $e) {
+            $response->getBody()->write('Caught exception: ' . $e->getMessage() . "\n");
+            return $response->withStatus(401);
+        }
+    }
+
     public function setUser(array $user)
     {
         $this->user = $user;
@@ -105,38 +127,38 @@ class UserController
     }
 
     public function saveReservationsUser(Request $request, Response $response, array $args)
-    {            
-        $data = json_decode(file_get_contents("php://input"), TRUE);
+    {
+        $data = json_decode(file_get_contents("php://input"), true);
         $this->response = $response;
 
         $db = new DB();
         $usersId = $data["usersId"];
         $booksId = $data["booksId"];
         $reservationDateTime = $data["reservationDateTime"];
-        if($data['id']){
+        if ($data['id']) {
             $id = $data['id'];
             $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime);
-        }
-        else {
+        } else {
             $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime);
         }
         $response->getBody()->write($data);
         return $response;
-      
+
     }
-    public function ChangeAccepted($booksId, $userId){
+    public function ChangeAccepted($booksId, $userId)
+    {
         $db = new DB();
-        $sql=$db->exec('UPDATE reservations Set accepted = 1 WHERE booksId = '. $booksId .' AND userId = '. $userId .'');
+        $sql = $db->exec('UPDATE reservations Set accepted = 1 WHERE booksId = ' . $booksId . ' AND userId = ' . $userId . '');
         if ($db->exec($sql)) {
             return $db->lastInsertRowID();
         } else {
             return false;
-        } 
+        }
     }
 
     public function saveCheckoutAdmin(Request $request, Response $response, array $args)
-    {            
-        $data = json_decode(file_get_contents("php://input"), TRUE);
+    {
+        $data = json_decode(file_get_contents("php://input"), true);
         $this->response = $response;
 
         $db = new DB();
@@ -145,12 +167,11 @@ class UserController
         $checkoutDateTime = $data["checkoutDateTime"];
         $returnDateTime = $data["reservationDateTime"];
         $maxAllowedDate = $data["maxAllowedDate"];
-        if($data['id']){
+        if ($data['id']) {
             $id = $data['id'];
-            $data = $db->saveCheckoutAdmin($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate);
-        }
-        else {
-            $data = $db->saveCheckoutAdmin($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate);
+            $data = $db->saveCheckoutAdmin($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate);
+        } else {
+            $data = $db->saveCheckoutAdmin($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate);
         }
         $response->getBody()->write($data);
         return $response;
@@ -180,4 +201,3 @@ class UserController
             ->withHeader('Content-Type', 'application/json');
     }
 }
-
