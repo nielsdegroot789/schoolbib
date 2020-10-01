@@ -26,6 +26,7 @@ export default {
     const array = data.split('.');
     state.currentUser.header = atob(array[0]);
     state.currentUser.payload = atob(array[1]);
+    state.currentUser.id = JSON.parse(atob(array[1])).userId;
     state.currentUser.role = JSON.parse(atob(array[1])).role;
     state.currentUser.signature = array[2];
   },

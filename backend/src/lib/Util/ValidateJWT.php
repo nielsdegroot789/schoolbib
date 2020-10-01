@@ -2,12 +2,12 @@
 
 namespace skoolBiep\Util;
 
-use skoolBiep\Model\User;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Token;
 use Lcobucci\JWT\ValidationData;
+use skoolBiep\Model\User;
 
 class ValidateJWT
 {
@@ -28,7 +28,7 @@ class ValidateJWT
     {
         $this->token = (new Parser())->parse($jwtString);
         $this->signer = new Sha256();
-        $this->secret = new Key("ABC");
+        $this->secret = new Key(getenv('JWT_SECRET'));
     }
 
     public function __invoke()
@@ -42,7 +42,7 @@ class ValidateJWT
     private function validationData()
     {
         $data = new ValidationData();
-        $data->setIssuer('Localhost:8080');
+        $data->setIssuer(getenv('JWT_ISSUER'));
 
         return $data;
     }
