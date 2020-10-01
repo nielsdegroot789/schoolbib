@@ -75,10 +75,10 @@ class DB extends \SQLite3
             $sql->bindValue(':sticker', $sticker);
             $sql->bindValue(':readingLevel', $readingLevel);
             $sql->bindValue(':id', $id);
-            $publisherId = getPublisherId($publishers);
+            $publisherId = $this->getPublisherId($publishers);
             $sql->bindValue(':publishersId', $publisherId);
-            $authorsIds = getAuthorsIds($authors);
-            $sql->bindValue(':authorsIds', $publisherId);
+            $authorsIds = $this->getAuthorsIds($authors);
+            $sql->bindValue(':authorsIds', $authorsIds);
 
             $status = $sql->execute();
             $categoriesArr = explode(',', $categories);
@@ -99,15 +99,15 @@ class DB extends \SQLite3
             $sql->bindValue(':language', $language);
             $sql->bindValue(':sticker', $sticker);
             $sql->bindValue(':readingLevel', $readingLevel);
-            $publisherId = getPublisherId($publishers);
+            $publisherId = $this->getPublisherId($publishers);
             $sql->bindValue(':publishersId', $publisherId);
-            $authorsIds = getAuthorsIds($authors);
-            $sql->bindValue(':authorsIds', $publisherId);
+            $authorsIds = $this->getAuthorsIds($authors);
+            $sql->bindValue(':authorsIds', $authorsIds);
 
             $status = $sql->execute();
             $res = $status ? "Success" : "Failed";
             //todo get the newly created id here
-            setCategories(1, $categories);
+            $this->setCategories($this->lastInsertRowID(), $categories);
             return $res;
 
         }
@@ -151,11 +151,17 @@ class DB extends \SQLite3
         $res = $sql->execute();
 
         $data = $res->fetchArray(SQLITE3_ASSOC);
-
         if ($data) {
-            return $data;
+            return $data['id'];
         } else {
             //create new publisher and return the new id
+            $sql = $this->prepare(
+                "INSERT into publishers(name)
+                values (:name)");
+            $sql->bindValue(':name', $publisherName);
+            $res = $sql->execute();
+            var_dump($this->lastInsertRowID());
+            return $this->lastInsertRowID();
         }
     }
 
@@ -171,43 +177,47 @@ class DB extends \SQLite3
             $data = $res->fetchArray(SQLITE3_ASSOC);
 
             if ($data) {
-                array_push($authorsIdArr, $data);
+                array_push($authorsIdArr, $data['id']);
             } else {
                 //create new author and push the new id
-
+                $sql = $this->prepare(
+                    "INSERT into authors(name)
+                    values (:name)");
+                $sql->bindValue(':name', $author);
+                $res = $sql->execute();
+                array_push($authorsIdArr, $this->lastInsertRowID());
             }
         }
+        var_dump($authorsIdArr);
         $idString = implode(',', $authorsIdArr);
         return $idString;
     }
 
     private function setCategories($bookMetaId, $categories)
     {
-        $sql = $this->prepare("select id from categories WHERE name = :name");
+        $sql = $this->prepare("SELECT id from categories WHERE name = :name");
         $sql->bindValue(':name', $categories);
         $res = $sql->execute();
-
         $data = $res->fetchArray(SQLITE3_ASSOC);
+        $categoryId = null;
 
         if ($data) {
-            $sql = $this->prepare(
-                "insert into categoriesInBooks(categoriesId, bookMetaId)
-                values (:categoriesId, :bookMetaId)");
-            $sql->bindValue(':categoriesId', $data);
-            $sql->bindValue(':bookMetaId', $bookMetaId);
-
+            $categoryId = $data['id'];
         } else {
             //create new category
-            $sql = $this->prepare(
-                "insert into categoriesInBooks(categoriesId, bookMetaId)
-                values (:categoriesId, :bookMetaId)");
-            $sql->bindValue(':categoriesId', 1);
-            $sql->bindValue(':bookMetaId', $bookMetaId);
-
+            $sql = $this->prepare("INSERT into categories(name)
+            values (:name)");
+            $sql->bindValue(':name', $categories);
+            $res = $sql->execute();
+            $categoryId = $this->lastInsertRowID();
         }
-
-        $idString = implode(',', $authorsIdArr);
-        return $idString;
+        $sql = $this->prepare("INSERT into categoriesInBooks(categoriesId, bookMetaId)
+                values (:categoriesId, :bookMetaId)");
+        $sql->bindValue(':categoriesId', $categoryId);
+        $sql->bindValue(':bookMetaId', $bookMetaId);
+        $status = $sql->execute();
+        $res = $status ? "Success" : "Failed";
+        return $res;
     }
 
     public function saveReservationsUser($usersId, $booksId, $reservationDateTime)
