@@ -30,7 +30,6 @@
         <span>{{ item.rating }}</span>
         <span>{{ item.totalPages }}</span>
         <span>{{ item.sticker }}</span>
-        <!-- //cover? -->
         <span>{{ item.language }}</span>
         <span>{{ item.readingLevel }}</span>
         <span>{{ item.authors }}</span>
