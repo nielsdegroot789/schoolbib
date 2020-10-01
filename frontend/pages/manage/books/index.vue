@@ -37,10 +37,12 @@
           <span>{{ item.publishers }}</span>
           <span>{{ item.categories }}</span>
           <span>
-            <nuxt-link :to="/editBook/ + item.id">edit</nuxt-link>
+            <nuxt-link :to="/manage/ + /books/ + /edit/ + item.id"
+              >edit</nuxt-link
+            >
           </span>
           <span>
-            <nuxt-link :to="/deleteBook/ + item.id">delete</nuxt-link>
+            <nuxt-link :to="/manage/ + /books/">delete</nuxt-link>
           </span>
         </nuxt-link>
       </div>

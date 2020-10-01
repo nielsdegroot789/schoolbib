@@ -65,17 +65,6 @@
                     <strong> publishDate : </strong>{{ bookMeta.publishDate }}
                   </p>
                 </div>
-                <!-- <div v-if="book.stock != 0" class="containerBookInfoRight">
-                  <n-link to="/borrow/">
-                    <button>reserve here!</button>
-                  </n-link>
-                </div> -->
-                <!-- <div v-else class="containerBookInfoRight">
-                  This book isn't in the store anymore.
-                  <n-link to="/borrow/">
-                    <button>reserve here!</button>
-                  </n-link>
-                </div> -->
               </div>
             </div>
           </div>
