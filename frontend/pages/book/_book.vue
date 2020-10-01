@@ -1,71 +1,60 @@
 <template>
   <div class="PageContainer">
-    <div v-for="bookMeta in bookMeta" :key="bookMeta.id">
-      <div v-for="item in books" :key="item.id">
-        <div class="BookInfoContainer">
-          <div class="InfoAboveBook">
-            <n-link to="/">Home</n-link> >
-            <n-link to="/catalog">catalog</n-link> >
-            {{ bookMeta.title }}
+    <div class="BookInfoContainer">
+      <div class="InfoAboveBook">
+        <n-link to="/">Home</n-link> > <n-link to="/catalog">catalog</n-link> >
+        {{ bookMeta.title }}
+      </div>
+      <div class="containerBook">
+        <div class="containerBookAbove">
+          <div>
+            <img
+              src="../../assets/pictures/book.png"
+              alt="bookPic"
+              height="50px"
+              width="50px"
+            />
+            <h3>book</h3>
+            {{ bookMeta.language }}
           </div>
-          <div class="containerBook">
-            <div class="containerBookAbove">
-              <div>
-                <img
-                  src="../../assets/pictures/book.png"
-                  alt="bookPic"
-                  height="50px"
-                  width="50px"
-                />
-                <h3>book</h3>
-                {{ bookMeta.language }}
-              </div>
-              <n-link to="/books/">
-                <div>
-                  <Button class="reserveBook" @click="submitReserveData">
-                    Reserve Now!
-                  </Button>
-                </div>
-              </n-link>
+          <n-link to="/books/">
+            <div>
+              <Button class="reserveBook" @click="submitReserveData">
+                Reserve Now! {{ currentUserId }}
+              </Button>
             </div>
+          </n-link>
+        </div>
 
-            <div class="containerBookInfo">
-              <div class="containerBookInfoLeft">
-                <strong>
-                  <h1>{{ bookMeta.title }}</h1></strong
-                >
-                <div>{{ bookMeta.sticker }}</div>
-                <Button> &#10084; Place on list </Button>
-              </div>
-              <div class="containerBookInfoMiddle">
-                <br />
+        <div class="containerBookInfo">
+          <div class="containerBookInfoLeft">
+            <strong>
+              <h1>{{ bookMeta.title }}</h1></strong
+            >
+            <div>{{ bookMeta.sticker }}</div>
+            <Button> &#10084; Place on list </Button>
+          </div>
+          <div class="containerBookInfoMiddle">
+            <br />
 
-                <p>Details:</p>
-                <div v-for="book in books" :key="book.id">
-                  <p><strong> Title : </strong>{{ bookMeta.title }}</p>
-                  <p><strong> Author :</strong> {{ bookMeta.authors }}</p>
-                  <p><strong> Language(s) :</strong> {{ bookMeta.language }}</p>
-                  <br />
-                  <p><strong>Categorie(s)</strong> {{ bookMeta.categories }}</p>
-                  <br />
-                  <p>-------</p>
-                  <br />
-                  <p><strong>rating :</strong>{{ bookMeta.rating }} / 5</p>
-                  <p><strong> Title : </strong>{{ bookMeta.title }}</p>
-                  <p>
-                    <strong> ReadingLevel : </strong>{{ bookMeta.readingLevel }}
-                  </p>
-                  <p>
-                    <strong> totalPages : </strong>{{ bookMeta.totalPages }}
-                  </p>
-                  <p>
-                    <strong> publishers : </strong>{{ bookMeta.publishers }}
-                  </p>
-                  <p>
-                    <strong> publishDate : </strong>{{ bookMeta.publishDate }}
-                  </p>
-                </div>
-              </div>
+            <p>Details:</p>
+            <div v-for="book in books" :key="book.id">
+              <p><strong> Title : </strong>{{ bookMeta.title }}</p>
+              <p><strong> Author :</strong> {{ bookMeta.authors }}</p>
+              <p><strong> Language(s) :</strong> {{ bookMeta.language }}</p>
+              <br />
+              <p><strong>Categorie(s)</strong> {{ bookMeta.categories }}</p>
+              <br />
+              <p>-------</p>
+              <br />
+              <p><strong>rating :</strong>{{ bookMeta.rating }} / 5</p>
+              <p><strong> Title : </strong>{{ bookMeta.title }}</p>
+              <p>
+                <strong> ReadingLevel : </strong>{{ bookMeta.readingLevel }}
+              </p>
+              <p><strong> totalPages : </strong>{{ bookMeta.totalPages }}</p>
+              <p><strong> publishers : </strong>{{ bookMeta.publishers }}</p>
+              <p><strong> publishDate : </strong>{{ bookMeta.publishDate }}</p>
             </div>
           </div>
         </div>
@@ -79,10 +68,9 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      bookId: 0,
-      reservationData: {},
+      bookId: '',
+      userId: '',
       timestamp: '',
-      reservationDateTime: null,
     };
   },
   computed: {
@@ -96,22 +84,38 @@ export default {
         parseInt(this.$route.params.book),
       );
     },
+    currentUserId() {
+      return this.$store.state.currentUser.id;
+    },
   },
   mounted() {
-    this.bookId = this.$route.params.books;
+    this.bookId = this.$route.params.book;
+    console.log(this.$route.params.book);
   },
   created() {
     setInterval(this.getNow, 1000);
+    setInterval(this.getBookId, 1000);
   },
 
   methods: {
     submitReserveData() {
-      axios.post('http://localhost:8080/saveReservationsUser', {
-        bookId: this.book,
-        userId: this.userId,
-        reservationDateTime: this.getNow,
-      });
+      axios
+        .post('http://localhost:8080/saveReservationsUser', {
+          bookId: this.bookId,
+          userId: 'currentUser.Id',
+          reservationDateTime: this.timestamp,
+        })
+        .then(function (response) {
+          console.log(response);
+          console.log(this.currentUser);
+        });
     },
+    getUserId() {},
+    getBookId() {
+      const bookIdrequest = this.$route.params.books;
+      this.bookId = bookIdrequest;
+    },
+
     getNow() {
       const today = new Date();
       const date =
@@ -123,7 +127,7 @@ export default {
       const time =
         today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
       const dateTime = date + ' ' + time;
-      this.timestamp = dateTime;
+      this.timestamp = dateTime.toString();
     },
   },
 };
