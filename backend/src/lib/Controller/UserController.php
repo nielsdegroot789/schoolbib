@@ -75,9 +75,12 @@ class UserController
             $user = $this->container->get('db')->getUserByEmail($address);
             if ($user) {
                 //todo generate random token and add it to the db
-                $randomToken = '123456755589';
-                $this->container->get('db')->addTokenToAccount($randomToken, $user['id']);
-                $body = $this->container->get('twig')->render('passwordReset.twig', ['user' => $user['surname'], 'token' => $randomToken]);
+                $token = rand(1, 999999);
+                // https://thisinterestsme.com/generating-random-token-php/
+                // $token = openssl_random_pseudo_bytes(16);
+                // $token = bin2hex($token);
+                $this->container->get('db')->addTokenToAccount($token, $user['id']);
+                $body = $this->container->get('twig')->render('passwordReset.twig', ['user' => $user['surname'], 'token' => $token]);
                 $subject = "Password reset";
                 $this->container->get('mailer')->sendMail($address, $body, $subject);
             }
