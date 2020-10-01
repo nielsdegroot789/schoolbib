@@ -135,7 +135,7 @@ class DB extends \SQLite3
     function saveReservationsUser($usersId,$booksId,$reservationDateTime) {
       
         $sql = $this->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime) 
-        values (:userId,:booksId,:reservationDateTime)");
+        values (:usersId,:booksId,:reservationDateTime)");
 
         $sql->bindValue(':usersId' , $usersId,);
         $sql->bindValue(':booksId' , $booksId,);

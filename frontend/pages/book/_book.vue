@@ -2,7 +2,7 @@
   <div class="PageContainer">
     <div class="BookInfoContainer">
       <div class="InfoAboveBook">
-        <n-link to="/">Home</n-link> > <n-link to="/catalog">catalog</n-link> >
+        <n-link to="/">Home</n-link> > <n-link to="/books">books</n-link> >
         {{ bookMeta.title }}
       </div>
       <div class="containerBook">
@@ -68,8 +68,9 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      bookId: '',
-      userId: '',
+      bookId: 0,
+      reservationData: {},
+      currentUser: '',
       timestamp: '',
     };
   },
@@ -88,22 +89,22 @@ export default {
       return this.$store.state.currentUser.id;
     },
   },
+  mounted() {
+    this.bookId = this.$route.params.books;
+  },
   created() {
     setInterval(this.getNow, 1000);
-    setInterval(this.getBookId, 1000);
   },
 
   methods: {
     submitReserveData() {
       axios
         .post('http://localhost:8080/saveReservationsUser', {
-          bookId: this.$route.params.book,
-          userId: this.currentUser.id,
+          booksId: this.$route.params.book,
+          usersId: this.currentUserId,
           reservationDateTime: this.timestamp,
         })
-        .then(function (response) {
-          console.log(response);
-        });
+        .then(function (response) {});
     },
 
     getNow() {
