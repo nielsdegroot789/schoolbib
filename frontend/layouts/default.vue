@@ -4,7 +4,7 @@
     <nav class="navbar is-light">
       <div class="container">
         <div class="navbar-brand">
-          <nuxt-link class="navbar-item" to="/">Library</nuxt-link>
+          <nuxt-link class="navbar-item" to="/">Home</nuxt-link>
           <button class="button navbar-burger">
             <span></span>
             <span></span>
@@ -17,9 +17,14 @@
             {{ currentUserRole }}</span
           >
           <div class="navbar-end">
+            <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/books"
+              >Manage books</nuxt-link
+            >
+            <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/users"
+              >Manage users</nuxt-link
+            >
             <nuxt-link class="navbar-item" to="/books">books</nuxt-link>
             <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link">My Account</a>
               <div class="navbar-dropdown">
                 <nuxt-link class="navbar-item" to="/profile"></nuxt-link>
                 <hr class="navbar-divider" />

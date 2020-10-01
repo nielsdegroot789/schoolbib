@@ -3,13 +3,13 @@
     <button class="carousel-button">
       <font-awesome-icon :icon="['fas', 'angle-left']" />
     </button>
-    <div v-for="(item, id) in bookMeta" :key="id" class="carousel-book">
+    <div
+      v-for="(item, id) in bookMeta.slice(0, 7)"
+      :key="id"
+      class="carousel-book"
+    >
       {{ item.title }}
     </div>
-    <div class="carousel-book"></div>
-    <div class="carousel-book"></div>
-    <div class="carousel-book"></div>
-    <div class="carousel-book"></div>
     <button class="carousel-button">
       <font-awesome-icon :icon="['fas', 'angle-right']" />
     </button>

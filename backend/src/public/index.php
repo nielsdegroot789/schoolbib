@@ -84,10 +84,6 @@ $app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . '
 
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
 
-//getUserData
-//gert totalpayments
-//getloaned books
-
 $app->get('/getReservation',\skoolBiep\Controller\UserController::class . ':getReservation');
 
 $app->get('/getCheckout',\skoolBiep\Controller\UserController::class . ':getCheckout');
