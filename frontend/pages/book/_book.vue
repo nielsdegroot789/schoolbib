@@ -90,7 +90,6 @@ export default {
   },
   mounted() {
     this.bookId = this.$route.params.book;
-    console.log(this.$route.params.book);
   },
   created() {
     setInterval(this.getNow, 1000);
@@ -101,7 +100,7 @@ export default {
     submitReserveData() {
       axios
         .post('http://localhost:8080/saveReservationsUser', {
-          bookId: this.bookId,
+          bookId: this.$route.params.book,
           userId: 'currentUser.Id',
           reservationDateTime: this.timestamp,
         })
@@ -109,11 +108,6 @@ export default {
           console.log(response);
           console.log(this.currentUser);
         });
-    },
-    getUserId() {},
-    getBookId() {
-      const bookIdrequest = this.$route.params.books;
-      this.bookId = bookIdrequest;
     },
 
     getNow() {
