@@ -40,4 +40,10 @@ export default {
     state.JWT = null;
     state.currentUser = {};
   },
+  setTotalItems(state, payload) {
+    state.setTotalItems = payload;
+  },
+  getReservations(state, reservation) {
+    state.reservation = reservation;
+  },
 };
