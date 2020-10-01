@@ -4,9 +4,10 @@ export default {
   users: [],
   currentUser: {},
   frontPageNotification: {},
-  notificationMessage: {},
-  show: false,
-  notification: {},
+  show: true,
+  notifications: [],
   JWT: null,
   showLoginError: false,
+  limit: 20,
+  reservation: [],
 };

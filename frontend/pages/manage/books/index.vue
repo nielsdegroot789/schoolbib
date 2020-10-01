@@ -30,17 +30,27 @@
         <span>{{ item.rating }}</span>
         <span>{{ item.totalPages }}</span>
         <span>{{ item.sticker }}</span>
-        <!-- //cover? -->
         <span>{{ item.language }}</span>
         <span>{{ item.readingLevel }}</span>
         <span>{{ item.authors }}</span>
         <span>{{ item.publishers }}</span>
         <span>{{ item.categories }}</span>
-        <nuxt-link :to="/editBook/ + item.id"> edit</nuxt-link>
+        <nuxt-link
+          :to="{
+            path: '/manage/books/edit/' + item.id,
+          }"
+        >
+          edit</nuxt-link
+        >
         <nuxt-link :to="/deleteBook/ + item.id">delete</nuxt-link>
       </nuxt-link>
       <button class="newBook">
-        <nuxt-link to="/book/new">new</nuxt-link>
+        <nuxt-link
+          :to="{
+            path: '/manage/books/new',
+          }"
+          >new</nuxt-link
+        >
       </button>
     </div>
   </div>

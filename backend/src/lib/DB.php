@@ -197,7 +197,7 @@ class DB extends \SQLite3
             $sql->bindValue(':bookMetaId', $bookMetaId);
 
         } else {
-            //create new category 
+            //create new category
             $sql = $this->prepare(
                 "insert into categoriesInBooks(categoriesId, bookMetaId)
                 values (:categoriesId, :bookMetaId)");
@@ -208,5 +208,63 @@ class DB extends \SQLite3
 
         $idString = implode(',', $authorsIdArr);
         return $idString;
+    }
+
+    public function saveReservationsUser($usersId, $booksId, $reservationDateTime)
+    {
+
+        $sql = $this->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime)
+        values (:userId,:booksId,:reservationDateTime)");
+
+        $sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':booksId', $booksId, );
+        $sql->bindValue(':reservationDateTime', $reservationDateTime, );
+
+        $status = $sql->execute();
+
+        return $status;
+    }
+
+    public function getReservation()
+    {
+        $sql = "select id, usersId, booksId, reservationDateTime, accepted FROM reservations GROUP by reservations.id ORDER by reservationDateTime DESC";
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
+    //(accepted? apparte functie fnie?)
+    public function saveCheckoutAdmin($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
+    {
+
+        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate)
+        Select (:userId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate ) from reservations where reservations.booksId = checkouts.booksId");
+
+        $sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':booksId', $booksId, );
+        $sql->bindValue(':checkoutDateTime', $checkoutDateTime, );
+        $sql->bindValue(':returnDateTime', $returnDateTime, );
+        $sql->bindValue(':maxAllowedDate', $maxAllowedDate, );
+
+        $status = $sql->execute();
+
+        return $status;
+    }
+
+    public function getCheckout()
+    {
+        $sql = "select id, usersId, booksId, checkoutDateTime, returnDateTime, maxAllowedDate, fine, isPaid, paidDate FROM checkouts GROUP by checkouts.id ORDER by checkoutDateTime DESC";
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
     }
 }
