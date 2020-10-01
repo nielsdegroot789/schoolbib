@@ -84,6 +84,11 @@ $app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . '
 
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
 
+//getUserData
+//gert totalpayments
+//getloaned books
+
+
 // $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
 //     $this->get('db');
 //     if ($request->getMethod() == 'GET') {
