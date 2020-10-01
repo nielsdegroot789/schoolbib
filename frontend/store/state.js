@@ -8,4 +8,6 @@ export default {
   notifications: [],
   JWT: null,
   showLoginError: false,
+  limit: 20,
+  reservation: [],
 };

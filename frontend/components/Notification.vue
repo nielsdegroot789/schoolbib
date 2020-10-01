@@ -20,11 +20,6 @@ export default {
       return this.$store.state.notifications;
     },
   },
-  methods: {
-    deleteNotification() {
-      this.$store.dispatch('deleteNotification');
-    },
-  },
 };
 </script>
 

@@ -29,6 +29,11 @@ export default {
       this.$store.dispatch('deleteNotification', this.notification);
     }, 3000);
   },
+  methods: {
+    deleteNotification() {
+      this.$store.dispatch('deleteNotification', this.notification);
+    },
+  },
 };
 </script>
 
