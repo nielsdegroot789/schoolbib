@@ -18,34 +18,39 @@
         <span>delete</span>
       </div>
 
-      <div
+      <nuxt-link
         v-for="(item, index) in bookMeta"
         :key="index"
         class="booksContainer"
+        :to="/book/ + item.id"
       >
-        <nuxt-link :to="/book/ + item.id">
-          <span>{{ item.title }}</span>
-          <span>{{ item.isbnCode }}</span>
-          <span>{{ item.publishDate }}</span>
-          <span>{{ item.rating }}</span>
-          <span>{{ item.totalPages }}</span>
-          <span>{{ item.sticker }}</span>
-          <!-- //cover? -->
-          <span>{{ item.language }}</span>
-          <span>{{ item.readingLevel }}</span>
-          <span>{{ item.authors }}</span>
-          <span>{{ item.publishers }}</span>
-          <span>{{ item.categories }}</span>
-          <span>
-            <nuxt-link :to="/editBook/ + item.id">edit</nuxt-link>
-          </span>
-          <span>
-            <nuxt-link :to="/deleteBook/ + item.id">delete</nuxt-link>
-          </span>
-        </nuxt-link>
-      </div>
+        <span>{{ item.title }}</span>
+        <span>{{ item.isbnCode }}</span>
+        <span>{{ item.publishDate }}</span>
+        <span>{{ item.rating }}</span>
+        <span>{{ item.totalPages }}</span>
+        <span>{{ item.sticker }}</span>
+        <span>{{ item.language }}</span>
+        <span>{{ item.readingLevel }}</span>
+        <span>{{ item.authors }}</span>
+        <span>{{ item.publishers }}</span>
+        <span>{{ item.categories }}</span>
+        <nuxt-link
+          :to="{
+            path: '/manage/books/edit/' + item.id,
+          }"
+        >
+          edit</nuxt-link
+        >
+        <nuxt-link :to="/deleteBook/ + item.id">delete</nuxt-link>
+      </nuxt-link>
       <button class="newBook">
-        <nuxt-link to="/book/new">new</nuxt-link>
+        <nuxt-link
+          :to="{
+            path: '/manage/books/new',
+          }"
+          >new</nuxt-link
+        >
       </button>
     </div>
   </div>
@@ -61,6 +66,7 @@ export default {
       return this.$store.state.bookMeta;
     },
   },
+  created() {},
 };
 </script>
 
@@ -85,11 +91,7 @@ export default {
   padding-top: 15px;
 }
 
-.travelContainer {
-  width: 100%;
-}
-
-.travelContainer > :nth-child(odd) {
+.booksContainer:nth-child(odd) {
   background-color: lightgray;
 }
 
@@ -102,11 +104,15 @@ export default {
   font-weight: bold;
 }
 
-.booksContainer a {
+.booksContainer {
   display: grid;
   grid-template-columns: repeat(11, calc(90% / 11)) 5% 5%;
   justify-items: center;
   align-items: center;
   margin: 5px 0;
+}
+
+.booksContainer span {
+  overflow-wrap: anywhere;
 }
 </style>

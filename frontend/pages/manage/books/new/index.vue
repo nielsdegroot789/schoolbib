@@ -1,11 +1,11 @@
 <template>
   <div>
-    <BookForm />
+    <BookForm :book-data="bookData" @updateBookData="updateBookData" />
   </div>
 </template>
 
 <script>
-import BookForm from '../../../components/BookForm.vue';
+import BookForm from '~/components/BookForm.vue';
 export default {
   name: 'New',
   components: { BookForm },
@@ -15,9 +15,11 @@ export default {
       bookData: {},
     };
   },
-  computed: {},
-  created() {},
-  methods: {},
+  methods: {
+    updateBookData(newDataObj) {
+      this.bookData = newDataObj;
+    },
+  },
 };
 </script>
 

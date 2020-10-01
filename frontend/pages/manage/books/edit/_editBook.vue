@@ -1,11 +1,11 @@
 <template>
   <div>
-    <BookForm :book-data="bookData" />
+    <BookForm :book-data="bookData" @updateBookData="updateBookData" />
   </div>
 </template>
 
 <script>
-import BookForm from '../../components/BookForm.vue';
+import BookForm from '~/components/BookForm.vue';
 export default {
   name: 'EditForm',
   components: { BookForm },
@@ -31,7 +31,11 @@ export default {
     // check if book is already fetched
     this.bookData = this.bookMeta[0];
   },
-  methods: {},
+  methods: {
+    updateBookData(newDataObj) {
+      this.bookData = newDataObj;
+    },
+  },
 };
 </script>
 
