@@ -37,17 +37,18 @@
           <span>{{ item.publishers }}</span>
           <span>{{ item.categories }}</span>
           <span>
-            <nuxt-link :to="/manage/ + /books/ + /edit/ + item.id"
+            <nuxt-link
+              :to="{ route: '/manage/book/edit', params: { id: item.id } }"
               >edit</nuxt-link
             >
           </span>
           <span>
-            <nuxt-link :to="/manage/ + /books/">delete</nuxt-link>
+            <button>delete</button>
           </span>
         </nuxt-link>
       </div>
       <button class="newBook">
-        <nuxt-link to="/book/new">new</nuxt-link>
+        <nuxt-link to="/manage/book/new">new</nuxt-link>
       </button>
     </div>
   </div>

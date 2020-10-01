@@ -1,5 +1,6 @@
 <template>
   <div>
+    BookForm:
     <BookForm />
   </div>
 </template>

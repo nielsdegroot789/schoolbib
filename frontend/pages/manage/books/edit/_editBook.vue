@@ -1,5 +1,6 @@
 <template>
   <div>
+    EditForm
     <BookForm :book-data="bookData" />
   </div>
 </template>
