@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import BookForm from '../../components/BookForm.vue';
+import BookForm from '~/components/BookForm.vue';
 export default {
   name: 'EditForm',
   components: { BookForm },
