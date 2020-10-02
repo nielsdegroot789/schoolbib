@@ -1,31 +1,27 @@
 <template>
-  <div>
-    <div id="carousel-links-container">
-      <ul class="carousel-new-suggestions">
-        <li class="carousel-link">
-          <h2 class="carousel-link-title">New adults</h2>
-        </li>
-        <li class="carousel-link">
-          <h2 class="carousel-link-title">New children</h2>
-        </li>
-        <li class="carousel-link">
-          <h2 class="carousel-link-title">New fantasy</h2>
-        </li>
-        <li class="carousel-link">
-          <h2 class="carousel-link-title">New fiction</h2>
-        </li>
+  <div class="section">
+    <div class="tabs is-centered is-boxed">
+      <ul>
+        <li class="is-active"><a>New adults</a></li>
+        <li><a>New children</a></li>
+        <li><a>New fantasy</a></li>
+        <li><a>New fiction</a></li>
       </ul>
     </div>
-    <div class="carousel-container">
+
+    <div class="carousel columns">
       <button class="carousel-button">
         <font-awesome-icon :icon="['fas', 'angle-left']" />
       </button>
       <div
         v-for="(item, id) in bookMeta.slice(0, 7)"
         :key="id"
-        class="carousel-book"
+        class="column box"
       >
-        {{ item.title }}
+        <p class="carouselTitle">
+          {{ item.title }}
+        </p>
+        <img :src="item.sticker" />
       </div>
       <button class="carousel-button">
         <font-awesome-icon :icon="['fas', 'angle-right']" />
@@ -46,4 +42,15 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+.carouselTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 70%;
+}
+
+.carousel .box {
+  margin: 20px;
+}
+</style>

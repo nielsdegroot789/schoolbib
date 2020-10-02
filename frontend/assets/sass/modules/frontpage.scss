@@ -12,7 +12,7 @@
 
 .wrapper {
   background-image: url('../pictures/image.jpg');
-  height: 270px;
+  height: 350px;
   width: 100%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -68,7 +68,6 @@ input[type='text'] {
 }
 
 .frontpageNotif {
-  margin-top: 7px;
   border-radius: 3px;
   background-color: lightskyblue;
   margin-left: 10%;
@@ -117,7 +116,7 @@ input[type='text'] {
   }
 }
 
-#carousel-links-container {
+.carousel-links-container {
   display: flex;
   flex-direction: row;
 
@@ -161,14 +160,13 @@ input[type='text'] {
 }
 
 .intro-text-container {
-  padding-bottom: 15px;
   color: white;
   margin-right: 10%;
   margin-left: 10%;
 
   .intro-text {
     border-radius: 3px;
-    margin-top: 7px;
+    margin-top: -3rem;
     height: 3rem;
     background-color: #414660;
     h2 {

@@ -1,17 +1,20 @@
 <template>
   <div class="index">
     <searchBar />
+
+    <div class="intro-text-container">
+      <div class="intro-text"><h2>Let's get started</h2></div>
+    </div>
+
     <div v-if="showNotif" class="frontpageNotif">
       <div>
-        <span>
-          {{ frontpageNotif }}
-        </span>
+        {{ frontpageNotif }}
         <button class="button is-small" type="button" @click="hideNotification">
           X
         </button>
       </div>
     </div>
-    <introContainer />
+
     <div class="quick-links-container">
       <ul>
         <li>
@@ -22,6 +25,7 @@
         </li>
       </ul>
     </div>
+
     <Carousel />
   </div>
 </template>
@@ -29,13 +33,11 @@
 <script>
 import searchBar from '../components/SearchBar';
 import Carousel from '../components/Carousel';
-import introContainer from '../components/IntroText';
 
 export default {
   components: {
     searchBar,
     Carousel,
-    introContainer,
   },
   data() {
     return {
