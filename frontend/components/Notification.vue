@@ -26,8 +26,8 @@ export default {
 <style>
 .notify-container {
   position: fixed;
-  width: 360px;
-  bottom: 0;
+  width: 300px;
+  bottom: 8px;
   right: 0;
   margin-right: 15px;
   z-index: 5000;

@@ -170,5 +170,15 @@ class UserController
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
+    public function getProfilePageData(Request $request, Response $response, array $args) {
+        $id = $_GET['id'];
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->getProfilePageData($id);
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 }
 

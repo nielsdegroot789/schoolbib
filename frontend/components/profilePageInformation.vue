@@ -48,12 +48,27 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'Profileinformation',
   data() {
     return {
       selectedFile: null,
     };
+  },
+  computed: {
+    UserId() {
+      return this.$store.state.currentUser;
+    },
+    JWT() {
+      return this.$store.state.JWT;
+    },
+  },
+  async mounted() {
+    console.log(this.UserId);
+    await axios
+      .get('http://localhost:8080/getProfilePageData', {})
+      .then((response) => this.$store.commit('handleProfileData', response));
   },
   methods: {
     selectPicture(event) {

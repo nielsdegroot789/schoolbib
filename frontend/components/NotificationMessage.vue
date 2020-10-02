@@ -3,7 +3,7 @@
     <button class="close-button" @click="deleteNotification()">
       <font-awesome-icon :icon="['fa', 'times']" />
     </button>
-    <p>{{ notification.message }}</p>
+    <p class="notification-text">{{ notification.message }}</p>
   </div>
 </template>
 
@@ -39,27 +39,35 @@ export default {
 
 <style>
 .close-button {
+  position: absolute;
+  top: 10px;
+  right: 3px;
+  background-color: inherit;
   border: none;
-  border-radius: 50%;
   width: 12%;
   height: 22%;
-  margin-right: 5px;
   cursor: pointer;
 }
 
 .notification-text {
-  margin-top: 1rem;
-  align-self: center;
+  color: #fff;
 }
 
 .notification-message-container {
+  border-radius: 1em;
+  width: 300px;
+  height: 70px;
   display: flex;
-  width: 360px;
+  justify-content: center;
+  align-items: center;
 }
 .alert-success {
-  background-color: green;
+  background-color: rgb(50, 205, 50);
 }
 .alert-fail {
-  background-color: red;
+  background-color: rgb(205, 92, 92);
+}
+.alert-normal {
+  background-color: blue;
 }
 </style>

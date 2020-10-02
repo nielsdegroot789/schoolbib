@@ -1,4 +1,10 @@
 <?php
+
+header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
+header("Access-Control-Allow-Headers: *");
+header("Content-Type: Application/json");
+
 use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -86,6 +92,11 @@ $app->get('/getCockpitFooterData', \skoolBiep\Controller\CockpitController::clas
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
 
 $app->get('/getReservation', \skoolBiep\Controller\UserController::class . ':getReservation');
+
+$app->get('/getCheckout', \skoolBiep\Controller\UserController::class . ':getCheckout');
+
+//boetes innen
+//boeken aan de kant houden
 
 $app->get('/getCheckout', \skoolBiep\Controller\UserController::class . ':getCheckout');
 

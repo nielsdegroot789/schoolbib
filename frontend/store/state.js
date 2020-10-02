@@ -6,8 +6,9 @@ export default {
   frontPageNotification: {},
   show: true,
   notifications: [],
-  JWT: null,
+  JWT: {},
   showLoginError: false,
   limit: 20,
   reservation: [],
+  profilePageData: {},
 };

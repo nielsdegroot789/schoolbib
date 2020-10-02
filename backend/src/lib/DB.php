@@ -87,7 +87,6 @@ class DB extends \SQLite3
             setCategories($id, $categories);
             return $res;
         } else {
-            //create
 
             $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
             values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
@@ -240,7 +239,6 @@ class DB extends \SQLite3
 
         return $data;
     }
-    //(accepted? apparte functie fnie?)
     public function saveCheckoutAdmin($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
     {
 
@@ -268,6 +266,18 @@ class DB extends \SQLite3
             array_push($data, $row);
         }
 
+        return $data;
+    }
+
+    public function getProfilePageData($id) {
+        $sql = $this->prepare("select surname, lastname, email from users where id = :id");
+        $sql->bindvalue(':id', $id);
+        $res = $sql->execute();
+
+        $data = array();
+        while($row = $res->fetchArray(SQLITE3_ASSOC)){
+            array_push($data, $row);
+        }
         return $data;
     }
 }
