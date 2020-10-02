@@ -9,7 +9,7 @@
       </ul>
     </div>
 
-    <div class="carousel columns">
+    <!-- <div class="carousel columns">
       <button class="carousel-button">
         <font-awesome-icon :icon="['fas', 'angle-left']" />
       </button>
@@ -26,14 +26,40 @@
       <button class="carousel-button">
         <font-awesome-icon :icon="['fas', 'angle-right']" />
       </button>
-    </div>
+    </div> -->
+
+    <VueSlickCarousel v-bind="settings" :arrows="true">
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+      <div>4</div>
+      <div>5</div>
+      <div>6</div>
+      <div>7</div>
+      <div>8</div>
+    </VueSlickCarousel>
   </div>
 </template>
 <script>
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+
 export default {
   name: 'Carousel',
+  components: { VueSlickCarousel },
   data() {
-    return {};
+    return {
+      settings: {
+        dots: true,
+        focusOnSelect: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        touchThreshold: 5,
+      },
+    };
   },
   computed: {
     bookMeta() {

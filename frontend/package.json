@@ -22,7 +22,8 @@
     "@nuxtjs/axios": "^5.12.1",
     "axios": "^0.19.2",
     "nuxt": "^2.14.3",
-    "nuxt-fontawesome": "^0.4.0"
+    "nuxt-fontawesome": "^0.4.0",
+    "vue-slick-carousel": "^1.0.6"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.1.0",
