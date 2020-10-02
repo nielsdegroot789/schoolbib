@@ -29,14 +29,12 @@
     </div> -->
 
     <VueSlickCarousel v-bind="settings" :arrows="true">
-      <div>1</div>
-      <div>2</div>
-      <div>3</div>
-      <div>4</div>
-      <div>5</div>
-      <div>6</div>
-      <div>7</div>
-      <div>8</div>
+      <div v-for="(item, id) in bookMeta" :key="id" class="column box">
+        <p class="carouselTitle">
+          {{ item.title }}
+        </p>
+        <img :src="item.sticker" />
+      </div>
     </VueSlickCarousel>
   </div>
 </template>
@@ -55,8 +53,8 @@ export default {
         focusOnSelect: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 3,
+        slidesToShow: 5,
+        slidesToScroll: 1,
         touchThreshold: 5,
       },
     };
