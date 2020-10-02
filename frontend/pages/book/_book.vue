@@ -19,8 +19,14 @@
           </div>
           <n-link to="/books/">
             <div>
-              <Button class="reserveBook" @click="submitReserveData">
-                Reserve Now! {{ currentUserId }}
+              <Button
+                class="reserveBook"
+                @click="
+                  submitReserveData();
+                  popUpMessage();
+                "
+              >
+                Reserve Now!
               </Button>
             </div>
           </n-link>
@@ -102,6 +108,12 @@ export default {
           reservationDateTime: this.timestamp,
         })
         .then(function (response) {});
+    },
+    popUpMessage() {
+      this.$store.dispatch('addNotification', {
+        type: 'success',
+        message: 'Form saved',
+      });
     },
 
     getNow() {
