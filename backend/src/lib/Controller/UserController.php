@@ -171,8 +171,7 @@ class UserController
             ->withHeader('Content-Type', 'application/json');
     }
     public function getProfilePageData(Request $request, Response $response, array $args) {
-        $data = json_decode(file_get_contents("php://input"), TRUE);
-        $id = $data["userId"];
+        $id = $_GET['id'];
         $this->response = $response;
         $db = new DB();
         $data = $db->getProfilePageData($id);

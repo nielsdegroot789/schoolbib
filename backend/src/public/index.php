@@ -88,6 +88,9 @@ $app->get('/getReservation',\skoolBiep\Controller\UserController::class . ':getR
 
 $app->get('/getCheckout',\skoolBiep\Controller\UserController::class . ':getCheckout');
 
+//boetes innen 
+//boeken aan de kant houden
+ 
 // $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
 //     $this->get('db');
 //     if ($request->getMethod() == 'GET') {

@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'Profileinformation',
   data() {
@@ -57,20 +58,17 @@ export default {
   },
   computed: {
     UserId() {
-      return this.$store.state.currentUser.id;
+      return this.$store.state.currentUser;
     },
     JWT() {
       return this.$store.state.JWT;
     },
   },
-  created() {
-    console.log(this.userId);
-    /* axios.get('http://localhost:8080/getProfilePageData', {
-      headers: {
-        'Access-Control-Allow-Credentials': true,
-      },
-    });
-    */
+  async mounted() {
+    console.log(this.UserId);
+    await axios
+      .get('http://localhost:8080/getProfilePageData', {})
+      .then((response) => this.$store.commit('handleProfileData', response));
   },
   methods: {
     selectPicture(event) {

@@ -54,4 +54,10 @@ export default {
       .get('http://localhost:8080/getReservation')
       .then((response) => context.commit('getReservation', response.data));
   },
+  getProfilePageData({ commit }, data) {
+    console.log(data);
+    axios
+      .get('http://localhost:8080/getProfilePageData', {})
+      .then((response) => commit('handleProfileData', response));
+  },
 };

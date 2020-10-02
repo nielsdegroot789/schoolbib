@@ -46,4 +46,7 @@ export default {
   getReservations(state, reservation) {
     state.reservation = reservation;
   },
+  handleProfileData(state, payload) {
+    state.profilePageData = payload;
+  },
 };
