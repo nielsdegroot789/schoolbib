@@ -147,11 +147,11 @@ class UserController
         return $response;
     }
 
-    public function getReservation(Request $request, Response $response, array $args)
+    public function getReservations(Request $request, Response $response, array $args)
     {
         $this->response = $response;
         $db = new DB();
-        $data = $db->getReservation();
+        $data = $db->getReservations();
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);

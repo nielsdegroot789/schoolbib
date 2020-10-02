@@ -215,7 +215,7 @@ class DB extends \SQLite3
     public function saveReservationsUser($usersId, $booksId, $reservationDateTime)
     {
 
-        $sql = $this->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime)
+        $sql = $this->prepare("INSERT INTO reservations (usersId,  booksId, reservationDateTime)
         values (:userId,:booksId,:reservationDateTime)");
 
         $sql->bindValue(':usersId', $usersId, );
@@ -227,7 +227,7 @@ class DB extends \SQLite3
         return $status;
     }
 
-    public function getReservation()
+    public function getReservations()
     {
         $sql = "select id, usersId, booksId, reservationDateTime, accepted FROM reservations GROUP by reservations.id ORDER by reservationDateTime DESC";
         $res = $this->query($sql);

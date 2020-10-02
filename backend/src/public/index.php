@@ -90,7 +90,7 @@ $app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . '
 
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
 
-$app->get('/getReservation',\skoolBiep\Controller\UserController::class . ':getReservation');
+$app->get('/getReservations',\skoolBiep\Controller\UserController::class . ':getReservations');
 
 $app->get('/getCheckout',\skoolBiep\Controller\UserController::class . ':getCheckout');
 
