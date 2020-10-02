@@ -1,67 +1,25 @@
 <template>
-  <div>
+  <div class="defaultLayout">
     <Notification />
-    <nav class="navbar is-light">
-      <div class="container">
-        <div class="navbar-brand">
-          <nuxt-link class="navbar-item" to="/">Home</nuxt-link>
-          <button class="button navbar-burger">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-        <div class="navbar-menu">
-          <span v-if="loggedIn"
-            >Welcome nr: {{ currentUserId }}, you are now logged in as
-            {{ currentUserRole }}</span
-          >
-          <div class="navbar-end">
-            <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/books"
-              >Manage books</nuxt-link
-            >
-            <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/users"
-              >Manage users</nuxt-link
-            >
-            <nuxt-link class="navbar-item" to="/books">books</nuxt-link>
-            <div class="navbar-item has-dropdown is-hoverable">
-              <div class="navbar-dropdown">
-                <nuxt-link class="navbar-item" to="/profile"></nuxt-link>
-                <hr class="navbar-divider" />
-                <a class="navbar-item">Logout</a>
-              </div>
-            </div>
-            <nuxt-link class="navbar-item" to="/register">Register</nuxt-link>
-            <nuxt-link v-if="!loggedIn" class="navbar-item" to="/login"
-              >Log In</nuxt-link
-            >
-            <div v-if="loggedIn" class="navbar-item" @click="logout">
-              Log out
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-    <Nuxt />
+    <div class="main">
+      <Navbar />
+      <Nuxt />
+    </div>
+    <Footer />
   </div>
 </template>
 <script>
-import Notification from '../components/Notification';
+import Notification from '~/components/Notification';
+import Footer from '~/components/Footer';
+import Navbar from '~/components/Navbar';
+
 export default {
   components: {
     Notification,
+    Footer,
+    Navbar,
   },
-  computed: {
-    loggedIn() {
-      return !!this.$store.state.JWT;
-    },
-    currentUserId() {
-      return this.$store.state.currentUser.id;
-    },
-    currentUserRole() {
-      return this.$store.state.currentUser.role;
-    },
-  },
+
   mounted() {
     this.$store.dispatch('getBookMeta');
     this.$store.dispatch('getBooks');
@@ -70,12 +28,6 @@ export default {
         this.$store.commit('setJWTtoken', localStorage.getItem('JWT'));
       }
     }
-  },
-  methods: {
-    logout() {
-      this.$store.commit('logout');
-      localStorage.removeItem('JWT');
-    },
   },
 };
 </script>
@@ -99,5 +51,16 @@ export default {
   padding: 14px 16px;
   text-decoration: none;
   float: left;
+}
+
+.defaultLayout {
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  min-height: 100vh;
+
+  flex-grow: 1;
 }
 </style>

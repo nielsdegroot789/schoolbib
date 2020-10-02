@@ -13,13 +13,6 @@ export default {
       .get('http://localhost:8080/getBooks')
       .then((response) => context.commit('getBooks', response.data));
   },
-  getFrontPageNotification(context) {
-    axios
-      .get('http://localhost:8080/getNotification')
-      .then((response) =>
-        context.commit('getFrontPageNotification', response.data),
-      );
-  },
   saveBook(context, payload) {
     axios.post('http://localhost:8080/saveBook', payload).catch((error) => {
       console.log(error);
