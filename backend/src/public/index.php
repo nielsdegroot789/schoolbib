@@ -97,9 +97,6 @@ $app->get('/getCheckout', \skoolBiep\Controller\UserController::class . ':getChe
 
 //boetes innen
 //boeken aan de kant houden
-
-$app->get('/getCheckout', \skoolBiep\Controller\UserController::class . ':getCheckout');
-
 $app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':saveReservationsUser');
 
 $app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');

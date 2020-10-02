@@ -27,15 +27,16 @@
         <font-awesome-icon :icon="['fas', 'angle-right']" />
       </button>
     </div> -->
-
-    <VueSlickCarousel v-bind="settings" :arrows="true">
-      <div v-for="(item, id) in bookMeta" :key="id" class="column box">
-        <p class="carouselTitle">
-          {{ item.title }}
-        </p>
-        <img :src="item.sticker" />
-      </div>
-    </VueSlickCarousel>
+    <div v-if="loaded">
+      <VueSlickCarousel v-bind="settings" :arrows="true">
+        <div v-for="(item, id) in bookMeta" :key="id" class="column box">
+          <p class="carouselTitle">
+            {{ item.title }}
+          </p>
+          <img :src="item.sticker" />
+        </div>
+      </VueSlickCarousel>
+    </div>
   </div>
 </template>
 <script>
@@ -57,12 +58,19 @@ export default {
         slidesToScroll: 1,
         touchThreshold: 5,
       },
+      bookMeta: [],
+      loaded: false,
     };
   },
-  computed: {
-    bookMeta() {
-      return this.$store.state.bookMeta;
-    },
+  created() {
+    this.$axios
+      .get('http://localhost:8080/getBookMeta', {
+        headers: { Authorization: `Bearer test` },
+      })
+      .then((response) => {
+        this.bookMeta = response.data;
+        this.loaded = true;
+      });
   },
 };
 </script>
