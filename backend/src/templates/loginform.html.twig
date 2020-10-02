@@ -1,0 +1,10 @@
+<h1>Login</h1>
+
+
+<form method="{{ data.method }}" action="{{ data.action}}">
+	{% for field in data.fields %}
+		<label for="{{ field.name }}">{{ field.name }}:</label>
+		<input type="{{ field.type }}" name="{{ field.name }}" value="{{ field.value }}"/><br/>
+
+	{% endfor %}
+</form>

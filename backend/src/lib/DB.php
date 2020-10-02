@@ -1,0 +1,271 @@
+<?php
+
+namespace skoolBiep;
+
+class DB extends \SQLite3
+{
+    protected $client;
+    public function __construct()
+    {
+        parent::__construct('../db/db.sqlite');
+    }
+
+    public function getTableName()
+    {
+        return $this->tableName;
+    }
+
+    public function getBookMeta($limitNumber, $offsetNumber, $category, $author, $title)
+    {
+        $sql = "
+        select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel,
+		authors.name as authors, publishers.name as publishers,  group_concat(categories.name, ', ') as categories from bookMeta
+		join authors on authors.id = bookMeta.authorsId
+		join publishers on publishers.id = bookMeta.publishersId
+        join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
+        join categories on categories.id = categoriesInBooks.categoriesId
+        where categories.name like '$category' and authors.name like '$author' and title like '$title'
+        GROUP by bookMeta.id
+        order by bookMeta.id";
+
+        $sql .= " limit '$limitNumber'";
+        $sql .= " offset '$offsetNumber' * '$limitNumber'";
+
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
+
+    public function getBooks()
+    {
+        $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
+        group by bookMetaId";
+
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
+
+    public function saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories, $id = -1)
+    {
+        if ($id != -1) {
+            //update
+
+            $sql = $this->prepare(
+                "UPDATE bookMeta
+                SET isbnCode = :isbn, title = :title, rating = :rating, totalPages = :totalPages, language = :language,
+                sticker = :sticker, readingLevel = :readingLevel, publishersId = :publishersId, authorsId = :authorsIds
+                WHERE id = :id");
+
+            $sql->bindValue(':isbn', $isbn);
+            $sql->bindValue(':title', $title);
+            $sql->bindValue(':rating', $rating);
+            $sql->bindValue(':totalPages', $totalPages);
+            $sql->bindValue(':language', $language);
+            $sql->bindValue(':sticker', $sticker);
+            $sql->bindValue(':readingLevel', $readingLevel);
+            $sql->bindValue(':id', $id);
+            $publisherId = $this->getPublisherId($publishers);
+            $sql->bindValue(':publishersId', $publisherId);
+            $authorsIds = $this->getAuthorsIds($authors);
+            $sql->bindValue(':authorsIds', $authorsIds);
+
+            $status = $sql->execute();
+            $categoriesArr = explode(',', $categories);
+
+            $res = $status ? "Success" : "Failed";
+            setCategories($id, $categories);
+            return $res;
+        } else {
+
+            $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
+            values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
+
+            $sql->bindValue(':isbn', $isbn);
+            $sql->bindValue(':title', $title);
+            $sql->bindValue(':rating', $rating);
+            $sql->bindValue(':totalPages', $totalPages);
+            $sql->bindValue(':language', $language);
+            $sql->bindValue(':sticker', $sticker);
+            $sql->bindValue(':readingLevel', $readingLevel);
+            $publisherId = $this->getPublisherId($publishers);
+            $sql->bindValue(':publishersId', $publisherId);
+            $authorsIds = $this->getAuthorsIds($authors);
+            $sql->bindValue(':authorsIds', $authorsIds);
+
+            $status = $sql->execute();
+            $res = $status ? "Success" : "Failed";
+            //todo get the newly created id here
+            $this->setCategories($this->lastInsertRowID(), $categories);
+            return $res;
+
+        }
+
+    }
+
+    public function editBook()
+    {
+        $sql = "UPDATE group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
+        group by bookMetaId";
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
+
+    public function getUserByEmail($formEmail)
+    {
+        $sql = $this->prepare('SELECT users.id, users.surname ,users.password, roles.id as role from users
+                                join userRoles on userRoles.usersId = users.id
+                                join roles on roles.id = userRoles.rolesId
+                                where users.email = :email;');
+        $sql->bindValue(':email', $formEmail);
+        $res = $sql->execute();
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data[0];
+    }
+
+    private function getPublisherId(String $publisherName): String
+    {
+        $sql = $this->prepare("select id from publishers WHERE name = :name");
+        $sql->bindValue(':name', $publisherName);
+        $res = $sql->execute();
+
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+        if ($data) {
+            return $data['id'];
+        } else {
+            //create new publisher and return the new id
+            $sql = $this->prepare(
+                "INSERT into publishers(name)
+                values (:name)");
+            $sql->bindValue(':name', $publisherName);
+            $res = $sql->execute();
+            var_dump($this->lastInsertRowID());
+            return $this->lastInsertRowID();
+        }
+    }
+
+    private function getAuthorsIds(String $authors): String
+    {
+        $sql = $this->prepare("select id from authors WHERE name = :name");
+        $sql->bindValue(':name', $authors);
+        $res = $sql->execute();
+
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+
+        if ($data) {
+            return $data['id'];
+        } else {
+            //create new author and push the new id
+            $sql = $this->prepare(
+                "INSERT into authors(name)
+                values (:name)");
+            $sql->bindValue(':name', $authors);
+            $res = $sql->execute();
+            return $this->lastInsertRowID();
+        }
+    }
+
+    private function setCategories($bookMetaId, $categories)
+    {
+        $sql = $this->prepare("SELECT id from categories WHERE name = :name");
+        $sql->bindValue(':name', $categories);
+        $res = $sql->execute();
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+        $categoryId = null;
+
+        if ($data) {
+            $categoryId = $data['id'];
+        } else {
+            //create new category
+            $sql = $this->prepare("INSERT into categories(name)
+            values (:name)");
+            $sql->bindValue(':name', $categories);
+            $res = $sql->execute();
+            $categoryId = $this->lastInsertRowID();
+        }
+        $sql = $this->prepare("INSERT into categoriesInBooks(categoriesId, bookMetaId)
+                values (:categoriesId, :bookMetaId)");
+        $sql->bindValue(':categoriesId', $categoryId);
+        $sql->bindValue(':bookMetaId', $bookMetaId);
+        $status = $sql->execute();
+        $res = $status ? "Success" : "Failed";
+        return $res;
+    }
+
+    public function saveReservationsUser($usersId, $booksId, $reservationDateTime)
+    {
+
+        $sql = $this->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime)
+        values (:userId,:booksId,:reservationDateTime)");
+
+        $sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':booksId', $booksId, );
+        $sql->bindValue(':reservationDateTime', $reservationDateTime, );
+
+        $status = $sql->execute();
+
+        return $status;
+    }
+
+    public function getReservation()
+    {
+        $sql = "select id, usersId, booksId, reservationDateTime, accepted FROM reservations GROUP by reservations.id ORDER by reservationDateTime DESC";
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
+    public function saveCheckoutAdmin($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
+    {
+
+        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate)
+        Select (:usersId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate ) from reservations where reservations.booksId = checkouts.booksId");
+
+        $sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':booksId', $booksId, );
+        $sql->bindValue(':checkoutDateTime', $checkoutDateTime, );
+        $sql->bindValue(':returnDateTime', $returnDateTime, );
+        $sql->bindValue(':maxAllowedDate', $maxAllowedDate, );
+
+        $status = $sql->execute();
+
+        return $status;
+    }
+
+    public function getCheckout()
+    {
+        $sql = "select id, usersId, booksId, checkoutDateTime, returnDateTime, maxAllowedDate, fine, isPaid, paidDate FROM checkouts GROUP by checkouts.id ORDER by checkoutDateTime DESC";
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
+}
