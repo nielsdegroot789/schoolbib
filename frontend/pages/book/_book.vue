@@ -68,11 +68,8 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      bookId: 0,
-      reservationData: {},
-      currentUser: '',
       timestamp: '',
-    };
+    };.
   },
   computed: {
     bookMeta() {
