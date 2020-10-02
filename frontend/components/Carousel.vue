@@ -8,33 +8,21 @@
         <li><a>New fiction</a></li>
       </ul>
     </div>
-
-    <!-- <div class="carousel columns">
-      <button class="carousel-button">
-        <font-awesome-icon :icon="['fas', 'angle-left']" />
-      </button>
-      <div
-        v-for="(item, id) in bookMeta.slice(0, 7)"
-        :key="id"
-        class="column box"
-      >
-        <p class="carouselTitle">
-          {{ item.title }}
-        </p>
-        <img :src="item.sticker" />
-      </div>
-      <button class="carousel-button">
-        <font-awesome-icon :icon="['fas', 'angle-right']" />
-      </button>
-    </div> -->
     <div v-if="loaded">
-      <VueSlickCarousel v-bind="settings" :arrows="true">
-        <div v-for="(item, id) in bookMeta" :key="id" class="column box">
-          <p class="carouselTitle">
+      <VueSlickCarousel v-bind="settings">
+        <nuxt-link
+          v-for="(item, id) in bookMeta"
+          :key="id"
+          :to="{
+            path: '/book/' + item.id,
+          }"
+          class="column"
+        >
+          <p class="carouselTitle subtitle">
             {{ item.title }}
           </p>
           <img :src="item.sticker" />
-        </div>
+        </nuxt-link>
       </VueSlickCarousel>
     </div>
   </div>
@@ -50,11 +38,11 @@ export default {
   data() {
     return {
       settings: {
+        arrows: true,
         dots: true,
-        focusOnSelect: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 5,
+        slidesToShow: 7,
         slidesToScroll: 1,
         touchThreshold: 5,
       },
@@ -80,6 +68,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 70%;
+  color: black;
 }
 
 .carousel .box {
