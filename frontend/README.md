@@ -1,4 +1,4 @@
-git# library
+# library
 
 ## Build Setup
 

@@ -213,10 +213,11 @@ class DB extends \SQLite3
         return $res;
     }
 
-    function saveReservationsUser($usersId,$booksId,$reservationDateTime) {
-      
-        $sql = $this->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime) 
-        values (:usersId,:booksId,:reservationDateTime)");
+    public function saveReservationsUser($usersId, $booksId, $reservationDateTime)
+    {
+
+        $sql = $this->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime)
+        values (:userId,:booksId,:reservationDateTime)");
 
         $sql->bindValue(':usersId', $usersId, );
         $sql->bindValue(':booksId', $booksId, );
@@ -239,6 +240,7 @@ class DB extends \SQLite3
 
         return $data;
     }
+    //(accepted? apparte functie fnie?)
     public function saveCheckoutAdmin($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
     {
 

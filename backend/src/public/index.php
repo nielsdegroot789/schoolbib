@@ -1,11 +1,4 @@
 <?php
-
-header("Access-Control-Allow-Origin: *");
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
-header("Access-Control-Allow-Headers: *");
-header("Content-Type: Application/json");
-
-
 use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
