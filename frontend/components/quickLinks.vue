@@ -8,7 +8,7 @@
         <a href="" class="quick-link">Opening hours</a>
       </li>
       <li>
-        <a href="/profile" class="quick-link">My library</a>
+        <a href="/profile" class="quick-link">My profile</a>
       </li>
     </ul>
   </div>

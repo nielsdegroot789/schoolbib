@@ -56,12 +56,16 @@ class DB extends \SQLite3
         return $data;
     }
 
-    public function saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $id = -1)
+    public function saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories, $id = -1)
     {
         if ($id != -1) {
             //update
 
-            $sql = $this->prepare("UPDATE bookMeta SET isbnCode = :isbn, title = :title, rating = :rating, totalPages = :totalPages, language = :language, sticker = :sticker, readingLevel = :readingLevel WHERE id = :id");
+            $sql = $this->prepare(
+                "UPDATE bookMeta
+                SET isbnCode = :isbn, title = :title, rating = :rating, totalPages = :totalPages, language = :language,
+                sticker = :sticker, readingLevel = :readingLevel, publishersId = :publishersId, authorsId = :authorsIds
+                WHERE id = :id");
 
             $sql->bindValue(':isbn', $isbn);
             $sql->bindValue(':title', $title);
@@ -71,17 +75,22 @@ class DB extends \SQLite3
             $sql->bindValue(':sticker', $sticker);
             $sql->bindValue(':readingLevel', $readingLevel);
             $sql->bindValue(':id', $id);
+            $publisherId = $this->getPublisherId($publishers);
+            $sql->bindValue(':publishersId', $publisherId);
+            $authorsIds = $this->getAuthorsIds($authors);
+            $sql->bindValue(':authorsIds', $authorsIds);
 
             $status = $sql->execute();
+            $categoriesArr = explode(',', $categories);
 
             $res = $status ? "Success" : "Failed";
+            setCategories($id, $categories);
             return $res;
         } else {
             //create
 
-            var_dump($title);
-            $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel)
-            values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel)');
+            $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
+            values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
 
             $sql->bindValue(':isbn', $isbn);
             $sql->bindValue(':title', $title);
@@ -90,13 +99,15 @@ class DB extends \SQLite3
             $sql->bindValue(':language', $language);
             $sql->bindValue(':sticker', $sticker);
             $sql->bindValue(':readingLevel', $readingLevel);
-            // $sql->bindValue(':authorsId', $POST['authorsId']);
-            // $sql->bindValue(':publishersId', $POST['publishersId']);
-            // $sql->bindValue(':categories', $POST['categories']);
+            $publisherId = $this->getPublisherId($publishers);
+            $sql->bindValue(':publishersId', $publisherId);
+            $authorsIds = $this->getAuthorsIds($authors);
+            $sql->bindValue(':authorsIds', $authorsIds);
 
             $status = $sql->execute();
-
             $res = $status ? "Success" : "Failed";
+            //todo get the newly created id here
+            $this->setCategories($this->lastInsertRowID(), $categories);
             return $res;
 
         }
@@ -132,55 +143,128 @@ class DB extends \SQLite3
 
         return $data[0];
     }
-    function saveReservationsUser($usersId,$booksId,$reservationDateTime) {
-      
-        $sql = $this->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime) 
+
+    private function getPublisherId(String $publisherName): String
+    {
+        $sql = $this->prepare("select id from publishers WHERE name = :name");
+        $sql->bindValue(':name', $publisherName);
+        $res = $sql->execute();
+
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+        if ($data) {
+            return $data['id'];
+        } else {
+            //create new publisher and return the new id
+            $sql = $this->prepare(
+                "INSERT into publishers(name)
+                values (:name)");
+            $sql->bindValue(':name', $publisherName);
+            $res = $sql->execute();
+            var_dump($this->lastInsertRowID());
+            return $this->lastInsertRowID();
+        }
+    }
+
+    private function getAuthorsIds(String $authors): String
+    {
+        $sql = $this->prepare("select id from authors WHERE name = :name");
+        $sql->bindValue(':name', $authors);
+        $res = $sql->execute();
+
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+
+        if ($data) {
+            return $data['id'];
+        } else {
+            //create new author and push the new id
+            $sql = $this->prepare(
+                "INSERT into authors(name)
+                values (:name)");
+            $sql->bindValue(':name', $authors);
+            $res = $sql->execute();
+            return $this->lastInsertRowID();
+        }
+    }
+
+    private function setCategories($bookMetaId, $categories)
+    {
+        $sql = $this->prepare("SELECT id from categories WHERE name = :name");
+        $sql->bindValue(':name', $categories);
+        $res = $sql->execute();
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+        $categoryId = null;
+
+        if ($data) {
+            $categoryId = $data['id'];
+        } else {
+            //create new category
+            $sql = $this->prepare("INSERT into categories(name)
+            values (:name)");
+            $sql->bindValue(':name', $categories);
+            $res = $sql->execute();
+            $categoryId = $this->lastInsertRowID();
+        }
+        $sql = $this->prepare("INSERT into categoriesInBooks(categoriesId, bookMetaId)
+                values (:categoriesId, :bookMetaId)");
+        $sql->bindValue(':categoriesId', $categoryId);
+        $sql->bindValue(':bookMetaId', $bookMetaId);
+        $status = $sql->execute();
+        $res = $status ? "Success" : "Failed";
+        return $res;
+    }
+
+    public function saveReservationsUser($usersId, $booksId, $reservationDateTime)
+    {
+
+        $sql = $this->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime)
         values (:userId,:booksId,:reservationDateTime)");
 
-        $sql->bindValue(':usersId' , $usersId,);
-        $sql->bindValue(':booksId' , $booksId,);
-        $sql->bindValue(':reservationDateTime' , $reservationDateTime,);
+        $sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':booksId', $booksId, );
+        $sql->bindValue(':reservationDateTime', $reservationDateTime, );
 
         $status = $sql->execute();
 
         return $status;
     }
-    
-    public function getReservation() {
-        $sql="select id, usersId, booksId, reservationDateTime, accepted FROM reservations GROUP by reservations.id ORDER by reservationDateTime DESC" ;
+
+    public function getReservation()
+    {
+        $sql = "select id, usersId, booksId, reservationDateTime, accepted FROM reservations GROUP by reservations.id ORDER by reservationDateTime DESC";
         $res = $this->query($sql);
 
         $data = array();
-        while($row = $res->fetchArray(SQLITE3_ASSOC)){
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($data, $row);
         }
 
         return $data;
     }
     //(accepted? apparte functie fnie?)
-    function saveCheckoutAdmin($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate) {
-      
-        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate) 
+    public function saveCheckoutAdmin($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
+    {
+
+        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate)
         Select (:userId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate ) from reservations where reservations.booksId = checkouts.booksId");
-        
-        $sql->bindValue(':usersId' , $usersId,);
-        $sql->bindValue(':booksId' , $booksId,);
-        $sql->bindValue(':checkoutDateTime' , $checkoutDateTime,);
-        $sql->bindValue(':returnDateTime' , $returnDateTime,);
-        $sql->bindValue(':maxAllowedDate' , $maxAllowedDate,);
+
+        $sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':booksId', $booksId, );
+        $sql->bindValue(':checkoutDateTime', $checkoutDateTime, );
+        $sql->bindValue(':returnDateTime', $returnDateTime, );
+        $sql->bindValue(':maxAllowedDate', $maxAllowedDate, );
 
         $status = $sql->execute();
-        
+
         return $status;
     }
 
-
-    public function getCheckout() {
-        $sql="select id, usersId, booksId, checkoutDateTime, returnDateTime, maxAllowedDate, fine, isPaid, paidDate FROM checkouts GROUP by checkouts.id ORDER by checkoutDateTime DESC" ;
+    public function getCheckout()
+    {
+        $sql = "select id, usersId, booksId, checkoutDateTime, returnDateTime, maxAllowedDate, fine, isPaid, paidDate FROM checkouts GROUP by checkouts.id ORDER by checkoutDateTime DESC";
         $res = $this->query($sql);
 
         $data = array();
-        while($row = $res->fetchArray(SQLITE3_ASSOC)){
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($data, $row);
         }
 
