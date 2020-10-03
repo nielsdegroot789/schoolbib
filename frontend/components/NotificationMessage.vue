@@ -67,4 +67,7 @@ export default {
 .alert-fail {
   background-color: rgb(205, 92, 92);
 }
+.alert-normal {
+  background-color: blue;
+}
 </style>
