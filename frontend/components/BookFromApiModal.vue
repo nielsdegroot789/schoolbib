@@ -5,20 +5,59 @@
       <div class="modalCenter">
         <div class="section">
           <header class="title">Use following book data?</header>
-          <div class="section">
-            <p>Title: {{ modalData.title }}</p>
-            <p>Isbn: {{ modalData.industryIdentifiers[1].identifier }}</p>
-            <p>Publish Date: {{ modalData.publishedDate }}</p>
-            <p>Rating: {{ modalData.averageRating }}</p>
-            <p>Amount of pages: {{ modalData.pageCount }}</p>
-            <p class="noOverflow">
-              sticker: {{ modalData.imageLinks.smallThumbnail }}
+          <div class="section bookInformation">
+            <p class="level">
+              <span class="level-left">Title:</span>
+              <span class="level-right">{{ modalData.title }}</span>
             </p>
-            <p>language: {{ modalData.language }}</p>
-            <p>authors: {{ modalData.authors }}</p>
-            <p>reading level: {{ modalData.maturityRating }}</p>
-            <p>publisher: {{ modalData.publisher }}</p>
-            <p>categories: {{ modalData.categories }}</p>
+            <p class="level">
+              <span class="level-left"> Isbn:</span>
+              <span class="level-right">
+                {{ modalData.industryIdentifiers[1].identifier }}</span
+              >
+            </p>
+            <p class="level">
+              <span class="level-left">Publish Date:</span>
+              <span class="level-right">{{ modalData.publishedDate }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left"> Rating:</span>
+              <span class="level-right">{{ modalData.averageRating }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left"> Amount of pages:</span>
+              <span class="level-right">{{ modalData.pageCount }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left">sticker: </span>
+              <span class="level-right">
+                {{
+                  modalData.imageLinks.smallThumbnail
+                    ? 'available'
+                    : 'not available'
+                }}
+              </span>
+            </p>
+            <p class="level">
+              <span class="level-left">language:</span>
+              <span class="level-right">{{ modalData.language }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left">authors:</span>
+              <span class="level-right">{{ modalData.authors }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left"> reading level:</span>
+              <span class="level-right">{{ modalData.maturityRating }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left"> publisher:</span>
+              <span class="level-right">{{ modalData.publisher }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left">categories:</span>
+              <span class="level-right"> {{ modalData.categories }}</span>
+            </p>
           </div>
           <div class="buttonContainer level">
             <button class="button level-item" @click="useData()">Use</button>
@@ -71,15 +110,20 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 70%;
+  width: 200px;
 }
 
 .modalCenter {
-  background-color: gray;
+  background-color: #d3d3d3;
   color: black;
 }
 
 .button {
   margin: 0 15px;
+}
+
+.bookInformation p:nth-child(even) {
+  box-sizing: border-box;
+  background-color: #bebebe;
 }
 </style>
