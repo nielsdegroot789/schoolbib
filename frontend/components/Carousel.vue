@@ -76,4 +76,33 @@ export default {
 .carousel {
   height: 265px;
 }
+
+.slick-prev,
+.slick-next {
+  height: 60px;
+  background-color: lightgray;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: white;
+  font-family: unset;
+  font-size: 30px;
+  background-color: transparent;
+}
+
+.slick-prev:before {
+  float: left;
+}
+
+.slick-next:before {
+  float: right;
+}
+
+.slick-prev:hover,
+.slick-prev:focus,
+.slick-next:hover,
+.slick-next:focus {
+  background-color: lightgray;
+}
 </style>
