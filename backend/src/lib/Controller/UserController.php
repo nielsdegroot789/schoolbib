@@ -158,9 +158,12 @@ class UserController
         $usersId = isset($arguments["usersId"]) ? '%' . $arguments["usersId"] : "%";
         $booksId = isset($arguments["booksId"]) ? $arguments["booksId"] : "%";
         $reservationDateTime = isset($arguments["reservationDateTime"]) ? '%' .$arguments["reservationDateTime"] :"%";
-        $accepted = isset($arguments["accepted"]) ? '%' .$arguments["offacceptedset"] : "%";
+        $accepted = isset($arguments["accepted"]) ? '%' .$arguments["accepted"] : "%";
+        $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
+        $offsetNumber = isset($arguments["offset"]) ? $arguments["offset"] : 0;
 
-        $data = $db->getReservations($reservationDateTime, $accepted, $booksId, $usersId, $id);
+
+        $data = $db->getReservations($limitNumber, $offsetNumber,$reservationDateTime, $accepted, $booksId, $usersId, $id);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);

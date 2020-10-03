@@ -135,9 +135,7 @@ export const actions = {
   },
   getReservations(context) {
     axios
-      .get('http://localhost:8080/getReservations', {
-        headers: { Authorization: `Bearer test` },
-      })
+      .get('http://localhost:8080/getReservations', {})
       .then((response) => context.commit('getReservations', response.data));
   },
 };
