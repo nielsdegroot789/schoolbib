@@ -104,12 +104,14 @@ class UserController
         $usersId = $data["usersId"];
         $booksId = $data["booksId"];
         $reservationDateTime = $data["reservationDateTime"];
+        $accepted = $data["accepted"];
+
         if($data['id']){
             $id = $data['id'];
-            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime);
+            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted);
         }
         else {
-            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime);
+            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted);
         }
         $response->getBody()->write($data);
         return $response;

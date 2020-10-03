@@ -3,7 +3,7 @@ export const state = {
   bookMeta: [],
   books: [],
   users: [],
-  currentUser: {},
+  currentUser: [],
   frontPageNotification: {},
   show: true,
   notifications: [],
@@ -22,6 +22,9 @@ export const getters = {
   },
   getNotification: (state) => {
     return state.notification;
+  },
+  getReservations: (state) => {
+    return state.reservations;
   },
   getPageCount(state) {
     return Math.ceil(state.totalItems / state.limit);

@@ -106,8 +106,13 @@ export default {
           booksId: this.$route.params.book,
           usersId: this.currentUserId,
           reservationDateTime: this.timestamp,
+          accepted: 0,
         })
-        .then(function (response) {});
+        .then(function (response) {
+          console.log(this.$route.params.book);
+          console.log(this.currentUserId);
+          console.log(this.CheckoutDate);
+        });
     },
     popUpMessage() {
       this.$store.dispatch('addNotification', {

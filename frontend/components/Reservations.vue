@@ -31,7 +31,9 @@ import axios from 'axios';
 export default {
   name: 'Reservations',
   data() {
-    return {};
+    return {
+      reservations: [],
+    };
   },
   computed: {
     getReservations() {
