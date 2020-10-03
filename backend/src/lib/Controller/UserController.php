@@ -153,14 +153,21 @@ class UserController
     {
         $this->response = $response;
         $db = new DB();
-        $data = $db->getReservations();
+        $arguments = json_decode(file_get_contents("php://input"), true);
+        $id = isset($arguments["id"]) ? '%' . $arguments["id"] : "%";
+        $usersId = isset($arguments["usersId"]) ? '%' . $arguments["usersId"] : "%";
+        $booksId = isset($arguments["booksId"]) ? $arguments["booksId"] : "%";
+        $reservationDateTime = isset($arguments["reservationDateTime"]) ? '%' .$arguments["reservationDateTime"] :"%";
+        $accepted = isset($arguments["accepted"]) ? '%' .$arguments["offacceptedset"] : "%";
+
+        $data = $db->getReservations($reservationDateTime, $accepted, $booksId, $usersId, $id);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
-
+    
     public function getCheckout(Request $request, Response $response, array $args)
     {
         $this->response = $response;

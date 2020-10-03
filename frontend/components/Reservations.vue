@@ -15,12 +15,21 @@
         :key="index"
         class="usersContainer"
       >
-        <span>{{ item.usersId }}</span>
-        <span>{{ item.name }}</span>
-        <span>{{ item.booksId }}</span>
+        <span>{{ reservations.usersId }}</span>
+        <span>{{ items.name }}</span>
+        <span>{{ reservations }}</span>
         <span>{{ item.reservationDate }}</span>
         <span>{{ item.accepted }}</span>
-        <button>reserve</button>
+
+        <Button
+          class="checkoutBtn"
+          @click="
+            saveCheckout();
+            saveCheckoutNotif();
+          "
+        >
+          Reserve Now!
+        </Button>
       </nuxt-link>
     </div>
   </div>
@@ -31,12 +40,10 @@ import axios from 'axios';
 export default {
   name: 'Reservations',
   data() {
-    return {
-      reservations: [],
-    };
+    return {};
   },
   computed: {
-    getReservations() {
+    reservations() {
       return this.$store.state.reservations;
     },
   },
@@ -50,7 +57,7 @@ export default {
         .post('http://localhost:8080/saveCheckouts', {
           booksId: this.$route.params.book,
           usersId: this.currentUserId,
-          checkoutDateTime: this.CheckoutDate,
+          checkoutDateTime: this.timestamp,
         })
         .then(function (response) {});
     },
@@ -77,7 +84,7 @@ export default {
 <style>
 .titleColumn {
   display: grid;
-  grid-template-columns: repeat(6, calc(90% / 6)) 5% 5%;
+  grid-template-columns: repeat(7, calc(90% / 7)) 5% 5%;
   justify-items: center;
   align-items: center;
   margin: 5px 0;
@@ -85,7 +92,7 @@ export default {
 }
 .usersContainer {
   display: grid;
-  grid-template-columns: repeat(11, calc(90% / 11)) 5% 5%;
+  grid-template-columns: repeat(7, calc(90% / 7)) 5% 5%;
   justify-items: center;
   align-items: center;
   margin: 5px 0;

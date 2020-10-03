@@ -227,11 +227,10 @@ class DB extends \SQLite3
 
         return $status;
     }
-
     public function getReservations()
     {
-        $sql = $this->prepare("SELECT id, usersId, booksId, reservationDateTime, accepted FROM reservations GROUP by reservations.id ORDER by reservationDateTime DESC");
-        $res = $sql->execute();
+        $sql = "select id, usersId, booksId, reservationDateTime, accepted from reservations";
+        $res = $this->query($sql);
 
         $data = array();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
@@ -240,6 +239,7 @@ class DB extends \SQLite3
 
         return $data;
     }
+    
     public function saveCheckoutAdmin($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
     {
 

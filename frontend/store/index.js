@@ -1,10 +1,11 @@
 import axios from 'axios';
+
 export const state = {
   bookMeta: [],
   books: [],
   users: [],
   currentUser: [],
-  frontPageNotification: {},
+  frontPageNotification: [],
   show: true,
   notifications: [],
   JWT: null,
@@ -22,9 +23,6 @@ export const getters = {
   },
   getNotification: (state) => {
     return state.notification;
-  },
-  getReservations: (state) => {
-    return state.reservations;
   },
   getPageCount(state) {
     return Math.ceil(state.totalItems / state.limit);
@@ -137,7 +135,9 @@ export const actions = {
   },
   getReservations(context) {
     axios
-      .get('http://localhost:8080/getReservations')
+      .get('http://localhost:8080/getReservations', {
+        headers: { Authorization: `Bearer test` },
+      })
       .then((response) => context.commit('getReservations', response.data));
   },
 };
