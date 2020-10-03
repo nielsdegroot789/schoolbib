@@ -2,20 +2,22 @@
   <div class="section">
     <div class="tabs is-centered is-boxed">
       <ul>
-        <li class="is-active"><a>New adults</a></li>
-        <li><a>New children</a></li>
-        <li><a>New fantasy</a></li>
-        <li><a>New fiction</a></li>
+        <li
+          v-for="category in categories"
+          :key="category.id"
+          :class="currentlyActive === category.id && 'is-active'"
+          @click="setCurrentTab(category.id)"
+        >
+          <a>{{ category.name }}</a>
+        </li>
       </ul>
     </div>
     <div v-if="loaded" class="carousel">
       <VueSlickCarousel v-bind="settings">
         <nuxt-link
-          v-for="(item, id) in bookMeta"
-          :key="id"
-          :to="{
-            path: '/book/' + item.id,
-          }"
+          v-for="item in bookMeta"
+          :key="item.id"
+          :to="'/book/' + item.id"
           class="column"
         >
           <p class="carouselTitle subtitle">
@@ -48,19 +50,36 @@ export default {
         slidesToScroll: 1,
         touchThreshold: 5,
       },
+      categories: [
+        { id: 0, value: 'adults', name: 'New Adults' },
+        { id: 1, value: 'children', name: 'New Children' },
+        { id: 2, value: 'fantasy', name: 'New Fantasy' },
+        { id: 3, value: 'fiction', name: 'New Fiction' },
+      ],
+      currentlyActive: 0,
       bookMeta: [],
       loaded: false,
     };
   },
   created() {
-    this.$axios
-      .get('http://localhost:8080/getBookMeta', {
-        headers: { Authorization: `Bearer test` },
-      })
-      .then((response) => {
-        this.bookMeta = response.data;
-        this.loaded = true;
-      });
+    this.getBookMeta();
+  },
+  methods: {
+    setCurrentTab(newId) {
+      this.currentlyActive = newId;
+      this.getBookMeta();
+    },
+    getBookMeta() {
+      this.loaded = false;
+      this.$axios
+        .get('http://localhost:8080/getBookMeta', {
+          headers: { Authorization: `Bearer test` },
+        })
+        .then((response) => {
+          this.bookMeta = response.data;
+          this.loaded = true;
+        });
+    },
   },
 };
 </script>
