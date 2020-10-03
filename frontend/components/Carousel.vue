@@ -8,7 +8,7 @@
         <li><a>New fiction</a></li>
       </ul>
     </div>
-    <div v-if="loaded">
+    <div v-if="loaded" class="carousel">
       <VueSlickCarousel v-bind="settings">
         <nuxt-link
           v-for="(item, id) in bookMeta"
@@ -25,16 +25,18 @@
         </nuxt-link>
       </VueSlickCarousel>
     </div>
+    <div v-if="!loaded" class="carousel level"><Loading /></div>
   </div>
 </template>
 <script>
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import Loading from '~/components/Loading';
 
 export default {
   name: 'Carousel',
-  components: { VueSlickCarousel },
+  components: { VueSlickCarousel, Loading },
   data() {
     return {
       settings: {
@@ -71,7 +73,7 @@ export default {
   color: black;
 }
 
-.carousel .box {
-  margin: 20px;
+.carousel {
+  height: 265px;
 }
 </style>
