@@ -122,6 +122,8 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
 
+$app->post('/saveProfileData',\skoolBiep\Controller\UserController::class . ':saveProfileData');
+
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
     return $response

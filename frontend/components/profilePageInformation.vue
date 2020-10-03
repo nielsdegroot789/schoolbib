@@ -5,18 +5,21 @@
     <input type="file" @change="selectPicture" />
     <button>Upload</button>
     <h2 class="profile-page-title">ACOUNT INFORMATION</h2>
-    <FormulateForm @submit="save()">
+    <FormulateForm v-model="formValues" @submit="postData()">
       <FormulateInput
+        name="firstName"
         label="First name"
         validation="required"
         input-class="input-style"
       />
       <FormulateInput
+        name="lastName"
         label="Last name"
         validation="required"
         input-class="input-style"
       />
       <FormulateInput
+        name="email"
         label="Email"
         validation="required|email"
         input-class="input-style"
@@ -54,6 +57,12 @@ export default {
   data() {
     return {
       selectedFile: null,
+      formValues: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        currentUser: '',
+      },
     };
   },
   computed: {
@@ -64,11 +73,20 @@ export default {
       return this.$store.state.JWT;
     },
   },
-  async mounted() {
+  created() {
     console.log(this.UserId);
-    await axios
-      .get('http://localhost:8080/getProfilePageData', {})
-      .then((response) => this.$store.commit('handleProfileData', response));
+    axios
+      .get('http://localhost:8080/getProfilePageData', {
+        params: {
+          data: this.UserId,
+        },
+      })
+      .then((response) =>
+        (this.formValues.firstName = response.data[0].surname)(
+          (this.formValues.lastName = response.data[0].lastname),
+          (this.formValues.email = response.data[0].email),
+        ),
+      );
   },
   methods: {
     selectPicture(event) {
@@ -78,6 +96,14 @@ export default {
       this.$store.dispatch('addNotification', {
         type: 'success',
         message: 'Form saved',
+      });
+    },
+    postData() {
+      this.formValues.currentUser = this.UserId.id;
+      axios({
+        method: 'post',
+        url: 'http://localhost:8080/saveProfileData',
+        data: this.formValues,
       });
     },
   },

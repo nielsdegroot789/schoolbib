@@ -276,10 +276,23 @@ class DB extends \SQLite3
         $sql->bindvalue(':id', $id);
         $res = $sql->execute();
 
+
         $data = array();
         while($row = $res->fetchArray(SQLITE3_ASSOC)){
             array_push($data, $row);
         }
         return $data;
+    }
+
+    public function saveProfileData($id,$surname,$lastname,$email) {
+        $sql = $this->prepare("update users set surname = :surname, lastname = :lastname, email = :email where id = :id ");
+        $sql->bindValue(':surname',$surname);
+        $sql->bindValue(':lastname',$lastname);
+        $sql->bindValue(':email',$email);
+        $sql->bindValue(':id',$id);
+
+        $res = $sql->execute();
+
+        return $res;
     }
 }

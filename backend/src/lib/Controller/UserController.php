@@ -171,7 +171,9 @@ class UserController
             ->withHeader('Content-Type', 'application/json');
     }
     public function getProfilePageData(Request $request, Response $response, array $args) {
-        $id = $_GET['id'];
+        $payloadData = $_GET['data'];
+        $json = json_decode($payloadData);
+        $id = $json->id;
         $this->response = $response;
         $db = new DB();
         $data = $db->getProfilePageData($id);
@@ -179,6 +181,20 @@ class UserController
 
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function saveProfileData(Request $request, Response $response, array $args) {
+        $this->response = $response;
+        $contents = json_decode(file_get_contents('php://input'), true);
+        $firstName = $contents['firstName'];
+        $lastName = $contents['lastName'];
+        $email = $contents['email'];
+        $id = $contents['currentUser'];
+        $db = new DB();
+        $db->saveProfileData($id,$firstName,$lastName,$email);
+        return $response;
+
+        
     }
 }
 
