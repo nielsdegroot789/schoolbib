@@ -203,13 +203,27 @@ class DB extends \SQLite3
             $res = $sql->execute();
             $categoryId = $this->lastInsertRowID();
         }
-        $sql = $this->prepare("INSERT into categoriesInBooks(categoriesId, bookMetaId)
-                values (:categoriesId, :bookMetaId)");
+
+        $sql = $this->prepare("SELECT id from categoriesInBooks WHERE categoriesId = :categoriesId  AND bookMetaId = :bookMetaId");
         $sql->bindValue(':categoriesId', $categoryId);
         $sql->bindValue(':bookMetaId', $bookMetaId);
-        $status = $sql->execute();
-        $res = $status ? "Success" : "Failed";
-        return $res;
+        $res = $sql->execute();
+
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+
+        if ($data) {
+            $res = $status ? "Success" : "Failed";
+            return $res;
+        } else {
+
+            $sql = $this->prepare("INSERT into categoriesInBooks(categoriesId, bookMetaId)
+                values (:categoriesId, :bookMetaId)");
+            $sql->bindValue(':categoriesId', $categoryId);
+            $sql->bindValue(':bookMetaId', $bookMetaId);
+            $status = $sql->execute();
+            $res = $status ? "Success" : "Failed";
+            return $res;
+        }
     }
 
     public function saveReservationsUser($usersId, $booksId, $reservationDateTime)
@@ -269,13 +283,14 @@ class DB extends \SQLite3
         return $data;
     }
 
-    public function getProfilePageData($id) {
+    public function getProfilePageData($id)
+    {
         $sql = $this->prepare("select surname, lastname, email from users where id = :id");
         $sql->bindvalue(':id', $id);
         $res = $sql->execute();
 
         $data = array();
-        while($row = $res->fetchArray(SQLITE3_ASSOC)){
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($data, $row);
         }
         return $data;
