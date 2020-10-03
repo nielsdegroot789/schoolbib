@@ -5,7 +5,12 @@
       :modal-data="modalData"
       @closeModal="handleCloseModal"
     />
-    <FormulateForm v-model="bookData" :values="bookData" @submit="saveBook">
+    <FormulateForm
+      v-model="bookData"
+      :values="bookData"
+      class="section"
+      @submit="saveBook"
+    >
       <FormulateInput v-if="currentBookData.id" type="hidden" name="id" />
       <FormulateInput
         label="isbn"
@@ -31,22 +36,37 @@
 
       <FormulateInput type="submit" label="Save" />
     </FormulateForm>
-    <div class="possibleBookResults">
-      <button @click="searchForBook({ isbn: currentBookData.isbnCode })">
-        Search by isbn
-      </button>
-      <button @click="searchForBook({ title: currentBookData.title })">
-        Search by title
-      </button>
+    <div class="possibleBookResults section">
+      <div class="buttonContainer level">
+        <button
+          class="button is-large level-item"
+          @click="searchForBook({ isbn: currentBookData.isbnCode })"
+        >
+          Search by isbn
+        </button>
+        <button
+          class="button is-large level-item"
+          @click="searchForBook({ title: currentBookData.title })"
+        >
+          Search by title
+        </button>
+      </div>
+      <div v-if="showError" class="notification is-danger">
+        <button class="delete" @click="closeError"></button>
+        Make sure that the field is filled in correctly!
+      </div>
 
-      <div
+      <p
         v-for="result in bookResults"
         :key="result.id"
+        class="level box"
         @click="showModal(result.volumeInfo)"
       >
-        {{ result.volumeInfo.title }}
-        <button>View book details</button>
-      </div>
+        <span class="level-left">
+          {{ result.volumeInfo.title }}
+        </span>
+        <button class="button level-right">View book details</button>
+      </p>
     </div>
   </div>
 </template>
@@ -71,6 +91,7 @@ export default {
       bookResults: [],
       modalData: {},
       shouldShowModal: false,
+      showError: false,
     };
   },
   computed: {
@@ -84,7 +105,6 @@ export default {
     },
 
     searchForBook(searchObj) {
-      // Example URL https://www.googleapis.com/books/v1/volumes?q=isbn:9780553213102+inauthor:jane&key=AIzaSyBFgcdVYDuw2EzuxaaUQZ45PMZw8Q5ksxs
       let string = '';
       for (const key in searchObj) {
         if (string !== '') string += '+';
@@ -98,7 +118,6 @@ export default {
         },
       })
         .then((response) => {
-          debugger;
           this.bookResults = response.data.items;
         })
         .catch((error) => {
@@ -106,8 +125,11 @@ export default {
         });
     },
 
+    closeError() {
+      this.showError = false;
+    },
+
     showModal(info) {
-      debugger;
       this.modalData = info;
       this.shouldShowModal = true;
     },
@@ -148,7 +170,14 @@ export default {
 
 <style scoped>
 .bookFormContainer {
-  display: flex;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
   position: relative;
+}
+
+.box {
+  margin-bottom: 0.5rem;
 }
 </style>
