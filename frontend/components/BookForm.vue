@@ -1,7 +1,7 @@
 <template>
   <div class="bookFormContainer">
     <BookFromApiModal
-      :show-modal="shouldShowModal"
+      v-if="shouldShowModal"
       :modal-data="modalData"
       @closeModal="handleCloseModal"
     />
@@ -69,9 +69,8 @@ export default {
   data() {
     return {
       bookResults: [],
-      modalData: null,
+      modalData: {},
       shouldShowModal: false,
-      // currentBookData: this.bookData,
     };
   },
   computed: {
@@ -91,7 +90,6 @@ export default {
         if (string !== '') string += '+';
         string += key + ':' + searchObj[key];
       }
-      debugger;
       this.$axios({
         method: 'GET',
         url: 'https://www.googleapis.com/books/v1/volumes?q=' + string,
@@ -100,6 +98,7 @@ export default {
         },
       })
         .then((response) => {
+          debugger;
           this.bookResults = response.data.items;
         })
         .catch((error) => {
@@ -108,6 +107,7 @@ export default {
     },
 
     showModal(info) {
+      debugger;
       this.modalData = info;
       this.shouldShowModal = true;
     },
@@ -120,7 +120,7 @@ export default {
           ...(modalData.categories && {
             categories: modalData.categories.join(),
           }),
-          ...(modalData.industryIdentifiers && {
+          ...(modalData.industryIdentifiers[1] && {
             isbnCode: modalData.industryIdentifiers[1].identifier,
           }),
           ...(modalData.language && { language: modalData.language }),
@@ -149,5 +149,6 @@ export default {
 <style scoped>
 .bookFormContainer {
   display: flex;
+  position: relative;
 }
 </style>

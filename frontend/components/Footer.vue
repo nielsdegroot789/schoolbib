@@ -36,5 +36,6 @@ export default {
 <style>
 .subtitle {
   color: white;
+  text-align: left;
 }
 </style>
