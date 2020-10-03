@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modalCenter">
         <div class="section">
-          <header>Use following book data?</header>
+          <header class="title">Use following book data?</header>
           <div class="section">
             <p>Title: {{ modalData.title }}</p>
             <p>Isbn: {{ modalData.industryIdentifiers[1].identifier }}</p>
@@ -40,10 +40,6 @@
 export default {
   name: 'APIModal',
   props: {
-    showModal: {
-      type: Boolean,
-      default: false,
-    },
     modalData: {
       type: Object,
       default() {
@@ -53,11 +49,6 @@ export default {
   },
   data() {
     return {};
-  },
-  computed: {
-    shouldShowModal() {
-      return this.showModal;
-    },
   },
   methods: {
     closeModal() {
