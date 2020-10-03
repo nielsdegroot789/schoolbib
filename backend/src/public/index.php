@@ -56,14 +56,14 @@ $checkLoggedInMW = function ($request, $handler) {
     $response = $handler->handle($request);
 
     if (empty($authHeader)) {
-        return $response->withStatus(404);
+        return $response->withStatus(401);
     }
 
     $jwtString = $authHeader[0];
     $userId = (new ValidateJWT($jwtString))();
 
     if (empty($userId)) {
-        return $response->withStatus(404);
+        return $response->withStatus(401);
     }
 
     //todo ??
