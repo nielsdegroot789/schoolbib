@@ -69,40 +69,6 @@
           </td>
         </tr>
       </tbody>
-      <!-- <nuxt-link
-        v-for="(item, index) in bookMeta"
-        :key="index"
-        class="booksContainer"
-        :to="/book/ + item.id"
-      >
-        <span>{{ item.title }}</span>
-        <span>{{ item.isbnCode }}</span>
-        <span>{{ item.publishDate }}</span>
-        <span>{{ item.rating }}</span>
-        <span>{{ item.totalPages }}</span>
-        <span>{{ item.sticker }}</span>
-        <span>{{ item.language }}</span>
-        <span>{{ item.readingLevel }}</span>
-        <span>{{ item.authors }}</span>
-        <span>{{ item.publishers }}</span>
-        <span>{{ item.categories }}</span>
-        <nuxt-link
-          :to="{
-            path: '/manage/books/edit/' + item.id,
-          }"
-        >
-          edit</nuxt-link
-        >
-        <nuxt-link :to="/deleteBook/ + item.id">delete</nuxt-link>
-      </nuxt-link>
-      <button class="newBook">
-        <nuxt-link
-          :to="{
-            path: '/manage/books/new',
-          }"
-          >new</nuxt-link
-        >
-      </button> -->
     </table>
   </div>
 </template>
