@@ -84,7 +84,7 @@ class DB extends \SQLite3
             $categoriesArr = explode(',', $categories);
 
             $res = $status ? "Success" : "Failed";
-            setCategories($id, $categories);
+            $this->setCategories($id, $categories);
             return $res;
         } else {
 

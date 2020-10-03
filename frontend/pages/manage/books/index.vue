@@ -1,24 +1,75 @@
 <template>
-  <div class="setup">
-    <h1 class="crudHeader crudTitle">Manage Books</h1>
-    <div>
-      <div class="headerContainer bold">
-        <span>title</span>
-        <span>isbn</span>
-        <span>publish Date</span>
-        <span>rating</span>
-        <span>total Pages</span>
-        <span>sticker</span>
-        <span>language</span>
-        <span>reading Level</span>
-        <span>authors</span>
-        <span>publishers</span>
-        <span>categories</span>
-        <span>edit</span>
-        <span>delete</span>
-      </div>
-
-      <nuxt-link
+  <div class="setup section">
+    <header class="level">
+      <h1 class="level-left title">Manage Books</h1>
+      <nuxt-link :to="{ path: '/manage/books/new' }" class="button level-right"
+        >new</nuxt-link
+      >
+    </header>
+    <table class="table table is-bordered is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <th>title</th>
+          <th>isbn</th>
+          <th>publish Date</th>
+          <th>rating</th>
+          <th>total Pages</th>
+          <th>sticker</th>
+          <th>language</th>
+          <th>reading Level</th>
+          <th>authors</th>
+          <th>publishers</th>
+          <th>categories</th>
+          <th>edit</th>
+          <th>delete</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <th>title</th>
+          <th>isbn</th>
+          <th>publish Date</th>
+          <th>rating</th>
+          <th>total Pages</th>
+          <th>sticker</th>
+          <th>language</th>
+          <th>reading Level</th>
+          <th>authors</th>
+          <th>publishers</th>
+          <th>categories</th>
+          <th>edit</th>
+          <th>delete</th>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr v-for="book in bookMeta" :key="book.id">
+          <td>{{ book.title }}</td>
+          <td>{{ book.isbnCode }}</td>
+          <td>{{ book.publishDate }}</td>
+          <td>{{ book.rating }}</td>
+          <td>{{ book.totalPages }}</td>
+          <td><img :src="book.sticker" alt="Book cover image" /></td>
+          <td>{{ book.language }}</td>
+          <td>{{ book.readingLevel }}</td>
+          <td>{{ book.authors }}</td>
+          <td>{{ book.publishers }}</td>
+          <td>{{ book.categories }}</td>
+          <td>
+            <nuxt-link
+              :to="{ path: '/manage/books/edit/' + book.id }"
+              class="button"
+            >
+              edit
+            </nuxt-link>
+          </td>
+          <td>
+            <nuxt-link :to="/deleteBook/ + book.id" class="button"
+              >delete</nuxt-link
+            >
+          </td>
+        </tr>
+      </tbody>
+      <!-- <nuxt-link
         v-for="(item, index) in bookMeta"
         :key="index"
         class="booksContainer"
@@ -51,8 +102,8 @@
           }"
           >new</nuxt-link
         >
-      </button>
-    </div>
+      </button> -->
+    </table>
   </div>
 </template>
 
@@ -82,7 +133,7 @@ export default {
 }
 
 .setup {
-  margin: 0 10%;
+  margin: 0 5%;
   box-sizing: border-box;
   height: 100%;
 }

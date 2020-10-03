@@ -72,11 +72,7 @@ class BookController
         $authors = $data["authors"];
         $publishers = $data["publishers"];
         $categories = $data["categories"];
-
-        var_dump($authors);
-        var_dump($publishers);
-        var_dump($categories);
-
+        
         if ($data['id']) {
             $id = $data['id'];
             $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories, $id);
