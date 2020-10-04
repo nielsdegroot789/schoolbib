@@ -9,8 +9,8 @@ use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use skoolBiep\DB;
-use skoolBiep\Util\ValidateJWT;
 use skoolBiep\Util\Mailer;
+use skoolBiep\Util\ValidateJWT;
 use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
@@ -56,14 +56,14 @@ $checkLoggedInMW = function ($request, $handler) {
     $response = $handler->handle($request);
 
     if (empty($authHeader)) {
-        return $response->withStatus(404);
+        return $response->withStatus(401);
     }
 
     $jwtString = $authHeader[0];
     $userId = (new ValidateJWT($jwtString))();
 
     if (empty($userId)) {
-        return $response->withStatus(404);
+        return $response->withStatus(401);
     }
 
     //todo ??
@@ -87,12 +87,13 @@ $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBoo
 $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
 
 $app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . ':getNotification');
+$app->get('/getCockpitFooterData', \skoolBiep\Controller\CockpitController::class . ':getCockpitFooterData');
 
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
 
-$app->get('/getReservation',\skoolBiep\Controller\UserController::class . ':getReservation');
+$app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
 
-$app->get('/getCheckout',\skoolBiep\Controller\UserController::class . ':getCheckout');
+$app->get('/getCheckout', \skoolBiep\Controller\UserController::class . ':getCheckout');
 
 $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
  
@@ -117,7 +118,6 @@ $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAll
 $app->post('/saveReservationsUser',\skoolBiep\Controller\UserController::class . ':saveReservationsUser');
 
 $app->post('/saveCheckoutAdmin',\skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
-
 
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 

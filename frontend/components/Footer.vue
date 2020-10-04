@@ -1,19 +1,41 @@
 <template>
-  <footer class="footer-container">
-    <div class="footer-section">
-      <h1>About Us</h1>
-      <p>zinnetje</p>
-      <p>lang zinnetje</p>
+  <footer id="footer" class="footer">
+    <div>
+      <h1 class="subtitle">Contact information</h1>
+      <p v-html="contactInformation"></p>
     </div>
-    <div class="footer-section"><h1>Op de hoogte</h1></div>
-    <div class="footer-section"><h1>Titel 3</h1></div>
+    <div>
+      <h1 class="subtitle">Opening hours</h1>
+      <p v-html="openingHours"></p>
+    </div>
   </footer>
 </template>
 
 <script>
 export default {
   name: 'Footer',
+  data() {
+    return {
+      privacyPolicy: '',
+      openingHours: '',
+      contactInformation: '',
+    };
+  },
+  created() {
+    this.$axios
+      .get('http://localhost:8080/getCockpitFooterData')
+      .then((response) => {
+        this.privacyPolicy = response.data[1].text;
+        this.openingHours = response.data[0].text;
+        this.contactInformation = response.data[2].text;
+      });
+  },
 };
 </script>
 
-<style></style>
+<style>
+.subtitle {
+  color: white;
+  text-align: left;
+}
+</style>

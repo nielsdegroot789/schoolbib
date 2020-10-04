@@ -1,27 +1,76 @@
 <template>
-  <div
-    :class="shouldShowModal ? 'modalBackground' : 'hide'"
-    @click.self="closeModal"
-  >
-    <div v-if="modalData" class="modalCenter">
-      <header>Use following book data?</header>
-      <p>Title: {{ modalData.title }}</p>
-      <p>Isbn: {{ modalData.industryIdentifiers[1].identifier }}</p>
-      <p>Publish Date: {{ modalData.publishedDate }}</p>
-      <p>Rating: {{ modalData.averageRating }}</p>
-      <p>Amount of pages: {{ modalData.pageCount }}</p>
-      <p>sticker: {{ modalData.imageLinks.smallThumbnail }}</p>
-      <p>language: {{ modalData.language }}</p>
-      <p>authors: {{ modalData.authors }}</p>
-      <p>reading level: {{ modalData.maturityRating }}</p>
-      <p>publisher: {{ modalData.publisher }}</p>
-      <p>categories: {{ modalData.categories }}</p>
-
-      <div class="buttonContainer">
-        <button @click="useData()">Use</button>
-        <button @click="useDataAndExit()">Use and exit</button>
-        <button @click="closeModal">Cancel</button>
+  <div class="modal is-active">
+    <div class="modal-background" @click="closeModal"></div>
+    <div class="modal-content">
+      <div class="modalCenter">
+        <div class="section">
+          <header class="title">Use following book data?</header>
+          <div class="section bookInformation">
+            <p class="level">
+              <span class="level-left">Title:</span>
+              <span class="level-right">{{ modalData.title }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left"> Isbn:</span>
+              <span class="level-right">
+                {{ modalData.industryIdentifiers[1].identifier }}</span
+              >
+            </p>
+            <p class="level">
+              <span class="level-left">Publish Date:</span>
+              <span class="level-right">{{ modalData.publishedDate }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left"> Rating:</span>
+              <span class="level-right">{{ modalData.averageRating }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left"> Amount of pages:</span>
+              <span class="level-right">{{ modalData.pageCount }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left">sticker: </span>
+              <span class="level-right">
+                {{
+                  modalData.imageLinks.smallThumbnail
+                    ? 'available'
+                    : 'not available'
+                }}
+              </span>
+            </p>
+            <p class="level">
+              <span class="level-left">language:</span>
+              <span class="level-right">{{ modalData.language }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left">authors:</span>
+              <span class="level-right">{{ modalData.authors }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left"> reading level:</span>
+              <span class="level-right">{{ modalData.maturityRating }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left"> publisher:</span>
+              <span class="level-right">{{ modalData.publisher }}</span>
+            </p>
+            <p class="level">
+              <span class="level-left">categories:</span>
+              <span class="level-right"> {{ modalData.categories }}</span>
+            </p>
+          </div>
+          <div class="buttonContainer level">
+            <button class="button level-item" @click="useData()">Use</button>
+            <button class="button level-item" @click="useDataAndExit()">
+              Use and exit
+            </button>
+            <button class="button level-item" @click="closeModal">
+              Cancel
+            </button>
+          </div>
+        </div>
       </div>
+      <button class="modal-close is-large" aria-label="close"></button>
     </div>
   </div>
 </template>
@@ -30,10 +79,6 @@
 export default {
   name: 'APIModal',
   props: {
-    showModal: {
-      type: Boolean,
-      default: false,
-    },
     modalData: {
       type: Object,
       default() {
@@ -43,11 +88,6 @@ export default {
   },
   data() {
     return {};
-  },
-  computed: {
-    shouldShowModal() {
-      return this.showModal;
-    },
   },
   methods: {
     closeModal() {
@@ -66,26 +106,24 @@ export default {
 </script>
 
 <style scoped>
-.hide {
-  display: none;
-}
-.modalBackground {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.noOverflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 200px;
 }
 
 .modalCenter {
-  background-color: white;
-  width: 50%;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+  background-color: #d3d3d3;
+  color: black;
+}
+
+.button {
+  margin: 0 15px;
+}
+
+.bookInformation p:nth-child(even) {
+  box-sizing: border-box;
+  background-color: #bebebe;
 }
 </style>

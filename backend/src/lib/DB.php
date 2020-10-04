@@ -40,7 +40,7 @@ class DB extends \SQLite3
 
         return $data;
     }
-
+    
     public function getBooks()
     {
         $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
@@ -84,7 +84,7 @@ class DB extends \SQLite3
             $categoriesArr = explode(',', $categories);
 
             $res = $status ? "Success" : "Failed";
-            setCategories($id, $categories);
+            $this->setCategories($id, $categories);
             return $res;
         } else {
 
@@ -133,6 +133,10 @@ class DB extends \SQLite3
                                 join userRoles on userRoles.usersId = users.id
                                 join roles on roles.id = userRoles.rolesId
                                 where users.email = :email;');
+
+
+
+
         $sql->bindValue(':email', $formEmail);
         $res = $sql->execute();
         $data = array();
@@ -203,33 +207,57 @@ class DB extends \SQLite3
             $res = $sql->execute();
             $categoryId = $this->lastInsertRowID();
         }
-        $sql = $this->prepare("INSERT into categoriesInBooks(categoriesId, bookMetaId)
-                values (:categoriesId, :bookMetaId)");
+
+        $sql = $this->prepare("SELECT id from categoriesInBooks WHERE categoriesId = :categoriesId  AND bookMetaId = :bookMetaId");
         $sql->bindValue(':categoriesId', $categoryId);
         $sql->bindValue(':bookMetaId', $bookMetaId);
-        $status = $sql->execute();
-        $res = $status ? "Success" : "Failed";
-        return $res;
+        $res = $sql->execute();
+
+        $data = $res->fetchArray(SQLITE3_ASSOC);
+
+        if ($data) {
+            $res = $status ? "Success" : "Failed";
+            return $res;
+        } else {
+
+            $sql = $this->prepare("INSERT into categoriesInBooks(categoriesId, bookMetaId)
+                values (:categoriesId, :bookMetaId)");
+            $sql->bindValue(':categoriesId', $categoryId);
+            $sql->bindValue(':bookMetaId', $bookMetaId);
+            $status = $sql->execute();
+            $res = $status ? "Success" : "Failed";
+            return $res;
+        }
     }
 
-    public function saveReservationsUser($usersId, $booksId, $reservationDateTime)
+    public function saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted)
     {
 
-        $sql = $this->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime)
-        values (:userId,:booksId,:reservationDateTime)");
+        $sql = $this->prepare("INSERT INTO reservations (usersId,  booksId, reservationDateTime, accepted)
+        values (:userId,:booksId,:reservationDateTime, :accepted)");
 
         $sql->bindValue(':usersId', $usersId, );
         $sql->bindValue(':booksId', $booksId, );
         $sql->bindValue(':reservationDateTime', $reservationDateTime, );
+        $sql->bindValue(':accepted', $accepted, );
 
         $status = $sql->execute();
 
         return $status;
     }
-
-    public function getReservation()
+    
+    public function getReservations($limitNumber, $offsetNumber)
     {
-        $sql = "select id, usersId, booksId, reservationDateTime, accepted FROM reservations GROUP by reservations.id ORDER by reservationDateTime DESC";
+        $sql = "SELECT usersId,booksId, reservationDateTime, accepted , users.surname as usersName, bookMeta.title as booksName
+        FROM reservations 
+        left join users on users.id = reservations.usersId
+		left join books on books.id = reservations.booksId
+		left join bookMeta on bookMeta.id = books.bookMetaId		
+        GROUP by reservations.id ORDER by reservations.reservationDateTime DESC";
+
+        $sql .= " limit '$limitNumber'";
+        $sql .= " offset '$offsetNumber' * '$limitNumber'";
+        
         $res = $this->query($sql);
 
         $data = array();
@@ -239,6 +267,7 @@ class DB extends \SQLite3
 
         return $data;
     }
+    
     public function saveCheckoutAdmin($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
     {
 
@@ -269,14 +298,15 @@ class DB extends \SQLite3
         return $data;
     }
 
-    public function getProfilePageData($id) {
+    public function getProfilePageData($id)
+    {
         $sql = $this->prepare("select surname, lastname, email from users where id = :id");
         $sql->bindvalue(':id', $id);
         $res = $sql->execute();
 
 
         $data = array();
-        while($row = $res->fetchArray(SQLITE3_ASSOC)){
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($data, $row);
         }
         return $data;

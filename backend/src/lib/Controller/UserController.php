@@ -104,12 +104,14 @@ class UserController
         $usersId = $data["usersId"];
         $booksId = $data["booksId"];
         $reservationDateTime = $data["reservationDateTime"];
+        $accepted = $data["accepted"];
+
         if($data['id']){
             $id = $data['id'];
-            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime);
+            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted);
         }
         else {
-            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime);
+            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted);
         }
         $response->getBody()->write($data);
         return $response;
@@ -147,18 +149,28 @@ class UserController
         return $response;
     }
 
-    public function getReservation(Request $request, Response $response, array $args)
+    public function getReservations(Request $request, Response $response, array $args)
     {
         $this->response = $response;
         $db = new DB();
-        $data = $db->getReservation();
+        $arguments = json_decode(file_get_contents("php://input"), true);
+        $id = isset($arguments["id"]) ? '%' . $arguments["id"] : "%";
+        $usersId = isset($arguments["usersId"]) ? '%' . $arguments["usersId"] : "%";
+        $booksId = isset($arguments["booksId"]) ? $arguments["booksId"] : "%";
+        $reservationDateTime = isset($arguments["reservationDateTime"]) ? '%' .$arguments["reservationDateTime"] :"%";
+        $accepted = isset($arguments["accepted"]) ? '%' .$arguments["accepted"] : "%";
+        $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
+        $offsetNumber = isset($arguments["offset"]) ? $arguments["offset"] : 0;
+
+
+        $data = $db->getReservations($limitNumber, $offsetNumber,$reservationDateTime, $accepted, $booksId, $usersId, $id);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
-
+    
     public function getCheckout(Request $request, Response $response, array $args)
     {
         $this->response = $response;

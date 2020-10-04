@@ -1,31 +1,127 @@
 <template>
-  <div class="carousel-container">
-    <button class="carousel-button">
-      <font-awesome-icon :icon="['fas', 'angle-left']" />
-    </button>
-    <div
-      v-for="(item, id) in bookMeta.slice(0, 7)"
-      :key="id"
-      class="carousel-book"
-    >
-      {{ item.title }}
+  <div class="section">
+    <div class="tabs is-centered is-boxed">
+      <ul>
+        <li
+          v-for="category in categories"
+          :key="category.id"
+          :class="currentlyActive === category.id && 'is-active'"
+          @click="setCurrentTab(category.id)"
+        >
+          <a>{{ category.name }}</a>
+        </li>
+      </ul>
     </div>
-    <button class="carousel-button">
-      <font-awesome-icon :icon="['fas', 'angle-right']" />
-    </button>
+    <div v-if="loaded" class="carousel">
+      <VueSlickCarousel v-bind="settings">
+        <nuxt-link
+          v-for="item in bookMeta"
+          :key="item.id"
+          :to="'/book/' + item.id"
+          class="column"
+        >
+          <p class="carouselTitle subtitle">
+            {{ item.title }}
+          </p>
+          <img :src="item.sticker" />
+        </nuxt-link>
+      </VueSlickCarousel>
+    </div>
+    <div v-if="!loaded" class="carousel level"><Loading /></div>
   </div>
 </template>
 <script>
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import Loading from '~/components/Loading';
+
 export default {
   name: 'Carousel',
+  components: { VueSlickCarousel, Loading },
   data() {
-    return {};
+    return {
+      settings: {
+        arrows: true,
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 7,
+        slidesToScroll: 1,
+        touchThreshold: 5,
+      },
+      categories: [
+        { id: 0, value: 'adults', name: 'New Adults' },
+        { id: 1, value: 'children', name: 'New Children' },
+        { id: 2, value: 'fantasy', name: 'New Fantasy' },
+        { id: 3, value: 'fiction', name: 'New Fiction' },
+      ],
+      currentlyActive: 0,
+      bookMeta: [],
+      loaded: false,
+    };
   },
-  computed: {
-    bookMeta() {
-      return this.$store.state.bookMeta;
+  created() {
+    this.getBookMeta();
+  },
+  methods: {
+    setCurrentTab(newId) {
+      this.currentlyActive = newId;
+      this.getBookMeta();
+    },
+    getBookMeta() {
+      this.loaded = false;
+      this.$axios
+        .get('http://localhost:8080/getBookMeta', {
+          headers: { Authorization: `Bearer test` },
+        })
+        .then((response) => {
+          this.bookMeta = response.data;
+          this.loaded = true;
+        });
     },
   },
 };
 </script>
-<style></style>
+<style>
+.carouselTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 70%;
+  color: black;
+}
+
+.carousel {
+  height: 265px;
+}
+
+.slick-prev,
+.slick-next {
+  height: 60px;
+  background-color: lightgray;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: white;
+  font-family: unset;
+  font-size: 30px;
+  background-color: transparent;
+}
+
+.slick-prev:before {
+  float: left;
+}
+
+.slick-next:before {
+  float: right;
+}
+
+.slick-prev:hover,
+.slick-prev:focus,
+.slick-next:hover,
+.slick-next:focus {
+  background-color: lightgray;
+}
+</style>

@@ -1,51 +1,65 @@
 <template>
-  <div>
+  <div class="index">
     <searchBar />
-    <frontNotification />
-    <introContainer />
-    <quickLinks />
-    <carouselLinks />
+
+    <div class="intro-text-container">
+      <div class="intro-text"><h2>Let's get started</h2></div>
+    </div>
+
+    <div v-if="showNotif" class="frontpageNotif">
+      <div>
+        {{ frontpageNotif }}
+        <button class="button is-small" type="button" @click="hideNotification">
+          X
+        </button>
+      </div>
+    </div>
+
+    <div class="quick-links-container">
+      <ul>
+        <li>
+          <a href="#footer" class="quick-link">Opening hours</a>
+        </li>
+        <li>
+          <nuxt-link to="/profile" class="quick-link">My profile</nuxt-link>
+        </li>
+      </ul>
+    </div>
+
     <Carousel />
-    <Footer />
   </div>
 </template>
 
 <script>
 import searchBar from '../components/SearchBar';
-import Footer from '../components/Footer';
 import Carousel from '../components/Carousel';
-import introContainer from '../components/IntroText';
-import frontNotification from '../components/frontNotification';
-import quickLinks from '../components/quickLinks';
-import carouselLinks from '../components/CarouselLinks';
 
 export default {
   components: {
     searchBar,
-    Footer,
-    carouselLinks,
     Carousel,
-    introContainer,
-    frontNotification,
-    quickLinks,
   },
-
-  data: () => {
-    return {};
+  data() {
+    return {
+      frontpageNotif: '',
+      showNotif: false,
+    };
+  },
+  created() {
+    // todo create system that only loads this one for the first time until new notif is made
+    this.$axios
+      .get('http://localhost:8080/getNotification')
+      .then((response) => {
+        this.frontpageNotif = response.data;
+        this.showNotif = true;
+      });
+  },
+  methods: {
+    hideNotification() {
+      this.showNotif = false;
+    },
   },
 };
 </script>
 
-<style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
-</style>
+<style></style>
