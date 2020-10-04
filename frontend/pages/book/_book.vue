@@ -93,14 +93,16 @@
         <p v-else>
           There are currently <b> {{ inStock }} </b> available.
         </p>
-        <button class="button is-large">Reserve now!</button>
+        <!-- todo change this to only show when logged in otherwise go to login -->
+        <button class="button is-large" @click="submitReserveData">
+          Reserve now!
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   data() {
     return {
@@ -134,13 +136,15 @@ export default {
 
   methods: {
     submitReserveData() {
-      axios
+      this.$axios
         .post('http://localhost:8080/saveReservationsUser', {
           booksId: this.$route.params.book,
           usersId: this.currentUserId,
           reservationDateTime: this.timestamp,
         })
-        .then(function (response) {});
+        .then(function (response) {
+          this.popUpMessage();
+        });
     },
     popUpMessage() {
       this.$store.dispatch('addNotification', {
@@ -192,7 +196,7 @@ export default {
   background-color: #474c66;
   margin-bottom: 1.5rem;
   height: 50%;
-  margin: 5px;
+  margin: 10px;
   margin-top: 7.5rem;
   color: white;
 }
