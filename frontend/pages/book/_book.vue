@@ -1,69 +1,99 @@
 <template>
-  <div class="PageContainer">
-    <div class="BookInfoContainer">
-      <div class="InfoAboveBook">
+  <div class="section pageSetup">
+    <div class="level box">
+      <div class="url level-left">
         <n-link to="/">Home</n-link> > <n-link to="/books">books</n-link> >
         {{ bookMeta.title }}
       </div>
-      <div class="containerBook">
-        <div class="containerBookAbove">
-          <div>
-            <img
-              src="../../assets/pictures/book.png"
-              alt="bookPic"
-              height="50px"
-              width="50px"
-            />
-            <h3>book</h3>
-            {{ bookMeta.language }}
-          </div>
-          <n-link to="/books/">
-            <div>
-              <Button
-                class="reserveBook"
-                @click="
-                  submitReserveData();
-                  popUpMessage();
-                "
-              >
-                Reserve Now!
-              </Button>
-            </div>
-          </n-link>
-        </div>
+    </div>
 
-        <div class="containerBookInfo">
-          <div class="containerBookInfoLeft">
-            <strong>
-              <h1>{{ bookMeta.title }}</h1></strong
-            >
-            <div>{{ bookMeta.sticker }}</div>
-            <Button> &#10084; Place on list </Button>
-          </div>
-          <div class="containerBookInfoMiddle">
-            <br />
-
-            <p>Details:</p>
-            <div v-for="book in books" :key="book.id">
-              <p><strong> Title : </strong>{{ bookMeta.title }}</p>
-              <p><strong> Author :</strong> {{ bookMeta.authors }}</p>
-              <p><strong> Language(s) :</strong> {{ bookMeta.language }}</p>
-              <br />
-              <p><strong>Categorie(s)</strong> {{ bookMeta.categories }}</p>
-              <br />
-              <p>-------</p>
-              <br />
-              <p><strong>rating :</strong>{{ bookMeta.rating }} / 5</p>
-              <p><strong> Title : </strong>{{ bookMeta.title }}</p>
-              <p>
-                <strong> ReadingLevel : </strong>{{ bookMeta.readingLevel }}
-              </p>
-              <p><strong> totalPages : </strong>{{ bookMeta.totalPages }}</p>
-              <p><strong> publishers : </strong>{{ bookMeta.publishers }}</p>
-              <p><strong> publishDate : </strong>{{ bookMeta.publishDate }}</p>
-            </div>
-          </div>
+    <div class="bookDetails">
+      <div class="section box">
+        <!-- picture  -->
+        <img :src="bookMeta.sticker" alt="" />
+      </div>
+      <div class="section box">
+        <!-- specifics -->
+        <h1 class="title">Book Details</h1>
+        <p class="level">
+          <span class="level-left"> Title:</span>
+          <span class="level-right">
+            {{ bookMeta.title ? bookMeta.title : 'Unavailable' }}
+          </span>
+        </p>
+        <p class="level">
+          <span class="level-left"> Category:</span>
+          <span class="level-right">
+            {{ bookMeta.categories ? bookMeta.categories : 'Unavailable' }}
+          </span>
+        </p>
+        <p class="level">
+          <span class="level-left"> Author(s):</span>
+          <span class="level-right">
+            {{ bookMeta.authors ? bookMeta.authors : 'Unavailable' }}
+          </span>
+        </p>
+        <p class="level">
+          <span class="level-left"> Rating:</span>
+          <span class="level-right">
+            {{ bookMeta.rating ? bookMeta.rating : 'Unavailable' }}
+          </span>
+        </p>
+        <p class="level">
+          <span class="level-left"> Language:</span>
+          <span class="level-right">
+            {{ bookMeta.language ? bookMeta.language : 'Unavailable' }}
+          </span>
+        </p>
+        <div v-if="showDetails">
+          <p class="level">
+            <span class="level-left"> ISBN:</span>
+            <span class="level-right">
+              {{ bookMeta.isbnCode ? bookMeta.isbnCode : 'Unavailable' }}
+            </span>
+          </p>
+          <p class="level">
+            <span class="level-left"> Publishers:</span>
+            <span class="level-right">
+              {{ bookMeta.publishers ? bookMeta.publishers : 'Unavailable' }}
+            </span>
+          </p>
+          <p class="level">
+            <span class="level-left"> Publish Date:</span>
+            <span class="level-right">
+              {{ bookMeta.publishDate ? bookMeta.publishDate : 'Unavailable' }}
+            </span>
+          </p>
+          <p class="level">
+            <span class="level-left"> Reading Level:</span>
+            <span class="level-right">
+              {{
+                bookMeta.readingLevel ? bookMeta.readingLevel : 'Unavailable'
+              }}
+            </span>
+          </p>
         </div>
+        <button v-if="showDetails" class="button" @click="toggleDetails">
+          Hide Details
+        </button>
+        <button v-if="!showDetails" class="button" @click="toggleDetails">
+          Show Details
+        </button>
+      </div>
+      <div class="section box stockInfo">
+        <!-- currently in stock -->
+        <h3 class="title">Interested in reading?</h3>
+        <p v-if="inStock === 0">
+          There are currently no books available. Feel free to contact an
+          employee.
+        </p>
+        <p v-else-if="inStock === 1">
+          There is currently <b> {{ inStock }} </b> available.
+        </p>
+        <p v-else>
+          There are currently <b> {{ inStock }} </b> available.
+        </p>
+        <button class="button is-large">Reserve now!</button>
       </div>
     </div>
   </div>
@@ -75,13 +105,15 @@ export default {
   data() {
     return {
       timestamp: '',
+      showDetails: false,
+      inStock: 5,
     };
   },
   computed: {
     bookMeta() {
       return this.$store.getters.getBookMetaById(
         parseInt(this.$route.params.book),
-      );
+      )[0];
     },
     books() {
       return this.$store.getters.getBooksByBookMetaId(
@@ -97,6 +129,7 @@ export default {
   },
   created() {
     setInterval(this.getNow, 1000);
+    // todo send axios call to get amount of books available
   },
 
   methods: {
@@ -129,76 +162,46 @@ export default {
       const dateTime = date + ' ' + time;
       this.timestamp = dateTime.toString();
     },
+    toggleDetails() {
+      this.showDetails = !this.showDetails;
+    },
   },
 };
 </script>
 
-<style>
-.BookInfoContainer {
-  height: 400px;
-}
-.PageContainer {
-  margin: 50px;
-}
-.InfoAboveBook {
-  border-color: rgb(93, 93, 93);
-  background-color: rgb(198, 194, 194);
-  border: 1px solid #dbdbdb;
-  border-radius: 6px;
-  padding: 10px;
-}
-.containerBookAbove {
-  display: flex;
-  justify-content: space-evenly;
-  border-color: rgb(93, 93, 93);
-  background-color: rgb(198, 194, 194);
-  border: 1px solid #dbdbdb;
-  border-radius: 6px;
-  padding: 50px;
-  margin-top: 50px;
-}
-.reserveBook {
-  background-color: black;
-  color: white;
-  border-radius: 25%;
-  cursor: pointer;
-}
-.containerBook {
-  background: rgb(235, 235, 235);
-  height: 800px;
-  display: block;
-  padding: 30px;
-}
-.containerBookInfo {
+<style language="scss">
+.bookDetails {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  justify-content: center;
-  background: rgb(209, 190, 183);
-  height: 600px;
-  padding: 10px;
+  grid-template-columns: 25% 40% 35%;
 }
-.containerBookInfoLeft {
-  background: honeydew;
-  padding: 30px;
-  margin-right: 100px;
-  align-content: center;
-  justify-content: center;
+
+.bookDetails img {
+  width: 100%;
 }
-.containerBookInfoMiddle {
-  background: honeydew;
-  margin-right: 100px;
-  align-content: center;
-  justify-content: center;
+
+.pageSetup {
+  padding-left: 5%;
+  padding-right: 5%;
 }
-.containerBookInfoMiddle > *,
-.containerBookInfoLeft > *,
-.containerBookInfoRight > * {
+.bookDetails .subtitle {
+  color: black;
+}
+
+.stockInfo {
   text-align: center;
+  background-color: #474c66;
+  margin-bottom: 1.5rem;
+  height: 50%;
+  margin: 5px;
+  margin-top: 7.5rem;
+  color: white;
 }
-.containerBookInfoRight {
-  background: honeydew;
-  margin-right: 100px;
-  align-content: center;
-  justify-content: center;
+
+.stockInfo .title {
+  color: white;
+}
+
+.stockInfo .button {
+  margin-top: 1.5rem;
 }
 </style>
