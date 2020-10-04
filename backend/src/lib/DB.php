@@ -40,7 +40,7 @@ class DB extends \SQLite3
 
         return $data;
     }
-
+    
     public function getBooks()
     {
         $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
@@ -133,6 +133,10 @@ class DB extends \SQLite3
                                 join userRoles on userRoles.usersId = users.id
                                 join roles on roles.id = userRoles.rolesId
                                 where users.email = :email;');
+
+
+
+
         $sql->bindValue(':email', $formEmail);
         $res = $sql->execute();
         $data = array();
@@ -226,24 +230,34 @@ class DB extends \SQLite3
         }
     }
 
-    public function saveReservationsUser($usersId, $booksId, $reservationDateTime)
+    public function saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted)
     {
 
-        $sql = $this->prepare("INSERT INTO RESERVATIONS (usersId,  booksId, reservationDateTime)
-        values (:userId,:booksId,:reservationDateTime)");
+        $sql = $this->prepare("INSERT INTO reservations (usersId,  booksId, reservationDateTime, accepted)
+        values (:userId,:booksId,:reservationDateTime, :accepted)");
 
         $sql->bindValue(':usersId', $usersId, );
         $sql->bindValue(':booksId', $booksId, );
         $sql->bindValue(':reservationDateTime', $reservationDateTime, );
+        $sql->bindValue(':accepted', $accepted, );
 
         $status = $sql->execute();
 
         return $status;
     }
-
-    public function getReservation()
+    
+    public function getReservations($limitNumber, $offsetNumber)
     {
-        $sql = "select id, usersId, booksId, reservationDateTime, accepted FROM reservations GROUP by reservations.id ORDER by reservationDateTime DESC";
+        $sql = "SELECT usersId,booksId, reservationDateTime, accepted , users.surname as usersName, bookMeta.title as booksName
+        FROM reservations 
+        left join users on users.id = reservations.usersId
+		left join books on books.id = reservations.booksId
+		left join bookMeta on bookMeta.id = books.bookMetaId		
+        GROUP by reservations.id ORDER by reservations.reservationDateTime DESC";
+
+        $sql .= " limit '$limitNumber'";
+        $sql .= " offset '$offsetNumber' * '$limitNumber'";
+        
         $res = $this->query($sql);
 
         $data = array();
@@ -253,6 +267,7 @@ class DB extends \SQLite3
 
         return $data;
     }
+    
     public function saveCheckoutAdmin($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
     {
 
