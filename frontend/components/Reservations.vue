@@ -47,7 +47,13 @@ export default {
       return this.$store.state.reservations;
     },
   },
+
   created() {
+    this.$axios
+      .get('http://localhost:8080/getReservations')
+      .then((response) => {
+        this.frontpageNotif = response.data;
+      });
     setInterval(this.getToday, 10000);
   },
 
