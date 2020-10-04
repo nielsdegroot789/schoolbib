@@ -1,36 +1,28 @@
 <template>
-  <div>
-    <div class="topContainer">
+  <div class="section pageSetup">
+    <div class="section level">
       <input
         v-model="search"
         type="text"
         placeholder="Search on title.."
+        class="level-left"
         @keydown="toSearch"
       />
 
-      <Pagination />
+      <Pagination class="level-right" />
     </div>
-    <div class="containerCard">
-      <div v-for="(item, index) in bookMeta" :key="index">
-        <div class="card">
-          <button class="btnAddList">&hearts;</button>
-          <n-link :to="/book/ + item.id">
-            <div class="image">
-              <img src="item.sticker" />
-            </div>
-            <div class="titleDiv">
-              <h1>{{ item.title }}</h1>
-            </div>
-            <p class="rating">{{ item.rating }} / 5</p>
 
-            <p>
-              {{ item.description }}
-            </p>
-          </n-link>
-          <n-link :to="/book/ + item.id">
-            <button class="borrow">Borrow</button>
-          </n-link>
+    <div class="cardContainer">
+      <div v-for="item in bookMeta" :key="item.id" class="card">
+        <div class="card-header noOverflow">
+          <p class="card-header-title">{{ item.title }}</p>
         </div>
+        <div class="card-image">
+          <figure class="image is-4by5">
+            <img :src="item.sticker" alt="" />
+          </figure>
+        </div>
+        <div class="card-content"></div>
       </div>
     </div>
   </div>
@@ -82,33 +74,23 @@ export default {
 </script>
 
 <style scoped>
-.topContainer {
-  display: flex;
-  justify-content: space-evenly;
+.pageSetup {
+  padding-left: 5%;
+  padding-right: 5%;
 }
-.btnAddList {
-  float: left;
+
+.noOverflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.titleDiv {
-  display: flex;
-  height: 50px;
-  text-align: center;
-  justify-content: center;
-}
-.containerCard {
-  width: 90%;
+
+.cardContainer {
   display: grid;
   margin: 0 auto;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-auto-rows: 400px;
-  column-gap: 100px;
+  grid-template-columns: repeat(7, 13%);
+  column-gap: 1%;
   row-gap: 50px;
-}
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 300px;
-  text-align: center;
-  font-family: arial;
 }
 
 .rating {
@@ -131,10 +113,7 @@ export default {
 .borrow:hover {
   opacity: 0.7;
 }
-.image {
-  height: 150px;
-  width: 50px;
-}
+
 input[type='text'] {
   display: flex;
   width: 600px;
