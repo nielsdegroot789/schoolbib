@@ -9,27 +9,29 @@ export const state = {
   JWT: null,
   showLoginError: false,
   limit: 20,
-  reservation: [],
+  reservations: [],
   profilePageData: {},
 };
 
 export const actions = {
   getBookMeta(context) {
-    axios
+    this.$axios
       .get('http://localhost:8080/getBookMeta', {
         headers: { Authorization: `Bearer test` },
       })
       .then((response) => context.commit('getBookMeta', response.data));
   },
   getBooks(context) {
-    axios
+    this.$axios
       .get('http://localhost:8080/getBooks')
       .then((response) => context.commit('getBooks', response.data));
   },
   saveBook(context, payload) {
-    axios.post('http://localhost:8080/saveBook', payload).catch((error) => {
-      console.log(error);
-    });
+    this.$axios
+      .post('http://localhost:8080/saveBook', payload)
+      .catch((error) => {
+        console.log(error);
+      });
   },
   addNotification({ commit }, message) {
     commit('addNotification', message);
@@ -40,7 +42,7 @@ export const actions = {
   },
 
   login(context, payload) {
-    axios
+    this.$axios
       .post('http://localhost:8080/login', payload)
       .then((response) => {
         localStorage.setItem('JWT', response.data);
@@ -55,14 +57,9 @@ export const actions = {
         console.log(error);
       });
   },
-  getReservation(context) {
-    axios
-      .get('http://localhost:8080/getReservation')
-      .then((response) => context.commit('getReservation', response.data));
-  },
   getProfilePageData({ commit }, data) {
     console.log(data);
-    axios
+    this.$axios
       .get('http://localhost:8080/getProfilePageData', {})
       .then((response) => commit('handleProfileData', response));
   },
@@ -113,9 +110,6 @@ export const mutations = {
   setTotalItems(state, payload) {
     state.setTotalItems = payload;
   },
-  getReservations(state, reservation) {
-    state.reservation = reservation;
-  },
   handleProfileData(state, payload) {
     state.profilePageData = payload;
   },
@@ -137,7 +131,7 @@ export const getters = {
   getBookMetaCount: (state) => (count) => {
     return state.bookMeta.filter((bookMeta) => bookMeta.count === count);
   },
-  getReservationById: (state) => (id) => {
-    return state.reservation.filter((reservation) => reservation.id === id);
+  getReservation: (state) => {
+    return state.reservations;
   },
 };

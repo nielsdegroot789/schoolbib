@@ -1,37 +1,38 @@
 <template>
-  <div class="setup">
-    <h1 class="crudHeader crudTitle">Manage Users</h1>
-    <div>
-      <div class="titleColumn">
-        <span>id_user</span>
-        <span>name_user</span>
-        <span>id_book</span>
-        <span>name_book</span>
-        <span>reservation date</span>
-        <span>Accept</span>
-      </div>
-      <nuxt-link
-        v-for="(item, index) in reservations"
-        :key="index"
-        to="/manage/users"
-        class="usersContainer"
-      >
-        <span>{{ item.usersId }}</span>
-        <span>{{ item.usersName }}</span>
-        <span>{{ item.booksId }}</span>
-        <span>{{ item.booksName }}</span>
-        <span>{{ item.reservationDateTime }}</span>
-        <Button
-          class="checkoutBtn"
-          @click="
-            saveCheckout();
-            saveCheckoutNotif();
-          "
-        >
-          Reserve Now!
-        </Button>
-      </nuxt-link>
-    </div>
+  <div class="setup section">
+    <header class="level">
+      <h1 class="level-left title">Manage Users</h1>
+    </header>
+    <table class="table table is-bordered is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <th>id_user</th>
+          <th>name_user</th>
+          <th>id_book</th>
+          <th>name_book</th>
+          <th>reservation date</th>
+          <th>Accept</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in reservations" :key="index">
+          <td>{{ item.usersId }}</td>
+          <td>{{ item.usersName }}</td>
+          <td>{{ item.booksId }}</td>
+          <td>{{ item.booksName }}</td>
+          <td>{{ item.reservationDateTime }}</td>
+          <td
+            class="checkoutBtn"
+            @click="
+              saveCheckout();
+              saveCheckoutNotif();
+            "
+          >
+            Reserve Now!
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -55,7 +56,7 @@ export default {
 
   methods: {
     saveCheckout() {
-      this.axios
+      this.$axios
         .post('http://localhost:8080/saveCheckouts', {
           booksId: this.$route.params.book,
           usersId: this.currentUserId,
@@ -86,7 +87,7 @@ export default {
 <style>
 .titleColumn {
   display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7)) 5% 5%;
+  grid-template-columns: repeat(7, calc(90% / 7));
   justify-items: center;
   align-items: center;
   margin: 5px 0;
@@ -94,7 +95,7 @@ export default {
 }
 .usersContainer {
   display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7)) 5% 5%;
+  grid-template-columns: repeat(7, calc(90% / 7));
   justify-items: center;
   align-items: center;
   margin: 5px 0;
