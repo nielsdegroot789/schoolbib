@@ -193,8 +193,14 @@ class UserController
         $db = new DB();
         $db->saveProfileData($id,$firstName,$lastName,$email);
         return $response;
-
-        
+    }
+    public function getAllUsers(Request $request, Response $response, array $args) {
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->getAllUsers();
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 

@@ -293,4 +293,16 @@ class DB extends \SQLite3
 
         return $res;
     }
+
+    public function getAllUsers() {
+        $sql = 'select id,surname,lastname,age,email from users';
+        $data = $this->query($sql);
+
+        $res = array();
+
+        while($row = $data->fetchArray(SQLITE3_ASSOC)) {
+            array_push($res, $row);
+        }
+        return $res;
+    }
 }

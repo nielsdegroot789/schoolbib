@@ -94,8 +94,7 @@ $app->get('/getReservation',\skoolBiep\Controller\UserController::class . ':getR
 
 $app->get('/getCheckout',\skoolBiep\Controller\UserController::class . ':getCheckout');
 
-//boetes innen 
-//boeken aan de kant houden
+$app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
  
 // $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
 //     $this->get('db');

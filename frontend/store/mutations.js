@@ -49,4 +49,7 @@ export default {
   handleProfileData(state, payload) {
     state.profilePageData = payload;
   },
+  setAllUsers(state, payload) {
+    state.getUsers = payload;
+  },
 };

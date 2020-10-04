@@ -60,4 +60,9 @@ export default {
       .get('http://localhost:8080/getProfilePageData', {})
       .then((response) => commit('handleProfileData', response));
   },
+  getAllUsers({ commit }) {
+    axios
+      .get('http://localhost:8080/getAllUsers')
+      .then((response) => commit('setAllUsers', response.data));
+  },
 };

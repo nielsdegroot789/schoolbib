@@ -10,6 +10,5 @@ export default {
   components: {
     profileInformation,
   },
-  middleware: ['auth'],
 };
 </script>

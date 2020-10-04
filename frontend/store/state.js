@@ -11,4 +11,5 @@ export default {
   limit: 20,
   reservation: [],
   profilePageData: {},
+  getUsers: {},
 };
