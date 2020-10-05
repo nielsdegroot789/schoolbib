@@ -342,11 +342,13 @@ class DB extends \SQLite3
         $res = $sql->execute();
         $result = array();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
-            array_push($result, $row);
+            array_push($id, $row);
         }
-        if(!$row) {
+
+        if(!$id) {
             echo 'Something went wrong';
         } else {
             $token = md5(uniqid(rand(), true));}
           //  $sql = $this->prepare(insert into tokens (users_id, ) )
     }
+}
