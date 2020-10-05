@@ -74,8 +74,10 @@ class UserController
     {
         try{
             $data = json_decode(file_get_contents("php://input"), true);
-            $address = $data['address'];
-            $body = $this->container->get('twig')->render('twig.twig', ['token' => 'testToken']);
+            $db = $this->container->get('db');
+            $address = $_GET['address'];
+            $token = $db->checkAdress($address);
+            $body = $this->container->get('twig')->render('twig.twig', ['token' => $token]);
             $subject = "Password reset";
             $this->container->get('mailer')->sendMail($address, $body, $subject);
             return $response;

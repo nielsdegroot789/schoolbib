@@ -320,7 +320,6 @@ class DB extends \SQLite3
         $sql->bindValue(':id',$id);
 
         $res = $sql->execute();
-
         return $res;
     }
 
@@ -335,4 +334,19 @@ class DB extends \SQLite3
         }
         return $res;
     }
-}
+
+    public function checkAdress($email) {
+        $sql = $this->prepare('select id from users where email = :email');
+        $sql->bindValue(':email', $email);
+
+        $res = $sql->execute();
+        $result = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($result, $row);
+        }
+        if(!$row) {
+            echo 'Something went wrong';
+        } else {
+            $token = md5(uniqid(rand(), true));}
+          //  $sql = $this->prepare(insert into tokens (users_id, ) )
+    }
