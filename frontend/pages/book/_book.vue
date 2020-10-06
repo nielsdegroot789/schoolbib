@@ -81,7 +81,7 @@
         </button>
       </div>
       <div class="section box stockInfo">
-        <!-- currently in stock -->
+        {{ inStock }}
         <h3 class="title">Interested in reading?</h3>
         <p v-if="inStock === 0">
           There are currently no books available. Feel free to contact an
@@ -133,10 +133,12 @@ export default {
     },
   },
   mounted() {
-    this.bookId = this.$route.params.books;
+    this.booksId = this.$route.params.books;
   },
   created() {
-    // todo send axios call to get amount of books available
+    this.$axios.get('http://localhost:8080/inStock').then((response) => {
+      this.inStock = response.data;
+    });
   },
 
   methods: {
@@ -160,7 +162,9 @@ export default {
           reservationDateTime: this.timestamp,
           accepted: 0,
         })
-        .then(function (response) {});
+        .then(function (response) {
+          // this.saveCheckoutNotif();
+        });
     },
 
     saveCheckoutNotif() {

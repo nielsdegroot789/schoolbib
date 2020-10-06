@@ -93,13 +93,15 @@ $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . '
 
 $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
 
-$app->get('/getCheckout', \skoolBiep\Controller\UserController::class . ':getCheckout');
+$app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
+
+$app->get('/inStock', \skoolBiep\Controller\bookController::class . ':inStock');
 
 //boetes innen
 //boeken aan de kant houden
 $app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':saveReservationsUser');
 
-$app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
+$app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
 
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 

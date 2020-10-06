@@ -82,7 +82,7 @@ class BookController
         $response->getBody()->write($data);
         return $response;
     }
-
+   
     public function setUserName($user)
     {
         $this->username = $user;

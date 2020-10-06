@@ -29,8 +29,32 @@
               saveCheckoutNotif();
             "
           >
-            Reserve Now!
+            Accept!
           </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Checkouts</h2>
+    <table class="table table is-bordered is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <th>usersId</th>
+          <th>nName</th>
+          <th>book</th>
+          <th>checkoutDateTime</th>
+          <th>reservation date</th>
+          <th>fine</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in checkouts" :key="index">
+          <td>{{ item.usersName }}</td>
+          <td>{{ item.usersName }}</td>
+          <td>{{ item.checkoutDateTime }}</td>
+          <td>{{ item.fine }}</td>
+          <td>{{ item.paidDate }}</td>
+          <td class="checkoutBtn">Accept!</td>
         </tr>
       </tbody>
     </table>
@@ -53,6 +77,9 @@ export default {
       .then((response) => {
         this.reservations = response.data;
       });
+    this.$axios.get('http://localhost:8080/getCheckouts').then((response) => {
+      this.checkouts = response.data;
+    });
   },
 
   methods: {
@@ -66,15 +93,18 @@ export default {
         today.getDate();
       this.checkoutDateTime = date.toString();
       this.maxAllowedDate = (date + 14).toString();
-
       this.$axios
         .post('http://localhost:8080/saveCheckouts', {
           booksId: this.booksId,
           usersId: this.usersId,
           checkoutDateTime: this.checkoutDateTime,
           maxAllowedDate: this.maxAllowedDate,
+          fine: 0,
+          isPaid: 0,
         })
-        .then(function (response) {});
+        .then(function (response) {
+          // saveCheckoutNotif();
+        });
     },
 
     saveCheckoutNotif() {
@@ -82,27 +112,6 @@ export default {
         type: 'success',
         message: 'Form saved',
       });
-    },
-    getToday() {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      this.checkoutDateTime = date.toString();
-    },
-    getCheckoutDate() {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate() +
-        14;
-      this.checkoutDateTime = date.toString();
     },
   },
 };
