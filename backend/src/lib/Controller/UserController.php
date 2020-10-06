@@ -223,7 +223,14 @@ class UserController
        // $token = $contents['token']
         $db = new DB(); 
         $data = $db->checkToken($token);
-        
+
+    }
+    public function updatePassword(Request $request, Response $response, array $args) {
+        $this->response = $response;
+        $contents = json_decode(file_get_contents('php://input'), true);
+        $newPassword = $contents['password'];
+        $db = new DB();
+        $db->updatePassword($newPassword);
     }
 }
 

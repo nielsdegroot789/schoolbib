@@ -22,14 +22,25 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
+  data() {
+    return {
+      password: '',
+    };
+  },
   created() {
     const token = this.$route.query.token;
-    this.$store.dispatch('checkToken', token);
+    axios
+      .post('http://localhost:8080/checkToken', token)
+      .then((response) => console.log(response));
   },
+
   methods: {
-    resetPassword(password) {
-      this.$store.dispatch('resetPassword');
+    resetPassword() {
+      axios
+        .post('http://localhost:8080/updatePassword', this.password)
+        .then((response) => console.log(response));
     },
   },
 };

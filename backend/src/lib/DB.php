@@ -384,5 +384,8 @@ class DB extends \SQLite3
             return 'token is expired or invalid';
         }
    }
+   public function updatePassword($password) {
+       $sql = $this->prepare('Update ')
+   }
    
 }
