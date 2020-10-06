@@ -12,4 +12,5 @@ export default {
   reservation: [],
   profilePageData: {},
   getUsers: {},
+  resetTokenValid: {},
 };

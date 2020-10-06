@@ -216,5 +216,14 @@ class UserController
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
     }
+
+    public function checkToken(Request $request, Response $response, array $args) {
+        $this->response = $response;
+        $contents = json_decode(file_get_contents('php://input'), true);
+       // $token = $contents['token']
+        $db = new DB(); 
+        $data = $db->checkToken($token);
+        
+    }
 }
 

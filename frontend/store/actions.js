@@ -65,4 +65,10 @@ export default {
       .get('http://localhost:8080/getAllUsers')
       .then((response) => commit('setAllUsers', response.data));
   },
+  checkToken({ commit }, token) {
+    console.log(token);
+    axios
+      .post('http://localhost:8080/checkToken', token)
+      .then((response) => commit('checkToken', response));
+  },
 };

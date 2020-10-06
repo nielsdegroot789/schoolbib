@@ -365,4 +365,24 @@ class DB extends \SQLite3
 
           return $token;
     }
+   public function checkToken($token) {
+        $sql = $this->prepare('select user_id,token,expireDate from tokens where token = :token');
+        $sql->bindValue(':token', $token);
+
+        $res = $sql->execute();
+        $userArray = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($userArray, $row);
+        }
+        if($userArray) {
+            $dateNow = new DateTime();
+            $expireDate = new DateTime($userArray[2]['expireDate']);
+            if($dateNow > $expireDate) {
+                return 'Token Accepted';
+            }
+        } else {
+            return 'token is expired or invalid';
+        }
+   }
+   
 }

@@ -52,4 +52,7 @@ export default {
   setAllUsers(state, payload) {
     state.getUsers = payload;
   },
+  checkToken(state, payload) {
+    state.resetTokenValid = payload;
+  },
 };

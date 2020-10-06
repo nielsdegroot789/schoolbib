@@ -23,9 +23,13 @@
 
 <script>
 export default {
+  created() {
+    const token = this.$route.query.token;
+    this.$store.dispatch('checkToken', token);
+  },
   methods: {
-    sendPassword() {
-      console.log('ba');
+    resetPassword(password) {
+      this.$store.dispatch('resetPassword');
     },
   },
 };
