@@ -94,7 +94,13 @@
           There are currently <b> {{ inStock }} </b> available.
         </p>
         <!-- todo change this to only show when logged in otherwise go to login -->
-        <button class="button is-large" @click="submitReserveData">
+        <button
+          class="button is-large"
+          @click="
+            submitReserveData();
+            saveCheckoutNotif();
+          "
+        >
           Reserve now!
         </button>
       </div>
@@ -130,12 +136,23 @@ export default {
     this.bookId = this.$route.params.books;
   },
   created() {
-    setInterval(this.getNow, 1000);
     // todo send axios call to get amount of books available
   },
 
   methods: {
     submitReserveData() {
+      const today = new Date();
+      const date =
+        today.getFullYear() +
+        '-' +
+        (today.getMonth() + 1) +
+        '-' +
+        today.getDate();
+      const time =
+        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+      const dateTime = date + ' ' + time;
+      this.timestamp = dateTime.toString();
+
       this.$axios
         .post('http://localhost:8080/saveReservationsUser', {
           booksId: this.$route.params.book,
@@ -143,12 +160,10 @@ export default {
           reservationDateTime: this.timestamp,
           accepted: 0,
         })
-        .then(function (response) {
-          this.popUpMessage();
-        });
+        .then(function (response) {});
     },
 
-    popUpMessage() {
+    saveCheckoutNotif() {
       this.$store.dispatch('addNotification', {
         type: 'success',
         message: 'Form saved',

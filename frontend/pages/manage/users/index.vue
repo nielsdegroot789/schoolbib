@@ -3,6 +3,7 @@
     <header class="level">
       <h1 class="level-left title">Manage Users</h1>
     </header>
+    <h2>Reservations</h2>
     <table class="table table is-bordered is-hoverable is-fullwidth">
       <thead>
         <tr>
@@ -41,6 +42,7 @@ export default {
   data() {
     return {
       reservations: '',
+      checkouts: '',
     };
   },
   computed: {},
@@ -51,19 +53,30 @@ export default {
       .then((response) => {
         this.reservations = response.data;
       });
-    setInterval(this.getToday, 10000);
   },
 
   methods: {
     saveCheckout() {
+      const today = new Date();
+      const date =
+        today.getFullYear() +
+        '-' +
+        (today.getMonth() + 1) +
+        '-' +
+        today.getDate();
+      this.checkoutDateTime = date.toString();
+      this.maxAllowedDate = (date + 14).toString();
+
       this.$axios
         .post('http://localhost:8080/saveCheckouts', {
-          booksId: this.$route.params.book,
-          usersId: this.currentUserId,
-          checkoutDateTime: this.timestamp,
+          booksId: this.booksId,
+          usersId: this.usersId,
+          checkoutDateTime: this.checkoutDateTime,
+          maxAllowedDate: this.maxAllowedDate,
         })
         .then(function (response) {});
     },
+
     saveCheckoutNotif() {
       this.$store.dispatch('addNotification', {
         type: 'success',
@@ -78,7 +91,18 @@ export default {
         (today.getMonth() + 1) +
         '-' +
         today.getDate();
-      this.timestamp = date.toString();
+      this.checkoutDateTime = date.toString();
+    },
+    getCheckoutDate() {
+      const today = new Date();
+      const date =
+        today.getFullYear() +
+        '-' +
+        (today.getMonth() + 1) +
+        '-' +
+        today.getDate() +
+        14;
+      this.checkoutDateTime = date.toString();
     },
   },
 };

@@ -253,7 +253,7 @@ class DB extends \SQLite3
         left join users on users.id = reservations.usersId
 		left join books on books.id = reservations.booksId
 		left join bookMeta on bookMeta.id = books.bookMetaId		
-        GROUP by reservations.id ORDER by reservations.reservationDateTime DESC";
+        GROUP by reservations.id ORDER by reservations.reservationDateTime ASC";
 
         $sql .= " limit '$limitNumber'";
         $sql .= " offset '$offsetNumber' * '$limitNumber'";
@@ -283,6 +283,8 @@ class DB extends \SQLite3
         $status = $sql->execute();
 
         return $status;
+
+        
     }
 
     public function getCheckout()
