@@ -304,12 +304,12 @@ class DB extends \SQLite3
 
     public function getCheckouts($limitNumber, $offsetNumber)
     {
-        $sql = "SELECT usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate users.surname as usersName, bookMeta.title as booksName
+        $sql = "SELECT usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName
         FROM checkouts 
         left join users on users.id = checkouts.usersId
 		left join books on books.id = checkouts.booksId
-		left join bookMeta on bookMeta.id = books.bookMetaId		
-        GROUP by checkouts.id ORDER by checkouts.checkoutDateTime DESC";
+		left join bookMeta on bookMeta.id = books.bookMetaId	
+		ORDER by checkouts.checkoutDateTime DESC";
 
         $sql .= " limit '$limitNumber'";
         $sql .= " offset '$offsetNumber' * '$limitNumber'";

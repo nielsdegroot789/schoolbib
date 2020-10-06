@@ -81,7 +81,6 @@
         </button>
       </div>
       <div class="section box stockInfo">
-        {{ inStock }}
         <h3 class="title">Interested in reading?</h3>
         <p v-if="inStock === 0">
           There are currently no books available. Feel free to contact an

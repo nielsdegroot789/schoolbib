@@ -49,11 +49,12 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in checkouts" :key="index">
+          <td>{{ item.id }}</td>
           <td>{{ item.usersName }}</td>
-          <td>{{ item.usersName }}</td>
+          <td>{{ item.booksName }}</td>
           <td>{{ item.checkoutDateTime }}</td>
+          <td>{{ item.isPaid }}</td>
           <td>{{ item.fine }}</td>
-          <td>{{ item.paidDate }}</td>
           <td class="checkoutBtn">Accept!</td>
         </tr>
       </tbody>
