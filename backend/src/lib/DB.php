@@ -2,6 +2,9 @@
 
 namespace skoolBiep;
 
+use DateInterval;
+use DateTime;
+
 class DB extends \SQLite3
 {
     protected $client;
@@ -340,15 +343,26 @@ class DB extends \SQLite3
         $sql->bindValue(':email', $email);
 
         $res = $sql->execute();
-        $result = array();
+        $idArray = array();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
-            array_push($id, $row);
+            array_push($idArray, $row);
         }
 
-        if(!$id) {
-            echo 'Something went wrong';
+        if(!$idArray) {
+            return 'Something went wrong';
         } else {
+            $id = $idArray['0']['id'];
+            $now = new DateTime();
+            $now->add(new DateInterval("PT1H") );
+            $expireDate = $now->date;
             $token = md5(uniqid(rand(), true));}
-          //  $sql = $this->prepare(insert into tokens (users_id, ) )
+
+          $sql = $this->prepare("insert into tokens (users_id, expireDate, token) values(:id, :expireDate, :token)");
+          $sql->bindValue(':id', $id);
+          $sql->bindValue('expireDate', $expireDate);
+          $sql->bindValue('token', $token);
+          $sql->execute();
+
+          return $token;
     }
 }
