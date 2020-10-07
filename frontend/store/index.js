@@ -13,6 +13,7 @@ export const state = () => ({
   reservation: [],
   profilePageData: {},
   getUsers: {},
+  resetPasswordNotification: false,
 });
 
 export const actions = {
@@ -60,6 +61,7 @@ export const actions = {
       })
       .catch((error) => {
         context.commit('showLoginError');
+        context.commit('resetPasswordNotification');
         setTimeout(() => {
           context.commit('removeLoginError');
         }, 3000);
@@ -137,6 +139,9 @@ export const mutations = {
   },
   setAllUsers(state, payload) {
     state.getUsers = payload;
+  },
+  resetPasswordNotification(state) {
+    state.resetPasswordNotification = true;
   },
 };
 

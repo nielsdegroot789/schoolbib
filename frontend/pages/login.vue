@@ -6,10 +6,6 @@
           <div class="column is-6 is-offset-4">
             <h2 class="title has-text-centered">Welcome back!</h2>
 
-            <div v-if="showError" class="errorMessage">
-              Error: This combination is not found.
-            </div>
-
             <div class="field">
               <label class="label">Name</label>
               <div class="control">
@@ -36,6 +32,15 @@
               </button>
             </div>
             <div class="has-text-centered" style="margin-top: 20px">
+              <div v-if="showError" class="errorMessage">
+                Error: This combination is not found.
+              </div>
+              <div v-if="resetPasswordNotification">
+                <p>
+                  Forgot your password?
+                  <nuxt-link to="/resetPassword">Reset Password</nuxt-link>
+                </p>
+              </div>
               <p>
                 Don't have an account?
                 <nuxt-link to="/register">Register</nuxt-link>
@@ -72,6 +77,9 @@ export default {
   computed: {
     showError() {
       return this.$store.state.showLoginError;
+    },
+    resetPasswordNotification() {
+      return this.$store.state.resetPasswordNotification;
     },
   },
   methods: {
