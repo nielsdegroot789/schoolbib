@@ -1,4 +1,3 @@
-import axios from 'axios';
 export const state = () => ({
   bookMeta: [],
   books: [],
@@ -18,28 +17,30 @@ export const state = () => ({
 
 export const actions = {
   getBookMeta(context) {
-    axios
+    this.$axios
       .get('http://localhost:8080/getBookMeta', {
         headers: { Authorization: `Bearer test` },
       })
       .then((response) => context.commit('getBookMeta', response.data));
   },
   getBooks(context) {
-    axios
+    this.$axios
       .get('http://localhost:8080/getBooks')
       .then((response) => context.commit('getBooks', response.data));
   },
   getFrontPageNotification(context) {
-    axios
+    this.$axios
       .get('http://localhost:8080/getNotification')
       .then((response) =>
         context.commit('getFrontPageNotification', response.data),
       );
   },
   saveBook(context, payload) {
-    axios.post('http://localhost:8080/saveBook', payload).catch((error) => {
-      console.log(error);
-    });
+    this.$axios
+      .post('http://localhost:8080/saveBook', payload)
+      .catch((error) => {
+        console.log(error);
+      });
   },
   addNotification({ commit }, message) {
     commit('addNotification', message);
@@ -50,7 +51,7 @@ export const actions = {
   },
 
   login(context, payload) {
-    axios
+    this.$axios
       .post('http://localhost:8080/login', payload)
       .then((response) => {
         localStorage.setItem('JWT', response.data);
@@ -68,18 +69,18 @@ export const actions = {
       });
   },
   getReservation(context) {
-    axios
+    this.$axios
       .get('http://localhost:8080/getReservation')
       .then((response) => context.commit('getReservation', response.data));
   },
   getProfilePageData({ commit }, data) {
     console.log(data);
-    axios
+    this.$axios
       .get('http://localhost:8080/getProfilePageData', {})
       .then((response) => commit('handleProfileData', response));
   },
   getAllUsers({ commit }) {
-    axios
+    this.$axios
       .get('http://localhost:8080/getAllUsers')
       .then((response) => commit('setAllUsers', response.data));
   },

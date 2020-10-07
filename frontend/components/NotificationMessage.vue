@@ -27,7 +27,7 @@ export default {
   created() {
     this.timeOut = setTimeout(() => {
       this.$store.dispatch('deleteNotification', this.notification);
-    }, 3000);
+    }, 4000);
   },
   methods: {
     deleteNotification() {

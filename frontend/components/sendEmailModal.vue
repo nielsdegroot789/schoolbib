@@ -54,14 +54,18 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$store.dispatch('openEmailModal', this.formValues.email);
+      this.$store.dispatch('openEmailModal');
     },
     successCloseModal() {
       this.$store.dispatch('openEmailModal');
       this.$store.dispatch('addNotification', {
         type: 'success',
-        message: 'email has been successfully send.',
+        message: 'email has been successfully sen',
       });
+      this.$axios.post(
+        'http://localhost:8080/resetPassword',
+        this.formValues.email,
+      );
     },
   },
 };
