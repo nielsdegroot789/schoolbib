@@ -1,4 +1,5 @@
-export const state = {
+import axios from 'axios';
+export const state = () => ({
   bookMeta: [],
   books: [],
   users: [],
@@ -6,32 +7,38 @@ export const state = {
   frontPageNotification: {},
   show: true,
   notifications: [],
-  JWT: null,
+  JWT: {},
   showLoginError: false,
   limit: 20,
-  reservations: [],
+  reservation: [],
   profilePageData: {},
-};
+  getUsers: {},
+});
 
 export const actions = {
   getBookMeta(context) {
-    this.$axios
+    axios
       .get('http://localhost:8080/getBookMeta', {
         headers: { Authorization: `Bearer test` },
       })
       .then((response) => context.commit('getBookMeta', response.data));
   },
   getBooks(context) {
-    this.$axios
+    axios
       .get('http://localhost:8080/getBooks')
       .then((response) => context.commit('getBooks', response.data));
   },
+  getFrontPageNotification(context) {
+    axios
+      .get('http://localhost:8080/getNotification')
+      .then((response) =>
+        context.commit('getFrontPageNotification', response.data),
+      );
+  },
   saveBook(context, payload) {
-    this.$axios
-      .post('http://localhost:8080/saveBook', payload)
-      .catch((error) => {
-        console.log(error);
-      });
+    axios.post('http://localhost:8080/saveBook', payload).catch((error) => {
+      console.log(error);
+    });
   },
   addNotification({ commit }, message) {
     commit('addNotification', message);
@@ -42,7 +49,7 @@ export const actions = {
   },
 
   login(context, payload) {
-    this.$axios
+    axios
       .post('http://localhost:8080/login', payload)
       .then((response) => {
         localStorage.setItem('JWT', response.data);
@@ -57,11 +64,21 @@ export const actions = {
         console.log(error);
       });
   },
+  getReservation(context) {
+    axios
+      .get('http://localhost:8080/getReservation')
+      .then((response) => context.commit('getReservation', response.data));
+  },
   getProfilePageData({ commit }, data) {
     console.log(data);
-    this.$axios
+    axios
       .get('http://localhost:8080/getProfilePageData', {})
       .then((response) => commit('handleProfileData', response));
+  },
+  getAllUsers({ commit }) {
+    axios
+      .get('http://localhost:8080/getAllUsers')
+      .then((response) => commit('setAllUsers', response.data));
   },
 };
 
@@ -99,7 +116,7 @@ export const mutations = {
   },
   setLoginError(state) {
     state.showLoginError = true;
-    setTimeout(function () {
+    setTimeout(function (state) {
       state.showLoginError = false;
     }, 3000);
   },
@@ -110,8 +127,14 @@ export const mutations = {
   setTotalItems(state, payload) {
     state.setTotalItems = payload;
   },
+  getReservations(state, reservation) {
+    state.reservation = reservation;
+  },
   handleProfileData(state, payload) {
     state.profilePageData = payload;
+  },
+  setAllUsers(state, payload) {
+    state.getUsers = payload;
   },
 };
 
