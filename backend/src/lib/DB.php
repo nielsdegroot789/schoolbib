@@ -384,8 +384,13 @@ class DB extends \SQLite3
             return 'token is expired or invalid';
         }
    }
-   public function updatePassword($password) {
-       $sql = $this->prepare('Update ')
+   public function updatePassword($password,$id) {
+       
+       $sql = $this->prepare('Update users set password = :password where id = :id');
+       $sql->bindValue(':password', $password);
+       $sql->bindValue(':id',$id);
+       $sql->execute();
+       return 'password succesfully updated';
    }
    
 }
