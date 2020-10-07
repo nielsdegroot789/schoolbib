@@ -64,6 +64,7 @@
 }
 .reset:hover {
   color: #3273dc;
+  cursor: pointer;
 }
 .hide {
   display: none;

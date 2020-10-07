@@ -27,7 +27,10 @@
               </FormulateForm>
             </div>
             <br />
-            <button class="button is-dark is-fullwidth" @click="closeModal">
+            <button
+              class="button is-dark is-fullwidth"
+              @click="successCloseModal"
+            >
               Reset password
             </button>
           </div>
@@ -52,6 +55,13 @@ export default {
   methods: {
     closeModal() {
       this.$store.dispatch('openEmailModal', this.formValues.email);
+    },
+    successCloseModal() {
+      this.$store.dispatch('openEmailModal');
+      this.$store.dispatch('addNotification', {
+        type: 'success',
+        message: 'email has been successfully send.',
+      });
     },
   },
 };
