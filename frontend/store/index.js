@@ -13,7 +13,7 @@ export const state = () => ({
   reservation: [],
   profilePageData: {},
   getUsers: {},
-  resetPasswordNotification: false,
+  emailModal: false,
 });
 
 export const actions = {
@@ -61,7 +61,6 @@ export const actions = {
       })
       .catch((error) => {
         context.commit('showLoginError');
-        context.commit('resetPasswordNotification');
         setTimeout(() => {
           context.commit('removeLoginError');
         }, 3000);
@@ -83,6 +82,9 @@ export const actions = {
     axios
       .get('http://localhost:8080/getAllUsers')
       .then((response) => commit('setAllUsers', response.data));
+  },
+  openEmailModal({ commit }) {
+    commit('openEmailModal');
   },
 };
 
@@ -140,8 +142,12 @@ export const mutations = {
   setAllUsers(state, payload) {
     state.getUsers = payload;
   },
-  resetPasswordNotification(state) {
-    state.resetPasswordNotification = true;
+  openEmailModal(state) {
+    if (!state.emailModal) {
+      state.emailModal = true;
+    } else {
+      state.emailModal = false;
+    }
   },
 };
 

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <emailModal />
     <section class="section">
       <div class="container">
         <div class="columns">
@@ -35,10 +36,9 @@
               <div v-if="showError" class="errorMessage">
                 Error: This combination is not found.
               </div>
-              <div v-if="resetPasswordNotification">
-                <p>
+              <div>
+                <p class="reset" @click="openEmailModal">
                   Forgot your password?
-                  <nuxt-link to="/resetPassword">Reset Password</nuxt-link>
                 </p>
               </div>
               <p>
@@ -57,9 +57,21 @@
 .errorMessage {
   color: red;
 }
+.reset {
+  text-decoration: none;
+  color: #4a4a4a;
+  line-height: 2;
+}
+.reset:hover {
+  color: #3273dc;
+}
+.hide {
+  display: none;
+}
 </style>
 
 <script>
+import emailModal from '../components/sendEmailModal';
 export default {
   middleware({ store, redirect }) {
     // If the user is not authenticated
@@ -68,23 +80,28 @@ export default {
     }
   },
   // middleware: 'auth',
+  components: {
+    emailModal,
+  },
+
   data() {
     return {
       email: '',
       password: '',
+      setModal: false,
     };
   },
   computed: {
     showError() {
       return this.$store.state.showLoginError;
     },
-    resetPasswordNotification() {
-      return this.$store.state.resetPasswordNotification;
-    },
   },
   methods: {
     login(data) {
       this.$store.dispatch('login', data);
+    },
+    openEmailModal() {
+      this.$store.dispatch('openEmailModal');
     },
   },
 };
