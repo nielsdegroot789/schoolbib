@@ -59,8 +59,10 @@ export const actions = {
         this.$router.push('/');
       })
       .catch((error) => {
-        // todo Show error messages
-        context.commit('setLoginError');
+        context.commit('showLoginError');
+        setTimeout(() => {
+          context.commit('removeLoginError');
+        }, 3000);
         console.log(error);
       });
   },
@@ -114,11 +116,11 @@ export const mutations = {
     state.currentUser.role = JSON.parse(atob(array[1])).role;
     state.currentUser.signature = array[2];
   },
-  setLoginError(state) {
+  showLoginError(state) {
     state.showLoginError = true;
-    setTimeout(function (state) {
-      state.showLoginError = false;
-    }, 3000);
+  },
+  removeLoginError(state) {
+    state.showLoginError = false;
   },
   logout(state) {
     state.JWT = null;
