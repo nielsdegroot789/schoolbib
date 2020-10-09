@@ -22,15 +22,7 @@
           <td>{{ item.booksId }}</td>
           <td>{{ item.booksName }}</td>
           <td>{{ item.reservationDateTime }}</td>
-          <td
-            class="checkoutBtn"
-            @click="
-              saveCheckout();
-              saveCheckoutNotif();
-            "
-          >
-            Accept!
-          </td>
+          <td class="checkoutBtn" @click="saveCheckout(item)">Accept!</td>
         </tr>
       </tbody>
     </table>
@@ -39,23 +31,26 @@
     <table class="table table is-bordered is-hoverable is-fullwidth">
       <thead>
         <tr>
-          <th>usersId</th>
-          <th>nName</th>
+          <th>userName</th>
           <th>book</th>
           <th>checkoutDateTime</th>
-          <th>reservation date</th>
+          <th>maxAllowedDate</th>
           <th>fine</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in checkouts" :key="index">
-          <td>{{ item.id }}</td>
           <td>{{ item.usersName }}</td>
           <td>{{ item.booksName }}</td>
           <td>{{ item.checkoutDateTime }}</td>
-          <td>{{ item.isPaid }}</td>
+          <td>{{ item.maxAllowedDate }}</td>
           <td>{{ item.fine }}</td>
-          <td class="checkoutBtn">Accept!</td>
+          <td
+            class="checkoutBtn"
+            @click="returneCheckouts(item, index) in checkouts"
+          >
+            Delete!
+          </td>
         </tr>
       </tbody>
     </table>
@@ -84,7 +79,7 @@ export default {
   },
 
   methods: {
-    saveCheckout() {
+    saveCheckout(object) {
       const today = new Date();
       const date =
         today.getFullYear() +
@@ -93,26 +88,55 @@ export default {
         '-' +
         today.getDate();
       this.checkoutDateTime = date.toString();
-      this.maxAllowedDate = (date + 14).toString();
+
+      const inTwoWeeks = new Date();
+      const dateInTwoWeeks =
+        inTwoWeeks.getFullYear() +
+        '-' +
+        (inTwoWeeks.getMonth() + 1) +
+        '-' +
+        (inTwoWeeks.getDate() + 14);
+      this.maxAllowedDate = dateInTwoWeeks.toString();
+
+      this.$axios.update('http://localhost:8080/saveReservations', {
+        accepted: '1',
+      });
       this.$axios
         .post('http://localhost:8080/saveCheckouts', {
-          booksId: this.booksId,
-          usersId: this.usersId,
+          usersId: object.usersId,
+          booksId: object.booksId,
           checkoutDateTime: this.checkoutDateTime,
+          returnDateTime: '',
           maxAllowedDate: this.maxAllowedDate,
           fine: 0,
-          isPaid: 0,
+          isPaid: '',
         })
         .then(function (response) {
-          // saveCheckoutNotif();
+          // this.$store.dispatch('addNotification', {
+          //   type: 'success',
+          //   message: 'Form saved',
+          // });
         });
     },
-
-    saveCheckoutNotif() {
-      this.$store.dispatch('addNotification', {
-        type: 'success',
-        message: 'Form saved',
-      });
+    returnCheckouts(object) {
+      const today = new Date();
+      const date =
+        today.getFullYear() +
+        '-' +
+        (today.getMonth() + 1) +
+        '-' +
+        today.getDate();
+      this.returnDateTime = date.toString();
+      this.$axios
+        .update('http://localhost:8080/returnCheckouts', {
+          returnDateTime: object.returnDateTime,
+        })
+        .then(function (response) {
+          // this.$store.dispatch('addNotification', {
+          //   type: 'success',
+          //   message: 'Form saved',
+          // });
+        });
     },
   },
 };

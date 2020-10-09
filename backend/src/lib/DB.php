@@ -272,7 +272,7 @@ class DB extends \SQLite3
     {
 
         $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate, fine, isPaid)
-        Select (:usersId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate, :fine, :isPaid ) from reservations where reservations.booksId = checkouts.booksId");
+        values (:usersId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate, :fine, :isPaid )");
 
         $sql->bindValue(':usersId', $usersId, );
         $sql->bindValue(':booksId', $booksId, );
@@ -287,6 +287,19 @@ class DB extends \SQLite3
         return $status;
 
         
+    }
+    public function returnCheckouts()
+    {
+        $sql = "UPDATE  from books
+        group by bookMetaId";
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
     }
     public function inStock($inStock)
     {
