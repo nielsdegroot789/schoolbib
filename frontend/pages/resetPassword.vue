@@ -1,5 +1,5 @@
 <template>
-  <div reset-password-container>
+  <div v-if="tokenValid" reset-password-container>
     <FormulateForm v-model="password" @submit="sendPassword">
       <FormulateInput
         label="new password"
@@ -27,6 +27,7 @@ export default {
   data() {
     return {
       password: '',
+      tokenValid: false,
     };
   },
   created() {
@@ -34,7 +35,7 @@ export default {
     console.log(token);
     axios
       .get('http://localhost:8080/checkToken', { params: token })
-      .then((response) => console.log(response));
+      .then((response) => console.log(response.data));
   },
 
   methods: {
