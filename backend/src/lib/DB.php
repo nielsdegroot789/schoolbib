@@ -354,7 +354,7 @@ class DB extends \SQLite3
             $id = $idArray['0']['id'];
             $now = new DateTime();
             $now->add(new DateInterval("PT1H") );
-            $expireDate = $now->date;
+            $expireDate = $now->format('Y-m-d H:i:s');
             $token = md5(uniqid(rand(), true));}
 
           $sql = $this->prepare("insert into tokens (users_id, expireDate, token) values(:id, :expireDate, :token)");
@@ -366,7 +366,7 @@ class DB extends \SQLite3
           return $token;
     }
    public function checkToken($token) {
-        $sql = $this->prepare('select user_id,token,expireDate from tokens where token = :token');
+        $sql = $this->prepare('select users_id,token,expireDate from tokens where token = :token');
         $sql->bindValue(':token', $token);
 
         $res = $sql->execute();
@@ -376,12 +376,12 @@ class DB extends \SQLite3
         }
         if($userArray) {
             $dateNow = new DateTime();
-            $expireDate = new DateTime($userArray[2]['expireDate']);
+            $expireDate = new DateTime($userArray[0]['expireDate']);
             if($dateNow > $expireDate) {
-                return 'Token Accepted';
+                return $answer = 'Invalid token';
             }
         } else {
-            return 'token is expired or invalid';
+            return $answer = 'Valid token';
         }
    }
    public function updatePassword($password,$id) {

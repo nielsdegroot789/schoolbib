@@ -60,12 +60,9 @@ export default {
       this.$store.dispatch('openEmailModal');
       this.$store.dispatch('addNotification', {
         type: 'success',
-        message: 'email has been successfully sen',
+        message: 'email has been successfully send',
       });
-      this.$axios.post(
-        'http://localhost:8080/resetPassword',
-        this.formValues.email,
-      );
+      this.$axios.post('http://localhost:8080/resetPassword', this.formValues);
     },
   },
 };

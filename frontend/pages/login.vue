@@ -74,12 +74,13 @@
 <script>
 import emailModal from '../components/sendEmailModal';
 export default {
-  middleware({ store, redirect }) {
+  /* middleware({ store, redirect }) {
     // If the user is not authenticated
     if (store.state.JWT) {
       return redirect('/');
     }
   },
+  */
   // middleware: 'auth',
   components: {
     emailModal,

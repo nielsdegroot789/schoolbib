@@ -75,7 +75,7 @@ class UserController
         try{
             $data = json_decode(file_get_contents("php://input"), true);
             $db = $this->container->get('db');
-            $address = $_GET['address'];
+            $address = $data["email"];
             $token = $db->checkAdress($address);
             $body = $this->container->get('twig')->render('twig.twig', ['token' => $token]);
             $subject = "Password reset";
@@ -219,10 +219,11 @@ class UserController
 
     public function checkToken(Request $request, Response $response, array $args) {
         $this->response = $response;
-        $contents = json_decode(file_get_contents('php://input'), true);
-       // $token = $contents['token']
+        $token = $_REQUEST[0];
         $db = new DB(); 
-        $data = $db->checkToken($token);
+        $checkAnswer = $db->checkToken($token);
+        $response->getBody()->write($checkAnswer);
+        return $response;
 
     }
     public function updatePassword(Request $request, Response $response, array $args) {

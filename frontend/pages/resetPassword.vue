@@ -31,8 +31,9 @@ export default {
   },
   created() {
     const token = this.$route.query.token;
+    console.log(token);
     axios
-      .post('http://localhost:8080/checkToken', token)
+      .get('http://localhost:8080/checkToken', { params: token })
       .then((response) => console.log(response));
   },
 
