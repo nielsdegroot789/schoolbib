@@ -378,11 +378,15 @@ class DB extends \SQLite3
             $dateNow = new DateTime();
             $expireDate = new DateTime($userArray[0]['expireDate']);
             if($dateNow > $expireDate) {
-                return $answer = 'Invalid token';
+                $answer['message'] = 'Invalid token';
+            } else {
+                $answer['message'] = 'Valid token';
+                $answer['userId'] = $userArray[0]['users_id'];
             }
         } else {
-            return $answer = 'Valid token';
+            $answer['message'] = 'Invalid token';
         }
+        return $answer;
    }
    public function updatePassword($password,$id) {
        

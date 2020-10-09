@@ -222,19 +222,22 @@ class UserController
         $token = $_REQUEST[0];
         $db = new DB(); 
         $checkAnswer = $db->checkToken($token);
-        $response->getBody()->write($checkAnswer);
-        return $response;
+        $payload = json_encode($checkAnswer);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
 
     }
     public function updatePassword(Request $request, Response $response, array $args) {
         $this->response = $response;
         $contents = json_decode(file_get_contents('php://input'), true);
         // id van hieruit meelrijen
-        $token = $contents['token'];
-        $newPassword = $contents['password'];
+        $id = $contents['id'];
+        $newPassword = $contents['password']['password'];
+        $ba ="4";
         $hashed_pass = password_hash($newPassword, CRYPT_SHA256);
         $db = new DB();
-        $db->updatePassword($hashed_pass, $token);
+        $db->updatePassword($hashed_pass, $id);
+        return $response;
     }
 }
 

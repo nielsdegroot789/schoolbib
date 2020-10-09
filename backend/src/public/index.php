@@ -100,6 +100,8 @@ $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAll
 $app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
 
 
+
+
  
 // $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
 //     $this->get('db');
@@ -118,7 +120,7 @@ $app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkTo
 //     }
 //     return $response;
 // });
-$app->post('/updatePassword', \skoolBiep\Controller\UserController::class . 'updatePassword');
+$app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':updatePassword');
 
 $app->post('/saveReservationsUser',\skoolBiep\Controller\UserController::class . ':saveReservationsUser');
 
