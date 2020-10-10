@@ -53,10 +53,23 @@ export default {
 
   methods: {
     resetPassword() {
-      axios.post('http://localhost:8080/updatePassword', {
-        password: this.password,
-        id: this.userId,
-      });
+      axios
+        .post('http://localhost:8080/updatePassword', {
+          password: this.password,
+          id: this.userId,
+        })
+        .then((response) =>
+          this.$store.dispatch('addNotification', {
+            type: 'success',
+            message: 'Password has been successfully updated',
+          }),
+        )
+        .catch((error) =>
+          this.$store.dispatch('addNotification', {
+            type: 'fail',
+            message: error,
+          }),
+        );
     },
   },
 };

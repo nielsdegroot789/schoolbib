@@ -349,7 +349,7 @@ class DB extends \SQLite3
         }
 
         if(!$idArray) {
-            return 'Something went wrong';
+            return false;
         } else {
             $id = $idArray['0']['id'];
             $now = new DateTime();

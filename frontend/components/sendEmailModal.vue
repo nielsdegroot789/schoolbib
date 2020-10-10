@@ -58,11 +58,20 @@ export default {
     },
     successCloseModal() {
       this.$store.dispatch('openEmailModal');
-      this.$store.dispatch('addNotification', {
-        type: 'success',
-        message: 'email has been successfully send',
-      });
-      this.$axios.post('http://localhost:8080/resetPassword', this.formValues);
+      this.$axios
+        .post('http://localhost:8080/resetPassword', this.formValues)
+        .then((response) =>
+          this.$store.dispatch('addNotification', {
+            type: 'success',
+            message: 'email has been successfully send',
+          }),
+        )
+        .catch((error) =>
+          this.$store.dispatch('addNotification', {
+            type: 'fail',
+            message: error,
+          }),
+        );
     },
   },
 };

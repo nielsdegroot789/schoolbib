@@ -77,6 +77,10 @@ class UserController
             $db = $this->container->get('db');
             $address = $data["email"];
             $token = $db->checkAdress($address);
+            
+            if(!$token) {
+                throw new Exception('Email is not registered');
+            }
             $body = $this->container->get('twig')->render('twig.twig', ['token' => $token]);
             $subject = "Password reset";
             $this->container->get('mailer')->sendMail($address, $body, $subject);
@@ -230,10 +234,8 @@ class UserController
     public function updatePassword(Request $request, Response $response, array $args) {
         $this->response = $response;
         $contents = json_decode(file_get_contents('php://input'), true);
-        // id van hieruit meelrijen
         $id = $contents['id'];
         $newPassword = $contents['password']['password'];
-        $ba ="4";
         $hashed_pass = password_hash($newPassword, CRYPT_SHA256);
         $db = new DB();
         $db->updatePassword($hashed_pass, $id);
