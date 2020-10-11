@@ -99,11 +99,16 @@
         </button>
       </div>
     </div>
+    <adminEditBook v-if="currentRole == 2" />
   </div>
 </template>
 
 <script>
+import adminEditBook from '../../components/AdminEditBook';
 export default {
+  components: {
+    adminEditBook,
+  },
   data() {
     return {
       timestamp: '',
@@ -125,6 +130,9 @@ export default {
     currentUserId() {
       return this.$store.state.currentUser.id;
     },
+    currentRole() {
+      return this.$store.state.currentUser.role;
+    },
   },
   mounted() {
     this.bookId = this.$route.params.books;
@@ -133,7 +141,6 @@ export default {
     setInterval(this.getNow, 1000);
     // todo send axios call to get amount of books available
   },
-
   methods: {
     submitReserveData() {
       this.$axios

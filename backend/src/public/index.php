@@ -99,6 +99,10 @@ $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAll
 
 $app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
 
+$app->get('/getAdminSpecificBooks', \skoolBiep\Controller\UserController::class . ':getAdminSpecificBooks');
+
+$app->map(['POST','DELETE','PUT'], '/handleSpecificBook', \skoolBiep\Controller\UserController::class . ':handleSpecificBook');
+
 
 
 

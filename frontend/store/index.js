@@ -13,6 +13,7 @@ export const state = () => ({
   profilePageData: {},
   getUsers: {},
   emailModal: false,
+  adminSpecificBooks: {},
 });
 
 export const actions = {
@@ -87,6 +88,19 @@ export const actions = {
   openEmailModal({ commit }) {
     commit('openEmailModal');
   },
+  getAdminSpecificBooks({ commit }, bookId) {
+    this.$axios
+      .get('http://localhost:8080/getAdminSpecificBooks', {
+        params: { id: bookId },
+      })
+      .then((response) => commit('getAdminSpecificBooks', response.data));
+  },
+  deleteSpecificBook({ commit }, id) {
+    this.$axios.delete('http://localhost:8080/handleSpecificBook', {
+      data: { userId: id },
+    });
+    commit('deleteSpecificBook', id);
+  },
 };
 
 export const mutations = {
@@ -149,6 +163,14 @@ export const mutations = {
     } else {
       state.emailModal = false;
     }
+  },
+  getAdminSpecificBooks(state, payload) {
+    state.adminSpecificBooks = payload;
+  },
+  deleteSpecificBook(state, removeId) {
+    state.adminSpecificBooks = state.adminSpecificBooks.filter((item) => {
+      return item.id !== removeId;
+    });
   },
 };
 

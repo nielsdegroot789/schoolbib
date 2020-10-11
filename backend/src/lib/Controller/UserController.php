@@ -241,5 +241,30 @@ class UserController
         $db->updatePassword($hashed_pass, $id);
         return $response;
     }
+    public function getAdminSpecificBooks(Request $request, Response $response, array $args) {
+        $this->response = $response;
+        $id = $_GET['id'];
+
+        $db = new DB();
+        $data = $db->getAdminSpecificBooks($id);
+        $result = json_encode($data);
+        $response->getBody()->write($result);
+        return $response->withHeader('Content-Type', 'application/json');
+
+    }
+
+    public function handleSpecificBook(Request $request, Response $response, array $args) {
+        $this->response = $response;
+        $db =new DB();
+        if($request->getMethod() == 'DELETE') {
+            $contents = json_decode(file_get_contents('php://input'), true);
+            $id = $contents['userId'];
+            $db->deleteSpecificBook($id);
+        }
+        if($request->getMethod() == 'PUT') {
+         echo 'put';
+        }
+        return $response;
+    }
 }
 

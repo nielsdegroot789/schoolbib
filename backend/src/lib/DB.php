@@ -396,5 +396,22 @@ class DB extends \SQLite3
        $sql->execute();
        return 'password succesfully updated';
    }
+   public function getAdminSpecificBooks($id) {
+       $sql = $this->prepare('select * from books where bookMetaId = :id');
+       $sql->bindValue(':id', $id);
+       $data = $sql->execute();
+       
+       $res = array();
+       while($row = $data->fetchArray(SQLITE3_ASSOC)) {
+           array_push($res, $row);
+       }
+       return $res;
+   }
+
+   public function deleteSpecificBook($id) {
+       $sql = $this->prepare('delete from books where id = :id');
+       $sql->bindValue(':id', $id);
+       $sql->execute();
+   }
    
 }
