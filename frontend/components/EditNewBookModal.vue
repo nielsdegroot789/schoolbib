@@ -34,6 +34,7 @@ export default {
   },
   methods: {
     sendChanges() {
+      console.log(this.formValues);
       this.$axios.put(
         'http://localhost:8000/handleSpecificBook',
         this.formValues,

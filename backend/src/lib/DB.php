@@ -414,4 +414,21 @@ class DB extends \SQLite3
        $sql->execute();
    }
    
+   public function updateSpecificBook($id,$stock,$qrCode,$status) {
+       $sql = $this->prepare("Update books set stock = :stock, qrCode = :qrCode, status = :status where id = :id");
+       $sql->bindValue(':id', $id);
+       $sql->bindValue(':stock', $stock);
+       $sql->bindValue(':qrCode', $qrCode);
+       $sql->bindValue(':status', $status);
+       $sql->execute();
+   }
+
+   public function newBook($stock,$qrCode,$status,$bookMetaId) {
+       $sql = $this->prepare("insert into books (stock, qrCode, status, bookMetaId) values(:stock, :qrCode, :status, :bookMetaId)");
+       $sql->bindValue(':stock', $stock);
+       $sql->bindValue(':qrCode', $qrCode);
+       $sql->bindValue(':status', $status);
+       $sql->bindValue(':bookMetaId', $bookMetaId);
+       $sql->execute();
+   }
 }

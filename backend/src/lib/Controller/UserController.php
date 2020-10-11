@@ -261,8 +261,16 @@ class UserController
             $id = $contents['userId'];
             $db->deleteSpecificBook($id);
         }
-        if($request->getMethod() == 'PUT') {
-         echo 'put';
+        $contents = json_decode(file_get_contents('php://input'), true);
+         $id = $contents['userId'];
+         $stock = $contents['stock'];
+         $qrCode = $contents['qrCode'];
+         $status = $contents['status'];
+         if($request->getMethod() == 'POST') { 
+            $bookMetaId = $contents['bookMetaId'];
+            $db->newBook($stock, $qrCode, $status, $bookMetaId);
+         } else {
+         $db->updateSpecificBook($id,$stock,$qrCode,$status);
         }
         return $response;
     }
