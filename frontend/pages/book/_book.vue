@@ -161,9 +161,7 @@ export default {
           reservationDateTime: this.timestamp,
           accepted: 0,
         })
-        .then(function (response) {
-          // this.saveCheckoutNotif();
-        });
+        .then(function (response) {});
     },
 
     saveCheckoutNotif() {

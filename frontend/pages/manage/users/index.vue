@@ -49,7 +49,7 @@
             class="checkoutBtn"
             @click="returneCheckouts(item, index) in checkouts"
           >
-            Delete!
+            Returned!
           </td>
         </tr>
       </tbody>
@@ -97,26 +97,23 @@ export default {
         '-' +
         (inTwoWeeks.getDate() + 14);
       this.maxAllowedDate = dateInTwoWeeks.toString();
-
-      this.$axios.update('http://localhost:8080/saveReservations', {
-        accepted: '1',
-      });
       this.$axios
-        .post('http://localhost:8080/saveCheckouts', {
-          usersId: object.usersId,
-          booksId: object.booksId,
-          checkoutDateTime: this.checkoutDateTime,
-          returnDateTime: '',
-          maxAllowedDate: this.maxAllowedDate,
-          fine: 0,
-          isPaid: '',
-        })
-        .then(function (response) {
-          // this.$store.dispatch('addNotification', {
-          //   type: 'success',
-          //   message: 'Form saved',
-          // });
-        });
+        .post(
+          'http://localhost:8080/saveCheckouts',
+          'http://localhost:8080/saveReservationsUser',
+          {
+            usersId: object.usersId,
+            booksId: object.booksId,
+            checkoutDateTime: this.checkoutDateTime,
+            returnDateTime: '',
+            maxAllowedDate: this.maxAllowedDate,
+            fine: 0,
+            isPaid: '',
+
+            accepted: '1',
+          },
+        )
+        .then(function (response) {});
     },
     returnCheckouts(object) {
       const today = new Date();

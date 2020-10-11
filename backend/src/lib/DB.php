@@ -288,10 +288,11 @@ class DB extends \SQLite3
 
         
     }
-    public function returnCheckouts()
+
+    public function acceptReservation()
     {
-        $sql = "UPDATE  from books
-        group by bookMetaId";
+
+        $sql = "UPDATE reservations SET accepted = :accepted WHERE ";
         $res = $this->query($sql);
 
         $data = array();
