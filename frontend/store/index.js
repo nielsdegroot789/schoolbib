@@ -14,6 +14,7 @@ export const state = () => ({
   getUsers: {},
   emailModal: false,
   adminSpecificBooks: {},
+  specificBook: {},
 });
 
 export const actions = {
@@ -101,6 +102,10 @@ export const actions = {
     });
     commit('deleteSpecificBook', id);
   },
+  setSpecificBook({ commit }, values) {
+    console.log(values);
+    commit('setSpecificBook', values);
+  },
 };
 
 export const mutations = {
@@ -172,6 +177,9 @@ export const mutations = {
       return item.id !== removeId;
     });
   },
+  setSpecificBook(state, values) {
+    state.specificBook = values;
+  },
 };
 
 export const getters = {
@@ -192,5 +200,8 @@ export const getters = {
   },
   getReservation: (state) => {
     return state.reservations;
+  },
+  getSpecificBook: (state) => (id) => {
+    return state.adminSpecificBooks.find((book) => book.id === id);
   },
 };

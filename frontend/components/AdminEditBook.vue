@@ -1,28 +1,36 @@
 <template>
   <div>
-    <editBookModal />
+    <editBookModal
+      :class="{ 'is-active': editNewActive }"
+      :specificbook="specificBook"
+    />
     <div class="section box">
       <div>
         <div
           v-for="item in adminSpecificBooks"
           :key="item.id"
+          :specificBook="item"
           class="div level-box"
         >
           <h1>id : {{ item.id }}</h1>
           <h1>status: {{ item.status }}</h1>
-          <button>Edit</button>
-          <button @click="showModal">Delete</button>
+          <button @click="showEditNewModal(item.id)">Edit</button>
+          <button @click="showDeleteModal(item.id)">Delete</button>
         </div>
       </div>
       <button>New</button>
     </div>
 
-    <div :class="['modal', { 'is-active': active }]">
-      <div class="modal-background" @click="showModal"></div>
+    <div :class="['modal', { 'is-active': deleteActive }]">
+      <div class="modal-background" @click="showDeleteModal"></div>
       <div class="modal-card card-width">
         <header class="modal-card-head">
           <p class="modal-card-title">Do you want to delete this book?</p>
-          <button class="delete" aria-label="close" @click="showModal"></button>
+          <button
+            class="delete"
+            aria-label="close"
+            @click="showDeleteModal"
+          ></button>
         </header>
         <section class="modal-card-body card-body">
           <button
@@ -47,7 +55,9 @@ export default {
   },
   data() {
     return {
-      active: false,
+      deleteActive: false,
+      editNewActive: false,
+      specificBook: '',
     };
   },
   computed: {
@@ -61,10 +71,16 @@ export default {
   methods: {
     deleteSpecificBook(id) {
       this.$store.dispatch('deleteSpecificBook', id);
-      this.showModal();
+      this.showDeleteModal();
     },
-    showModal() {
-      this.active = !this.active;
+    showDeleteModal(id) {
+      this.deleteActive = !this.deleteActive;
+      this.$store.dispatch('clickedBookDetails');
+    },
+    showEditNewModal(id) {
+      console.log(id);
+      this.specificBook = this.$store.getters.getSpecificBook(id);
+      this.editNewActive = !this.editNewActive;
     },
   },
 };

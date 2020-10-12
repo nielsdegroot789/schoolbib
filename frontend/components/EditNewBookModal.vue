@@ -1,5 +1,5 @@
 <template>
-  <div class="modal is-active">
+  <div class="modal">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
@@ -7,12 +7,16 @@
         <button class="delete" aria-label="close"></button>
       </header>
       <section class="modal-card-body">
-        <FormulateForm v-model="formValues">
-          <FormulateInput type="text" name="id" label="id" />
-          <FormulateInput type="text" name="stock" label="Stock" />
-          <FormulateInput type="text" name="qr-code" label="qr-code" />
-          <FormulateInput type="text" name="status" label="status" />
-        </FormulateForm>
+        <div class="field">
+          <div class="control">
+            <FormulateForm v-model="formValues">
+              <FormulateInput type="text" name="id" label="id" />
+              <FormulateInput type="text" name="stock" label="Stock" />
+              <FormulateInput type="text" name="qrCode" label="qr-code" />
+              <FormulateInput type="text" name="status" label="status" />
+            </FormulateForm>
+          </div>
+        </div>
       </section>
       <footer class="modal-card-foot">
         <button class="button is-success" @click="sendChanges">
@@ -27,10 +31,21 @@
 <script>
 export default {
   name: 'EditNewBook',
+  props: {
+    specificbook: {
+      default: () => {},
+      type: Object,
+    },
+  },
   data() {
     return {
-      formValues: '',
+      formValues: this.specificbook,
     };
+  },
+  watch: {
+    specificbook() {
+      this.formValues = this.specificbook;
+    },
   },
   methods: {
     sendChanges() {
