@@ -104,7 +104,7 @@ class UserController
         $usersId = $data["usersId"];
         $booksId = $data["booksId"];
         $reservationDateTime = $data["reservationDateTime"];
-        $accepted = $data["accepted"];
+        $accepted = 1;
 
         if($data['id']){
             $id = $data['id'];

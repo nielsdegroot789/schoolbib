@@ -44,10 +44,16 @@
           <td>{{ item.booksName }}</td>
           <td>{{ item.checkoutDateTime }}</td>
           <td>{{ item.maxAllowedDate }}</td>
-          <td>{{ item.fine }}</td>
+          <td>
+            <p v-if="!isEditing">{{ item.fine }}</p>
+            <input v-else type="text" />
+            <button class="changeFine" @click="EditMsg(item, index)">
+              Change
+            </button>
+          </td>
           <td
             class="checkoutBtn"
-            @click="returneCheckouts(item, index) in checkouts"
+            @click="returnCheckouts(item, index) in checkouts"
           >
             Returned!
           </td>
@@ -63,6 +69,8 @@ export default {
     return {
       reservations: '',
       checkouts: '',
+      fine: '',
+      isEditing: false,
     };
   },
   computed: {},
@@ -79,6 +87,9 @@ export default {
   },
 
   methods: {
+    EditMsg(object) {
+      this.isEditing = true;
+    },
     saveCheckout(object) {
       const today = new Date();
       const date =
@@ -98,23 +109,18 @@ export default {
         (inTwoWeeks.getDate() + 14);
       this.maxAllowedDate = dateInTwoWeeks.toString();
       this.$axios
-        .post(
-          'http://localhost:8080/saveCheckouts',
-          'http://localhost:8080/saveReservationsUser',
-          {
-            usersId: object.usersId,
-            booksId: object.booksId,
-            checkoutDateTime: this.checkoutDateTime,
-            returnDateTime: '',
-            maxAllowedDate: this.maxAllowedDate,
-            fine: 0,
-            isPaid: '',
-
-            accepted: '1',
-          },
-        )
+        .post('http://localhost:8080/saveCheckouts', {
+          usersId: object.usersId,
+          booksId: object.booksId,
+          checkoutDateTime: this.checkoutDateTime,
+          returnDateTime: '',
+          maxAllowedDate: this.maxAllowedDate,
+          fine: 0,
+          isPaid: '',
+        })
         .then(function (response) {});
     },
+
     returnCheckouts(object) {
       const today = new Date();
       const date =

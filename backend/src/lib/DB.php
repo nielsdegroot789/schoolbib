@@ -252,7 +252,8 @@ class DB extends \SQLite3
         FROM reservations 
         left join users on users.id = reservations.usersId
 		left join books on books.id = reservations.booksId
-		left join bookMeta on bookMeta.id = books.bookMetaId		
+		left join bookMeta on bookMeta.id = books.bookMetaId	
+        WHERE accepted = 0	
         GROUP by reservations.id ORDER by reservations.reservationDateTime DESC";
 
         $sql .= " limit '$limitNumber'";
@@ -322,8 +323,9 @@ class DB extends \SQLite3
         FROM checkouts 
         left join users on users.id = checkouts.usersId
 		left join books on books.id = checkouts.booksId
-		left join bookMeta on bookMeta.id = books.bookMetaId	
-		ORDER by checkouts.checkoutDateTime DESC";
+		left join bookMeta on bookMeta.id = books.bookMetaId
+        WHERE returnDateTime IS NULL
+		ORDER by checkouts.maxAllowedDate DESC";
 
         $sql .= " limit '$limitNumber'";
         $sql .= " offset '$offsetNumber' * '$limitNumber'";
