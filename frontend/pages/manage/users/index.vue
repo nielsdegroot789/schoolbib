@@ -2,6 +2,8 @@
   <div class="setup section">
     <header class="level">
       <h1 class="level-left title">Manage Users</h1>
+      <button @click="checkNow">Check now Time k</button>
+      {{ this.DateNow }}
     </header>
     <h2>Reservations</h2>
     <table class="table table is-bordered is-hoverable is-fullwidth">
@@ -44,18 +46,12 @@
           <td>{{ item.booksName }}</td>
           <td>{{ item.checkoutDateTime }}</td>
           <td>{{ item.maxAllowedDate }}</td>
-          <td>
-            <p v-if="!isEditing">{{ item.fine }}</p>
-            <input v-else type="text" />
-            <button class="changeFine" @click="EditMsg(item, index)">
-              Change
-            </button>
-          </td>
+          <td>{{ item.fine }}</td>
           <td
             class="checkoutBtn"
             @click="returnCheckouts(item, index) in checkouts"
           >
-            Returned!
+            Paid - returned
           </td>
         </tr>
       </tbody>
@@ -71,6 +67,7 @@ export default {
       checkouts: '',
       fine: '',
       isEditing: false,
+      DateNow: '',
     };
   },
   computed: {},
@@ -87,6 +84,19 @@ export default {
   },
 
   methods: {
+    checkNow() {
+      const today = new Date();
+      const date =
+        today.getFullYear() +
+        '-' +
+        (today.getMonth() + 1) +
+        '-' +
+        today.getDate();
+      const time =
+        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+      const dateTime = date + ' ' + time;
+      this.DateNow = dateTime.toString();
+    },
     EditMsg(object) {
       this.isEditing = true;
     },
