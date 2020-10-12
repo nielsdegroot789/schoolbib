@@ -140,8 +140,9 @@ export default {
         '-' +
         today.getDate();
       this.returnDateTime = date.toString();
+      this.fine = 0;
       this.$axios
-        .update('http://localhost:8080/returnCheckouts', {
+        .post('http://localhost:8080/returnCheckouts', {
           returnDateTime: object.returnDateTime,
         })
         .then(function (response) {

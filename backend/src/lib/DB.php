@@ -268,7 +268,19 @@ class DB extends \SQLite3
 
         return $data;
     }
-    
+    public function acceptReservation($usersId, $booksId)
+    {
+
+        $sql = "UPDATE reservations  SET accepted = 1 FROM reservation LEFT JOIN BookMeta on booksId WHERE bookId = $booksId AND usersId = $usersId AND bookTitle = $";
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
     public function saveCheckouts($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate, $fine, $isPaid)
     {
 
@@ -285,24 +297,15 @@ class DB extends \SQLite3
 
         $status = $sql->execute();
 
+
+        $this->acceptReservation($usersId, $booksId);
+
         return $status;
 
         
     }
 
-    public function acceptReservation()
-    {
-
-        $sql = "UPDATE reservations SET accepted = :accepted WHERE ";
-        $res = $this->query($sql);
-
-        $data = array();
-        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
-            array_push($data, $row);
-        }
-
-        return $data;
-    }
+    
     public function inStock($inStock)
     {
 
