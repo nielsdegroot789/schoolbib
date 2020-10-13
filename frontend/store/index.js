@@ -15,6 +15,7 @@ export const state = () => ({
   emailModal: false,
   adminSpecificBooks: {},
   specificBook: {},
+  editModal: false,
 });
 
 export const actions = {
@@ -106,6 +107,9 @@ export const actions = {
     console.log(values);
     commit('setSpecificBook', values);
   },
+  toggleEditModal({ commit }) {
+    commit('toggleEditModal');
+  },
 };
 
 export const mutations = {
@@ -179,6 +183,9 @@ export const mutations = {
   },
   setSpecificBook(state, values) {
     state.specificBook = values;
+  },
+  toggleEditModal(state) {
+    this.state.editModal = !this.state.editModal;
   },
 };
 

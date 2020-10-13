@@ -262,7 +262,7 @@ class UserController
             $db->deleteSpecificBook($id);
         }
         $contents = json_decode(file_get_contents('php://input'), true);
-         $id = $contents['userId'];
+         $id = $contents['id'];
          $stock = $contents['stock'];
          $qrCode = $contents['qrCode'];
          $status = $contents['status'];

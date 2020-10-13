@@ -1,7 +1,7 @@
 <template>
   <div>
     <editBookModal
-      :class="{ 'is-active': editNewActive }"
+      :class="{ 'is-active': editModal }"
       :specificbook="specificBook"
     />
     <div class="section box">
@@ -14,11 +14,12 @@
         >
           <h1>id : {{ item.id }}</h1>
           <h1>status: {{ item.status }}</h1>
+          <h1>qr-code: {{ item.qrCode }}</h1>
           <button @click="showEditNewModal(item.id)">Edit</button>
           <button @click="showDeleteModal(item.id)">Delete</button>
         </div>
       </div>
-      <button>New</button>
+      <button @click="showEditNewModal">New</button>
     </div>
 
     <div :class="['modal', { 'is-active': deleteActive }]">
@@ -64,6 +65,9 @@ export default {
     adminSpecificBooks() {
       return this.$store.state.adminSpecificBooks;
     },
+    editModal() {
+      return this.$store.state.editModal;
+    },
   },
   created() {
     this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);
@@ -78,9 +82,8 @@ export default {
       this.$store.dispatch('clickedBookDetails');
     },
     showEditNewModal(id) {
-      console.log(id);
+      this.$store.dispatch('toggleEditModal');
       this.specificBook = this.$store.getters.getSpecificBook(id);
-      this.editNewActive = !this.editNewActive;
     },
   },
 };

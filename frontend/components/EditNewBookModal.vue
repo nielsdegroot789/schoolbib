@@ -1,10 +1,14 @@
 <template>
   <div class="modal">
-    <div class="modal-background"></div>
+    <div class="modal-background" @click="closeModal()"></div>
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">book</p>
-        <button class="delete" aria-label="close"></button>
+        <button
+          class="delete"
+          aria-label="close"
+          @click="closeModal()"
+        ></button>
       </header>
       <section class="modal-card-body">
         <div class="field">
@@ -14,15 +18,29 @@
               <FormulateInput type="text" name="stock" label="Stock" />
               <FormulateInput type="text" name="qrCode" label="qr-code" />
               <FormulateInput type="text" name="status" label="status" />
+              <FormulateInput
+                v-if="!specificbook"
+                type="text"
+                name="bookMetaId"
+                label="book meta id"
+              />
             </FormulateForm>
           </div>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-success" @click="sendChanges">
+        <button
+          :class="['button', 'is-success', { hidden: !specificbook }]"
+          @click="sendChanges"
+        >
           Save changes
         </button>
-        <button class="button">Cancel</button>
+        <button
+          :class="['button', 'is-success', { hidden: specificbook }]"
+          @click="newBook"
+        >
+          Add book
+        </button>
       </footer>
     </div>
   </div>
@@ -33,7 +51,9 @@ export default {
   name: 'EditNewBook',
   props: {
     specificbook: {
-      default: () => {},
+      default: () => {
+        '';
+      },
       type: Object,
     },
   },
@@ -49,14 +69,26 @@ export default {
   },
   methods: {
     sendChanges() {
-      console.log(this.formValues);
-      this.$axios.put(
-        'http://localhost:8000/handleSpecificBook',
+      this.$axios
+        .put('http://localhost:8080/handleSpecificBook', this.formValues)
+        .catch((err) => console.log(err));
+      this.closeModal();
+    },
+    newBook() {
+      this.$axios.post(
+        'http://localhost:8080/handleSpecificBook',
         this.formValues,
       );
+    },
+    closeModal() {
+      this.$store.dispatch('toggleEditModal');
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+.hidden {
+  display: none;
+}
+</style>
