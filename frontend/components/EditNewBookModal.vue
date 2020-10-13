@@ -18,12 +18,6 @@
               <FormulateInput type="text" name="stock" label="Stock" />
               <FormulateInput type="text" name="qrCode" label="qr-code" />
               <FormulateInput type="text" name="status" label="status" />
-              <FormulateInput
-                v-if="!specificbook"
-                type="text"
-                name="bookMetaId"
-                label="book meta id"
-              />
             </FormulateForm>
           </div>
         </div>
@@ -75,10 +69,12 @@ export default {
       this.closeModal();
     },
     newBook() {
+      this.formValues.bookMetaId = this.$store.state.adminSpecificBooks[0].bookMetaId;
       this.$axios.post(
         'http://localhost:8080/handleSpecificBook',
         this.formValues,
       );
+      this.closeModal();
     },
     closeModal() {
       this.$store.dispatch('toggleEditModal');
