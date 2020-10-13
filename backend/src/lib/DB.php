@@ -255,7 +255,8 @@ class DB extends \SQLite3
         FROM reservations 
         left join users on users.id = reservations.usersId
 		left join books on books.id = reservations.booksId
-		left join bookMeta on bookMeta.id = books.bookMetaId		
+		left join bookMeta on bookMeta.id = books.bookMetaId	
+        WHERE accepted = 0	
         GROUP by reservations.id ORDER by reservations.reservationDateTime DESC";
 
         $sql .= " limit '$limitNumber'";
@@ -270,27 +271,71 @@ class DB extends \SQLite3
 
         return $data;
     }
-    
-    public function saveCheckoutAdmin($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
+    public function acceptReservation($usersId, $booksId)
     {
 
-        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate)
-        Select (:usersId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate ) from reservations where reservations.booksId = checkouts.booksId");
+        $sql = "UPDATE reservations  SET accepted = 1 FROM reservation LEFT JOIN BookMeta on booksId WHERE bookId = $booksId AND usersId = $usersId AND bookTitle = $";
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
+    public function saveCheckouts($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate, $fine, $isPaid)
+    {
+
+        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate, fine, isPaid)
+        values (:usersId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate, :fine, :isPaid )");
 
         $sql->bindValue(':usersId', $usersId, );
         $sql->bindValue(':booksId', $booksId, );
         $sql->bindValue(':checkoutDateTime', $checkoutDateTime, );
         $sql->bindValue(':returnDateTime', $returnDateTime, );
         $sql->bindValue(':maxAllowedDate', $maxAllowedDate, );
+        $sql->bindValue(':fine', $fine, );
+        $sql->bindValue(':isPaid', $isPaid, );
+
+        $status = $sql->execute();
+
+
+        $this->acceptReservation($usersId, $booksId);
+
+        return $status;
+
+        
+    }
+
+    
+    public function inStock($inStock)
+    {
+
+        $sql = $this->prepare("select count booksId");
+
+        $sql->bindValue(':inStock', $inStock, );
 
         $status = $sql->execute();
 
         return $status;
+
+        
     }
 
-    public function getCheckout()
+    public function getCheckouts($limitNumber, $offsetNumber)
     {
-        $sql = "select id, usersId, booksId, checkoutDateTime, returnDateTime, maxAllowedDate, fine, isPaid, paidDate FROM checkouts GROUP by checkouts.id ORDER by checkoutDateTime DESC";
+        $sql = "SELECT usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName
+        FROM checkouts 
+        left join users on users.id = checkouts.usersId
+		left join books on books.id = checkouts.booksId
+		left join bookMeta on bookMeta.id = books.bookMetaId
+        WHERE returnDateTime IS NULL
+		ORDER by checkouts.maxAllowedDate DESC";
+
+        $sql .= " limit '$limitNumber'";
+        $sql .= " offset '$offsetNumber' * '$limitNumber'";
+        
         $res = $this->query($sql);
 
         $data = array();

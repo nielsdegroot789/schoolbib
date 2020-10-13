@@ -110,7 +110,7 @@ class UserController
         $usersId = $data["usersId"];
         $booksId = $data["booksId"];
         $reservationDateTime = $data["reservationDateTime"];
-        $accepted = $data["accepted"];
+        $accepted = 1;
 
         if($data['id']){
             $id = $data['id'];
@@ -123,17 +123,8 @@ class UserController
         return $response;
       
     }
-    public function ChangeAccepted($booksId, $userId){
-        $db = new DB();
-        $sql=$db->exec('UPDATE reservations Set accepted = 1 WHERE booksId = '. $booksId .' AND userId = '. $userId .'');
-        if ($db->exec($sql)) {
-            return $db->lastInsertRowID();
-        } else {
-            return false;
-        } 
-    }
 
-    public function saveCheckoutAdmin(Request $request, Response $response, array $args)
+    public function saveCheckouts(Request $request, Response $response, array $args)
     {            
         $data = json_decode(file_get_contents("php://input"), TRUE);
         $this->response = $response;
@@ -144,16 +135,19 @@ class UserController
         $checkoutDateTime = $data["checkoutDateTime"];
         $returnDateTime = $data["reservationDateTime"];
         $maxAllowedDate = $data["maxAllowedDate"];
+        $fine = $data["fine"];
+        $isPaid = $data["isPaid"];
         if($data['id']){
             $id = $data['id'];
-            $data = $db->saveCheckoutAdmin($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate);
+            $data = $db->saveCheckouts($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate, $fine, $isPaid);
         }
         else {
-            $data = $db->saveCheckoutAdmin($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate);
+            $data = $db->saveCheckouts($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate, $fine, $isPaid);
         }
         $response->getBody()->write($data);
         return $response;
     }
+
 
     public function getReservations(Request $request, Response $response, array $args)
     {
@@ -177,16 +171,29 @@ class UserController
             ->withHeader('Content-Type', 'application/json');
     }
     
-    public function getCheckout(Request $request, Response $response, array $args)
+    public function getCheckouts(Request $request, Response $response, array $args)
     {
         $this->response = $response;
         $db = new DB();
-        $data = $db->getCheckout();
+        $arguments = json_decode(file_get_contents("php://input"), true);
+        $id = isset($arguments["id"]) ? '%' . $arguments["id"] : "%";
+        $usersId = isset($arguments["usersId"]) ? '%' . $arguments["usersId"] : "%";
+        $booksId = isset($arguments["booksId"]) ? $arguments["booksId"] : "%";
+        $checkoutDateTime = isset($arguments["checkoutDateTime"]) ? '%' .$arguments["checkoutDateTime"] :"%";
+        $returnDateTime = isset($arguments["returnDateTime"]) ? '%' .$arguments["returnDateTime"] : "%";
+        $maxAllowedDate = isset($arguments["maxAllowedDate"]) ? '%' .$arguments["maxAllowedDate"] : '%';
+        $fine = isset($arguments["fine"]) ? '%' .$arguments["fine"] : '%';
+        $isPaid = isset($arguments["isPaid"]) ? '%' .$arguments["isPaid"] : '%';
+        $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
+        $offsetNumber = isset($arguments["offset"]) ? $arguments["offset"] : 0;
+
+        $data = $db->getCheckouts($limitNumber, $offsetNumber,$id, $usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate, $fine, $isPaid);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
         return $response
             ->withHeader('Content-Type', 'application/json');
+
     }
     public function getProfilePageData(Request $request, Response $response, array $args) {
         $payloadData = $_GET['data'];
