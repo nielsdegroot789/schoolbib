@@ -456,7 +456,9 @@ class DB extends \SQLite3
    public function deleteSpecificBook($id) {
        $sql = $this->prepare('delete from books where id = :id');
        $sql->bindValue(':id', $id);
-       $sql->execute();
+      $res = $sql->execute();
+      return $res;
+       
    }
    
    public function updateSpecificBook($id,$stock,$qrCode,$status) {
@@ -465,7 +467,8 @@ class DB extends \SQLite3
        $sql->bindValue(':stock', $stock);
        $sql->bindValue(':qrCode', $qrCode);
        $sql->bindValue(':status', $status);
-       $sql->execute();
+       $res = $sql->execute();
+       return $res;
    }
 
    public function newBook($stock,$qrCode,$status,$bookMetaId) {
@@ -474,6 +477,7 @@ class DB extends \SQLite3
        $sql->bindValue(':qrCode', $qrCode);
        $sql->bindValue(':status', $status);
        $sql->bindValue(':bookMetaId', $bookMetaId);
-       $sql->execute();
+       $res = $sql->execute();
+       return $res;
    }
 }

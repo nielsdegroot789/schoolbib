@@ -95,7 +95,7 @@ $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':ge
 
 $app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
 
-$app->get('/inStock', \skoolBiep\Controller\bookController::class . ':inStock');
+ // $app->get('/inStock', \skoolBiep\Controller\bookController::class . ':inStock');
 
 $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
 

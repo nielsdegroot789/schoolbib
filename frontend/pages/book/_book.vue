@@ -73,12 +73,8 @@
             </span>
           </p>
         </div>
-        <button v-if="showDetails" class="button" @click="toggleDetails">
-          Hide Details
-        </button>
-        <button v-if="!showDetails" class="button" @click="toggleDetails">
-          Show Details
-        </button>
+        <button v-if="showDetails" class="button">Hide Details</button>
+        <button v-if="!showDetails" class="button">Show Details</button>
       </div>
       <div class="section box stockInfo">
         <h3 class="title">Interested in reading?</h3>
@@ -86,12 +82,8 @@
           There are currently no books available. Feel free to contact an
           employee.
         </p>
-        <p v-else-if="inStock === 1">
-          There is currently <b> {{ inStock }} </b> available.
-        </p>
-        <p v-else>
-          There are currently <b> {{ inStock }} </b> available.
-        </p>
+        <p v-else-if="inStock === 1">There is currently <b> </b> available.</p>
+        <p v-else>There are currently <b> </b> available.</p>
         <!-- todo change this to only show when logged in otherwise go to login -->
         <button
           class="button is-large"

@@ -107,8 +107,8 @@ export const actions = {
     console.log(values);
     commit('setSpecificBook', values);
   },
-  toggleEditModal({ commit }) {
-    commit('toggleEditModal');
+  toggleEditModal({ commit }, id) {
+    commit('toggleEditModal', id);
   },
 };
 
@@ -184,8 +184,11 @@ export const mutations = {
   setSpecificBook(state, values) {
     state.specificBook = values;
   },
-  toggleEditModal(state) {
-    this.state.editModal = !this.state.editModal;
+  toggleEditModal(state, id) {
+    state.editModal = !state.editModal;
+    state.specificBook = state.adminSpecificBooks.find(
+      (book) => book.id === id,
+    );
   },
 };
 
@@ -207,8 +210,5 @@ export const getters = {
   },
   getReservation: (state) => {
     return state.reservations;
-  },
-  getSpecificBook: (state) => (id) => {
-    return state.adminSpecificBooks.find((book) => book.id === id);
   },
 };

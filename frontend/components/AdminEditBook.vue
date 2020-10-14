@@ -1,11 +1,8 @@
 <template>
   <div>
-    <editBookModal
-      :class="{ 'is-active': editModal }"
-      :specificbook="specificBook"
-    />
+    <editBookModal />
     <div class="section box">
-      <div>
+      <div class="grid-books">
         <div
           v-for="item in adminSpecificBooks"
           :key="item.id"
@@ -15,11 +12,15 @@
           <h1>id : {{ item.id }}</h1>
           <h1>status: {{ item.status }}</h1>
           <h1>qr-code: {{ item.qrCode }}</h1>
-          <button @click="showEditNewModal(item.id)">Edit</button>
-          <button @click="showDeleteModal(item.id)">Delete</button>
+          <button class="button" @click="showEditNewModal(item.id)">
+            Edit
+          </button>
+          <button class="button" @click="showDeleteModal(item.id)">
+            Delete
+          </button>
         </div>
       </div>
-      <button @click="showEditNewModal">New</button>
+      <button class="button" @click="showEditNewModal">New</button>
     </div>
 
     <div :class="['modal', { 'is-active': deleteActive }]">
@@ -59,14 +60,12 @@ export default {
       deleteActive: false,
       editNewActive: false,
       specificBook: '',
+      currentId: null,
     };
   },
   computed: {
     adminSpecificBooks() {
       return this.$store.state.adminSpecificBooks;
-    },
-    editModal() {
-      return this.$store.state.editModal;
     },
   },
   created() {
@@ -82,8 +81,7 @@ export default {
       this.$store.dispatch('clickedBookDetails');
     },
     showEditNewModal(id) {
-      this.$store.dispatch('toggleEditModal');
-      this.specificBook = this.$store.getters.getSpecificBook(id);
+      this.$store.dispatch('toggleEditModal', id);
     },
   },
 };
@@ -96,5 +94,9 @@ export default {
 .card-body {
   display: flex;
   justify-content: space-around;
+}
+.grid-books {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 </style>
