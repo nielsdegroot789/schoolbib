@@ -38,10 +38,46 @@ export default {
       show: true,
     };
   },
+  computed: {
+    filterObject() {
+      const query = [];
+      if (this.bookName) {
+        query['book-name'] = this.bookName;
+      }
+      return query;
+    },
+  },
   methods: {
     toggleShow() {
       this.show = !this.show;
     },
+  },
+  updateQuery() {
+    const newQuery = this.filterObject;
+
+    this.$router.push({ path: '/books', query: newQuery });
+  },
+  async searchBooks(bookTitle) {
+    if (bookTitle.length === 0) {
+      return;
+    }
+
+    const params = {
+      limit: 25,
+      titleName: bookTitle,
+    };
+
+    try {
+      this.fetchingBooks = true;
+      const response = await this.$axios({
+        method: 'GET',
+        url: 'http://localhost:8080/searchBooks',
+        params,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    this.fetchinBooks = true;
   },
 };
 </script>
