@@ -1,6 +1,13 @@
 <template>
   <div class="favoritediv">
-    <button @click="addToFavoriteBookList()">Add To favorite</button>
+    <button
+      @click="
+        addToFavoriteBookList();
+        saveCheckoutNotif();
+      "
+    >
+      Add To favorite
+    </button>
   </div>
 </template>
 
@@ -24,7 +31,7 @@ export default {
     addToFavoriteBookList() {
       this.$axios
         .post('http://localhost:8080/addToFavoriteBookList', {
-          bookMetaId: this.$route.params.book,
+          bookMetaId: this.booksId,
           usersId: this.currentUserId,
         })
         .then(function (response) {});

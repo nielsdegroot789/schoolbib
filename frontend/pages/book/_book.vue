@@ -145,11 +145,6 @@ export default {
   mounted() {
     this.booksId = this.$route.params.books;
   },
-  created() {
-    this.$axios.get('http://localhost:8080/inStock').then((response) => {
-      this.inStock = response.data;
-    });
-  },
   methods: {
     submitReserveData() {
       const today = new Date();
@@ -180,6 +175,7 @@ export default {
         message: 'Form saved',
       });
     },
+    toggleDetails() {},
   },
 };
 </script>

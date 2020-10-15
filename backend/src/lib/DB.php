@@ -237,9 +237,9 @@ class DB extends \SQLite3
     {
 
         $sql = $this->prepare("INSERT INTO favoriteBooks (usersId,  bookMetaId)
-        values (:userId,:bookMetaId)");
+        values (:usersId,:bookMetaId)");
 
-        $sql->bindValue(':usersId', $usersId, );
+$sql->bindValue(':usersId', $usersId, );
         $sql->bindValue(':bookMetaId', $bookMetaId, );
 
         $status = $sql->execute();
@@ -251,7 +251,7 @@ class DB extends \SQLite3
     {
 
         $sql = $this->prepare("INSERT INTO reservations (usersId,  booksId, reservationDateTime, accepted)
-        values (:userId,:booksId,:reservationDateTime, :accepted)");
+        values (:usersId,:booksId,:reservationDateTime, :accepted)");
 
         $sql->bindValue(':usersId', $usersId, );
         $sql->bindValue(':booksId', $booksId, );

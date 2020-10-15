@@ -107,8 +107,9 @@ class UserController
         $this->response = $response;
 
         $db = new DB();
-        $bookMetaId = $data["bookMetaId"];
         $usersId = $data["usersId"];
+        $bookMetaId = $data["bookMetaId"];
+        
 
         if($data['id']){
             $id = $data['id'];
