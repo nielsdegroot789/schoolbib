@@ -1,113 +1,127 @@
 <template>
-  <div class="pagination-row">
-    <n-link v-if="first !== false" :to="'/catalog/' + first"> first </n-link>
-
-    <n-link v-if="previous !== false" :to="'/catalog/' + previous">
-      previous
-    </n-link>
-
-    <n-link
-      v-for="page in pageButtons"
-      :key="page"
-      :to="{ path: '/catalog/' + page, query: $route.query }"
-    >
-      {{ page }}
-    </n-link>
-
-    <n-link v-if="next !== false" :to="'/catalog/' + next"> next </n-link>
-
-    <n-link v-if="last !== false" :to="'/catalog/' + last"> last </n-link>
+  <div>
+    Here come all the pagination shit
+    <div v-if="pagesCount > 1" class="c-pagination">
+      <div class="c-pagination__back">
+        <nuxt-link
+          v-if="firstPage !== false"
+          :to="pageConfig(firstPage)"
+          class="c-pagination__link"
+        >
+          first
+        </nuxt-link>
+        <nuxt-link
+          v-if="previousPage !== false"
+          :to="pageConfig(previousPage)"
+          class="c-pagination__link"
+        >
+          previous
+        </nuxt-link>
+      </div>
+      <div class="c-pagination__numbered">
+        <nuxt-link
+          v-for="page in pageButtons"
+          :key="page"
+          :to="pageConfig(page)"
+          :disable="page == currentPage"
+          :class="{
+            'c-pagination__link': true,
+            'c-pagination__link--active': page == currentPage,
+          }"
+        >
+          {{ page }}
+        </nuxt-link>
+      </div>
+      <div class="c-pagination__forward">
+        <nuxt-link
+          v-if="nextPage !== false"
+          :to="pageConfig(nextPage)"
+          class="c-pagination__link"
+        >
+          next
+        </nuxt-link>
+        <nuxt-link
+          v-if="lastPage !== false"
+          :to="pageConfig(lastPage)"
+          class="c-pagination__link"
+        >
+          last
+        </nuxt-link>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {};
-  },
+  name: 'Pagination',
   computed: {
-    totalBookMeta() {
-      return this.$store.getters.getBookMetaCount;
-    },
-    pageNumber() {
+    currentPage() {
       return parseInt(this.$route.params.page);
     },
-    totalPages() {
-      return this.totalBookMeta / this.limit;
+    pagesCount() {
+      return this.$store.getters.pageCount;
+    },
+    amountOfButtons() {
+      return Math.min(5);
     },
     pageButtons() {
       const start = Math.min(
-        this.totalPages - 4,
-        Math.max(1, this.pageNumber - 2),
+        Math.max(1, this.pagesCount - 4),
+        Math.max(1, this.currentPage - 2),
       );
       const array = [];
-      for (let i = start; i <= start + 5; i++) {
+      for (let i = start; i < start + this.amountOfButtons; i++) {
         array.push(i);
       }
       return array;
     },
+    firstPage() {
+      if (this.currentPage <= 2) return false;
 
-    first() {
-      if (this.pageNumber === 1) {
-        return false;
-      }
       return 1;
     },
-    last() {
-      if (this.pageNumber === this.totalPages) {
-        return false;
-      }
-      return this.totalPages;
+    previousPage() {
+      if (this.currentPage === 1) return false;
+
+      return this.currentPage - 1;
     },
-    next() {
-      if (this.pageNumber === this.totalItems) {
-        return false;
-      }
-      return this.pageNumber + 1;
+    nextPage() {
+      if (this.currentPage === this.pagesCount) return false;
+
+      return this.currentPage + 1;
     },
-    previous() {
-      if (this.pageNumber === this.totalItems) {
-        return false;
-      }
-      return this.pageNumber - 1;
+    lastPage() {
+      if (this.currentPage >= this.pagesCount - 1) return false;
+
+      return this.pagesCount;
+    },
+  },
+  methods: {
+    pageConfig(newPageNumber) {
+      return {
+        path: '/characters/' + newPageNumber,
+        query: this.$route.query,
+      };
     },
   },
 };
 </script>
 
-<style scoped>
-.pagination-button {
-  padding: 8px;
-  margin: 2px;
-  border-radius: 3px;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-.pagination-button .active {
-  background-color: rgb(24, 250, 250);
-  cursor: auto;
-}
-
-.pagination-button .disabled {
-  cursor: auto;
-}
-.pagination-row {
+<style lang="scss">
+.c-pagination {
+  padding: 1rem;
   display: flex;
-  width: 600px;
   justify-content: space-between;
-  text-align: center;
-  margin-bottom: 50px;
-  height: 4rem;
-  padding-left: 1rem;
-  background-color: #f9f9f9;
-  color: black;
-  width: 700px;
-  border: 0;
-  border-radius: 3px;
-  border-color: black;
-  border-width: 0.5px;
-  border-style: dotted;
-  padding: 10px;
+  border: 1px solid purple;
+
+  &__link {
+    font-size: 1.8rem;
+    padding: 0.5rem;
+
+    &--active {
+      color: grey;
+    }
+  }
 }
 </style>

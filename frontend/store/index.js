@@ -17,6 +17,7 @@ export const state = () => ({
   specificBook: {},
   editModal: false,
   deleteModal: false,
+  totalMetaBooks: 0,
 });
 
 export const actions = {
@@ -31,6 +32,13 @@ export const actions = {
     this.$axios
       .get('http://localhost:8080/getBooks')
       .then((response) => context.commit('getBooks', response.data));
+  },
+  set_bookMetaItems(context) {
+    this.$axios
+      .get('http://localhost:8080/getBookMeta', {
+        headers: { Authorization: `Bearer test` },
+      })
+      .then((response) => context.commit('set_bookMetaItems', response.data));
   },
   getFrontPageNotification(context) {
     this.$axios
@@ -203,6 +211,9 @@ export const mutations = {
       (book) => book.id === id,
     );
   },
+  set_bookMetaItems(state, totalMetaBooks) {
+    state.totalMetaBooks = totalMetaBooks;
+  },
 };
 
 export const getters = {
@@ -215,9 +226,6 @@ export const getters = {
   getNotification: (state) => {
     return state.notification;
   },
-  getPageCount(state) {
-    return Math.ceil(state.totalItems / state.limit);
-  },
   getBookMetaCount: (state) => (count) => {
     return state.bookMeta.filter((bookMeta) => bookMeta.count === count);
   },
@@ -226,5 +234,8 @@ export const getters = {
   },
   getCurrentBook: (state) => {
     return state.specificBook;
+  },
+  pageCount(state) {
+    return Math.ceil(state.totalMetaBooks / state.limit);
   },
 };
