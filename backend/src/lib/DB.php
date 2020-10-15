@@ -46,7 +46,8 @@ class DB extends \SQLite3
     
     public function getBooks()
     {
-        $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
+        $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, 
+        count(bookMetaId) as count from books
         group by bookMetaId";
 
         $res = $this->query($sql);
@@ -318,6 +319,9 @@ class DB extends \SQLite3
         $this->acceptReservation($usersId, $booksId);
 
         return $status;
+
+        
+        
 
         
     }
