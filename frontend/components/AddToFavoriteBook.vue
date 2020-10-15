@@ -22,20 +22,22 @@ export default {
     currentUserId() {
       return this.$store.state.currentUser.id;
     },
-    bookMeta() {
-      return this.$store.state.bookMeta;
+    books() {
+      return this.$store.getters.getBooksByBookMetaId(
+        parseInt(this.$route.params.book),
+      );
     },
   },
 
   mounted() {
-    this.bookMetaId = this.$route.params.books;
+    this.booksId = this.$route.params.books;
   },
   methods: {
     addToFavoriteBookList() {
       this.$axios
         .post('http://localhost:8080/addToFavoriteBookList', {
           usersId: this.currentUserId,
-          bookMetaId: this.bookMetaId.id,
+          bookMetaId: this.$route.params.book,
         })
         .then(function (response) {});
     },
