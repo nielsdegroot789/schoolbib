@@ -145,12 +145,7 @@ export default {
         .post('http://localhost:8080/returnCheckouts', {
           returnDateTime: object.returnDateTime,
         })
-        .then(function (response) {
-          // this.$store.dispatch('addNotification', {
-          //   type: 'success',
-          //   message: 'Form saved',
-          // });
-        });
+        .then(function (response) {});
     },
   },
 };

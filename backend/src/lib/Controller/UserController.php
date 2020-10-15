@@ -113,10 +113,10 @@ class UserController
 
         if($data['id']){
             $id = $data['id'];
-            $data = $db->addToFavoriteBookList($bookMetaId,  $usersId);
+            $data = $db->addToFavoriteBookList($usersId, $bookMetaId);
         }
         else {
-            $data = $db->addToFavoriteBookList($bookMetaId, $usersId);
+            $data = $db->addToFavoriteBookList($usersId, $bookMetaId);
         }
         $response->getBody()->write($data);
         return $response;

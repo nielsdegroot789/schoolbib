@@ -239,7 +239,7 @@ class DB extends \SQLite3
         $sql = $this->prepare("INSERT INTO favoriteBooks (usersId,  bookMetaId)
         values (:usersId,:bookMetaId)");
 
-$sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':usersId', $usersId, );
         $sql->bindValue(':bookMetaId', $bookMetaId, );
 
         $status = $sql->execute();
