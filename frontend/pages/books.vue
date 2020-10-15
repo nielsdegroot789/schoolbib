@@ -1,17 +1,11 @@
 <template>
   <div class="section pageSetup">
     <div class="section level">
-      <input
-        v-model="search"
-        type="text"
-        placeholder="Search on title.."
-        class="level-left"
-        @keydown="toSearch"
-      />
-
       <Pagination class="level-right" />
     </div>
-
+    <div class="section level">
+      <Filters />
+    </div>
     <div class="cardContainer">
       <nuxt-link
         v-for="item in bookMeta"
@@ -44,10 +38,12 @@
   </div>
 </template>
 <script>
+import Filters from '../components/filters';
 import StarRating from '~/components/StarRating';
 export default {
   components: {
     StarRating,
+    Filters,
   },
   data() {
     return {
