@@ -11,6 +11,15 @@ export default {
   data() {
     return {};
   },
+  computed: {
+    currentUserId() {
+      return this.$store.state.currentUser.id;
+    },
+  },
+
+  mounted() {
+    this.booksId = this.$route.params.books;
+  },
   methods: {
     addToFavoriteBookList() {
       this.$axios

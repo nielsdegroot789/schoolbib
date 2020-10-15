@@ -233,6 +233,20 @@ class DB extends \SQLite3
         }
     }
 
+    public function addToFavoriteBookList($usersId, $bookMetaId)
+    {
+
+        $sql = $this->prepare("INSERT INTO favoriteBooks (usersId,  bookMetaId)
+        values (:userId,:bookMetaId)");
+
+        $sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':bookMetaId', $bookMetaId, );
+
+        $status = $sql->execute();
+
+        return $status;
+    }
+
     public function saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted)
     {
 
