@@ -20,21 +20,23 @@ class DB extends \SQLite3
 
     public function getBookMeta($limitNumber, $offsetNumber, $category, $author, $title)
     {
-        $sql = "
+        $sql = $this->prepare("
         select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel,
 		authors.name as authors, publishers.name as publishers,  group_concat(categories.name, ', ') as categories from bookMeta
 		join authors on authors.id = bookMeta.authorsId
 		join publishers on publishers.id = bookMeta.publishersId
         join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
         join categories on categories.id = categoriesInBooks.categoriesId
-        where categories.name like '$category' and authors.name like '$author' and title like '$title'
+        where categories.name like :category and authors.name like :author and title like :title
         GROUP by bookMeta.id
-        order by bookMeta.id";
+        order by bookMeta.id limit :limit offset :offset * :limit ");
 
-        $sql .= " limit '$limitNumber'";
-        $sql .= " offset '$offsetNumber' * '$limitNumber'";
-
-        $res = $this->query($sql);
+        $sql->bindValue(':title', $title);
+        $sql->bindValue(':category', $category);
+        $sql->bindValue(':author', $author);
+        $sql->bindValue(':limit', $limitNumber);
+        $sql->bindValue(':offset', $offsetNumber);
+        $res = $sql->execute();
 
         $data = array();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {

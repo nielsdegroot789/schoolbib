@@ -31,7 +31,7 @@
               </p>
             </div>
           </div>
-          <div class="content">short book info</div>
+          <div class="content">{{ item.categories }}</div>
         </div>
       </nuxt-link>
     </div>
