@@ -5,6 +5,7 @@
         <n-link to="/">Home</n-link> > <n-link to="/books">books</n-link> >
         {{ bookMeta.title }}
       </div>
+      <AddToFavoriteBook />
     </div>
 
     <div class="bookDetails">
@@ -109,10 +110,12 @@
 </template>
 
 <script>
-import adminEditBook from '../../components/AdminEditBook';
+import adminEditBook from '~/components/AdminEditBook';
+import addToFavoriteBook from '~/components/AddToFavoriteBook';
 export default {
   components: {
     adminEditBook,
+    addToFavoriteBook,
   },
   data() {
     return {

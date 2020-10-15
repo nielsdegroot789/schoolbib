@@ -101,6 +101,26 @@ class UserController
         return $this->user;
     }
 
+    public function addToFavoriteBookList(Request $request, Response $response, array $args)
+    {            
+        $data = json_decode(file_get_contents("php://input"), TRUE);
+        $this->response = $response;
+
+        $db = new DB();
+        $bookMetaId = $data["bookMetaId"];
+        $usersId = $data["usersId"];
+
+        if($data['id']){
+            $id = $data['id'];
+            $data = $db->addToFavoriteBookList($bookMetaId,  $usersId);
+        }
+        else {
+            $data = $db->addToFavoriteBookList($bookMetaId, $usersId);
+        }
+        $response->getBody()->write($data);
+        return $response;
+    }
+
     public function saveReservationsUser(Request $request, Response $response, array $args)
     {            
         $data = json_decode(file_get_contents("php://input"), TRUE);
@@ -121,7 +141,6 @@ class UserController
         }
         $response->getBody()->write($data);
         return $response;
-      
     }
 
     public function saveCheckouts(Request $request, Response $response, array $args)
