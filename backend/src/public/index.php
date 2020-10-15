@@ -128,6 +128,8 @@ $app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':up
 
 $app->post('/saveReservationsUser',\skoolBiep\Controller\UserController::class . ':saveReservationsUser');
 
+$app->post('/addToFavoriteBookList',\skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
+
 $app->post('/saveCheckoutAdmin',\skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
 $app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
 

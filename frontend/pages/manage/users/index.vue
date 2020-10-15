@@ -97,9 +97,11 @@ export default {
       const dateTime = date + ' ' + time;
       this.DateNow = dateTime.toString();
     },
+
     EditMsg(object) {
       this.isEditing = true;
     },
+
     saveCheckout(object) {
       const today = new Date();
       const date =
@@ -145,12 +147,7 @@ export default {
         .post('http://localhost:8080/returnCheckouts', {
           returnDateTime: object.returnDateTime,
         })
-        .then(function (response) {
-          // this.$store.dispatch('addNotification', {
-          //   type: 'success',
-          //   message: 'Form saved',
-          // });
-        });
+        .then(function (response) {});
     },
   },
 };

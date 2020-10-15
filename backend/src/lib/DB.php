@@ -46,7 +46,8 @@ class DB extends \SQLite3
     
     public function getBooks()
     {
-        $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, count(bookMetaId) as count from books
+        $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, 
+        count(bookMetaId) as count from books
         group by bookMetaId";
 
         $res = $this->query($sql);
@@ -233,11 +234,25 @@ class DB extends \SQLite3
         }
     }
 
+    public function addToFavoriteBookList($usersId, $bookMetaId)
+    {
+
+        $sql = $this->prepare("INSERT INTO favoriteBooks (usersId,  bookMetaId)
+        values (:usersId,:bookMetaId)");
+
+        $sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':bookMetaId', $bookMetaId, );
+
+        $status = $sql->execute();
+
+        return $status;
+    }
+
     public function saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted)
     {
 
         $sql = $this->prepare("INSERT INTO reservations (usersId,  booksId, reservationDateTime, accepted)
-        values (:userId,:booksId,:reservationDateTime, :accepted)");
+        values (:usersId,:booksId,:reservationDateTime, :accepted)");
 
         $sql->bindValue(':usersId', $usersId, );
         $sql->bindValue(':booksId', $booksId, );
@@ -306,22 +321,24 @@ class DB extends \SQLite3
         return $status;
 
         
-    }
-
-    
-    public function inStock($inStock)
-    {
-
-        $sql = $this->prepare("select count booksId");
-
-        $sql->bindValue(':inStock', $inStock, );
-
-        $status = $sql->execute();
-
-        return $status;
+        
 
         
     }
+
+    // public function inStock()
+    // {
+
+    //     $sql = $this->prepare("select count booksId");
+
+    //     $res = $this->query($sql);
+
+    //     while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+    //         array_push($data, $row);
+    //         }
+        
+    //      return $data;
+    // }
 
     public function getCheckouts($limitNumber, $offsetNumber)
     {
