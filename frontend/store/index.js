@@ -16,6 +16,7 @@ export const state = () => ({
   adminSpecificBooks: {},
   specificBook: {},
   editModal: false,
+  deleteModal: false,
 });
 
 export const actions = {
@@ -110,6 +111,9 @@ export const actions = {
   toggleEditModal({ commit }, id) {
     commit('toggleEditModal', id);
   },
+  toggleDeleteModal({ commit }) {
+    commit('toggleDeleteModal');
+  },
 };
 
 export const mutations = {
@@ -189,6 +193,9 @@ export const mutations = {
     state.specificBook = state.adminSpecificBooks.find(
       (book) => book.id === id,
     );
+  },
+  toggleDeleteModal(state) {
+    state.deleteModal = !state.deleteModal;
   },
 };
 

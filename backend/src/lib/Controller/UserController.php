@@ -262,14 +262,14 @@ class UserController
 
     public function handleSpecificBook(Request $request, Response $response, array $args) {
         $this->response = $response;
-        $db =new DB();
+        $db = new DB();
         if($request->getMethod() == 'DELETE') {
             $contents = json_decode(file_get_contents('php://input'), true);
             $id = $contents['userId'];
             $db->deleteSpecificBook($id);
         }
         $contents = json_decode(file_get_contents('php://input'), true);
-         $id = $contents['id'];
+         
          $stock = $contents['stock'];
          $qrCode = $contents['qrCode'];
          $status = $contents['status'];
@@ -277,6 +277,7 @@ class UserController
             $bookMetaId = $contents['bookMetaId'];
             $db->newBook($stock, $qrCode, $status, $bookMetaId);
          } else {
+        $id = $contents['id'];
          $db->updateSpecificBook($id,$stock,$qrCode,$status);
         }
         return $response;

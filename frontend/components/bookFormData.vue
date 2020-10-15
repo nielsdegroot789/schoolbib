@@ -4,14 +4,15 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p :class="['modal-card-title', { hidden: !book.empty }]">Add book</p>
-        <p :class="['modal-card-title', { hidden: book.empty }]">Update book</p>
+        <p :class="['modal-card-title', { hidden: book.empty }]">
+          Update book id: {{ formValues.id }}
+        </p>
         <button class="delete" aria-label="close" @click="closeModal"></button>
       </header>
       <section class="modal-card-body">
         <div class="field">
           <div class="control">
             <FormulateForm v-model="formValues">
-              <FormulateInput type="text" name="id" label="id" />
               <FormulateInput type="text" name="stock" label="Stock" />
               <FormulateInput type="text" name="qrCode" label="qr-code" />
               <FormulateInput type="text" name="status" label="status" />
@@ -58,6 +59,9 @@ export default {
     editModal() {
       return this.$store.state.editModal;
     },
+    getBookMeta() {
+      return this.$store.state.adminSpecificBooks[0].bookMetaId;
+    },
   },
   watch: {
     book(book) {
@@ -67,16 +71,24 @@ export default {
   methods: {
     sendChanges() {
       this.$axios
-        .put('http://localhost:8080/handleSpecificBook', this.values)
+        .put('http://localhost:8080/handleSpecificBook', this.formValues)
+        .then(() => {
+          this.refreshBooks();
+        })
         .catch((err) => console.log(err));
       this.closeModal();
+    },
+    refreshBooks() {
       this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);
     },
     newBook() {
-      this.formValues.bookMetaId = this.$store.state.adminSpecificBooks[0].bookMetaId;
-      this.$axios.post('http://localhost:8080/handleSpecificBook', this.values);
+      this.formValues.bookMetaId = this.getBookMeta;
+      this.$axios
+        .post('http://localhost:8080/handleSpecificBook', this.formValues)
+        .then(() => {
+          this.refreshBooks();
+        });
       this.closeModal();
-      this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);
     },
     closeModal() {
       this.$store.dispatch('toggleEditModal');
