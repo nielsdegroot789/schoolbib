@@ -322,20 +322,19 @@ class DB extends \SQLite3
         
     }
 
-    
-    public function inStock($inStock)
-    {
+    // public function inStock()
+    // {
 
-        $sql = $this->prepare("select count booksId");
+    //     $sql = $this->prepare("select count booksId");
 
-        $sql->bindValue(':inStock', $inStock, );
+    //     $res = $this->query($sql);
 
-        $status = $sql->execute();
-
-        return $status;
-
+    //     while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+    //         array_push($data, $row);
+    //         }
         
-    }
+    //      return $data;
+    // }
 
     public function getCheckouts($limitNumber, $offsetNumber)
     {

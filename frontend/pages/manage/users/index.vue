@@ -97,9 +97,11 @@ export default {
       const dateTime = date + ' ' + time;
       this.DateNow = dateTime.toString();
     },
+
     EditMsg(object) {
       this.isEditing = true;
     },
+
     saveCheckout(object) {
       const today = new Date();
       const date =
