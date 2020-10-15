@@ -151,6 +151,4 @@ $app->add(function ($request, $handler) {
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 
-$app->get('/searchBooks', \skoolBiep\Controller\UserController::class . ":" )
-
 $app->run();

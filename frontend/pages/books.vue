@@ -47,7 +47,6 @@ export default {
   },
   data() {
     return {
-      search: '',
       timeoutId: null,
       filterTimeOut: null,
     };
@@ -62,28 +61,21 @@ export default {
     bookMeta() {
       return this.$store.state.bookMeta;
     },
+    filters() {
+      return this.$route.query;
+    },
   },
 
   watch: {
     $route: {
       immediate: true,
       handler(route) {
-        this.search = route.query.name;
         this.$store.dispatch('getBookMeta', {
           pageNumber: this.pageNumber,
           name: this.search,
+          filters: this.filters,
         });
-        console.log(route);
       },
-    },
-  },
-  methods: {
-    toSearch() {
-      clearTimeout(this.filterTimeOut);
-      this.filterTimeOut = setTimeout(() => {
-        this.$router.push({ path: '/catalog/', query: { name: this.search } });
-      }, 1000);
-      console.log('search');
     },
   },
 };

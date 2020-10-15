@@ -20,12 +20,14 @@ export const state = () => ({
 });
 
 export const actions = {
-  getBookMeta(context) {
+  getBookMeta({ commit }, { filters }) {
+    console.log(filters);
     this.$axios
       .get('http://localhost:8080/getBookMeta', {
         headers: { Authorization: `Bearer test` },
+        params: { filters },
       })
-      .then((response) => context.commit('getBookMeta', response.data));
+      .then((response) => commit('getBookMeta', response.data));
   },
   getBooks(context) {
     this.$axios

@@ -27,12 +27,14 @@ class BookController
     {
         $this->response = $response;
         $db = new DB();
-        $arguments = json_decode(file_get_contents("php://input"), true);
-        $title = isset($arguments["title"]) ? '%' . $arguments["title"] : "%";
-        $author = isset($arguments["author"]) ? '%' . $arguments["author"] : "%";
-        $category = isset($arguments["category"]) ? $arguments["category"] : "%";
-        $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
-        $offsetNumber = isset($arguments["offset"]) ? $arguments["offset"] : 0;
+        $data = $_GET['filters'];
+        $filters = json_decode($data);
+        $bookTitle = $filters->{"book-name"};
+        $title = isset($bookTitle) ? '%' . $bookTitle : "%";
+        $author = isset($_GET["author"]) ? '%' . $_GET["author"] : "%";
+        $category = isset($_GET["category"]) ? $_GET["category"] : "%";
+        $limitNumber = isset($_GET["limit"]) ? $_GET["limit"] : 20;
+        $offsetNumber = isset($_GET["offset"]) ? $_GET["offset"] : 0;
 
         $data = $db->getBookMeta($limitNumber, $offsetNumber, $category, $author, $title);
         $payload = json_encode($data);
