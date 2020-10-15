@@ -62,7 +62,7 @@ export default {
       return this.$store.state.bookMeta;
     },
     filters() {
-      return this.$route.query;
+      return { filters: this.$route.query };
     },
   },
 
@@ -70,11 +70,7 @@ export default {
     $route: {
       immediate: true,
       handler(route) {
-        this.$store.dispatch('getBookMeta', {
-          pageNumber: this.pageNumber,
-          name: this.search,
-          filters: this.filters,
-        });
+        this.$store.dispatch('getBookMeta', this.filters);
       },
     },
   },

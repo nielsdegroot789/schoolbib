@@ -7,6 +7,15 @@
           <input v-model="bookName" type="text" />
         </label>
       </div>
+      <Autocomplete
+        :value="filterIds"
+        :loading="fetchingComics"
+        :options="filterOptions"
+        :disabled="fetchingInitLabel"
+        @change="searchFilters"
+        @remove="removeFilterId"
+        @select="updateFilterId"
+      />
     </div>
     <div class="filters-toggle">
       <button class="button button-clear" @click="toggleShow">
@@ -17,8 +26,12 @@
 </template>
 
 <script>
+import Autocomplete from '../components/AutoComplete';
 export default {
   name: 'Filter',
+  components: {
+    Autocomplete,
+  },
   data() {
     return {
       bookName: this.$route.query['book-name']
@@ -26,6 +39,7 @@ export default {
         : '',
       show: true,
       nameTimeout: null,
+      filterOptions: [],
     };
   },
   computed: {
@@ -43,6 +57,11 @@ export default {
       this.nameTimeout = setTimeout(this.updateQuery, 1000);
     },
   },
+  created() {
+    for (const filter of this.filterIds) {
+      this.fetchComicLabel(filter.value);
+    }
+  },
   methods: {
     toggleShow() {
       this.show = !this.show;
@@ -51,6 +70,13 @@ export default {
       console.log('ba');
       const newQuery = this.filterObject;
       this.$router.push({ path: '/books/', query: newQuery });
+    },
+    updateFilterId(filter) {
+      if (filter !== null) {
+        this.filterIds.push(filter);
+      }
+      this.filterOptions = [];
+      this.updateQuery();
     },
   },
 };

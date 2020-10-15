@@ -21,11 +21,14 @@ export const state = () => ({
 
 export const actions = {
   getBookMeta({ commit }, { filters }) {
-    console.log(filters);
+    const params = {};
+    if (filters['book-name']) {
+      params.title = filters['book-name'];
+    }
     this.$axios
       .get('http://localhost:8080/getBookMeta', {
         headers: { Authorization: `Bearer test` },
-        params: { filters },
+        params,
       })
       .then((response) => commit('getBookMeta', response.data));
   },

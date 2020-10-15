@@ -27,10 +27,7 @@ class BookController
     {
         $this->response = $response;
         $db = new DB();
-        $data = $_GET['filters'];
-        $filters = json_decode($data);
-        $bookTitle = $filters->{'book-name'};
-        $title = isset($bookTitle) ? $bookTitle . '%'  : "%";
+        $title = isset($_GET["title"]) ? $_GET["title"] . '%'  : "%";
         $author = isset($_GET["author"]) ? '%' . $_GET["author"] : "%";
         $category = isset($_GET["category"]) ? $_GET["category"] : "%";
         $limitNumber = isset($_GET["limit"]) ? $_GET["limit"] : 20;
