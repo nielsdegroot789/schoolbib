@@ -29,9 +29,13 @@ export default {
     active() {
       return this.$store.state.deleteModal;
     },
+    currentBook() {
+      return this.$store.getters.specificBook;
+    },
   },
   methods: {
     deleteBook() {
+      this.$store.dispatch('deleteSpecificBook');
       this.closeDeleteModal();
     },
     closeDeleteModal() {

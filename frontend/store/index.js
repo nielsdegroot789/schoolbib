@@ -98,11 +98,13 @@ export const actions = {
       })
       .then((response) => commit('getAdminSpecificBooks', response.data));
   },
-  deleteSpecificBook({ commit }, id) {
-    this.$axios.delete('http://localhost:8080/handleSpecificBook', {
-      data: { userId: id },
-    });
-    commit('deleteSpecificBook', id);
+  deleteSpecificBook({ commit, state }) {
+    const id = state.specificBook.id;
+    this.$axios
+      .delete('http://localhost:8080/handleSpecificBook', {
+        data: { userId: id },
+      })
+      .then(() => commit('deleteSpecificBook', id));
   },
   setSpecificBook({ commit }, values) {
     console.log(values);
@@ -111,8 +113,8 @@ export const actions = {
   toggleEditModal({ commit }, id) {
     commit('toggleEditModal', id);
   },
-  toggleDeleteModal({ commit }) {
-    commit('toggleDeleteModal');
+  toggleDeleteModal({ commit }, id) {
+    commit('toggleDeleteModal', id);
   },
 };
 
@@ -194,8 +196,12 @@ export const mutations = {
       (book) => book.id === id,
     );
   },
-  toggleDeleteModal(state) {
+  toggleDeleteModal(state, id) {
+    console.log(id);
     state.deleteModal = !state.deleteModal;
+    state.specificBook = state.adminSpecificBooks.find(
+      (book) => book.id === id,
+    );
   },
 };
 
@@ -217,5 +223,8 @@ export const getters = {
   },
   getReservation: (state) => {
     return state.reservations;
+  },
+  getCurrentBook: (state) => {
+    return state.specificBook;
   },
 };

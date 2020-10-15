@@ -16,7 +16,9 @@
           <button class="button" @click="showEditNewModal(item.id)">
             Edit
           </button>
-          <button class="button" @click="showDeleteModal">Delete</button>
+          <button class="button" @click="showDeleteModal(item.id)">
+            Delete
+          </button>
         </div>
       </div>
       <button class="button" @click="showEditNewModal">New</button>
@@ -55,7 +57,7 @@ export default {
       this.showDeleteModal();
     },
     showDeleteModal(id) {
-      this.$store.dispatch('toggleDeleteModal');
+      this.$store.dispatch('toggleDeleteModal', id);
     },
     showEditNewModal(id) {
       this.$store.dispatch('toggleEditModal', id);
