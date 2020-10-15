@@ -84,6 +84,8 @@ $app->post('/login', \skoolBiep\Controller\UserController::class . ':login');
 
 $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
 
+$app->get('/getBookMetaCount', \skoolBiep\Controller\BookController::class . ':getBookMetaCount');
+
 $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
 
 $app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . ':getNotification');

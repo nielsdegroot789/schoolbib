@@ -1,49 +1,49 @@
 <template>
   <div>
     Here come all the pagination shit
-    <div v-if="pagesCount > 1" class="c-pagination">
-      <div class="c-pagination__back">
+    <div v-if="pagesCount > 1" class="pagination">
+      <div class="pagination__back">
         <nuxt-link
           v-if="firstPage !== false"
           :to="pageConfig(firstPage)"
-          class="c-pagination__link"
+          class="pagination__link"
         >
           first
         </nuxt-link>
         <nuxt-link
           v-if="previousPage !== false"
           :to="pageConfig(previousPage)"
-          class="c-pagination__link"
+          class="pagination__link"
         >
           previous
         </nuxt-link>
       </div>
-      <div class="c-pagination__numbered">
+      <div class="pagination__numbered">
         <nuxt-link
           v-for="page in pageButtons"
           :key="page"
           :to="pageConfig(page)"
           :disable="page == currentPage"
           :class="{
-            'c-pagination__link': true,
-            'c-pagination__link--active': page == currentPage,
+            pagination__link: true,
+            'pagination__link--active': page == currentPage,
           }"
         >
           {{ page }}
         </nuxt-link>
       </div>
-      <div class="c-pagination__forward">
+      <div class="pagination__forward">
         <nuxt-link
           v-if="nextPage !== false"
           :to="pageConfig(nextPage)"
-          class="c-pagination__link"
+          class="pagination__link"
         >
           next
         </nuxt-link>
         <nuxt-link
           v-if="lastPage !== false"
           :to="pageConfig(lastPage)"
-          class="c-pagination__link"
+          class="pagination__link"
         >
           last
         </nuxt-link>
@@ -109,7 +109,7 @@ export default {
 </script>
 
 <style lang="scss">
-.c-pagination {
+.pagination {
   padding: 1rem;
   display: flex;
   justify-content: space-between;

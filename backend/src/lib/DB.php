@@ -43,6 +43,19 @@ class DB extends \SQLite3
 
         return $data;
     }
+    public function getBookMetaCount()
+    {
+        $sql = "select count(id) as count from bookMeta ";
+
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
     
     public function getBooks()
     {
@@ -325,20 +338,6 @@ class DB extends \SQLite3
 
         
     }
-
-    // public function inStock()
-    // {
-
-    //     $sql = $this->prepare("select count booksId");
-
-    //     $res = $this->query($sql);
-
-    //     while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
-    //         array_push($data, $row);
-    //         }
-        
-    //      return $data;
-    // }
 
     public function getCheckouts($limitNumber, $offsetNumber)
     {

@@ -17,7 +17,7 @@ export const state = () => ({
   specificBook: {},
   editModal: false,
   deleteModal: false,
-  totalMetaBooks: 0,
+  totalMetaBooks: 50,
 });
 
 export const actions = {
@@ -35,9 +35,7 @@ export const actions = {
   },
   set_bookMetaItems(context) {
     this.$axios
-      .get('http://localhost:8080/getBookMeta', {
-        headers: { Authorization: `Bearer test` },
-      })
+      .get('http://localhost:8080/getBookMetaCount')
       .then((response) => context.commit('set_bookMetaItems', response.data));
   },
   getFrontPageNotification(context) {
