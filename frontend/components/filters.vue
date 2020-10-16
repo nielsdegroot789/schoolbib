@@ -9,7 +9,7 @@
       </div>
       <Autocomplete
         :value="filterIds"
-        :loading="fetchingComics"
+        :loading="fetchingFilters"
         :options="filterOptions"
         :disabled="fetchingInitLabel"
         @change="searchFilters"
@@ -40,6 +40,7 @@ export default {
       show: true,
       nameTimeout: null,
       filterOptions: [],
+      fetchingFilters: false,
     };
   },
   computed: {
@@ -77,6 +78,32 @@ export default {
       }
       this.filterOptions = [];
       this.updateQuery();
+    },
+    async searchFilters(filterValue) {
+      if (filterValue.length === 0) {
+        return;
+      }
+      const params = {
+        title: filterValue,
+      };
+
+      try {
+        this.fetchingFilters = true;
+        const response = await this.$axios({
+          method: 'GET',
+          url: 'http://localhost:8080/getBooksMeta',
+          params,
+        });
+        this.filterOptions = response.data.map(function (filter) {
+          return {
+            value: filter.id,
+            label: filter.name,
+          };
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      this.fetchingFilters = false;
     },
   },
 };
