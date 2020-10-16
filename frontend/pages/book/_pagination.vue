@@ -5,7 +5,7 @@
         <nuxt-link
           v-if="firstPage !== false"
           :to="pageConfig(firstPage)"
-          class="pagination__link"
+          class="PageLink"
           :disabled="isInFirstPage"
         >
           first
@@ -13,7 +13,7 @@
         <nuxt-link
           v-if="previousPage !== false"
           :to="pageConfig(previousPage)"
-          class="pagination__link"
+          class="PageLink"
         >
           previous
         </nuxt-link>
@@ -26,7 +26,7 @@
           :disable="page == currentPage"
           :class="{
             pagination__link: true,
-            'pagination__link--active': page == currentPage,
+            'PageLink--active': page == currentPage,
           }"
         >
           {{ page }}
@@ -36,7 +36,7 @@
         <nuxt-link
           v-if="nextPage !== false"
           :to="pageConfig(nextPage)"
-          class="pagination__link"
+          class="PageLink"
           :disabled="isInLastPage"
         >
           next
@@ -44,7 +44,7 @@
         <nuxt-link
           v-if="lastPage !== false"
           :to="pageConfig(lastPage)"
-          class="pagination__link"
+          class="PageLink"
           :disabled="isInLastPage"
         >
           last
@@ -59,7 +59,7 @@ export default {
   name: 'Pagination',
   computed: {
     currentPage() {
-      return parseInt(this.$route.params.page);
+      return parseInt(this.$route.query.page);
     },
     pagesCount() {
       return this.$store.getters.pageCount;
@@ -110,20 +110,18 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="css">
 .pagination {
   padding: 1rem;
   display: flex;
   justify-content: space-between;
   border: 1px solid purple;
-
-  &__link {
-    font-size: 1.8rem;
-    padding: 0.5rem;
-
-    &--active {
-      color: grey;
-    }
-  }
+}
+.PageLink {
+  font-size: 1.8rem;
+  padding: 0.5rem;
+}
+.PageLink__active {
+  color: grey;
 }
 </style>
