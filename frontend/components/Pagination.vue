@@ -57,7 +57,7 @@ export default {
   name: 'Pagination',
   computed: {
     currentPage() {
-      return parseInt(this.$route.query.page);
+      return parseInt(this.$route.params.page);
     },
     pagesCount() {
       return this.$store.getters.pageCount;
