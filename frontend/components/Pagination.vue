@@ -100,7 +100,7 @@ export default {
   methods: {
     pageConfig(newPageNumber) {
       return {
-        path: '/books' + newPageNumber,
+        path: '/books/' + newPageNumber,
         query: this.$route.query,
       };
     },
