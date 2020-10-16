@@ -1,12 +1,12 @@
 <template>
   <div>
-    Here come all the pagination shit
     <div v-if="pagesCount > 1" class="pagination">
       <div class="pagination__back">
         <nuxt-link
           v-if="firstPage !== false"
           :to="pageConfig(firstPage)"
           class="pagination__link"
+          :disabled="isInFirstPage"
         >
           first
         </nuxt-link>
@@ -37,6 +37,7 @@
           v-if="nextPage !== false"
           :to="pageConfig(nextPage)"
           class="pagination__link"
+          :disabled="isInLastPage"
         >
           next
         </nuxt-link>
@@ -44,6 +45,7 @@
           v-if="lastPage !== false"
           :to="pageConfig(lastPage)"
           class="pagination__link"
+          :disabled="isInLastPage"
         >
           last
         </nuxt-link>
