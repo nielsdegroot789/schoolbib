@@ -57,7 +57,7 @@ export default {
   name: 'Pagination',
   computed: {
     currentPage() {
-      return parseInt(this.$route.params.page);
+      return parseInt(this.$route.query.page);
     },
     pagesCount() {
       return this.$store.getters.pageCount;
@@ -100,7 +100,7 @@ export default {
   methods: {
     pageConfig(newPageNumber) {
       return {
-        path: '/characters/' + newPageNumber,
+        path: '/books' + newPageNumber,
         query: this.$route.query,
       };
     },

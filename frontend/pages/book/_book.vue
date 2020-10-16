@@ -89,7 +89,6 @@
         <p v-else>
           There are currently <b> {{ inStock.count }} </b> available.
         </p>
-        <!-- todo change this to only show when logged in otherwise go to login -->
         <button
           class="button is-large"
           @click="
