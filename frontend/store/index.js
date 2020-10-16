@@ -20,13 +20,24 @@ export const state = () => ({
 });
 
 export const actions = {
-  getBookMeta(context) {
-    this.$axios
-      .get('http://localhost:8080/getBookMeta', {
+  async getBookMeta({ commit }, { filters }) {
+    const params = {};
+    if (filters['book-name']) {
+      params.title = filters['book-name'];
+    }
+    try {
+      const books = await this.$axios({
+        method: 'GET',
+        url: 'http://localhost:8080/getBookMeta',
         headers: { Authorization: `Bearer test` },
-      })
-      .then((response) => context.commit('getBookMeta', response.data));
+        params,
+      });
+      commit('getBookMeta', books.data);
+    } catch (error) {
+      console.log(error);
+    }
   },
+
   getBooks(context) {
     this.$axios
       .get('http://localhost:8080/getBooks')

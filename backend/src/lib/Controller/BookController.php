@@ -27,8 +27,8 @@ class BookController
     {
         $this->response = $response;
         $db = new DB();
-        $arguments = json_decode(file_get_contents("php://input"), true);
-        $title = isset($arguments["title"]) ? '%' . $arguments["title"] : "%";
+
+        $title = isset($_GET["title"]) ? $_GET["title"] . '%'  : "%";
         $author = isset($arguments["author"]) ? '%' . $arguments["author"] : "%";
         $category = isset($arguments["category"]) ? $arguments["category"] : "%";
         $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
