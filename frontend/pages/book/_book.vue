@@ -122,17 +122,17 @@ export default {
   computed: {
     bookMeta() {
       return this.$store.getters.getBookMetaById(
-        parseInt(this.$route.params.book),
+        parseInt(this.$route.query.id),
       )[0];
     },
     books() {
       return this.$store.getters.getBooksByBookMetaId(
-        parseInt(this.$route.params.book),
+        parseInt(this.$route.query.id),
       );
     },
     inStock() {
       return this.$store.getters.getBooksByBookMetaId(
-        parseInt(this.$route.params.book),
+        parseInt(this.$route.query.id),
       )[0];
     },
     currentUserId() {
@@ -143,7 +143,7 @@ export default {
     },
   },
   mounted() {
-    this.booksId = this.$route.params.books;
+    this.booksId = this.$route.query.id;
   },
 
   methods: {

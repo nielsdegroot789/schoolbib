@@ -17,7 +17,7 @@
         v-for="item in bookMeta"
         :key="item.id"
         class="card"
-        :to="'/book/' + item.id"
+        :to="'/book?id=' + item.id"
       >
         <div class="card-content">
           <div class="media">
