@@ -6,13 +6,13 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-end">
-          <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/books/"
+          <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/books"
             >Manage books</nuxt-link
           >
           <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/users"
             >Manage users</nuxt-link
           >
-          <nuxt-link class="navbar-item" to="/books/1">Books</nuxt-link>
+          <nuxt-link class="navbar-item" to="/books">Books</nuxt-link>
           <nuxt-link v-if="!loggedIn" class="navbar-item" to="/login"
             >Log In</nuxt-link
           >
