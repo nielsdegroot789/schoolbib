@@ -105,6 +105,8 @@ $app->map(['POST','DELETE','PUT'], '/handleSpecificBook', \skoolBiep\Controller\
 
 $app->get('/getAdminSpecificBooks', \skoolBiep\Controller\UserController::class . ':getAdminSpecificBooks');
 
+$app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':getFilterResults');
+
 
  
 // $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {

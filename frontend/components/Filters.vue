@@ -1,18 +1,29 @@
 <template>
   <div
     :class="{
-      'c-filters': true,
+      'container-filters': true,
     }"
   >
-    <div v-if="show" class="c-filters__content">
-      <div class="c-filters__name">
+    <div v-if="show" class="filters__content">
+      <div class="filters__name">
         <label>
           Name:
           <input v-model="bookName" type="text" />
         </label>
       </div>
+      <Autocomplete
+        name="Filters"
+        :value="filterIds"
+        :loading="fetchingFilters"
+        :options="FilterOptions"
+        :init-label="initLabel"
+        :disabled="fetchingInitLabel"
+        @change="searchFilter"
+        @remove="removeFilterId"
+        @select="updateFilterId"
+      />
     </div>
-    <div class="c-filters__toggle">
+    <div class="filters__toggle">
       <button class="button button-clear" @click="toggleShow">
         {{ show ? 'Hide filters' : 'Show filters' }}
       </button>
@@ -21,25 +32,18 @@
 </template>
 
 <script>
+import Autocomplete from '../components/Autocomplete';
 export default {
   name: 'Filters',
+  components: {
+    Autocomplete,
+  },
   data() {
-    let filterIds = [];
-    if (this.$route.query['filter-id']) {
-      filterIds = this.$route.query['filter-id'].map((val) => {
-        return {
-          value: val,
-          label: 'loading...',
-        };
-      });
-    }
-
     return {
       bookName: this.$route.query['book-name']
         ? this.$route.query['book-name']
         : '',
       nameTimeout: null,
-      filterIds,
       FilterOptions: [],
       fetchingFilters: false,
       initLabel: '',
@@ -68,35 +72,6 @@ export default {
     },
   },
   methods: {
-    async fetchComicLabel(comicId) {
-      const params = {
-        apikey: this.$store.state.apiKey,
-      };
-
-      try {
-        this.fetchingComics = true;
-        const response = await this.$axios({
-          method: 'GET',
-          url: 'https://gateway.marvel.com:443/v1/public/comics/' + comicId,
-          params,
-        });
-
-        if (!response.data.data.results[0]) {
-          throw new Error('Comic not found');
-        }
-
-        const label = response.data.data.results[0].title;
-        this.comicIds.map((comic) => {
-          if (comic.value === comicId) {
-            comic.label = label;
-          }
-        });
-      } catch (error) {
-        console.error(error);
-        this.comicId = null;
-        this.updateQuery();
-      }
-    },
     toggleShow() {
       this.show = !this.show;
     },
@@ -109,46 +84,41 @@ export default {
         query: newQuery,
       });
     },
-    async searchComics(comicTitle) {
-      if (comicTitle.length === 0) {
+    async searchFilter(input) {
+      if (input.length === 0) {
         return;
       }
 
       const params = {
-        apikey: this.$store.state.apiKey,
-        limit: 10,
-        titleStartsWith: comicTitle,
+        searchVal: input,
       };
-
+      console.log(input);
       try {
-        this.fetchingComics = true;
+        this.fetchingfilter = true;
         const response = await this.$axios({
           method: 'GET',
-          url: 'https://gateway.marvel.com:443/v1/public/comics',
+          url: 'http://localhost:8080/getFilterResults',
           params,
         });
 
-        this.comicOptions = response.data.data.results.map(function (comic) {
-          return {
-            value: comic.id,
-            label: comic.title,
-          };
-        });
+        return {
+          value: response,
+        };
       } catch (error) {
         console.error(error);
       }
-      this.fetchingComics = false;
+      this.fetchingFilters = false;
     },
-    updateComicId(comic) {
-      if (comic !== null) {
-        this.comicIds.push(comic);
+    updateFilterId(filter) {
+      if (filter !== null) {
+        this.filterIds.push(filter);
       }
-      this.comicOptions = [];
+      this.filterOptions = [];
       this.updateQuery();
     },
-    removeComicId(comicId) {
-      const index = this.comicIds.reduce((index, comic, curIndex) => {
-        if (comic.value === comicId) {
+    removeFilterId(filterId) {
+      const index = this.filterIds.reduce((index, filter, curIndex) => {
+        if (filter.value === filterId) {
           return curIndex;
         }
 
@@ -159,7 +129,7 @@ export default {
         return;
       }
 
-      this.comicIds.splice(index, 1);
+      this.filterIds.splice(index, 1);
       this.updateQuery();
     },
   },

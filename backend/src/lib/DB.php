@@ -501,4 +501,30 @@ class DB extends \SQLite3
        $res = $sql->execute();
        return $res;
    }
+
+   public function checkAuthor($searchVal) {
+       $sql = $this->prepare("select name from authors where name like :name");
+       $sql->bindValue(":name", $searchVal);
+       $data = $sql->execute();
+
+       $result = array();
+       while($row = $data->fetchArray(SQLITE3_ASSOC)) {
+           array_push($result, $row);
+       }
+       
+      return $result;
+   }
+
+   public function checkCategories($searchVal) {
+    $sql = $this->prepare("select name from categories where name like :name");
+    $sql->bindValue(":name", $searchVal);
+    $data = $sql->execute();
+    
+    $result = array();
+    while($row = $data->fetchArray(SQLITE3_ASSOC)) {
+        array_push($result, $row);
+    }
+    return $result;
+}
+
 }
