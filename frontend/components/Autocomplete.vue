@@ -7,7 +7,6 @@
         :key="valueItem.value"
         class="c-autocomplete__batch"
         :data-value="valueItem.value"
-        @click="removeItem(valueItem.value)"
       >
         {{ valueItem.label }}
       </button>
@@ -19,30 +18,19 @@
       class="c-autocomplete__input"
       :disabled="isDisabled"
       type="text"
-      @blur="blur"
       @keyup="manualChange"
     />
     <div
       :class="{
-        'c-autocomplete__option-container': true,
-        'c-autocomplete__option-container--empty':
-          !labelChanged && options.length === 0,
         'c-autocomplete__option-container--loading': labelChanged,
       }"
     >
       <button
-        v-for="option in optionList"
-        :key="'comic_option_' + option.value"
-        :class="{
-          'c-autocomplete__option': true,
-          'c-autocomplete__option--disabled': optionIsSelected(option.value),
-        }"
-        :disabled="optionIsSelected(option.value)"
-        type="button"
-        @click.prevent="selectOption(option.label, option.value)"
-        @keyup.enter="selectOption(option.label, option.value)"
+        v-for="result in autoCompleteResults"
+        :key="result.name"
+        class="auto-complete-button"
       >
-        {{ option.label }}
+        {{ result.name }}
       </button>
     </div>
   </div>
@@ -59,18 +47,6 @@ export default {
     name: {
       type: String,
       required: true,
-    },
-    value: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-    options: {
-      type: Array,
-      default() {
-        return [];
-      },
     },
     loading: {
       type: Boolean,
@@ -89,8 +65,8 @@ export default {
     };
   },
   computed: {
-    optionList() {
-      return this.options;
+    autoCompleteResults() {
+      return this.$store.state.autoCompleteResults;
     },
     curValue() {
       return this.value;
@@ -115,9 +91,6 @@ export default {
     },
   },
   methods: {
-    removeItem(value) {
-      this.$emit('remove', value);
-    },
     manualChange() {
       clearTimeout(this.timeout);
       this.labelChanged = true;
@@ -126,12 +99,7 @@ export default {
       this.timeout = setTimeout(this.emitChange, 1000);
     },
     emitChange() {
-      if (this.label.length === 0) {
-        this.labelChanged = false;
-        this.$emit('select', null);
-        return;
-      }
-      this.$emit('change', this.label);
+      this.$store.dispatch('getAutoCompleteResults', this.label);
     },
   },
 };

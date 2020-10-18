@@ -17,6 +17,7 @@ export const state = () => ({
   specificBook: {},
   editModal: false,
   deleteModal: false,
+  autoCompleteResults: [],
 });
 
 export const actions = {
@@ -127,6 +128,21 @@ export const actions = {
   toggleDeleteModal({ commit }, id) {
     commit('toggleDeleteModal', id);
   },
+  getAutoCompleteResults({ commit }, search) {
+    if (search.length === 0) {
+      return commit('makeEmpty');
+    }
+    const params = {
+      searchVal: search,
+    };
+    this.$axios({
+      method: 'GET',
+      url: 'http://localhost:8080/getFilterResults',
+      params,
+    }).then((response) => {
+      commit('setAutoCompleteResults', response.data);
+    });
+  },
 };
 
 export const mutations = {
@@ -213,6 +229,12 @@ export const mutations = {
     state.specificBook = state.adminSpecificBooks.find(
       (book) => book.id === id,
     );
+  },
+  setAutoCompleteResults(state, data) {
+    state.autoCompleteResults = data;
+  },
+  makeEmpty(state) {
+    state.autoCompleteResults = '';
   },
 };
 

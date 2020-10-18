@@ -15,11 +15,9 @@
         name="Filters"
         :value="filterIds"
         :loading="fetchingFilters"
-        :options="FilterOptions"
         :init-label="initLabel"
         :disabled="fetchingInitLabel"
         @change="searchFilter"
-        @remove="removeFilterId"
         @select="updateFilterId"
       />
     </div>
@@ -86,27 +84,11 @@ export default {
         query: newQuery,
       });
     },
-    async searchFilter(input) {
+    searchFilter(input) {
       if (input.length === 0) {
         return;
       }
-
-      const params = {
-        searchVal: input,
-      };
       console.log(input);
-      try {
-        this.fetchingFilters = true;
-        const response = await this.$axios({
-          method: 'GET',
-          url: 'http://localhost:8080/getFilterResults',
-          params,
-        });
-        console.log(response.data);
-        this.filterCategories = 'hq';
-      } catch (error) {
-        console.error(error);
-      }
       this.fetchingFilters = false;
     },
     updateFilterId(filter) {
