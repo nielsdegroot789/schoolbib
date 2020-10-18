@@ -97,16 +97,9 @@ class BookController
         $this->response = $response;
         $searchVal = $_GET['searchVal'] . '%';
         $db = new DB();
-        
-        $filterResults['author'] = $db->checkAuthor($searchVal);
-        $filterResults['category'] = $db->checkCategories($searchVal);
-
-        if(empty($filterResults['author']) && empty($filterResults['category'])){
-            return $response;
-        } else {
-            $res = json_encode($filterResults);
-            $response->getBody()->write($res);
-            return $response;
-        }
+        $searchResults = $db->searchFilters($searchVal);
+        $json = json_encode($searchResults);
+        $response->getBody()->write($json);
+        return $response;
     }
 }

@@ -502,9 +502,10 @@ class DB extends \SQLite3
        return $res;
    }
 
-   public function checkAuthor($searchVal) {
-       $sql = $this->prepare("select name from authors where name like :name");
-       $sql->bindValue(":name", $searchVal);
+   public function searchFilters($searchVal) {
+       $sql = $this->prepare("select 'authors' as type, name from authors where name like :searchVal
+       union select 'categories', name from categories where name like :searchVal");
+       $sql->bindValue(":searchVal", $searchVal);
        $data = $sql->execute();
 
        $result = array();
@@ -514,17 +515,4 @@ class DB extends \SQLite3
        
       return $result;
    }
-
-   public function checkCategories($searchVal) {
-    $sql = $this->prepare("select name from categories where name like :name");
-    $sql->bindValue(":name", $searchVal);
-    $data = $sql->execute();
-    
-    $result = array();
-    while($row = $data->fetchArray(SQLITE3_ASSOC)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-
 }

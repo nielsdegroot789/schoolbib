@@ -45,6 +45,8 @@ export default {
         : '',
       nameTimeout: null,
       FilterOptions: [],
+      filterCategories: '',
+      filterAuthors: [],
       fetchingFilters: false,
       initLabel: '',
       show: true,
@@ -94,16 +96,14 @@ export default {
       };
       console.log(input);
       try {
-        this.fetchingfilter = true;
+        this.fetchingFilters = true;
         const response = await this.$axios({
           method: 'GET',
           url: 'http://localhost:8080/getFilterResults',
           params,
         });
-
-        return {
-          value: response,
-        };
+        console.log(response.data);
+        this.filterCategories = 'hq';
       } catch (error) {
         console.error(error);
       }
@@ -114,22 +114,6 @@ export default {
         this.filterIds.push(filter);
       }
       this.filterOptions = [];
-      this.updateQuery();
-    },
-    removeFilterId(filterId) {
-      const index = this.filterIds.reduce((index, filter, curIndex) => {
-        if (filter.value === filterId) {
-          return curIndex;
-        }
-
-        return index;
-      }, -1);
-
-      if (index === -1) {
-        return;
-      }
-
-      this.filterIds.splice(index, 1);
       this.updateQuery();
     },
   },
