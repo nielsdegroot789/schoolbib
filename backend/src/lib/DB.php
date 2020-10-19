@@ -19,24 +19,25 @@ class DB extends \SQLite3
     }
 
     public function getBookMeta($limitNumber, $offsetNumber, $category, $author, $title)
+    { 
         
-    {   // $query = $this->prepareQuery($category);
-        $sql =  $this->prepare("
+        if(isset($category) {
+            $categoryQuery = $this->prepareQuery($category);
+        }
+        $sql = "
         select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel,
 		authors.name as authors, publishers.name as publishers,  group_concat(categories.name, ', ') as categories from bookMeta
 		join authors on authors.id = bookMeta.authorsId
 		join publishers on publishers.id = bookMeta.publishersId
         join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
-        join categories on categories.id = categoriesInBooks.categoriesId
-        where categories like :categories and authors.name like :author and title like :title
-        GROUP by bookMeta.id
-        order by bookMeta.id limit :limit offset :offset");
-
+        join categories on categories.id = categoriesInBooks.categoriesId group by bookMeta.id";
+        
+        
         $sql->bindValue(':title', $title);
         $sql->bindValue(':categories', $category);
         $sql->bindValue(':author', $author);
         $sql->bindValue(':limit', $limitNumber);
-        $sql->bindValue(':offset', $offsetNumber);
+        $sql->bindValue(':offset', $offsetNumber);  
 
 
         $res = $sql->execute();
@@ -48,7 +49,8 @@ class DB extends \SQLite3
 
         return $data;
     }
-/*
+
+
     public function prepareQuery($filterArray) {
         is_countable($filterArray);
         $sql = "
@@ -57,25 +59,24 @@ class DB extends \SQLite3
 		join authors on authors.id = bookMeta.authorsId
 		join publishers on publishers.id = bookMeta.publishersId
         join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
-        join categories on categories.id = categoriesInBooks.categoriesId
-        having";
+        join categories on categories.id = categoriesInBooks.categoriesId group by bookMeta.id";
         foreach($filterArray as $key => $value) {
-            $sql.= ' categories = ?';
+            $sql.= ' categories = :category' . $key;
             if(count($filterArray) > $key + 1) {
-                $sql.= " and";
+                $sql.= " or";
             } else {
-                $sql.= " and authors.name like :author and title like :title 
-                order by bookMeta.id limit :limit offset :offset group by bookMeta.id";
+                $sql.= " order by bookMeta.id limit :limit offset :offset";
             }
         }
        
         $query = $this->prepare($sql);
         foreach($filterArray as $key => $value) {
-            $query->bindValue($key, $value);
+            $query->bindValue(':category' . $key, $value);
         }
         return $sql;
     }
-    */
+
+    
 
     public function getBooks()
     {
