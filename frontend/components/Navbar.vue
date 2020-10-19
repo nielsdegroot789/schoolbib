@@ -6,13 +6,10 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-end">
-          <nuxt-link
-            v-if="(loggedIn = true)"
-            class="navbar-item"
-            to="/manage/books"
+          <nuxt-link v-if="adminRole" class="navbar-item" to="/manage/books"
             >Manage books</nuxt-link
           >
-          <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/users"
+          <nuxt-link v-if="adminRole" class="navbar-item" to="/manage/users"
             >Manage users</nuxt-link
           >
           <nuxt-link class="navbar-item" to="/books">Books</nuxt-link>
@@ -29,6 +26,15 @@
 <script>
 export default {
   computed: {
+    adminRole() {
+      if ((this.currentRole = '2')) {
+        return true;
+      }
+      return false;
+    },
+    currentRole() {
+      return this.$store.state.currentUser.role;
+    },
     loggedIn() {
       return !!this.$store.state.JWT;
     },

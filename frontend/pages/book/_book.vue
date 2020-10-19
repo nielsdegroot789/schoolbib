@@ -135,12 +135,6 @@ export default {
         parseInt(this.$route.params.book),
       )[0];
     },
-    currentUserId() {
-      return this.$store.state.currentUser.id;
-    },
-    currentRole() {
-      return this.$store.state.currentUser.role;
-    },
   },
   mounted() {
     this.booksId = this.$route.params.books;

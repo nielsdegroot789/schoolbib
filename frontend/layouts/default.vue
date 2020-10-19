@@ -19,6 +19,14 @@ export default {
     Footer,
     Navbar,
   },
+  computed: {
+    loggedIn() {
+      return !!this.$store.state.JWT;
+    },
+    currentRole() {
+      return this.$store.state.currentUser.role;
+    },
+  },
   mounted() {
     this.$store.dispatch('getBookMeta');
     this.$store.dispatch('getBooks');
