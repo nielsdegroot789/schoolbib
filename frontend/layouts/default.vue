@@ -23,9 +23,15 @@ export default {
     Footer,
     Navbar,
   },
+  computed: {
+    UserId() {
+      return this.$store.state.currentUser;
+    },
+    JWT() {
+      return this.$store.state.JWT;
+    },
+  },
   mounted() {
-    this.$store.dispatch('currentUser');
-    this.$store.dispatch('JWT');
     this.$store.dispatch('getBookMeta');
     this.$store.dispatch('getBooks');
     if (!this.$store.state.jwt) {
