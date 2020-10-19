@@ -6,6 +6,10 @@
       <Nuxt />
     </div>
     <Footer />
+    {{ this.currentUser }}
+    {{ this.currentUser.name }}
+    {{ this.currentUser }}
+    {{ currentUser.role }}
   </div>
 </template>
 <script>
@@ -19,8 +23,9 @@ export default {
     Footer,
     Navbar,
   },
-
   mounted() {
+    this.$store.dispatch('currentUser');
+    this.$store.dispatch('JWT');
     this.$store.dispatch('getBookMeta');
     this.$store.dispatch('getBooks');
     if (!this.$store.state.jwt) {

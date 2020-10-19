@@ -1,7 +1,7 @@
 <template>
   <div class="setup section">
     <header class="level">
-      <h1 class="level-left title">Manage Users</h1>
+      <h1 class="level-left title">Manage Users Books</h1>
       <button @click="checkNow">Check now Time k</button>
       {{ this.DateNow }}
     </header>
