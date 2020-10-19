@@ -84,10 +84,10 @@
           employee.
         </p>
         <p v-else-if="inStock === 1">
-          There is currently <b> {{ inStock.count }} </b> available.
+          There is currently <b> {{ inStock }} </b> available.
         </p>
         <p v-else>
-          There are currently <b> {{ inStock.count }} </b> available.
+          There are currently <b> {{ inStock }} </b> available.
         </p>
         <!-- todo change this to only show when logged in otherwise go to login -->
         <button
@@ -117,6 +117,7 @@ export default {
     return {
       timestamp: '',
       showDetails: false,
+      intock: '',
     };
   },
   computed: {
@@ -131,9 +132,7 @@ export default {
       );
     },
     inStock() {
-      return this.$store.getters.getBooksByBookMetaId(
-        parseInt(this.$route.params.book),
-      )[0];
+      return this.$store.state.adminSpecificBooks.length;
     },
     currentUserId() {
       return this.$store.state.currentUser.id;
@@ -141,6 +140,9 @@ export default {
     currentRole() {
       return this.$store.state.currentUser.role;
     },
+  },
+  created() {
+    this.$store.dispatch('inStock', this.$route.params.book);
   },
   mounted() {
     this.booksId = this.$route.params.books;
