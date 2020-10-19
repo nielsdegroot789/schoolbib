@@ -54,6 +54,11 @@ export default {
       return this.$store.state.JWT;
     },
   },
+  middleware({ store, redirect }) {
+    if (!store.state.notAuth) {
+      return redirect('/login');
+    }
+  },
   created() {
     // todo create system that only loads this one for the first time until new notif is made
     this.$axios
