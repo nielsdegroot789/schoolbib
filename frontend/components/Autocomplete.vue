@@ -2,17 +2,11 @@
   <div ref="c-autocomplete" class="c-autocomplete">
     <label class="c-autocomplete__label" for="comic-search">{{ name }}: </label>
     <div class="c-autocomplete__batch-container">
-      <button
-        v-for="valueItem in curValue"
-        :key="valueItem.value"
-        class="c-autocomplete__batch"
-        :data-value="valueItem.value"
-      >
-        {{ valueItem.label }}
+      <button v-for="item in batches" :key="item" class="c-autocomplete__batch">
+        {{ item }}
       </button>
     </div>
     <input
-      id="comic-search"
       v-model="label"
       :name="name + '-label'"
       class="c-autocomplete__input"
@@ -25,13 +19,23 @@
         'c-autocomplete__option-container--loading': labelChanged,
       }"
     >
-      <button
-        v-for="result in autoCompleteResults"
-        :key="result.name"
-        class="auto-complete-button"
-      >
-        {{ result.name }}
-      </button>
+      <div v-for="result in autoCompleteResults" :key="result.name">
+        <button
+          v-if="result.type === 'categories'"
+          class="auto-complete-button"
+          @click="emitSelect(result.name)"
+        >
+          {{ result.name }}
+        </button>
+
+        <button
+          v-if="result.type === 'authors'"
+          class="auto-complete-button"
+          @click="emitSelect(result.name)"
+        >
+          {{ result.name }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -74,6 +78,9 @@ export default {
     isDisabled() {
       return this.disabled;
     },
+    batches() {
+      return this.$store.batches;
+    },
   },
   watch: {
     loading(val) {
@@ -95,11 +102,14 @@ export default {
       clearTimeout(this.timeout);
       this.labelChanged = true;
 
-      this.$emit('select', null);
       this.timeout = setTimeout(this.emitChange, 1000);
     },
     emitChange() {
       this.$store.dispatch('getAutoCompleteResults', this.label);
+    },
+    emitSelect(batch) {
+      this.$store.dispatch('addBatch', batch);
+      this.$emit('select', batch);
     },
   },
 };

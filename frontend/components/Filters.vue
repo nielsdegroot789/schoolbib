@@ -18,7 +18,7 @@
         :init-label="initLabel"
         :disabled="fetchingInitLabel"
         @change="searchFilter"
-        @select="updateFilterId"
+        @select="updateFilterQuery"
       />
     </div>
     <div class="filters__toggle">
@@ -37,13 +37,22 @@ export default {
     Autocomplete,
   },
   data() {
+    let filterCategories = [];
+    if (this.$route.query['filter-categories']) {
+      filterCategories = this.$route.query['filter-categories'].map((val) => {
+        return {
+          value: val,
+          label: 'loading...',
+        };
+      });
+    }
     return {
       bookName: this.$route.query['book-name']
         ? this.$route.query['book-name']
         : '',
       nameTimeout: null,
       FilterOptions: [],
-      filterCategories: '',
+      filterCategories,
       filterAuthors: [],
       fetchingFilters: false,
       initLabel: '',
@@ -58,8 +67,8 @@ export default {
         query['book-name'] = this.bookName;
       }
 
-      if (this.filterIds) {
-        query['filter-id'] = this.filterIds.map((val) => val.value);
+      if (this.filterCategories) {
+        query['filter-category'] = this.filterCategories.map((val) => val);
       }
 
       return query;
@@ -91,9 +100,10 @@ export default {
       console.log(input);
       this.fetchingFilters = false;
     },
-    updateFilterId(filter) {
-      if (filter !== null) {
-        this.filterIds.push(filter);
+    updateFilterQuery(val) {
+      console.log(val);
+      if (val !== null) {
+        this.filterCategories.push(val);
       }
       this.filterOptions = [];
       this.updateQuery();

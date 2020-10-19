@@ -19,20 +19,21 @@ class DB extends \SQLite3
     }
 
     public function getBookMeta($limitNumber, $offsetNumber, $category, $author, $title)
-    {
-        $sql = $this->prepare("
+        
+    {   // $query = $this->prepareQuery($category);
+        $sql =  $this->prepare("
         select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel,
 		authors.name as authors, publishers.name as publishers,  group_concat(categories.name, ', ') as categories from bookMeta
 		join authors on authors.id = bookMeta.authorsId
 		join publishers on publishers.id = bookMeta.publishersId
         join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
         join categories on categories.id = categoriesInBooks.categoriesId
-        where categories.name like :category and authors.name like :author and title like :title
+        where categories like :categories and authors.name like :author and title like :title
         GROUP by bookMeta.id
         order by bookMeta.id limit :limit offset :offset");
 
         $sql->bindValue(':title', $title);
-        $sql->bindValue(':category', $category);
+        $sql->bindValue(':categories', $category);
         $sql->bindValue(':author', $author);
         $sql->bindValue(':limit', $limitNumber);
         $sql->bindValue(':offset', $offsetNumber);
@@ -47,7 +48,35 @@ class DB extends \SQLite3
 
         return $data;
     }
-    
+/*
+    public function prepareQuery($filterArray) {
+        is_countable($filterArray);
+        $sql = "
+        select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel,
+		authors.name as authors, publishers.name as publishers,  group_concat(categories.name, ', ') as categories from bookMeta
+		join authors on authors.id = bookMeta.authorsId
+		join publishers on publishers.id = bookMeta.publishersId
+        join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
+        join categories on categories.id = categoriesInBooks.categoriesId
+        having";
+        foreach($filterArray as $key => $value) {
+            $sql.= ' categories = ?';
+            if(count($filterArray) > $key + 1) {
+                $sql.= " and";
+            } else {
+                $sql.= " and authors.name like :author and title like :title 
+                order by bookMeta.id limit :limit offset :offset group by bookMeta.id";
+            }
+        }
+       
+        $query = $this->prepare($sql);
+        foreach($filterArray as $key => $value) {
+            $query->bindValue($key, $value);
+        }
+        return $sql;
+    }
+    */
+
     public function getBooks()
     {
         $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, 

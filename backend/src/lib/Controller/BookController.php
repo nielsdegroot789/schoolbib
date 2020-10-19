@@ -30,7 +30,7 @@ class BookController
 
         $title = isset($_GET["title"]) ? $_GET["title"] . '%'  : "%";
         $author = isset($arguments["author"]) ? '%' . $arguments["author"] : "%";
-        $category = isset($arguments["category"]) ? $arguments["category"] : "%";
+        $category = isset($_GET["categories"]) ? $_GET["categories"] : "%";
         $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
         $offsetNumber = isset($arguments["offset"]) ? $arguments["offset"] : 0;
 
@@ -102,4 +102,5 @@ class BookController
         $response->getBody()->write($json);
         return $response;
     }
+
 }

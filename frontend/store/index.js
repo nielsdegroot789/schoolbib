@@ -18,6 +18,7 @@ export const state = () => ({
   editModal: false,
   deleteModal: false,
   autoCompleteResults: [],
+  batches: [],
 });
 
 export const actions = {
@@ -26,6 +27,10 @@ export const actions = {
     if (filters['book-name']) {
       params.title = filters['book-name'];
     }
+    if (filters['filter-category']) {
+      params.categories = filters['filter-category'];
+    }
+
     try {
       const books = await this.$axios({
         method: 'GET',
@@ -143,6 +148,9 @@ export const actions = {
       commit('setAutoCompleteResults', response.data);
     });
   },
+  addBatch({ commit }, batch) {
+    commit('setBatch', batch);
+  },
 };
 
 export const mutations = {
@@ -235,6 +243,9 @@ export const mutations = {
   },
   makeEmpty(state) {
     state.autoCompleteResults = '';
+  },
+  setBatch(state, batch) {
+    state.batches.push(batch);
   },
 };
 
