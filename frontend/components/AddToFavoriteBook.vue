@@ -1,4 +1,4 @@
-<template>
+<template v-if="loggedIn">
   <div class="favoritediv">
     <button
       @click="

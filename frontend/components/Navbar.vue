@@ -6,7 +6,10 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-end">
-          <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/books"
+          <nuxt-link
+            v-if="(loggedIn = true)"
+            class="navbar-item"
+            to="/manage/books"
             >Manage books</nuxt-link
           >
           <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/users"
