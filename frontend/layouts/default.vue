@@ -24,6 +24,7 @@ export default {
     isAdmin() {
       if ((this.currentRole = 2)) {
         return true;
+        // why doesnt this work?
       }
       return false;
     },
