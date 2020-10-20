@@ -19,12 +19,19 @@ export default {
     Footer,
     Navbar,
   },
+  currentRole: '',
   computed: {
-    loggedIn() {
-      return !!this.$store.state.JWT;
+    isAdmin() {
+      if ((this.currentRole = 2)) {
+        return true;
+      }
+      return false;
     },
     currentRole() {
       return this.$store.state.currentUser.role;
+    },
+    loggedIn() {
+      return !!this.$store.state.JWT;
     },
   },
   mounted() {
