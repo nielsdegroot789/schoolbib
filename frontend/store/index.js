@@ -17,6 +17,8 @@ export const state = () => ({
   specificBook: {},
   editModal: false,
   deleteModal: false,
+  isAdmin: false,
+  isStudent: false,
 });
 
 export const actions = {
@@ -150,6 +152,12 @@ export const mutations = {
     state.currentUser.role = JSON.parse(atob(array[1])).role;
     state.currentUser.signature = array[2];
   },
+  isAdmin: (state) => {
+    state.isAdmin = true;
+  },
+  isStudent: (state) => {
+    state.isStudent = true;
+  },
   showLoginError(state) {
     state.showLoginError = true;
   },
@@ -159,6 +167,12 @@ export const mutations = {
   logout(state) {
     state.JWT = null;
     state.currentUser = {};
+  },
+  isAdmin(state, isAdmin) {
+    state.isAdmin = isAdmin;
+  },
+  isStudent(state, isStudent) {
+    state.isStudent = isStudent;
   },
   setTotalItems(state, payload) {
     state.setTotalItems = payload;

@@ -19,22 +19,7 @@ export default {
     Footer,
     Navbar,
   },
-  currentRole: '',
-  computed: {
-    isAdmin() {
-      if ((this.currentRole = 2)) {
-        return true;
-        // why doesnt this work?
-      }
-      return false;
-    },
-    currentRole() {
-      return this.$store.state.currentUser.role;
-    },
-    loggedIn() {
-      return !!this.$store.state.JWT;
-    },
-  },
+
   mounted() {
     this.$store.dispatch('getBookMeta');
     this.$store.dispatch('getBooks');

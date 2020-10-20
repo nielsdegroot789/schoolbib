@@ -25,7 +25,32 @@
 
 <script>
 export default {
+  computed: {
+    isStudent() {
+      return this.$store.state.isStudent;
+    },
+    isAdmin() {
+      return this.$store.state.isAdmin;
+    },
+    currentRole() {
+      return this.$store.state.currentUser.role;
+    },
+    loggedIn() {
+      return !!this.$store.state.JWT;
+    },
+  },
   methods: {
+    WhatUserIsLoggedIn() {
+      switch (this.currentRole) {
+        case 1:
+          this.isStudent === true;
+          break;
+        case 2:
+          this.isAdmin === true;
+          break;
+      }
+      return false;
+    },
     logout() {
       this.$store.commit('logout');
       localStorage.removeItem('JWT');
