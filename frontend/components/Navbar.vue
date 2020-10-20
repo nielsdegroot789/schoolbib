@@ -40,18 +40,8 @@ export default {
     },
   },
   methods: {
-    WhatUserIsLoggedIn() {
-      switch (this.currentRole) {
-        case 1:
-          this.isStudent === true;
-          break;
-        case 2:
-          this.isAdmin === true;
-          break;
-      }
-      return false;
-    },
     logout() {
+      this.$store.commit('logout');
       this.$store.commit('logout');
       localStorage.removeItem('JWT');
     },

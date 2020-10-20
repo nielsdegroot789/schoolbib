@@ -168,11 +168,16 @@ export const mutations = {
     state.JWT = null;
     state.currentUser = {};
   },
-  isAdmin(state, isAdmin) {
-    state.isAdmin = isAdmin;
-  },
-  isStudent(state, isStudent) {
-    state.isStudent = isStudent;
+  CheckUserRole(state) {
+    switch (state.currentRole) {
+      case 1:
+        state.isStudent = true;
+        break;
+      case 2:
+        state.isAdmin = true;
+        break;
+    }
+    return false;
   },
   setTotalItems(state, payload) {
     state.setTotalItems = payload;
