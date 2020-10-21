@@ -1,7 +1,7 @@
 <template>
   <div class="section pageSetup">
     <div class="level box">
-      <div class="url level-left">
+      <div v-if="bookMeta" class="url level-left">
         <n-link to="/">Home</n-link> > <n-link to="/books">books</n-link> >
         {{ bookMeta.title }}
       </div>
@@ -11,63 +11,63 @@
     <div class="bookDetails">
       <div class="section box">
         <!-- picture  -->
-        <img :src="bookMeta.sticker" alt="" />
+        <img v-if="bookMeta" :src="bookMeta.sticker" alt="" />
       </div>
       <div class="section box">
         <!-- specifics -->
         <h1 class="title">Book Details</h1>
         <p class="level">
           <span class="level-left"> Title:</span>
-          <span class="level-right">
+          <span v-if="bookMeta" class="level-right">
             {{ bookMeta.title ? bookMeta.title : 'Unavailable' }}
           </span>
         </p>
         <p class="level">
           <span class="level-left"> Category:</span>
-          <span class="level-right">
+          <span v-if="bookMeta" class="level-right">
             {{ bookMeta.categories ? bookMeta.categories : 'Unavailable' }}
           </span>
         </p>
         <p class="level">
           <span class="level-left"> Author(s):</span>
-          <span class="level-right">
+          <span v-if="bookMeta" class="level-right">
             {{ bookMeta.authors ? bookMeta.authors : 'Unavailable' }}
           </span>
         </p>
         <p class="level">
           <span class="level-left"> Rating:</span>
-          <span class="level-right">
+          <span v-if="bookMeta" class="level-right">
             {{ bookMeta.rating ? bookMeta.rating : 'Unavailable' }}
           </span>
         </p>
         <p class="level">
           <span class="level-left"> Language:</span>
-          <span class="level-right">
+          <span v-if="bookMeta" class="level-right">
             {{ bookMeta.language ? bookMeta.language : 'Unavailable' }}
           </span>
         </p>
         <div v-if="showDetails">
           <p class="level">
             <span class="level-left"> ISBN:</span>
-            <span class="level-right">
+            <span v-if="bookMeta" class="level-right">
               {{ bookMeta.isbnCode ? bookMeta.isbnCode : 'Unavailable' }}
             </span>
           </p>
           <p class="level">
             <span class="level-left"> Publishers:</span>
-            <span class="level-right">
+            <span v-if="bookMeta" class="level-right">
               {{ bookMeta.publishers ? bookMeta.publishers : 'Unavailable' }}
             </span>
           </p>
           <p class="level">
             <span class="level-left"> Publish Date:</span>
-            <span class="level-right">
+            <span v-if="bookMeta" class="level-right">
               {{ bookMeta.publishDate ? bookMeta.publishDate : 'Unavailable' }}
             </span>
           </p>
           <p class="level">
             <span class="level-left"> Reading Level:</span>
-            <span class="level-right">
+            <span v-if="bookMeta" class="level-right">
               {{
                 bookMeta.readingLevel ? bookMeta.readingLevel : 'Unavailable'
               }}
@@ -84,10 +84,10 @@
           employee.
         </p>
         <p v-else-if="inStock === 1">
-          There is currently <b> {{ inStock.count }} </b> available.
+          There is currently <b> {{ inStock }} </b> available.
         </p>
         <p v-else>
-          There are currently <b> {{ inStock.count }} </b> available.
+          There are currently <b> {{ inStock }} </b> available.
         </p>
         <!-- todo change this to only show when logged in otherwise go to login -->
         <button
@@ -131,10 +131,11 @@ export default {
       );
     },
     inStock() {
-      return this.$store.getters.getBooksByBookMetaId(
-        parseInt(this.$route.params.book),
-      )[0];
+      return this.$store.state.adminSpecificBooks.length;
     },
+  },
+  created() {
+    this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);
   },
   mounted() {
     this.booksId = this.$route.params.books;
@@ -180,7 +181,6 @@ export default {
   display: grid;
   grid-template-columns: 25% 40% 35%;
 }
-
 .bookDetails img {
   width: 100%;
 }
