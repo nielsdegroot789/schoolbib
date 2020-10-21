@@ -165,6 +165,7 @@ export const mutations = {
     state.showLoginError = false;
   },
   logout(state) {
+    this.$router.push('/');
     state.JWT = null;
     state.currentUser = {};
   },
