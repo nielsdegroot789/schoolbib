@@ -19,7 +19,16 @@ export default {
     Footer,
     Navbar,
   },
-
+  watch: {
+    $route: {
+      immediate: true,
+      handler(route) {
+        if (this.$store.state.JWT === null) {
+          this.$router.push('/login');
+        }
+      },
+    },
+  },
   mounted() {
     this.$store.dispatch('getBookMeta');
     this.$store.dispatch('getBooks');
