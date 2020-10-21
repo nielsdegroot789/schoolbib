@@ -19,7 +19,6 @@ export default {
     Footer,
     Navbar,
   },
-
   mounted() {
     this.$store.dispatch('getBookMeta');
     this.$store.dispatch('getBooks');

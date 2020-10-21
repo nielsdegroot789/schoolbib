@@ -18,9 +18,13 @@
     <div class="quick-links-container">
       <ul>
         <li>
-          <a href="#footer" class="quick-link">Opening hours</a>
+          <a
+            href="#footer"
+            :class="['quick-link', { 'center-link-frontpage': !JWT }]"
+            >Opening hours</a
+          >
         </li>
-        <li>
+        <li v-if="JWT">
           <nuxt-link to="/profile" class="quick-link">My profile</nuxt-link>
         </li>
       </ul>
@@ -45,6 +49,11 @@ export default {
       showNotif: false,
     };
   },
+  computed: {
+    JWT() {
+      return this.$store.state.JWT;
+    },
+  },
   created() {
     // todo create system that only loads this one for the first time until new notif is made
     this.$axios
@@ -62,4 +71,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.center-link-frontpage {
+  text-align: center;
+}
+</style>

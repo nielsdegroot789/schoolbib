@@ -6,7 +6,7 @@ export const state = () => ({
   frontPageNotification: {},
   show: true,
   notifications: [],
-  JWT: {},
+  JWT: null,
   showLoginError: false,
   limit: 20,
   reservation: [],
