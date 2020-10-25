@@ -57,12 +57,6 @@ export default {
     };
   },
   computed: {
-    changePageNumber() {
-      return this.$store.getters.pageNumber;
-    },
-    pageNumber() {
-      return parseInt(this.$route.params.page);
-    },
     bookMeta() {
       return this.$store.state.bookMeta;
     },

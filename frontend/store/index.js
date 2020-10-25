@@ -19,6 +19,7 @@ export const state = () => ({
   deleteModal: false,
   isAdmin: false,
   isStudent: false,
+  pageCount: 0,
 });
 
 export const actions = {
@@ -127,6 +128,9 @@ export const mutations = {
   getBooks(state, data) {
     state.books = data;
   },
+  getPageCount(state, pageCount) {
+    state.pageCount = pageCount;
+  },
   getFrontPageNotification(state, data) {
     state.frontPageNotification = data;
   },
@@ -180,9 +184,6 @@ export const mutations = {
     }
     return false;
   },
-  setTotalItems(state, payload) {
-    state.setTotalItems = payload;
-  },
   getReservations(state, reservation) {
     state.reservation = reservation;
   },
@@ -234,12 +235,6 @@ export const getters = {
   },
   getNotification: (state) => {
     return state.notification;
-  },
-  getPageCount(state) {
-    return Math.ceil(state.totalItems / state.limit);
-  },
-  getBookMetaCount: (state) => (count) => {
-    return state.bookMeta.filter((bookMeta) => bookMeta.count === count);
   },
   getReservation: (state) => {
     return state.reservations;
