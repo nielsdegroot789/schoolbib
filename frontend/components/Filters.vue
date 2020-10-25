@@ -38,11 +38,11 @@ export default {
   },
   data() {
     let filterCategories = [];
-    if (this.$route.query['filter-categories']) {
-      filterCategories = this.$route.query['filter-categories'].map((val) => {
+    if (this.$route.query['filter-category']) {
+      filterCategories = this.$route.query['filter-category'].map((val) => {
         return {
           value: val,
-          label: 'loading...',
+          type: 'categories',
         };
       });
     }
@@ -79,6 +79,11 @@ export default {
       clearTimeout(this.nameTimeout);
       this.nameTimeout = setTimeout(this.updateQuery, 1000);
     },
+  },
+  created() {
+    this.$route.query['filter-category'].map((val) => {
+      this.$store.dispatch('addBatch', { value: val, type: 'categories' });
+    });
   },
   methods: {
     toggleShow() {

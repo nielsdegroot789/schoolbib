@@ -1,9 +1,8 @@
 <template>
   <div ref="c-autocomplete" class="c-autocomplete">
-    <label class="c-autocomplete__label" for="comic-search">{{ name }}: </label>
     <div class="c-autocomplete__batch-container">
       <button v-for="item in batches" :key="item" class="c-autocomplete__batch">
-        {{ item }}
+        {{ item.type + ' : ' + item.value }}
       </button>
     </div>
     <input
@@ -23,7 +22,7 @@
         <button
           v-if="result.type === 'categories'"
           class="auto-complete-button"
-          @click="emitSelect(result.name)"
+          @click="emitSelect(result.name, result.type)"
         >
           {{ result.name }}
         </button>
@@ -79,7 +78,7 @@ export default {
       return this.disabled;
     },
     batches() {
-      return this.$store.batches;
+      return this.$store.state.batches;
     },
   },
   watch: {
@@ -97,6 +96,7 @@ export default {
       },
     },
   },
+  created() {},
   methods: {
     manualChange() {
       clearTimeout(this.timeout);
@@ -107,9 +107,10 @@ export default {
     emitChange() {
       this.$store.dispatch('getAutoCompleteResults', this.label);
     },
-    emitSelect(batch) {
-      this.$store.dispatch('addBatch', batch);
-      this.$emit('select', batch);
+    emitSelect(value, type) {
+      console.log(value, type);
+      this.$store.dispatch('addBatch', { value, type });
+      this.$emit('select', value);
     },
   },
 };
