@@ -133,6 +133,12 @@ export default {
     inStock() {
       return this.$store.state.adminSpecificBooks.length;
     },
+    currentUserId() {
+      return this.$store.state.currentUser.id;
+    },
+    currentRole() {
+      return this.$store.state.currentUser.role;
+    },
   },
   created() {
     this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);

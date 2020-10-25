@@ -1,22 +1,40 @@
 <template>
   <div class="pagination-row">
-    <n-link v-if="first !== false" :to="'/books/' + first"> first </n-link>
+    <n-link
+      v-if="first !== false"
+      :to="{ path: 'books', query: { page: '1' } }"
+    >
+      first
+    </n-link>
 
-    <n-link v-if="previous !== false" :to="'/books/' + previous">
+    <n-link
+      v-if="previous !== false"
+      :to="{ path: 'books', query: { page: previous } }"
+    >
       previous
     </n-link>
 
     <n-link
       v-for="page in pageButtons"
       :key="page"
-      :to="{ path: '/books/' + page, query: $route.query }"
+      :to="{ path: 'books', query: { page: pageButtons } }"
     >
       {{ page }}
     </n-link>
 
-    <n-link v-if="next !== false" :to="'/books/' + next"> next </n-link>
+    <n-link
+      v-if="next !== false"
+      :to="{ path: 'books', query: { page: next } }"
+    >
+      next
+    </n-link>
 
-    <n-link v-if="last !== false" :to="'/books/' + last"> last </n-link>
+    <n-link
+      v-if="last !== false"
+      :to="{ path: 'books', query: { page: last } }"
+    >
+      last
+    </n-link>
   </div>
 </template>
 
@@ -30,7 +48,7 @@ export default {
       return this.$store.getters.getBookMetaCount;
     },
     pageNumber() {
-      return parseInt(this.$route.params.page);
+      return parseInt(this.$route.query.page);
     },
     totalPages() {
       return this.totalBookMeta / this.limit;
@@ -70,6 +88,18 @@ export default {
         return false;
       }
       return this.pageNumber - 1;
+    },
+  },
+  watch: {
+    $route: {
+      immediate: true,
+      handler(route) {
+        this.currentPage = route.query.name;
+        this.$store.dispatch('getBookMeta', {
+          pageNumber: this.pageNumber,
+        });
+        console.log(route);
+      },
     },
   },
 };

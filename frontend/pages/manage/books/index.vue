@@ -83,7 +83,6 @@ export default {
       return this.$store.state.bookMeta;
     },
   },
-  created() {},
 };
 </script>
 
