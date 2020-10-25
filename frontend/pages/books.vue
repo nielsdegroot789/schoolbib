@@ -45,9 +45,12 @@
 </template>
 <script>
 import StarRating from '~/components/StarRating';
+import Pagination from '~/components/Pagination';
+
 export default {
   components: {
     StarRating,
+    Pagination,
   },
   data() {
     return {
