@@ -32,12 +32,6 @@ export default {
     pagesCount() {
       return this.$store.getters.getPageCount;
     },
-    totalItems() {
-      return this.$store.state.totalItems;
-    },
-    totalPages() {
-      return this.totalItems / this.limit;
-    },
     amountOfButtons() {
       return Math.min(this.pagesCount, 5);
     },
@@ -55,13 +49,13 @@ export default {
 
     first() {
       if (this.pageNumber === 1) {
-        return false;
+        return 1;
       }
       return 1;
     },
     last() {
       if (this.pageNumber >= this.pagesCount - 1) {
-        return 100;
+        return this.pagesCount;
       }
       return this.pagesCount;
     },

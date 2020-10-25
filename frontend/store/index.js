@@ -1,5 +1,6 @@
 export const state = () => ({
   bookMeta: [],
+  totalBookMeta: 0,
   books: [],
   users: [],
   currentUser: {},
@@ -28,6 +29,11 @@ export const actions = {
         headers: { Authorization: `Bearer test` },
       })
       .then((response) => context.commit('getBookMeta', response.data));
+  },
+  getBookMetaCount(context) {
+    this.$axios
+      .get('http://localhost:8080/getBookMetaCount')
+      .then((response) => context.commit('getBookMetaCount', response.data));
   },
   getBooks(context) {
     this.$axios
@@ -127,8 +133,8 @@ export const mutations = {
   getBooks(state, data) {
     state.books = data;
   },
-  getPageCount(state, pageCount) {
-    state.pageCount = pageCount;
+  getBookMetaCount(state, totalBookMeta) {
+    state.totalBookMeta = totalBookMeta;
   },
   getFrontPageNotification(state, data) {
     state.frontPageNotification = data;
@@ -242,6 +248,6 @@ export const getters = {
     return state.specificBook;
   },
   getPageCount(state) {
-    return Math.ceil(state.bookMeta / state.limit);
+    return Math.ceil(state.totalBookMeta / state.limit);
   },
 };

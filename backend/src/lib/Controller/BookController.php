@@ -41,7 +41,18 @@ class BookController
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
+    
+    public function getBookMetaCount(Request $request, Response $response, array $args)
+    {
+        $db = new DB();
+        $data = $db->getBookMetaCount();
+        $payload = json_encode($data);
 
+        $response->getBody()->write($payload);
+
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
     public function getBooks(Request $request, Response $response, array $args)
     {
         $db = new DB();

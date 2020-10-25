@@ -86,6 +86,8 @@ $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBoo
 
 $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
 
+$app->get('/getBookMetaCount', \skoolBiep\Controller\BookController::class . ':getBookMetaCount');
+
 $app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . ':getNotification');
 $app->get('/getCockpitFooterData', \skoolBiep\Controller\CockpitController::class . ':getCockpitFooterData');
 
