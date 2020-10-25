@@ -1,22 +1,22 @@
 <template>
   <div class="pagination-row">
-    <n-link v-if="first !== false" :to="'/catalog/' + first"> first </n-link>
+    <n-link v-if="first !== false" :to="'/books/' + first"> first </n-link>
 
-    <n-link v-if="previous !== false" :to="'/catalog/' + previous">
+    <n-link v-if="previous !== false" :to="'/books/' + previous">
       previous
     </n-link>
 
     <n-link
       v-for="page in pageButtons"
       :key="page"
-      :to="{ path: '/catalog/' + page, query: $route.query }"
+      :to="{ path: '/books/' + page, query: $route.query }"
     >
       {{ page }}
     </n-link>
 
-    <n-link v-if="next !== false" :to="'/catalog/' + next"> next </n-link>
+    <n-link v-if="next !== false" :to="'/books/' + next"> next </n-link>
 
-    <n-link v-if="last !== false" :to="'/catalog/' + last"> last </n-link>
+    <n-link v-if="last !== false" :to="'/books/' + last"> last </n-link>
   </div>
 </template>
 
