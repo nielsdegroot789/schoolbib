@@ -19,7 +19,6 @@ export const state = () => ({
   deleteModal: false,
   isAdmin: false,
   isStudent: false,
-  pageCount: 0,
 });
 
 export const actions = {
@@ -241,5 +240,8 @@ export const getters = {
   },
   getCurrentBook: (state) => {
     return state.specificBook;
+  },
+  getPageCount(state) {
+    return Math.ceil(state.bookMeta / state.limit);
   },
 };

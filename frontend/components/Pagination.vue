@@ -30,7 +30,7 @@ export default {
       return parseInt(this.$route.query.page);
     },
     pagesCount() {
-      return this.$store.getters.pageCount;
+      return this.$store.getters.getPageCount;
     },
     totalItems() {
       return this.$store.state.totalItems;
@@ -38,10 +38,13 @@ export default {
     totalPages() {
       return this.totalItems / this.limit;
     },
+    amountOfButtons() {
+      return Math.min(this.pagesCount, 5);
+    },
     pageButtons() {
       const start = Math.min(
         Math.max(1, this.pagesCount - 4),
-        Math.max(1, this.currentPage - 2),
+        Math.max(1, this.pageNumber - 2),
       );
       const array = [];
       for (let i = start; i < start + this.amountOfButtons; i++) {
