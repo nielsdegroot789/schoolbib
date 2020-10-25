@@ -24,7 +24,7 @@ class BookController
     }
 
     public function getBookMeta(Request $request, Response $response, array $args)
-    {
+    { 
         $this->response = $response;
         $db = new DB();
 

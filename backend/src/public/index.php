@@ -76,7 +76,6 @@ $checkLoggedInMW = function ($request, $handler) {
 //routes
 $app->get('/', function (Request $request, Response $response, $args) {
     $response->getBody()->write('Hello ');
-
     return $response;
 })->add($checkLoggedInMW);
 
