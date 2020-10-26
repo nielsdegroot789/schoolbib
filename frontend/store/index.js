@@ -151,6 +151,10 @@ export const actions = {
   addBatch({ commit }, batch) {
     commit('setBatch', batch);
   },
+  deleteBatch({ commit }, batch) {
+    console.log(batch);
+    commit('deleteBatch', batch);
+  },
 };
 
 export const mutations = {
@@ -246,6 +250,11 @@ export const mutations = {
   },
   setBatch(state, batch) {
     state.batches.push(batch);
+  },
+  deleteBatch(state, batch) {
+    state.batches = state.batches.filter((item) => {
+      return item.value !== batch;
+    });
   },
 };
 

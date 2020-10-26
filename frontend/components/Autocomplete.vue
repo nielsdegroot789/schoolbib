@@ -1,7 +1,12 @@
 <template>
   <div ref="c-autocomplete" class="c-autocomplete">
     <div class="c-autocomplete__batch-container">
-      <button v-for="item in batches" :key="item" class="c-autocomplete__batch">
+      <button
+        v-for="item in batches"
+        :key="item"
+        class="c-autocomplete__batch"
+        @click="deleteBatch(item.value)"
+      >
         {{ item.type + ' : ' + item.value }}
       </button>
     </div>
@@ -111,6 +116,9 @@ export default {
       console.log(value, type);
       this.$store.dispatch('addBatch', { value, type });
       this.$emit('select', value);
+    },
+    deleteBatch(value) {
+      this.$store.dispatch('deleteBatch', value);
     },
   },
 };

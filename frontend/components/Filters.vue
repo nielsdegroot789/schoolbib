@@ -37,15 +37,7 @@ export default {
     Autocomplete,
   },
   data() {
-    let filterCategories = [];
-    if (this.$route.query['filter-category']) {
-      filterCategories = this.$route.query['filter-category'].map((val) => {
-        return {
-          value: val,
-          type: 'categories',
-        };
-      });
-    }
+    const filterCategories = [];
     return {
       bookName: this.$route.query['book-name']
         ? this.$route.query['book-name']
@@ -68,7 +60,9 @@ export default {
       }
 
       if (this.filterCategories) {
-        query['filter-category'] = this.filterCategories.map((val) => val);
+        query['filter-category'] = this.$store.state.batches.map(
+          (val) => val.value,
+        );
       }
 
       return query;
@@ -81,9 +75,18 @@ export default {
     },
   },
   created() {
-    this.$route.query['filter-category'].map((val) => {
-      this.$store.dispatch('addBatch', { value: val, type: 'categories' });
-    });
+    if (this.$route.query['filter-category']) {
+      if (Array.isArray(this.$route.query['filter-category'])) {
+        this.$route.query['filter-category'].map((val) => {
+          this.$store.dispatch('addBatch', { value: val, type: 'categories' });
+        });
+      } else {
+        this.$store.dispatch('addBatch', {
+          value: this.$route.query['filter-category'],
+          type: 'categories',
+        });
+      }
+    }
   },
   methods: {
     toggleShow() {
