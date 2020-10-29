@@ -19,6 +19,7 @@
         :disabled="fetchingInitLabel"
         @change="searchFilter"
         @select="updateFilterQuery"
+        @delete="deleteQuery"
       />
     </div>
     <div class="filters__toggle">
@@ -59,8 +60,14 @@ export default {
         query['book-name'] = this.bookName;
       }
 
-      if (this.filterCategories) {
+      if (this.filterCategories[0]) {
         query['filter-category'] = this.$store.state.batches.map(
+          (val) => val.value,
+        );
+      }
+
+      if (this.filterAuthors[0]) {
+        query['filter-authors'] = this.$store.state.batches.map(
           (val) => val.value,
         );
       }
@@ -93,9 +100,8 @@ export default {
       this.show = !this.show;
     },
     updateQuery() {
-      console.log(this.filterObject);
       const newQuery = this.filterObject;
-
+      console.log(newQuery);
       this.$router.push({
         path: '/books',
         query: newQuery,
@@ -108,12 +114,20 @@ export default {
       console.log(input);
       this.fetchingFilters = false;
     },
-    updateFilterQuery(val) {
-      console.log(val);
-      if (val !== null) {
-        this.filterCategories.push(val);
+    updateFilterQuery(filterObject) {
+      debugger;
+      if (filterObject !== null) {
+        if (filterObject.type === 'categories') {
+          this.filterCategories.push(filterObject);
+        } else {
+          this.filterAuthors.push(filterObject);
+        }
       }
+
       this.filterOptions = [];
+      this.updateQuery();
+    },
+    deleteQuery() {
       this.updateQuery();
     },
   },

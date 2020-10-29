@@ -3,7 +3,7 @@
     <div class="c-autocomplete__batch-container">
       <button
         v-for="item in batches"
-        :key="item"
+        :key="item.value"
         class="c-autocomplete__batch"
         @click="deleteBatch(item.value)"
       >
@@ -31,14 +31,15 @@
         >
           {{ result.name }}
         </button>
-
-        <button
-          v-if="result.type === 'authors'"
-          class="auto-complete-button"
-          @click="emitSelect(result.name)"
-        >
-          {{ result.name }}
-        </button>
+        <div>
+          <button
+            v-if="result.type === 'authors'"
+            class="auto-complete-button"
+            @click="emitSelect(result.name, result.type)"
+          >
+            {{ result.name }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -115,10 +116,21 @@ export default {
     emitSelect(value, type) {
       console.log(value, type);
       this.$store.dispatch('addBatch', { value, type });
-      this.$emit('select', value);
+      this.$emit('select', { value, type });
     },
     deleteBatch(value) {
       this.$store.dispatch('deleteBatch', value);
+      let categoryQuery = this.$route.query['filter-categories'];
+
+      if ((value = categoryQuery)) {
+        categoryQuery = '';
+
+        categoryQuery = categoryQuery.filter((item) => {
+          console.log(item, value);
+          return item !== value;
+        });
+      }
+      this.$emit('delete');
     },
   },
 };
