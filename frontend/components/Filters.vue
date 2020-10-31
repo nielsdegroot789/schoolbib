@@ -38,14 +38,13 @@ export default {
     Autocomplete,
   },
   data() {
-    const filterCategories = [];
     return {
       bookName: this.$route.query['book-name']
         ? this.$route.query['book-name']
         : '',
       nameTimeout: null,
       FilterOptions: [],
-      filterCategories,
+      filterCategories: [],
       filterAuthors: [],
       fetchingFilters: false,
       initLabel: '',
@@ -55,36 +54,31 @@ export default {
   computed: {
     filterObject() {
       const query = {};
-
       if (this.bookName) {
         query['book-name'] = this.bookName;
       }
 
-      if (this.filterCategories.length) {
-        query['filter-category'] = this.$store.state.batches.reduce(function (
-          filtered,
-          batch,
-        ) {
-          if (batch.type === 'categories') {
-            filtered.push(batch.value);
-          }
-          return filtered;
-        },
-        []);
-      }
+      query['filter-category'] = this.$store.state.batches.reduce(function (
+        filtered,
+        batch,
+      ) {
+        if (batch.type === 'categories') {
+          filtered.push(batch.value);
+        }
+        return filtered;
+      },
+      []);
 
-      if (this.filterAuthors.length) {
-        query['filter-authors'] = this.$store.state.batches.reduce(function (
-          filtered,
-          batch,
-        ) {
-          if (batch.type === 'authors') {
-            filtered.push(batch.value);
-          }
-          return filtered;
-        },
-        []);
-      }
+      query['filter-authors'] = this.$store.state.batches.reduce(function (
+        filtered,
+        batch,
+      ) {
+        if (batch.type === 'authors') {
+          filtered.push(batch.value);
+        }
+        return filtered;
+      },
+      []);
 
       return query;
     },
@@ -96,18 +90,8 @@ export default {
     },
   },
   created() {
-    if (this.$route.query['filter-category']) {
-      if (Array.isArray(this.$route.query['filter-category'])) {
-        this.$route.query['filter-category'].map((val) => {
-          this.$store.dispatch('addBatch', { value: val, type: 'categories' });
-        });
-      } else {
-        this.$store.dispatch('addBatch', {
-          value: this.$route.query['filter-category'],
-          type: 'categories',
-        });
-      }
-    }
+    this.queryReload(this.$route.query['filter-category'], 'categories');
+    this.queryReload(this.$route.query['filter-authors'], 'authors');
   },
   methods: {
     toggleShow() {
@@ -141,6 +125,20 @@ export default {
     },
     deleteQuery() {
       this.updateQuery();
+    },
+    queryReload(routeQuery, typeQuery) {
+      if (routeQuery) {
+        if (Array.isArray(routeQuery)) {
+          routeQuery.map((val) => {
+            this.$store.dispatch('addBatch', { value: val, type: typeQuery });
+          });
+        } else {
+          this.$store.dispatch('addBatch', {
+            value: routeQuery,
+            type: typeQuery,
+          });
+        }
+      }
     },
   },
 };

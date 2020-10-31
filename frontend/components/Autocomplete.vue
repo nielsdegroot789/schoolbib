@@ -109,16 +109,6 @@ export default {
     },
     deleteBatch(value) {
       this.$store.dispatch('deleteBatch', value);
-      let categoryQuery = this.$route.query['filter-categories'];
-
-      if ((value = categoryQuery)) {
-        categoryQuery = '';
-
-        categoryQuery = categoryQuery.filter((item) => {
-          console.log(item, value);
-          return item !== value;
-        });
-      }
       this.$emit('delete');
     },
   },
