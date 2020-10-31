@@ -29,7 +29,7 @@ class BookController
         $db = new DB();
 
         $title = isset($_GET["title"]) ? $_GET["title"] . '%'  : "%";
-        $author = isset($arguments["author"]) ? '%' . $arguments["author"] : "%";
+        $author = isset($_GET["authors"]) ? $_GET["authors"] : "%";
         $category = isset($_GET["categories"]) ? $_GET["categories"] : "%";
         $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
         $offsetNumber = isset($arguments["offset"]) ? $arguments["offset"] : 0;

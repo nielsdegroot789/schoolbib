@@ -18,30 +18,24 @@
       type="text"
       @keyup="manualChange"
     />
-    <div
-      :class="{
-        'c-autocomplete__option-container--loading': labelChanged,
-      }"
+    <h1 v-if="categoryList.length">Categories</h1>
+    <button
+      v-for="result in categoryList"
+      :key="result.name"
+      class="auto-complete-button"
+      @click="emitSelect(result.name, result.type)"
     >
-      <div v-for="result in autoCompleteResults" :key="result.name">
-        <button
-          v-if="result.type === 'categories'"
-          class="auto-complete-button"
-          @click="emitSelect(result.name, result.type)"
-        >
-          {{ result.name }}
-        </button>
-        <div>
-          <button
-            v-if="result.type === 'authors'"
-            class="auto-complete-button"
-            @click="emitSelect(result.name, result.type)"
-          >
-            {{ result.name }}
-          </button>
-        </div>
-      </div>
-    </div>
+      {{ result.name }}
+    </button>
+    <h1 v-if="authorList.length">Authors</h1>
+    <button
+      v-for="result in authorList"
+      :key="result.name"
+      class="auto-complete-button"
+      @click="emitSelect(result.name, result.type)"
+    >
+      {{ result.name }}
+    </button>
   </div>
 </template>
 
@@ -49,10 +43,6 @@
 export default {
   name: 'Autocomplete',
   props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
     name: {
       type: String,
       required: true,
@@ -60,10 +50,6 @@ export default {
     loading: {
       type: Boolean,
       default: true,
-    },
-    initLabel: {
-      type: String,
-      default: '',
     },
   },
   data() {
@@ -74,8 +60,11 @@ export default {
     };
   },
   computed: {
-    autoCompleteResults() {
-      return this.$store.state.autoCompleteResults;
+    authorList() {
+      return this.$store.state.authorList;
+    },
+    categoryList() {
+      return this.$store.state.categoryList;
     },
     curValue() {
       return this.value;

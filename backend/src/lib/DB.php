@@ -30,7 +30,7 @@ class DB extends \SQLite3
 
         if(is_array($author)){
         foreach ($author as $key => $value) {
-            $sql .= " author.name like :author" . $key;
+            $sql .= " authors.name like :author" . $key;
             if (count($author) > $key + 1) {
                 $sql .= " or";
             }

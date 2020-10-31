@@ -60,16 +60,30 @@ export default {
         query['book-name'] = this.bookName;
       }
 
-      if (this.filterCategories[0]) {
-        query['filter-category'] = this.$store.state.batches.map(
-          (val) => val.value,
-        );
+      if (this.filterCategories.length) {
+        query['filter-category'] = this.$store.state.batches.reduce(function (
+          filtered,
+          batch,
+        ) {
+          if (batch.type === 'categories') {
+            filtered.push(batch.value);
+          }
+          return filtered;
+        },
+        []);
       }
 
-      if (this.filterAuthors[0]) {
-        query['filter-authors'] = this.$store.state.batches.map(
-          (val) => val.value,
-        );
+      if (this.filterAuthors.length) {
+        query['filter-authors'] = this.$store.state.batches.reduce(function (
+          filtered,
+          batch,
+        ) {
+          if (batch.type === 'authors') {
+            filtered.push(batch.value);
+          }
+          return filtered;
+        },
+        []);
       }
 
       return query;
@@ -111,11 +125,9 @@ export default {
       if (input.length === 0) {
         return;
       }
-      console.log(input);
       this.fetchingFilters = false;
     },
     updateFilterQuery(filterObject) {
-      debugger;
       if (filterObject !== null) {
         if (filterObject.type === 'categories') {
           this.filterCategories.push(filterObject);
