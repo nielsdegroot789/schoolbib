@@ -13,9 +13,6 @@
       </div>
       <Autocomplete
         name="Filters"
-        :value="filterIds"
-        :loading="fetchingFilters"
-        :init-label="initLabel"
         :disabled="fetchingInitLabel"
         @change="searchFilter"
         @select="updateFilterQuery"
@@ -43,21 +40,14 @@ export default {
         ? this.$route.query['book-name']
         : '',
       nameTimeout: null,
-      FilterOptions: [],
       filterCategories: [],
       filterAuthors: [],
-      fetchingFilters: false,
-      initLabel: '',
       show: true,
     };
   },
   computed: {
     filterObject() {
       const query = {};
-      if (this.bookName) {
-        query['book-name'] = this.bookName;
-      }
-
       query['filter-category'] = this.$store.state.batches.reduce(function (
         filtered,
         batch,
@@ -107,9 +97,7 @@ export default {
     },
     searchFilter(input) {
       if (input.length === 0) {
-        return;
       }
-      this.fetchingFilters = false;
     },
     updateFilterQuery(filterObject) {
       if (filterObject !== null) {
@@ -120,7 +108,6 @@ export default {
         }
       }
 
-      this.filterOptions = [];
       this.updateQuery();
     },
     deleteQuery() {

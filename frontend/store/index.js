@@ -20,6 +20,7 @@ export const state = () => ({
   autoCompleteResults: [],
   categoryList: [],
   authorList: [],
+  titleList: [],
   batches: [],
 });
 
@@ -252,6 +253,9 @@ export const mutations = {
     });
     state.categoryList = data.filter((result) => {
       return result.type === 'categories';
+    });
+    state.titleList = data.filter((result) => {
+      return result.type === 'title';
     });
   },
   makeEmpty(state) {

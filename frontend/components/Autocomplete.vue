@@ -18,6 +18,15 @@
       type="text"
       @keyup="manualChange"
     />
+    <h1 v-if="titleList.length">Title</h1>
+    <nuxt-link
+      v-for="result in titleList"
+      :key="result.name"
+      :to="'/book/' + result.id"
+      class="auto-complete-button"
+    >
+      {{ result.name }}
+    </nuxt-link>
     <h1 v-if="categoryList.length">Categories</h1>
     <button
       v-for="result in categoryList"
@@ -66,6 +75,9 @@ export default {
     categoryList() {
       return this.$store.state.categoryList;
     },
+    titleList() {
+      return this.$store.state.titleList;
+    },
     curValue() {
       return this.value;
     },
@@ -91,7 +103,6 @@ export default {
       },
     },
   },
-  created() {},
   methods: {
     manualChange() {
       clearTimeout(this.timeout);
