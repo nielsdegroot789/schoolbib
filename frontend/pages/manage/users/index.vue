@@ -9,24 +9,10 @@ export default {
   },
   computed: {},
   created() {},
-  methods: {},
+  methods: {
+    // fetches people, needs to work with pagination + filter
+  },
 };
 </script>
 
-<style>
-.titleColumn {
-  display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
-  font-weight: bold;
-}
-.usersContainer {
-  display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
-}
-</style>
+<style></style>
