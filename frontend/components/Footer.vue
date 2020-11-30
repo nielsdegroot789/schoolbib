@@ -7,7 +7,6 @@
     <div>
       <h1 class="subtitle">Opening hours</h1>
       <p v-html="openingHours"></p>
-      <p>@SPongebobloR</p>
     </div>
   </footer>
 </template>

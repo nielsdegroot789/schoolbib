@@ -6,7 +6,7 @@ export const state = () => ({
   frontPageNotification: {},
   show: true,
   notifications: [],
-  JWT: {},
+  JWT: null,
   showLoginError: false,
   limit: 20,
   reservation: [],
@@ -22,6 +22,8 @@ export const state = () => ({
   authorList: [],
   titleList: [],
   batches: [],
+  isAdmin: false,
+  isStudent: false,
 });
 
 export const actions = {
@@ -194,6 +196,12 @@ export const mutations = {
     state.currentUser.role = JSON.parse(atob(array[1])).role;
     state.currentUser.signature = array[2];
   },
+  isAdmin: (state) => {
+    state.isAdmin = true;
+  },
+  isStudent: (state) => {
+    state.isStudent = true;
+  },
   showLoginError(state) {
     state.showLoginError = true;
   },
@@ -201,8 +209,20 @@ export const mutations = {
     state.showLoginError = false;
   },
   logout(state) {
+    this.$router.push('/');
     state.JWT = null;
     state.currentUser = {};
+  },
+  CheckUserRole(state) {
+    switch (state.currentRole) {
+      case 1:
+        state.isStudent = true;
+        break;
+      case 2:
+        state.isAdmin = true;
+        break;
+    }
+    return false;
   },
   setTotalItems(state, payload) {
     state.setTotalItems = payload;

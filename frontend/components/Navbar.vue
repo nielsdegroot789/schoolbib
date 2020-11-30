@@ -26,12 +26,22 @@
 <script>
 export default {
   computed: {
+    isStudent() {
+      return this.$store.state.isStudent;
+    },
+    isAdmin() {
+      return this.$store.state.isAdmin;
+    },
+    currentRole() {
+      return this.$store.state.currentUser.role;
+    },
     loggedIn() {
       return !!this.$store.state.JWT;
     },
   },
   methods: {
     logout() {
+      this.$store.commit('logout');
       this.$store.commit('logout');
       localStorage.removeItem('JWT');
     },
