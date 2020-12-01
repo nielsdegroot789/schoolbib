@@ -1,6 +1,6 @@
 <template>
   <div ref="c-autocomplete" class="c-autocomplete">
-    <div class="c-autocomplete__batch-container">
+    <div v-if="batches.length" class="c-autocomplete__batch-container">
       <button
         v-for="item in batches"
         :key="item.value"
@@ -8,43 +8,48 @@
         @click="deleteBatch(item.value)"
       >
         {{ item.type + ' : ' + item.value }}
+        <font-awesome-icon :icon="['far', 'fa-window-close']" />
       </button>
     </div>
     <input
       v-model="label"
-      :name="name + '-label'"
+      placeholder="Type your search here"
       class="c-autocomplete__input"
-      :disabled="isDisabled"
       type="text"
       @keyup="manualChange"
     />
-    <h1 v-if="titleList.length">Title</h1>
-    <nuxt-link
-      v-for="result in titleList"
-      :key="result.name"
-      :to="'/book/' + result.id"
-      class="auto-complete-button"
+    <div
+      v-if="titleList.length || categoryList.length || authorList.length"
+      class="autocomplete-results-container"
     >
-      {{ result.name }}
-    </nuxt-link>
-    <h1 v-if="categoryList.length">Categories</h1>
-    <button
-      v-for="result in categoryList"
-      :key="result.name"
-      class="auto-complete-button"
-      @click="emitSelect(result.name, result.type)"
-    >
-      {{ result.name }}
-    </button>
-    <h1 v-if="authorList.length">Authors</h1>
-    <button
-      v-for="result in authorList"
-      :key="result.name"
-      class="auto-complete-button"
-      @click="emitSelect(result.name, result.type)"
-    >
-      {{ result.name }}
-    </button>
+      <h1 v-if="titleList.length" class="autocomplete-title">Title</h1>
+      <nuxt-link
+        v-for="result in titleList"
+        :key="result.name"
+        :to="'/book/' + result.id"
+        class="auto-complete-button"
+      >
+        {{ result.name }}
+      </nuxt-link>
+      <h1 v-if="categoryList.length" class="autocomplete-title">Categories</h1>
+      <li
+        v-for="result in categoryList"
+        :key="result.name"
+        class="auto-complete-button"
+        @click="emitSelect(result.name, result.type)"
+      >
+        {{ result.name }}
+      </li>
+      <h1 v-if="authorList.length" class="autocomplete-title">Authors</h1>
+      <li
+        v-for="result in authorList"
+        :key="result.name"
+        class="auto-complete-button"
+        @click="emitSelect(result.name, result.type)"
+      >
+        {{ result.name }}
+      </li>
+    </div>
   </div>
 </template>
 
@@ -103,6 +108,12 @@ export default {
       },
     },
   },
+  mounted() {
+    document.addEventListener('click', this.emptyAutoList);
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.emptyAutoList);
+  },
   methods: {
     manualChange() {
       clearTimeout(this.timeout);
@@ -117,13 +128,90 @@ export default {
       console.log(value, type);
       this.$store.dispatch('addBatch', { value, type });
       this.$emit('select', { value, type });
+      this.$store.dispatch('getAutoCompleteResults', '');
     },
     deleteBatch(value) {
       this.$store.dispatch('deleteBatch', value);
       this.$emit('delete');
     },
+    emptyAutoList(e) {
+      console.log(e.target);
+      if (!this.$el.contains(e.target)) {
+        this.$store.dispatch('getAutoCompleteResults', '');
+      }
+    },
   },
 };
 </script>
 
-<style></style>
+<style>
+.c-autocomplete__input {
+  border: 1px solid #dbdbdb !important;
+  margin-top: 2rem;
+}
+.c-autocomplete__input:focus {
+  border: 1px solid #dbdbdb !important;
+}
+.container-filters {
+  margin: auto;
+  width: 50%;
+  color: black;
+}
+.container-filters li,
+.container-filters a {
+  list-style: none;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+
+.container-filters h1 {
+  color: #48748a;
+}
+.container-filters h1:first-child {
+  border-top: 4px solid #48748a;
+}
+
+.container-filters h1,
+.container-filters li,
+.container-filters a {
+  padding: 0.5rem 0 0.5rem 0.6rem;
+}
+.container-filters li:hover {
+  cursor: pointer;
+  background-color: #0048ba;
+  color: white;
+}
+.container-filters a:hover {
+  cursor: pointer;
+  background-color: #0048ba;
+  color: white;
+}
+
+.autocomplete-results-container {
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  border-top: none;
+  width: 700px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.button-clear {
+  margin-top: 1rem;
+}
+
+.c-autocomplete__batch-container {
+  width: 700px;
+  border-bottom: 1px solid #dbdbdb;
+  padding-bottom: 1rem;
+}
+.c-autocomplete__batch {
+  border-radius: 1em;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  cursor: pointer;
+}
+</style>

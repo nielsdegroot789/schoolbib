@@ -4,21 +4,14 @@
       'container-filters': true,
     }"
   >
-    <div v-if="show" class="filters__content">
-      <div class="filters__name">
-        <label>
-          Name:
-          <input v-model="bookName" type="text" />
-        </label>
-      </div>
-      <Autocomplete
-        name="Filters"
-        :disabled="fetchingInitLabel"
-        @change="searchFilter"
-        @select="updateFilterQuery"
-        @delete="deleteQuery"
-      />
-    </div>
+    <Autocomplete
+      v-if="show"
+      name="Filters"
+      :disabled="fetchingInitLabel"
+      @change="searchFilter"
+      @select="updateFilterQuery"
+      @delete="deleteQuery"
+    />
     <div class="filters__toggle">
       <button class="button button-clear" @click="toggleShow">
         {{ show ? 'Hide filters' : 'Show filters' }}
@@ -39,7 +32,6 @@ export default {
       bookName: this.$route.query['book-name']
         ? this.$route.query['book-name']
         : '',
-      nameTimeout: null,
       filterCategories: [],
       filterAuthors: [],
       show: true,

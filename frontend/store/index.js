@@ -281,6 +281,7 @@ export const mutations = {
   makeEmpty(state) {
     state.categoryList = '';
     state.authorList = '';
+    state.titleList = '';
   },
   setBatch(state, batch) {
     state.batches.push(batch);
