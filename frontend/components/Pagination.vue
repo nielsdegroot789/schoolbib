@@ -1,5 +1,5 @@
 <template>
-  <div class="pagination-row">
+  <div v-if="pagesCount > 1" class="pagination-row">
     <n-link :to="{ path: 'books', query: { page: first } }"> first </n-link>
 
     <n-link :to="{ path: 'books', query: { page: previous } }">

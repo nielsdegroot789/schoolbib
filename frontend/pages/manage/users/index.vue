@@ -2,8 +2,6 @@
   <div class="setup section">
     <header class="level">
       <h1 class="level-left title">Manage Users Books</h1>
-      <button @click="checkNow">Check now Time k</button>
-      {{ this.DateNow }}
     </header>
     <h2>Reservations</h2>
     <table class="table table is-bordered is-hoverable is-fullwidth">
@@ -28,8 +26,9 @@
         </tr>
       </tbody>
     </table>
-
+    <button @click="newCheckout">New</button>
     <h2>Checkouts</h2>
+
     <table class="table table is-bordered is-hoverable is-fullwidth">
       <thead>
         <tr>

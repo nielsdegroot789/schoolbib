@@ -23,26 +23,6 @@ export const state = () => ({
 });
 
 export const actions = {
-  // async getBookMetaEaPage({ commit, state }, page) {
-  //   const params = {
-  //     limit: 20,
-  //     offset: 20 * (page - 1),
-  //   };
-  //   try {
-  //     const characters = await this.$axios({
-  //       method: 'GET',
-  //       url: 'https://gateway.marvel.com:443/v1/public/characters',
-  //       params,
-  //     });
-
-  //     commit('SET_CHARACTERS', characters.data.data.results);
-  //     commit('SET_TOTAL_CHARACTERS', characters.data.data.total);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-
-  //   commit('FINISH_FETCHING_CHARACTERS');
-  // },
   getBookMeta(context) {
     this.$axios
       .get('http://localhost:8080/getBookMeta', {
@@ -267,7 +247,7 @@ export const getters = {
   getCurrentBook: (state) => {
     return state.specificBook;
   },
-  getPageCount(state) {
+  pageCount(state) {
     return Math.ceil(state.totalBookMeta / state.limit);
   },
 };
