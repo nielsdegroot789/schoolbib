@@ -545,9 +545,9 @@ class DB extends \SQLite3
 
     public function searchFilters($searchVal)
     {
-        $sql = $this->prepare("select 'authors' as type, name, id from authors where name like :searchVal
-       union select 'categories', name, id from categories where name like :searchVal
-        union select 'title', title, id from bookMeta where title like :searchVal");
+        $sql = $this->prepare("select 'Authors' as type, name, id from authors where name like :searchVal
+       union select 'Categories', name, id from categories where name like :searchVal
+        union select 'Title', title, id from bookMeta where title like :searchVal");
         $sql->bindValue(":searchVal", $searchVal);
         $data = $sql->execute();
 

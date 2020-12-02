@@ -44,7 +44,7 @@ export default {
         filtered,
         batch,
       ) {
-        if (batch.type === 'categories') {
+        if (batch.type === 'Categories') {
           filtered.push(batch.value);
         }
         return filtered;
@@ -55,7 +55,7 @@ export default {
         filtered,
         batch,
       ) {
-        if (batch.type === 'authors') {
+        if (batch.type === 'Authors') {
           filtered.push(batch.value);
         }
         return filtered;
@@ -93,7 +93,7 @@ export default {
     },
     updateFilterQuery(filterObject) {
       if (filterObject !== null) {
-        if (filterObject.type === 'categories') {
+        if (filterObject.type === 'Categories') {
           this.filterCategories.push(filterObject);
         } else {
           this.filterAuthors.push(filterObject);

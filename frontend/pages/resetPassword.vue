@@ -64,6 +64,9 @@ export default {
             message: 'Password has been successfully updated',
           }),
         )
+        .then((response) => {
+          this.$router.push('/login');
+        })
         .catch((error) =>
           this.$store.dispatch('addNotification', {
             type: 'fail',

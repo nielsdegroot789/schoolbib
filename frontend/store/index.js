@@ -269,13 +269,13 @@ export const mutations = {
   },
   setAutoCompleteResults(state, data) {
     state.authorList = data.filter((result) => {
-      return result.type === 'authors';
+      return result.type === 'Authors';
     });
     state.categoryList = data.filter((result) => {
-      return result.type === 'categories';
+      return result.type === 'Categories';
     });
     state.titleList = data.filter((result) => {
-      return result.type === 'title';
+      return result.type === 'Title';
     });
   },
   makeEmpty(state) {

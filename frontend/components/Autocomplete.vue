@@ -8,7 +8,7 @@
         @click="deleteBatch(item.value)"
       >
         {{ item.type + ' : ' + item.value }}
-        <font-awesome-icon :icon="['far', 'fa-window-close']" />
+        <font-awesome-icon class="close-icon" :icon="['fas', 'times']" />
       </button>
     </div>
     <input
@@ -148,6 +148,7 @@ export default {
 .c-autocomplete__input {
   border: 1px solid #dbdbdb !important;
   margin-top: 2rem;
+  width: 100% !important;
 }
 .c-autocomplete__input:focus {
   border: 1px solid #dbdbdb !important;
@@ -193,7 +194,6 @@ export default {
   flex-direction: column;
   border: 1px solid black;
   border-top: none;
-  width: 700px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -202,16 +202,23 @@ export default {
 }
 
 .c-autocomplete__batch-container {
-  width: 700px;
+  width: 100%;
   border-bottom: 1px solid #dbdbdb;
   padding-bottom: 1rem;
 }
 .c-autocomplete__batch {
-  border-radius: 1em;
+  border-radius: 1.625rem;
   background-color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.35rem 1rem 0.5rem 1rem;
   font-weight: 700;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border: 1px solid #48748a;
   cursor: pointer;
+  margin-left: 5px;
+  height: auto;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+.close-icon {
+  margin-left: 0.5rem;
+  vertical-align: middle;
 }
 </style>
