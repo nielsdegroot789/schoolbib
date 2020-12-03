@@ -24,17 +24,33 @@ class BookController
     }
 
     public function getBookMeta(Request $request, Response $response, array $args)
-    { 
+    {
         $this->response = $response;
         $db = new DB();
 
-        $title = isset($_GET["title"]) ? $_GET["title"] . '%'  : "%";
+        $title = isset($_GET["title"]) ? $_GET["title"] . '%' : "%";
         $author = isset($_GET["authors"]) ? $_GET["authors"] : "%";
         $category = isset($_GET["categories"]) ? $_GET["categories"] : "%";
         $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
         $offsetNumber = isset($arguments["offset"]) ? $arguments["offset"] : 0;
 
         $data = $db->getBookMeta($limitNumber, $offsetNumber, $category, $author, $title);
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
+
+    public function getFrontpageTabs(Request $request, Response $response, array $args)
+    {
+        $this->response = $response;
+        $db = new DB();
+
+        //todo Find way to set these without having to hardcode + expecting frontend to know the exact names. Make tabs dropdowns for admins?
+        $category = isset($_GET["categories"]) ? $_GET["categories"] : "%";
+
+        $data[] = $db->getFrontpageBooksFromCategory($limitNumber, $category);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
@@ -72,7 +88,7 @@ class BookController
         $authors = $data["authors"];
         $publishers = $data["publishers"];
         $categories = $data["categories"];
-        
+
         if ($data['id']) {
             $id = $data['id'];
             $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories, $id);
@@ -82,7 +98,7 @@ class BookController
         $response->getBody()->write($data);
         return $response;
     }
-   
+
     public function setUserName($user)
     {
         $this->username = $user;
@@ -93,7 +109,8 @@ class BookController
         return $this->id;
     }
 
-    public function getFilterResults(Request $request, Response $response, array $args) {
+    public function getFilterResults(Request $request, Response $response, array $args)
+    {
         $this->response = $response;
         $searchVal = $_GET['searchVal'] . '%';
         $db = new DB();
