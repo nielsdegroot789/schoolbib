@@ -386,20 +386,23 @@ class DB extends \SQLite3
 
     }
 
-    // public function inStock()
-    // {
+    public function saveNewCheckout($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
+    {
 
-    //     $sql = $this->prepare("select count booksId");
+        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate, fine, isPaid)
+        values (:usersId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate, :fine, :isPaid )");
 
-    //     $res = $this->query($sql);
+        $sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':booksId', $booksId, );
+        $sql->bindValue(':checkoutDateTime', $checkoutDateTime, );
+        $sql->bindValue(':returnDateTime', $returnDateTime, );
+        $sql->bindValue(':maxAllowedDate', $maxAllowedDate, );
 
-    //     while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
-    //         array_push($data, $row);
-    //         }
+        $status = $sql->execute();
+        return $status;
 
-    //      return $data;
-    // }
-
+    }
+    
     public function getCheckouts($limitNumber, $offsetNumber)
     {
         $sql = "SELECT usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName

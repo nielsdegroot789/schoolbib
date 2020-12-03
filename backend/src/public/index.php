@@ -103,6 +103,9 @@ $app->get('/getAdminSpecificBooks', \skoolBiep\Controller\UserController::class 
 $app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':saveReservationsUser');
 $app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
 $app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
+$app->post('/saveNewCheckout', \skoolBiep\Controller\UserController::class . ':savenewCheckout');
+
+
 
 $app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');

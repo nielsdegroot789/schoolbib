@@ -167,6 +167,27 @@ class UserController
         $response->getBody()->write($data);
         return $response;
     }
+    public function saveNewCheckout(Request $request, Response $response, array $args)
+    {            
+        $data = json_decode(file_get_contents("php://input"), TRUE);
+        $this->response = $response;
+
+        $db = new DB();
+        $usersId = $data["usersId"];
+        $booksId = $data["booksId"];
+        $checkoutDateTime = $data["checkoutDateTime"];
+        $returnDateTime = $data["reservationDateTime"];
+        $maxAllowedDate = $data["maxAllowedDate"];
+        if($data['id']){
+            $id = $data['id'];
+            $data = $db->saveNewCheckout($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate);
+        }
+        else {
+            $data = $db->saveNewCheckout($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate);
+        }
+        $response->getBody()->write($data);
+        return $response;
+    }
 
 
     public function getReservations(Request $request, Response $response, array $args)

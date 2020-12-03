@@ -1,21 +1,18 @@
 <template>
-  <div>
-    <newCheckoutForm :checkout-data="checkoutData" />
-  </div>
+  <saveNewCheckout />
 </template>
 
 <script>
-import newCheckoutForm from '~/components/newCheckoutForm.vue';
+import saveNewCheckout from '~/components/saveNewCheckout.vue';
 export default {
   name: 'New',
-  components: { newCheckoutForm },
+  components: {
+    saveNewCheckout,
+  },
   data() {
-    return {
-      ready: false,
-      checkoutData: {},
-    };
+    return {};
   },
 };
 </script>
 
-<style scoped></style>
+<style></style>
