@@ -46,36 +46,30 @@
             {{ bookMeta.language ? bookMeta.language : 'Unavailable' }}
           </span>
         </p>
-        <div v-if="showDetails">
-          <p class="level">
-            <span class="level-left"> ISBN:</span>
-            <span v-if="bookMeta" class="level-right">
-              {{ bookMeta.isbnCode ? bookMeta.isbnCode : 'Unavailable' }}
-            </span>
-          </p>
-          <p class="level">
-            <span class="level-left"> Publishers:</span>
-            <span v-if="bookMeta" class="level-right">
-              {{ bookMeta.publishers ? bookMeta.publishers : 'Unavailable' }}
-            </span>
-          </p>
-          <p class="level">
-            <span class="level-left"> Publish Date:</span>
-            <span v-if="bookMeta" class="level-right">
-              {{ bookMeta.publishDate ? bookMeta.publishDate : 'Unavailable' }}
-            </span>
-          </p>
-          <p class="level">
-            <span class="level-left"> Reading Level:</span>
-            <span v-if="bookMeta" class="level-right">
-              {{
-                bookMeta.readingLevel ? bookMeta.readingLevel : 'Unavailable'
-              }}
-            </span>
-          </p>
-        </div>
-        <button v-if="showDetails" class="button">Hide Details</button>
-        <button v-if="!showDetails" class="button">Show Details</button>
+        <p class="level">
+          <span class="level-left"> ISBN:</span>
+          <span v-if="bookMeta" class="level-right">
+            {{ bookMeta.isbnCode ? bookMeta.isbnCode : 'Unavailable' }}
+          </span>
+        </p>
+        <p class="level">
+          <span class="level-left"> Publishers:</span>
+          <span v-if="bookMeta" class="level-right">
+            {{ bookMeta.publishers ? bookMeta.publishers : 'Unavailable' }}
+          </span>
+        </p>
+        <p class="level">
+          <span class="level-left"> Publish Date:</span>
+          <span v-if="bookMeta" class="level-right">
+            {{ bookMeta.publishDate ? bookMeta.publishDate : 'Unavailable' }}
+          </span>
+        </p>
+        <p class="level">
+          <span class="level-left"> Reading Level:</span>
+          <span v-if="bookMeta" class="level-right">
+            {{ bookMeta.readingLevel ? bookMeta.readingLevel : 'Unavailable' }}
+          </span>
+        </p>
       </div>
       <div v-if="currentRole == 1" class="section box stockInfo">
         <h3 class="title">Interested in reading?</h3>
@@ -116,7 +110,6 @@ export default {
   data() {
     return {
       timestamp: '',
-      showDetails: false,
     };
   },
   computed: {
@@ -177,7 +170,6 @@ export default {
         message: 'Form saved',
       });
     },
-    toggleDetails() {},
   },
 };
 </script>

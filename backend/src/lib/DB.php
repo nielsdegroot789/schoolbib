@@ -149,31 +149,41 @@ class DB extends \SQLite3
             $this->setCategories($id, $categories);
             return $res;
         } else {
+            //check if this bookmeta does not already exist.
 
-            $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
-            values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
-
+            $sql = $this->prepare('select id from bookMeta where isbnCode = :isbn');
             $sql->bindValue(':isbn', $isbn);
-            $sql->bindValue(':title', $title);
-            $sql->bindValue(':rating', $rating);
-            $sql->bindValue(':totalPages', $totalPages);
-            $sql->bindValue(':language', $language);
-            $sql->bindValue(':sticker', $sticker);
-            $sql->bindValue(':readingLevel', $readingLevel);
-            $publisherId = $this->getPublisherId($publishers);
-            $sql->bindValue(':publishersId', $publisherId);
-            $authorsIds = $this->getAuthorsIds($authors);
-            $sql->bindValue(':authorsIds', $authorsIds);
-
-            $status = $sql->execute();
-            $res = $status ? "Success" : "Failed";
-            //todo get the newly created id here
-            $this->setCategories($this->lastInsertRowID(), $categories);
-            return $res;
-
+            $res = $sql->execute();
+            if ($sql->execute()) {
+                //This bookMeta already exists in the database.
+                throw new Exception("This bookMeta already exists in the database under id " . $res->fetchArray(SQLITE3_ASSOC));
+            }
+            else {
+                $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
+                values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
+                
+                $sql->bindValue(':isbn', $isbn);
+                $sql->bindValue(':title', $title);
+                $sql->bindValue(':rating', $rating);
+                $sql->bindValue(':totalPages', $totalPages);
+                $sql->bindValue(':language', $language);
+                $sql->bindValue(':sticker', $sticker);
+                $sql->bindValue(':readingLevel', $readingLevel);
+                $publisherId = $this->getPublisherId($publishers);
+                $sql->bindValue(':publishersId', $publisherId);
+                $authorsIds = $this->getAuthorsIds($authors);
+                $sql->bindValue(':authorsIds', $authorsIds);
+                
+                $status = $sql->execute();
+                $res = $status ? "Success" : "Failed";
+                //todo get the newly created id here
+                $this->setCategories($this->lastInsertRowID(), $categories);
+                return $res;
+            }
+                
+            }
+            
         }
-
-    }
 
     public function editBook()
     {
