@@ -28,31 +28,31 @@ class DB extends \SQLite3
         join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
         join categories on categories.id = categoriesInBooks.categoriesId where";
 
-        if(is_array($author)){
-        foreach ($author as $key => $value) {
-            $sql .= " authors.name like :author" . $key;
-            if (count($author) > $key + 1) {
-                $sql .= " or";
+        if (is_array($author)) {
+            foreach ($author as $key => $value) {
+                $sql .= " authors.name like :author" . $key;
+                if (count($author) > $key + 1) {
+                    $sql .= " or";
+                }
             }
-        }
         } else {
             $sql .= " authors.name like :author";
         }
 
         $sql .= " and title like :title group by bookMeta.id having";
 
-        if(is_array($category)) {
-        foreach ($category as $key => $value) {
-            $sql .= " categories.name like :category" . $key;
-            if (count($category) > $key + 1) {
-                $sql .= " or";
-            } else {
-                $sql .= " order by bookMeta.id";
+        if (is_array($category)) {
+            foreach ($category as $key => $value) {
+                $sql .= " categories.name like :category" . $key;
+                if (count($category) > $key + 1) {
+                    $sql .= " or";
+                } else {
+                    $sql .= " order by bookMeta.id";
+                }
             }
+        } else {
+            $sql .= " categories.name like :category order by bookMeta.id";
         }
-    } else {
-        $sql .= " categories.name like :category order by bookMeta.id";
-    }
 
         $sql .= " limit :limit";
         $sql .= " offset :offset * :limit";
@@ -63,22 +63,22 @@ class DB extends \SQLite3
         $query->bindValue(':offset', $offsetNumber);
         $query->bindValue(':title', $title);
 
-        if(is_array($category)) {
-        foreach($category as $key => $value) {
-            $query->bindValue(':category' . $key, $value);
-        }
+        if (is_array($category)) {
+            foreach ($category as $key => $value) {
+                $query->bindValue(':category' . $key, $value);
+            }
         } else {
             $query->bindValue(':category', $category);
         }
 
-        if(is_array($author)){
-        foreach($author as $key => $value) {
-            $query->bindValue(':author' . $key, $value);
-        }
-         } else {
-            $query->bindValue(':author', $author);
+        if (is_array($author)) {
+            foreach ($author as $key => $value) {
+                $query->bindValue(':author' . $key, $value);
             }
-        
+        } else {
+            $query->bindValue(':author', $author);
+        }
+
         $res = $query->execute();
 
         $data = array();
@@ -136,31 +136,41 @@ class DB extends \SQLite3
             $this->setCategories($id, $categories);
             return $res;
         } else {
+            //check if this bookmeta does not already exist.
 
-            $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
-            values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
-
+            $sql = $this->prepare('select id from bookMeta where isbnCode = :isbn');
             $sql->bindValue(':isbn', $isbn);
-            $sql->bindValue(':title', $title);
-            $sql->bindValue(':rating', $rating);
-            $sql->bindValue(':totalPages', $totalPages);
-            $sql->bindValue(':language', $language);
-            $sql->bindValue(':sticker', $sticker);
-            $sql->bindValue(':readingLevel', $readingLevel);
-            $publisherId = $this->getPublisherId($publishers);
-            $sql->bindValue(':publishersId', $publisherId);
-            $authorsIds = $this->getAuthorsIds($authors);
-            $sql->bindValue(':authorsIds', $authorsIds);
-
-            $status = $sql->execute();
-            $res = $status ? "Success" : "Failed";
-            //todo get the newly created id here
-            $this->setCategories($this->lastInsertRowID(), $categories);
-            return $res;
-
+            $res = $sql->execute();
+            if ($sql->execute()) {
+                //This bookMeta already exists in the database.
+                throw new Exception("This bookMeta already exists in the database under id " . $res->fetchArray(SQLITE3_ASSOC));
+            }
+            else {
+                $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
+                values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
+                
+                $sql->bindValue(':isbn', $isbn);
+                $sql->bindValue(':title', $title);
+                $sql->bindValue(':rating', $rating);
+                $sql->bindValue(':totalPages', $totalPages);
+                $sql->bindValue(':language', $language);
+                $sql->bindValue(':sticker', $sticker);
+                $sql->bindValue(':readingLevel', $readingLevel);
+                $publisherId = $this->getPublisherId($publishers);
+                $sql->bindValue(':publishersId', $publisherId);
+                $authorsIds = $this->getAuthorsIds($authors);
+                $sql->bindValue(':authorsIds', $authorsIds);
+                
+                $status = $sql->execute();
+                $res = $status ? "Success" : "Failed";
+                //todo get the newly created id here
+                $this->setCategories($this->lastInsertRowID(), $categories);
+                return $res;
+            }
+                
+            }
+            
         }
-
-    }
 
     public function editBook()
     {
