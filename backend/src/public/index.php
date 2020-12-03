@@ -66,12 +66,14 @@ $checkLoggedInMW = function ($request, $handler) {
         return $response->withStatus(401);
     }
 
-    //todo ??
     // $request->withAttribute('user', $user);
     return $response;
 };
 
 // $app->add($checkLoggedInMW);
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
 
 //routes
 $app->get('/', function (Request $request, Response $response, $args) {
@@ -79,70 +81,34 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 })->add($checkLoggedInMW);
 
+// DOES NOT NEED TO BE LOGGED IN
+
 $app->post('/login', \skoolBiep\Controller\UserController::class . ':login');
-
-$app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
-
-$app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
-
 $app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . ':getNotification');
 $app->get('/getCockpitFooterData', \skoolBiep\Controller\CockpitController::class . ':getCockpitFooterData');
-
-$app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
-
-$app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
-
-$app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
-
- // $app->get('/inStock', \skoolBiep\Controller\bookController::class . ':inStock');
-
-$app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
-
-$app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
-
-$app->map(['POST','DELETE','PUT'], '/handleSpecificBook', \skoolBiep\Controller\UserController::class . ':handleSpecificBook');
-
-$app->get('/getAdminSpecificBooks', \skoolBiep\Controller\UserController::class . ':getAdminSpecificBooks');
-
-$app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':getFilterResults');
-
-
- 
-// $app->map(['GET', 'POST'], '/create', function (Request $request, Response $response, array $args) {
-//     $this->get('db');
-//     if ($request->getMethod() == 'GET') {
-//         $html = '<h1>Login</h1>
-// <form method="POST"><label for="username">Username:</label><input type="text" size="40" name="username" /><br />';
-//         $html = $html . '<label for="password">Password:</label><input type="password" size="40" name="password" /><br />';
-//         $html = $html . '<input type="submit" value="Create user" name="Save" /></form>';
-//         $response->getBody()->write($html);
-//     } else {
-//         // verwerking form
-//         $user = new User();
-//         $user->setUserName($request->getParsedBody()['username']);
-//         $id = $user->saveUser($request->getParsedBody()['password']);
-//         echo "User received ID: $id";
-//     }
-//     return $response;
-// });
-$app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':updatePassword');
-
-$app->post('/saveReservationsUser',\skoolBiep\Controller\UserController::class . ':saveReservationsUser');
-
-$app->post('/addToFavoriteBookList',\skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
-
-$app->post('/saveCheckoutAdmin',\skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
-$app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
-
-$app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
-
 $app->post('/resetPassword', \skoolBiep\Controller\UserController::class . ':resetPassword');
 
-$app->options('/{routes:.+}', function ($request, $response, $args) {
-    return $response;
-});
+$app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
+$app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
+$app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':getFilterResults');
 
-$app->post('/saveProfileData',\skoolBiep\Controller\UserController::class . ':saveProfileData');
+// NEEDS TO BE LOGGED IN
+
+$app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
+$app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
+$app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
+$app->map(['POST', 'DELETE', 'PUT'], '/handleSpecificBook', \skoolBiep\Controller\UserController::class . ':handleSpecificBook');
+$app->get('/getAdminSpecificBooks', \skoolBiep\Controller\UserController::class . ':getAdminSpecificBooks');
+$app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':saveReservationsUser');
+$app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
+$app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
+
+$app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
+$app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
+$app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':updatePassword');
+$app->post('/addToFavoriteBookList', \skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
+$app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
+$app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
 
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
