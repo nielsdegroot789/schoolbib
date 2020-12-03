@@ -4,13 +4,8 @@
 
 <script>
 export default {
-  data() {
-    return {};
-  },
-  computed: {},
-  created() {},
-  methods: {
-    // fetches people, needs to work with pagination + filter
+  created() {
+    this.$router.push('manage/users/1');
   },
 };
 </script>
