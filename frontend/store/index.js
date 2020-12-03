@@ -247,7 +247,7 @@ export const getters = {
   getCurrentBook: (state) => {
     return state.specificBook;
   },
-  pageCount(state) {
+  getPageCount(state) {
     return Math.ceil(state.totalBookMeta / state.limit);
   },
 };

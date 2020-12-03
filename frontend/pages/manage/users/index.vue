@@ -26,7 +26,9 @@
         </tr>
       </tbody>
     </table>
-    <button @click="newCheckout">New</button>
+    <nuxt-link :to="{ path: '/manage/users/new' }" class="button level-right"
+      >new</nuxt-link
+    >
     <h2>Checkouts</h2>
 
     <table class="table table is-bordered is-hoverable is-fullwidth">
