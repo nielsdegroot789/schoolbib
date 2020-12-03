@@ -1,5 +1,6 @@
 export const state = () => ({
   bookMeta: [],
+  totalBookMeta: 0,
   books: [],
   users: [],
   currentUser: {},
@@ -50,7 +51,11 @@ export const actions = {
       console.log(error);
     }
   },
-
+  getBookMetaCount(context) {
+    this.$axios
+      .get('http://localhost:8080/getBookMetaCount')
+      .then((response) => context.commit('getBookMetaCount', response.data));
+  },
   getBooks(context) {
     this.$axios
       .get('http://localhost:8080/getBooks')
@@ -171,6 +176,9 @@ export const mutations = {
   getBooks(state, data) {
     state.books = data;
   },
+  getBookMetaCount(state, totalBookMeta) {
+    state.totalBookMeta = totalBookMeta;
+  },
   getFrontPageNotification(state, data) {
     state.frontPageNotification = data;
   },
@@ -223,9 +231,6 @@ export const mutations = {
         break;
     }
     return false;
-  },
-  setTotalItems(state, payload) {
-    state.setTotalItems = payload;
   },
   getReservations(state, reservation) {
     state.reservation = reservation;
@@ -303,16 +308,13 @@ export const getters = {
   getNotification: (state) => {
     return state.notification;
   },
-  getPageCount(state) {
-    return Math.ceil(state.totalItems / state.limit);
-  },
-  getBookMetaCount: (state) => (count) => {
-    return state.bookMeta.filter((bookMeta) => bookMeta.count === count);
-  },
   getReservation: (state) => {
     return state.reservations;
   },
   getCurrentBook: (state) => {
     return state.specificBook;
+  },
+  getPageCount(state) {
+    return Math.ceil(state.totalBookMeta / state.limit);
   },
 };

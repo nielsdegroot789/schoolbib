@@ -1,22 +1,22 @@
 <template>
-  <div class="pagination-row">
-    <n-link v-if="first !== false" :to="'/catalog/' + first"> first </n-link>
+  <div v-if="pagesCount > 1" class="pagination-row">
+    <n-link :to="{ path: 'books', query: { page: first } }"> first </n-link>
 
-    <n-link v-if="previous !== false" :to="'/catalog/' + previous">
+    <n-link :to="{ path: 'books', query: { page: previous } }">
       previous
     </n-link>
 
     <n-link
       v-for="page in pageButtons"
       :key="page"
-      :to="{ path: '/catalog/' + page, query: $route.query }"
+      :to="{ path: 'books', query: { page: pageButtons } }"
     >
       {{ page }}
     </n-link>
 
-    <n-link v-if="next !== false" :to="'/catalog/' + next"> next </n-link>
+    <n-link :to="{ path: 'books', query: { page: next } }"> next </n-link>
 
-    <n-link v-if="last !== false" :to="'/catalog/' + last"> last </n-link>
+    <n-link :to="{ path: 'books', query: { page: last } }"> last </n-link>
   </div>
 </template>
 
@@ -26,22 +26,22 @@ export default {
     return {};
   },
   computed: {
-    totalBookMeta() {
-      return this.$store.getters.getBookMetaCount;
-    },
     pageNumber() {
-      return parseInt(this.$route.params.page);
+      return parseInt(this.$route.query.page);
     },
-    totalPages() {
-      return this.totalBookMeta / this.limit;
+    pagesCount() {
+      return this.$store.getters.getPageCount;
+    },
+    amountOfButtons() {
+      return Math.min(this.pagesCount, 5);
     },
     pageButtons() {
       const start = Math.min(
-        this.totalPages - 4,
+        Math.max(1, this.pagesCount - 4),
         Math.max(1, this.pageNumber - 2),
       );
       const array = [];
-      for (let i = start; i <= start + 5; i++) {
+      for (let i = start; i < start + this.amountOfButtons; i++) {
         array.push(i);
       }
       return array;
@@ -49,33 +49,50 @@ export default {
 
     first() {
       if (this.pageNumber === 1) {
-        return false;
+        return 1;
       }
       return 1;
     },
     last() {
-      if (this.pageNumber === this.totalPages) {
-        return false;
+      if (this.pageNumber >= this.pagesCount - 1) {
+        return this.pagesCount;
       }
-      return this.totalPages;
+      return this.pagesCount;
     },
     next() {
-      if (this.pageNumber === this.totalItems) {
+      if (this.pageNumber === this.pagesCount) {
         return false;
       }
       return this.pageNumber + 1;
     },
     previous() {
-      if (this.pageNumber === this.totalItems) {
-        return false;
+      if (this.pageNumber === 1) {
+        return 1;
       }
       return this.pageNumber - 1;
     },
   },
+  // watch: {
+  //   $route: {
+  //     immediate: true,
+  //     handler(route) {
+  //       this.currentPage = route.query.name;
+  //       this.$store.dispatch('getBookMeta', {
+  //         pageNumber: this.pageNumber,
+  //       });
+  //       console.log(route);
+  //     },
+  //   },
+  // },
 };
 </script>
 
 <style scoped>
+.disabled {
+  color: lightgrey;
+  pointer-events: none;
+}
+
 .pagination-button {
   padding: 8px;
   margin: 2px;

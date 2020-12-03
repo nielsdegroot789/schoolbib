@@ -38,9 +38,12 @@
 <script>
 import Filters from '../components/Filters';
 import StarRating from '~/components/StarRating';
+import Pagination from '~/components/Pagination';
+
 export default {
   components: {
     StarRating,
+    Pagination,
     Filters,
   },
   data() {
@@ -51,12 +54,6 @@ export default {
     };
   },
   computed: {
-    changePageNumber() {
-      return this.$store.getters.pageNumber;
-    },
-    pageNumber() {
-      return parseInt(this.$route.params.page);
-    },
     bookMeta() {
       return this.$store.state.bookMeta;
     },
