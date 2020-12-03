@@ -91,6 +91,7 @@ $app->post('/resetPassword', \skoolBiep\Controller\UserController::class . ':res
 $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
 $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
 $app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':getFilterResults');
+$app->get('/getFrontpageTabs', \skoolBiep\Controller\BookController::class . ':getFrontpageTabs');
 
 // NEEDS TO BE LOGGED IN
 
