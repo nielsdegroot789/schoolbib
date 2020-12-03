@@ -26,15 +26,60 @@ class DB extends \SQLite3
 		join authors on authors.id = bookMeta.authorsId
 		join publishers on publishers.id = bookMeta.publishersId
         join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
-        join categories on categories.id = categoriesInBooks.categoriesId
-        where categories.name like '$category' and authors.name like '$author' and title like '$title'
-        GROUP by bookMeta.id
-        order by bookMeta.id";
+        join categories on categories.id = categoriesInBooks.categoriesId where";
 
-        $sql .= " limit '$limitNumber'";
-        $sql .= " offset '$offsetNumber' * '$limitNumber'";
+        if (is_array($author)) {
+            foreach ($author as $key => $value) {
+                $sql .= " authors.name like :author" . $key;
+                if (count($author) > $key + 1) {
+                    $sql .= " or";
+                }
+            }
+        } else {
+            $sql .= " authors.name like :author";
+        }
 
-        $res = $this->query($sql);
+        $sql .= " and title like :title group by bookMeta.id having";
+
+        if (is_array($category)) {
+            foreach ($category as $key => $value) {
+                $sql .= " categories.name like :category" . $key;
+                if (count($category) > $key + 1) {
+                    $sql .= " or";
+                } else {
+                    $sql .= " order by bookMeta.id";
+                }
+            }
+        } else {
+            $sql .= " categories.name like :category order by bookMeta.id";
+        }
+
+        $sql .= " limit :limit";
+        $sql .= " offset :offset * :limit";
+
+        $query = $this->prepare($sql);
+
+        $query->bindValue(':limit', $limitNumber);
+        $query->bindValue(':offset', $offsetNumber);
+        $query->bindValue(':title', $title);
+
+        if (is_array($category)) {
+            foreach ($category as $key => $value) {
+                $query->bindValue(':category' . $key, $value);
+            }
+        } else {
+            $query->bindValue(':category', $category);
+        }
+
+        if (is_array($author)) {
+            foreach ($author as $key => $value) {
+                $query->bindValue(':author' . $key, $value);
+            }
+        } else {
+            $query->bindValue(':author', $author);
+        }
+
+        $res = $query->execute();
 
         $data = array();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
@@ -56,10 +101,10 @@ class DB extends \SQLite3
 
         return $data;
     }
-    
+
     public function getBooks()
     {
-        $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId, 
+        $sql = "select group_concat(id, ';') as id, group_concat(status, ';') as status, bookMetaId,
         count(bookMetaId) as count from books
         group by bookMetaId";
 
@@ -150,9 +195,6 @@ class DB extends \SQLite3
                                 join userRoles on userRoles.usersId = users.id
                                 join roles on roles.id = userRoles.rolesId
                                 where users.email = :email;');
-
-
-
 
         $sql->bindValue(':email', $formEmail);
         $res = $sql->execute();
@@ -276,20 +318,20 @@ class DB extends \SQLite3
 
         return $status;
     }
-    
+
     public function getReservations($limitNumber, $offsetNumber)
     {
         $sql = "SELECT usersId,booksId, reservationDateTime, accepted , users.surname as usersName, bookMeta.title as booksName
-        FROM reservations 
+        FROM reservations
         left join users on users.id = reservations.usersId
 		left join books on books.id = reservations.booksId
-		left join bookMeta on bookMeta.id = books.bookMetaId	
-        WHERE accepted = 0	
+		left join bookMeta on bookMeta.id = books.bookMetaId
+        WHERE accepted = 0
         GROUP by reservations.id ORDER by reservations.reservationDateTime DESC";
 
         $sql .= " limit '$limitNumber'";
         $sql .= " offset '$offsetNumber' * '$limitNumber'";
-        
+
         $res = $this->query($sql);
 
         $data = array();
@@ -328,15 +370,10 @@ class DB extends \SQLite3
 
         $status = $sql->execute();
 
-
         $this->acceptReservation($usersId, $booksId);
 
         return $status;
 
-        
-        
-
-        
     }
 
     // public function inStock()
@@ -349,14 +386,14 @@ class DB extends \SQLite3
     //     while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
     //         array_push($data, $row);
     //         }
-        
+
     //      return $data;
     // }
 
     public function getCheckouts($limitNumber, $offsetNumber)
     {
         $sql = "SELECT usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName
-        FROM checkouts 
+        FROM checkouts
         left join users on users.id = checkouts.usersId
 		left join books on books.id = checkouts.booksId
 		left join bookMeta on bookMeta.id = books.bookMetaId
@@ -365,7 +402,7 @@ class DB extends \SQLite3
 
         $sql .= " limit '$limitNumber'";
         $sql .= " offset '$offsetNumber' * '$limitNumber'";
-        
+
         $res = $this->query($sql);
 
         $data = array();
@@ -382,7 +419,6 @@ class DB extends \SQLite3
         $sql->bindvalue(':id', $id);
         $res = $sql->execute();
 
-
         $data = array();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($data, $row);
@@ -390,30 +426,33 @@ class DB extends \SQLite3
         return $data;
     }
 
-    public function saveProfileData($id,$surname,$lastname,$email) {
+    public function saveProfileData($id, $surname, $lastname, $email)
+    {
         $sql = $this->prepare("update users set surname = :surname, lastname = :lastname, email = :email where id = :id ");
-        $sql->bindValue(':surname',$surname);
-        $sql->bindValue(':lastname',$lastname);
-        $sql->bindValue(':email',$email);
-        $sql->bindValue(':id',$id);
+        $sql->bindValue(':surname', $surname);
+        $sql->bindValue(':lastname', $lastname);
+        $sql->bindValue(':email', $email);
+        $sql->bindValue(':id', $id);
 
         $res = $sql->execute();
         return $res;
     }
 
-    public function getAllUsers() {
+    public function getAllUsers()
+    {
         $sql = 'select id,surname,lastname,age,email from users';
         $data = $this->query($sql);
 
         $res = array();
 
-        while($row = $data->fetchArray(SQLITE3_ASSOC)) {
+        while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
             array_push($res, $row);
         }
         return $res;
     }
 
-    public function checkAdress($email) {
+    public function checkAdress($email)
+    {
         $sql = $this->prepare('select id from users where email = :email');
         $sql->bindValue(':email', $email);
 
@@ -423,24 +462,25 @@ class DB extends \SQLite3
             array_push($idArray, $row);
         }
 
-        if(!$idArray) {
+        if (!$idArray) {
             return false;
         } else {
             $id = $idArray['0']['id'];
             $now = new DateTime();
-            $now->add(new DateInterval("PT1H") );
+            $now->add(new DateInterval("PT1H"));
             $expireDate = $now->format('Y-m-d H:i:s');
             $token = md5(uniqid(rand(), true));}
 
-          $sql = $this->prepare("insert into tokens (users_id, expireDate, token) values(:id, :expireDate, :token)");
-          $sql->bindValue(':id', $id);
-          $sql->bindValue('expireDate', $expireDate);
-          $sql->bindValue('token', $token);
-          $sql->execute();
+        $sql = $this->prepare("insert into tokens (users_id, expireDate, token) values(:id, :expireDate, :token)");
+        $sql->bindValue(':id', $id);
+        $sql->bindValue('expireDate', $expireDate);
+        $sql->bindValue('token', $token);
+        $sql->execute();
 
-          return $token;
+        return $token;
     }
-   public function checkToken($token) {
+    public function checkToken($token)
+    {
         $sql = $this->prepare('select users_id,token,expireDate from tokens where token = :token');
         $sql->bindValue(':token', $token);
 
@@ -449,10 +489,10 @@ class DB extends \SQLite3
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($userArray, $row);
         }
-        if($userArray) {
+        if ($userArray) {
             $dateNow = new DateTime();
             $expireDate = new DateTime($userArray[0]['expireDate']);
-            if($dateNow > $expireDate) {
+            if ($dateNow > $expireDate) {
                 $answer['message'] = 'Invalid token';
             } else {
                 $answer['message'] = 'Valid token';
@@ -462,52 +502,73 @@ class DB extends \SQLite3
             $answer['message'] = 'Invalid token';
         }
         return $answer;
-   }
-   public function updatePassword($password,$id) {
-       
-       $sql = $this->prepare('Update users set password = :password where id = :id');
-       $sql->bindValue(':password', $password);
-       $sql->bindValue(':id',$id);
-       $sql->execute();
-       return 'password succesfully updated';
-   }
-   public function getAdminSpecificBooks($id) {
-       $sql = $this->prepare('select * from books where bookMetaId = :id');
-       $sql->bindValue(':id', $id);
-       $data = $sql->execute();
-       
-       $res = array();
-       while($row = $data->fetchArray(SQLITE3_ASSOC)) {
-           array_push($res, $row);
-       }
-       return $res;
-   }
+    }
+    public function updatePassword($password, $id)
+    {
 
-   public function deleteSpecificBook($id) {
-       $sql = $this->prepare('delete from books where id = :id');
-       $sql->bindValue(':id', $id);
-      $res = $sql->execute();
-      return $res;
-       
-   }
-   
-   public function updateSpecificBook($id,$stock,$qrCode,$status) {
-       $sql = $this->prepare("Update books set stock = :stock, qrCode = :qrCode, status = :status where id = :id");
-       $sql->bindValue(':id', $id);
-       $sql->bindValue(':stock', $stock);
-       $sql->bindValue(':qrCode', $qrCode);
-       $sql->bindValue(':status', $status);
-       $res = $sql->execute();
-       return $res;
-   }
+        $sql = $this->prepare('Update users set password = :password where id = :id');
+        $sql->bindValue(':password', $password);
+        $sql->bindValue(':id', $id);
+        $sql->execute();
+        return 'password succesfully updated';
+    }
+    public function getAdminSpecificBooks($id)
+    {
+        $sql = $this->prepare('select * from books where bookMetaId = :id');
+        $sql->bindValue(':id', $id);
+        $data = $sql->execute();
 
-   public function newBook($stock,$qrCode,$status,$bookMetaId) {
-       $sql = $this->prepare("insert into books (stock, qrCode, status, bookMetaId) values(:stock, :qrCode, :status, :bookMetaId)");
-       $sql->bindValue(':stock', $stock);
-       $sql->bindValue(':qrCode', $qrCode);
-       $sql->bindValue(':status', $status);
-       $sql->bindValue(':bookMetaId', $bookMetaId);
-       $res = $sql->execute();
-       return $res;
-   }
+        $res = array();
+        while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
+            array_push($res, $row);
+        }
+        return $res;
+    }
+
+    public function deleteSpecificBook($id)
+    {
+        $sql = $this->prepare('delete from books where id = :id');
+        $sql->bindValue(':id', $id);
+        $res = $sql->execute();
+        return $res;
+
+    }
+
+    public function updateSpecificBook($id, $stock, $qrCode, $status)
+    {
+        $sql = $this->prepare("Update books set stock = :stock, qrCode = :qrCode, status = :status where id = :id");
+        $sql->bindValue(':id', $id);
+        $sql->bindValue(':stock', $stock);
+        $sql->bindValue(':qrCode', $qrCode);
+        $sql->bindValue(':status', $status);
+        $res = $sql->execute();
+        return $res;
+    }
+
+    public function newBook($stock, $qrCode, $status, $bookMetaId)
+    {
+        $sql = $this->prepare("insert into books (stock, qrCode, status, bookMetaId) values(:stock, :qrCode, :status, :bookMetaId)");
+        $sql->bindValue(':stock', $stock);
+        $sql->bindValue(':qrCode', $qrCode);
+        $sql->bindValue(':status', $status);
+        $sql->bindValue(':bookMetaId', $bookMetaId);
+        $res = $sql->execute();
+        return $res;
+    }
+
+    public function searchFilters($searchVal)
+    {
+        $sql = $this->prepare("select 'authors' as type, name, id from authors where name like :searchVal
+       union select 'categories', name, id from categories where name like :searchVal
+        union select 'title', title, id from bookMeta where title like :searchVal");
+        $sql->bindValue(":searchVal", $searchVal);
+        $data = $sql->execute();
+
+        $result = array();
+        while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
+            array_push($result, $row);
+        }
+
+        return $result;
+    }
 }

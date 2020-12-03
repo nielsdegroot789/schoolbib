@@ -76,7 +76,6 @@ $checkLoggedInMW = function ($request, $handler) {
 //routes
 $app->get('/', function (Request $request, Response $response, $args) {
     $response->getBody()->write('Hello ');
-
     return $response;
 })->add($checkLoggedInMW);
 
@@ -106,6 +105,8 @@ $app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkTo
 $app->map(['POST','DELETE','PUT'], '/handleSpecificBook', \skoolBiep\Controller\UserController::class . ':handleSpecificBook');
 
 $app->get('/getAdminSpecificBooks', \skoolBiep\Controller\UserController::class . ':getAdminSpecificBooks');
+
+$app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':getFilterResults');
 
 
  
