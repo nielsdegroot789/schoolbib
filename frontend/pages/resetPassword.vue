@@ -21,7 +21,12 @@
           input-class="input-style"
         />
       </FormulateForm>
-      <input type="submit" label="Reset password" @click="resetPassword" />
+      <input
+        class="button is-dark reset-button"
+        type="submit"
+        label="Reset password"
+        @click="resetPassword"
+      />
     </div>
     <h1 v-if="tokenValid.includes('Invalid token')">
       Token invalid, please try again
