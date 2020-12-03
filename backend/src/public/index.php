@@ -94,7 +94,7 @@ $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBoo
 $app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':getFilterResults');
 
 // NEEDS TO BE LOGGED IN
-
+$app->group('/',function () use ($app) {
 $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
 $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
 $app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
@@ -110,6 +110,7 @@ $app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':up
 $app->post('/addToFavoriteBookList', \skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 $app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
+})->add($checkLoggedInMW);
 
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
