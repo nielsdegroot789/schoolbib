@@ -1,13 +1,19 @@
 <template>
-  <div class="container">
-    <div class="portfolio">
-      <div v-if="!isApiReady">
-        <Loading />
+  <div>
+    <div v-if="loggedIn" class="container">
+      <div>
+        <div v-if="!isApiReady">
+          <Loading />
+        </div>
+        <div v-if="isApiReady" class="peopleContainer">
+          <p>Specific information about students goes here</p>
+        </div>
+        <Pagination />
       </div>
-      <div v-if="isApiReady" class="peopleContainer">
-        <p>Specific information about students goes here</p>
-      </div>
-      <Pagination />
+    </div>
+    <div v-else>
+      Sorry, this page is only available for admin/arch users. If you are one
+      make sure you are logged in.
     </div>
   </div>
 </template>
@@ -32,89 +38,12 @@ export default {
     currentPage() {
       return parseInt(this.$route.params.page);
     },
+    loggedIn() {
+      return this.$store.state.JWT;
+    },
   },
   methods: {},
 };
 </script>
 
-<style>
-.container {
-  padding-top: 150px;
-  background-color: lightgray;
-  height: 2000px;
-  display: flex;
-  flex-direction: column;
-}
-
-.settings {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.portfolio {
-  height: 90%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.peopleContainer {
-  width: 90%;
-  height: 90%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  margin: auto;
-  padding-top: 20px;
-}
-
-.peopleContainer .person {
-  width: 23%;
-  height: 15%;
-  border: black thin solid;
-  margin: 2px;
-  padding: 5px;
-}
-
-.peopleContainer .person .img {
-  float: right;
-}
-
-.peopleContainer .person img {
-  height: 100px;
-}
-
-.buttonContainer {
-  bottom: 15px;
-  width: 100%;
-  padding: 0 35%;
-}
-
-.pageContainer {
-  display: flex;
-  justify-content: center;
-  margin: 0 100px;
-
-  width: 200px;
-  position: absolute;
-  left: 50%;
-  margin-left: -100px;
-}
-button {
-  margin: 0 5px;
-}
-
-.highlighted {
-  background-color: goldenrod;
-}
-
-.left {
-  float: left;
-}
-
-.right {
-  float: right;
-}
-</style>
+<style></style>

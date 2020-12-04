@@ -5,7 +5,7 @@
 <script>
 export default {
   created() {
-    this.$router.push('manage/users/1');
+    this.$router.push('/manage/users/1');
   },
 };
 </script>
