@@ -72,8 +72,8 @@ export default {
     },
   },
   created() {
-    this.queryReload(this.$route.query['filter-category'], 'categories');
-    this.queryReload(this.$route.query['filter-authors'], 'authors');
+    this.queryReload(this.$route.query['filter-category'], 'Categories');
+    this.queryReload(this.$route.query['filter-authors'], 'Authors');
   },
   methods: {
     toggleShow() {
