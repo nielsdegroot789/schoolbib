@@ -1,5 +1,6 @@
 <template>
-  <div v-if="pagesCount > 1" class="pagination-row">
+  <!-- <div v-if="pagesCount > 1" class="pagination-row"> -->
+  <div class="pagination-row">
     <n-link :to="{ path: 'books', query: { page: first } }"> first </n-link>
 
     <n-link :to="{ path: 'books', query: { page: previous } }">
@@ -29,9 +30,7 @@ export default {
     pageNumber() {
       return parseInt(this.$route.query.page);
     },
-    pagesCount() {
-      return this.$store.getters.getPageCount;
-    },
+
     amountOfButtons() {
       return Math.min(this.pagesCount, 5);
     },
@@ -72,18 +71,21 @@ export default {
       return this.pageNumber - 1;
     },
   },
-  // watch: {
-  //   $route: {
-  //     immediate: true,
-  //     handler(route) {
-  //       this.currentPage = route.query.name;
-  //       this.$store.dispatch('getBookMeta', {
-  //         pageNumber: this.pageNumber,
-  //       });
-  //       console.log(route);
-  //     },
-  //   },
-  // },
+  watch: {
+    $route: {
+      immediate: true,
+      handler(route) {
+        this.currentPage = route.query.name;
+        this.$store.dispatch('getBookMeta', {
+          pageNumber: this.pageNumber,
+        });
+        console.log(route);
+      },
+    },
+  },
+  created() {
+    return this.$store.getters.getPageCount;
+  },
 };
 </script>
 
