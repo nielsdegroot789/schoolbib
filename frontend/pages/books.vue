@@ -1,17 +1,9 @@
 <template>
   <div class="section pageSetup">
     <div class="section level">
-      <input
-        v-model="search"
-        type="text"
-        placeholder="Search on title.."
-        class="level-left"
-        @keydown="toSearch"
-      />
-
-      <Pagination class="level-right" />
+      <Filters />
     </div>
-
+    <Pagination class="level-right" />
     <div class="cardContainer">
       <nuxt-link
         v-for="item in bookMeta"
@@ -37,17 +29,22 @@
               </p>
             </div>
           </div>
-          <div class="content">short book info</div>
+          <div class="content">{{ item.categories }}</div>
         </div>
       </nuxt-link>
     </div>
   </div>
 </template>
 <script>
+import Filters from '../components/Filters';
 import StarRating from '~/components/StarRating';
+import Pagination from '~/components/Pagination';
+
 export default {
   components: {
     StarRating,
+    Pagination,
+    Filters,
   },
   data() {
     return {
@@ -57,27 +54,20 @@ export default {
     };
   },
   computed: {
-    changePageNumber() {
-      return this.$store.getters.pageNumber;
-    },
-    pageNumber() {
-      return parseInt(this.$route.params.page);
-    },
     bookMeta() {
       return this.$store.state.bookMeta;
+    },
+    filters() {
+      return { filters: this.$route.query };
     },
   },
 
   watch: {
     $route: {
       immediate: true,
-      handler(route) {
-        this.search = route.query.name;
-        this.$store.dispatch('getBookMeta', {
-          pageNumber: this.pageNumber,
-          name: this.search,
-        });
-        console.log(route);
+      handler() {
+        this.$store.dispatch('getBookMeta', this.filters);
+        console.log(this.filters);
       },
     },
   },

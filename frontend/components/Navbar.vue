@@ -12,7 +12,7 @@
           <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/users"
             >Manage users</nuxt-link
           >
-          <nuxt-link class="navbar-item" to="/books">Books</nuxt-link>
+          <nuxt-link class="navbar-item" to="/books?page=1">Books</nuxt-link>
           <nuxt-link v-if="!loggedIn" class="navbar-item" to="/login"
             >Log In</nuxt-link
           >

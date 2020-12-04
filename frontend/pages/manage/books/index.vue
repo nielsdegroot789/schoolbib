@@ -83,25 +83,15 @@ export default {
       return this.$store.state.bookMeta;
     },
   },
-  created() {},
 };
 </script>
 
 <style>
-.crudTitle {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 35px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
 .setup {
   margin: 0 5%;
   box-sizing: border-box;
   height: 100%;
+  overflow-x: auto;
 }
 
 .links {
@@ -127,9 +117,5 @@ export default {
   justify-items: center;
   align-items: center;
   margin: 5px 0;
-}
-
-.booksContainer span {
-  overflow-wrap: anywhere;
 }
 </style>

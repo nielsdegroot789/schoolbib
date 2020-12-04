@@ -24,13 +24,13 @@ class BookController
     }
 
     public function getBookMeta(Request $request, Response $response, array $args)
-    {
+    { 
         $this->response = $response;
         $db = new DB();
-        $arguments = json_decode(file_get_contents("php://input"), true);
-        $title = isset($arguments["title"]) ? '%' . $arguments["title"] : "%";
-        $author = isset($arguments["author"]) ? '%' . $arguments["author"] : "%";
-        $category = isset($arguments["category"]) ? $arguments["category"] : "%";
+
+        $title = isset($_GET["title"]) ? $_GET["title"] . '%'  : "%";
+        $author = isset($_GET["authors"]) ? $_GET["authors"] : "%";
+        $category = isset($_GET["categories"]) ? $_GET["categories"] : "%";
         $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
         $offsetNumber = isset($arguments["offset"]) ? $arguments["offset"] : 0;
 
@@ -41,7 +41,18 @@ class BookController
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
+    
+    public function getBookMetaCount(Request $request, Response $response, array $args)
+    {
+        $db = new DB();
+        $data = $db->getBookMetaCount();
+        $payload = json_encode($data);
 
+        $response->getBody()->write($payload);
+
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
     public function getBooks(Request $request, Response $response, array $args)
     {
         $db = new DB();
@@ -92,4 +103,15 @@ class BookController
     {
         return $this->id;
     }
+
+    public function getFilterResults(Request $request, Response $response, array $args) {
+        $this->response = $response;
+        $searchVal = $_GET['searchVal'] . '%';
+        $db = new DB();
+        $searchResults = $db->searchFilters($searchVal);
+        $json = json_encode($searchResults);
+        $response->getBody()->write($json);
+        return $response;
+    }
+
 }

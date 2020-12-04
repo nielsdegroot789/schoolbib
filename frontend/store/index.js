@@ -1,5 +1,6 @@
 export const state = () => ({
   bookMeta: [],
+  totalBookMeta: 0,
   books: [],
   users: [],
   currentUser: {},
@@ -17,17 +18,43 @@ export const state = () => ({
   specificBook: {},
   editModal: false,
   deleteModal: false,
+  autoCompleteResults: [],
+  categoryList: [],
+  authorList: [],
+  titleList: [],
+  batches: [],
   isAdmin: false,
   isStudent: false,
 });
 
 export const actions = {
-  getBookMeta(context) {
-    this.$axios
-      .get('http://localhost:8080/getBookMeta', {
+  async getBookMeta({ commit }, { filters }) {
+    const params = {};
+    if (filters['book-name']) {
+      params.title = filters['book-name'];
+    }
+    if (filters['filter-category']) {
+      params.categories = filters['filter-category'];
+    }
+    if (filters['filter-authors']) {
+      params.authors = filters['filter-authors'];
+    }
+    try {
+      const books = await this.$axios({
+        method: 'GET',
+        url: 'http://localhost:8080/getBookMeta',
         headers: { Authorization: `Bearer test` },
-      })
-      .then((response) => context.commit('getBookMeta', response.data));
+        params,
+      });
+      commit('getBookMeta', books.data);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getBookMetaCount(context) {
+    this.$axios
+      .get('http://localhost:8080/getBookMetaCount')
+      .then((response) => context.commit('getBookMetaCount', response.data));
   },
   getBooks(context) {
     this.$axios
@@ -118,6 +145,28 @@ export const actions = {
   toggleDeleteModal({ commit }, id) {
     commit('toggleDeleteModal', id);
   },
+  getAutoCompleteResults({ commit }, search) {
+    if (search.length === 0) {
+      return commit('makeEmpty');
+    }
+    const params = {
+      searchVal: search,
+    };
+    this.$axios({
+      method: 'GET',
+      url: 'http://localhost:8080/getFilterResults',
+      params,
+    }).then((response) => {
+      commit('setAutoCompleteResults', response.data);
+    });
+  },
+  addBatch({ commit }, batch) {
+    commit('setBatch', batch);
+  },
+  deleteBatch({ commit }, batch) {
+    console.log(batch);
+    commit('deleteBatch', batch);
+  },
 };
 
 export const mutations = {
@@ -126,6 +175,9 @@ export const mutations = {
   },
   getBooks(state, data) {
     state.books = data;
+  },
+  getBookMetaCount(state, totalBookMeta) {
+    state.totalBookMeta = totalBookMeta;
   },
   getFrontPageNotification(state, data) {
     state.frontPageNotification = data;
@@ -180,9 +232,6 @@ export const mutations = {
     }
     return false;
   },
-  setTotalItems(state, payload) {
-    state.setTotalItems = payload;
-  },
   getReservations(state, reservation) {
     state.reservation = reservation;
   },
@@ -223,6 +272,29 @@ export const mutations = {
       (book) => book.id === id,
     );
   },
+  setAutoCompleteResults(state, data) {
+    state.authorList = data.filter((result) => {
+      return result.type === 'authors';
+    });
+    state.categoryList = data.filter((result) => {
+      return result.type === 'categories';
+    });
+    state.titleList = data.filter((result) => {
+      return result.type === 'title';
+    });
+  },
+  makeEmpty(state) {
+    state.categoryList = '';
+    state.authorList = '';
+  },
+  setBatch(state, batch) {
+    state.batches.push(batch);
+  },
+  deleteBatch(state, batch) {
+    state.batches = state.batches.filter((item) => {
+      return item.value !== batch;
+    });
+  },
 };
 
 export const getters = {
@@ -235,16 +307,13 @@ export const getters = {
   getNotification: (state) => {
     return state.notification;
   },
-  getPageCount(state) {
-    return Math.ceil(state.totalItems / state.limit);
-  },
-  getBookMetaCount: (state) => (count) => {
-    return state.bookMeta.filter((bookMeta) => bookMeta.count === count);
-  },
   getReservation: (state) => {
     return state.reservations;
   },
   getCurrentBook: (state) => {
     return state.specificBook;
+  },
+  getPageCount(state) {
+    return Math.ceil(state.totalBookMeta / state.limit);
   },
 };
