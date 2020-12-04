@@ -92,6 +92,8 @@ $app->post('/resetPassword', \skoolBiep\Controller\UserController::class . ':res
 $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
 $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
 $app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':getFilterResults');
+$app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
+$app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':updatePassword');
 
 // NEEDS TO BE LOGGED IN
 $app->group('/',function () use ($app) {
@@ -104,9 +106,9 @@ $app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class 
 $app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
 $app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
 
-$app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
+
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
-$app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':updatePassword');
+
 $app->post('/addToFavoriteBookList', \skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 $app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
