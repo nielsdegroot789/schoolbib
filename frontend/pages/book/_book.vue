@@ -71,7 +71,7 @@
           </span>
         </p>
       </div>
-      <div v-if="loggedIn" class="section box stockInfo">
+      <div v-if="currentRole == 1" class="section box stockInfo">
         <h3 class="title">Interested in reading?</h3>
         <p v-if="inStock === 0">
           There are currently no books available. Feel free to contact an
@@ -125,6 +125,12 @@ export default {
     },
     inStock() {
       return this.$store.state.adminSpecificBooks.length;
+    },
+    currentUserId() {
+      return this.$store.state.currentUser.id;
+    },
+    currentRole() {
+      return this.$store.state.currentUser.role;
     },
   },
   created() {

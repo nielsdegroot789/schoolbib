@@ -83,6 +83,7 @@ $app->get('/', function (Request $request, Response $response, $args) {
 
 // DOES NOT NEED TO BE LOGGED IN
 
+$app->get('/getBookMetaCount', \skoolBiep\Controller\BookController::class . ':getBookMetaCount');
 $app->post('/login', \skoolBiep\Controller\UserController::class . ':login');
 $app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . ':getNotification');
 $app->get('/getCockpitFooterData', \skoolBiep\Controller\CockpitController::class . ':getCockpitFooterData');
