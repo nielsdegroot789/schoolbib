@@ -1,6 +1,9 @@
 <template>
   <div ref="c-autocomplete" class="c-autocomplete">
-    <div v-if="batches.length" class="c-autocomplete__batch-container">
+    <div
+      v-if="batches.length && this.$route.path == '/books'"
+      class="c-autocomplete__batch-container"
+    >
       <button
         v-for="item in batches"
         :key="item.value"
@@ -145,9 +148,11 @@ export default {
 </script>
 
 <style>
+.c-autocomplete {
+  position: relative;
+}
 .c-autocomplete__input {
   border: 1px solid #dbdbdb !important;
-  margin-top: 2rem;
   width: 100% !important;
 }
 .c-autocomplete__input:focus {
@@ -189,6 +194,12 @@ export default {
 }
 
 .autocomplete-results-container {
+  width: 100%;
+  z-index: 99;
+  background-color: white;
+  position: absolute;
+  top: 4rem;
+  left: 0;
   border-radius: 3px;
   display: flex;
   flex-direction: column;
@@ -214,6 +225,7 @@ export default {
   border: 1px solid #48748a;
   cursor: pointer;
   margin-left: 5px;
+  margin-top: 1rem;
   height: auto;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }

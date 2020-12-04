@@ -12,7 +12,7 @@
       @select="updateFilterQuery"
       @delete="deleteQuery"
     />
-    <div class="filters__toggle">
+    <div v-if="this.$route.path == '/books'" class="filters__toggle">
       <button class="button button-clear" @click="toggleShow">
         {{ show ? 'Hide filters' : 'Show filters' }}
       </button>
