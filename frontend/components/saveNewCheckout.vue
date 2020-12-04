@@ -2,28 +2,36 @@
   <FormulateForm v-model="values" :values="checkoutData" @submit="saveCheckout">
     <h2>Form for a user who wants to checkout a book.</h2>
     <FormulateInput
-      v-model="usersId"
+      v-model="checkoutData.usersId"
       type="number"
       label="usersId"
       placeholder="usersId: 1,2,.."
     />
     <FormulateInput
-      v-model="booksId"
+      v-model="checkoutData.booksId"
       type="number"
       label="booksId"
       placeholder="BookId: 1,2,.."
     />
-    <FormulateInput v-model="checkoutDateTime" type="date" label="Date" />
-    <FormulateInput v-model="maxAllowedDate" type="date" label="max - Date" />
+    <FormulateInput
+      v-model="checkoutData.checkoutDateTime"
+      type="text"
+      label="text"
+    />
+    <FormulateInput
+      v-model="checkoutData.maxAllowedDate"
+      type="text"
+      label="max - text"
+    />
 
     <FormulateInput
-      v-model="usersName"
+      v-model="checkoutData.usersName"
       type="text"
       label="Student name"
       placeholder="Student name"
     />
     <FormulateInput
-      v-model="usersName"
+      v-model="checkoutData.booksName"
       type="text"
       label="Student name"
       placeholder="Student name"
