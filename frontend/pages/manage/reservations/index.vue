@@ -1,7 +1,7 @@
 <template>
   <div class="setup section">
     <header class="level">
-      <h1 class="level-left title">Manage Users Books</h1>
+      <h1 class="level-left title">Manage Reservations</h1>
     </header>
     <h2>Reservations</h2>
     <table class="table table is-bordered is-hoverable is-fullwidth">
