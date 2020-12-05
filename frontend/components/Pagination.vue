@@ -83,9 +83,6 @@ export default {
       },
     },
   },
-  created() {
-    return this.$store.getters.getPageCount;
-  },
 };
 </script>
 

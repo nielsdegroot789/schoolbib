@@ -6,7 +6,7 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-end">
-          <ul class="sub-items">
+          <!-- <ul class="sub-items">
             <li class="sub-item">
               <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
                 >Information</nuxt-link
@@ -28,7 +28,7 @@
                 >wishlist</nuxt-link
               >
             </li>
-          </ul>
+          </ul> -->
           <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/books"
             >Manage books</nuxt-link
           >
