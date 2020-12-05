@@ -28,7 +28,7 @@ export const state = () => ({
 });
 
 export const actions = {
-  async Meta({ commit }, { filters }) {
+  async getBookMeta({ commit }, { filters }) {
     const params = {};
     if (filters['book-name']) {
       params.title = filters['book-name'];
@@ -160,8 +160,13 @@ export const actions = {
       commit('setAutoCompleteResults', response.data);
     });
   },
-  addBatch({ commit }, batch) {
-    commit('setBatch', batch);
+  addBatch({ commit, state }, batch) {
+    const arr = state.batches.filter((val) => {
+      return val.value === batch.value;
+    });
+    if (!arr[0]) {
+      commit('setBatch', batch);
+    }
   },
   deleteBatch({ commit }, batch) {
     console.log(batch);

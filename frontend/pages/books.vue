@@ -67,7 +67,6 @@ export default {
       immediate: true,
       handler() {
         this.$store.dispatch('getBookMeta', this.filters);
-        console.log(this.filters);
       },
     },
   },
@@ -77,7 +76,6 @@ export default {
       this.filterTimeOut = setTimeout(() => {
         this.$router.push({ path: '/catalog/', query: { name: this.search } });
       }, 1000);
-      console.log('search');
     },
   },
 };

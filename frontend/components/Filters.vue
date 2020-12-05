@@ -92,7 +92,6 @@ export default {
     },
     updateFilterQuery(filterObject) {
       if (filterObject !== null) {
-        debugger;
         if (filterObject.type === 'Categories') {
           this.filterCategories.push(filterObject);
         } else {
@@ -119,6 +118,9 @@ export default {
         }
       }
     },
+  },
+  checkDuplicates() {
+    console.log('ba');
   },
 };
 </script>
