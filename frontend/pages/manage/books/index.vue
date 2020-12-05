@@ -83,6 +83,9 @@ export default {
       return this.$store.state.bookMeta;
     },
   },
+  created() {
+    this.$store.dispatch('getBookMeta');
+  },
 };
 </script>
 

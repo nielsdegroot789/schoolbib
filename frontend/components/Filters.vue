@@ -7,7 +7,6 @@
     <Autocomplete
       v-if="show"
       name="Filters"
-      :disabled="fetchingInitLabel"
       @change="searchFilter"
       @select="updateFilterQuery"
       @delete="deleteQuery"
@@ -93,6 +92,7 @@ export default {
     },
     updateFilterQuery(filterObject) {
       if (filterObject !== null) {
+        debugger;
         if (filterObject.type === 'Categories') {
           this.filterCategories.push(filterObject);
         } else {

@@ -28,7 +28,7 @@ export const state = () => ({
 });
 
 export const actions = {
-  async getBookMeta({ commit }, { filters }) {
+  async Meta({ commit }, { filters }) {
     const params = {};
     if (filters['book-name']) {
       params.title = filters['book-name'];

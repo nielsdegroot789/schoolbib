@@ -96,21 +96,6 @@ export default {
       return this.$store.state.batches;
     },
   },
-  watch: {
-    loading(val) {
-      if (!val) {
-        this.labelChanged = false;
-      }
-    },
-    initLabel: {
-      immediate: true,
-      handler(label) {
-        if (label) {
-          this.label = label;
-        }
-      },
-    },
-  },
   mounted() {
     document.addEventListener('click', this.emptyAutoList);
   },
@@ -120,7 +105,6 @@ export default {
   methods: {
     manualChange() {
       clearTimeout(this.timeout);
-      this.labelChanged = true;
 
       this.timeout = setTimeout(this.emitChange, 1000);
     },
@@ -172,6 +156,7 @@ export default {
 
 .container-filters h1 {
   color: #48748a;
+  text-align: start;
 }
 .container-filters h1:first-child {
   border-top: 4px solid #48748a;
@@ -198,7 +183,6 @@ export default {
   z-index: 99;
   background-color: white;
   position: absolute;
-  top: 4rem;
   left: 0;
   border-radius: 3px;
   display: flex;
@@ -206,6 +190,7 @@ export default {
   border: 1px solid black;
   border-top: none;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+  font-size: 16px !important;
 }
 
 .button-clear {
