@@ -23,6 +23,12 @@
 
 <script>
 export default {
+  props: {
+    pageCount: {
+      type: number,
+      default: 0,
+    },
+  },
   data() {
     return {};
   },
@@ -75,11 +81,11 @@ export default {
     $route: {
       immediate: true,
       handler(route) {
-        this.currentPage = route.query.name;
-        this.$store.dispatch('getBookMeta', {
+        const payload = {
+          page: route.query.name,
           pageNumber: this.pageNumber,
-        });
-        console.log(route);
+        };
+        this.$store.dispatch('getBookMeta', payload);
       },
     },
   },
