@@ -25,7 +25,7 @@
 export default {
   props: {
     pageCount: {
-      type: number,
+      type: Number,
       default: 0,
     },
   },

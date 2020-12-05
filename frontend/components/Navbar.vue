@@ -6,29 +6,32 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-end">
-          <!-- <ul class="sub-items">
-            <li class="sub-item">
-              <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
-                >Information</nuxt-link
-              >
-            </li>
-            <li class="sub-item">
-              <nuxt-link
-                v-if="loggedIn"
-                class="navbar-item"
-                to="/profile/mybooks"
-                >My books</nuxt-link
-              >
-            </li>
-            <li class="sub-item">
-              <nuxt-link
-                v-if="loggedIn"
-                class="navbar-item"
-                to="/profile/wishlist"
-                >wishlist</nuxt-link
-              >
-            </li>
-          </ul> -->
+          <div class="dropdownProfile">
+            <button class="dropbtn" @click="myFunction()">profile</button>
+            <div id="myDropdown" class="dropdown-content">
+              <a class="sub-item">
+                <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
+                  >Information</nuxt-link
+                >
+              </a>
+              <a class="sub-item">
+                <nuxt-link
+                  v-if="loggedIn"
+                  class="navbar-item"
+                  to="/profile/mybooks"
+                  >My books</nuxt-link
+                >
+              </a>
+              <a class="sub-item">
+                <nuxt-link
+                  v-if="loggedIn"
+                  class="navbar-item"
+                  to="/profile/wishlist"
+                  >wishlist</nuxt-link
+                >
+              </a>
+            </div>
+          </div>
           <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/books"
             >Manage books</nuxt-link
           >
@@ -68,8 +71,56 @@ export default {
       this.$store.commit('logout');
       localStorage.removeItem('JWT');
     },
+    myFunction() {
+      document.getElementById('myDropdown').classList.toggle('show');
+    },
+
+    function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        const dropdowns = document.getElementsByClassName('sub-items');
+        let i;
+        for (i = 0; i < dropdowns.length; i++) {
+          const openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    },
   },
 };
 </script>
 
-<style></style>
+<style>
+.dropbtn {
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdownProfile {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: fixed;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.show {
+  display: block;
+}
+</style>

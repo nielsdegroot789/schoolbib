@@ -1,9 +1,9 @@
 <template>
   <div class="setup section">
     <header class="level">
-      <h1 class="level-left title">Manage Users</h1>
-      <button @click="checkNow">Check now Time k</button>
-      {{ this.DateNow }}
+      <h1 class="level-left title">
+        this is the wishlist. of books you have added as favorite
+      </h1>
     </header>
     <h2>Reservations</h2>
     <table class="table table is-bordered is-hoverable is-fullwidth">
@@ -45,81 +45,16 @@ export default {
   computed: {},
 
   created() {
-    this.$axios
-      .get('http://localhost:8080/getReservations')
-      .then((response) => {
-        this.reservations = response.data;
-      });
+    this.$axios.get('http://localhost:8080/getWishlist').then((response) => {
+      this.reservations = response.data;
+    });
     this.$axios.get('http://localhost:8080/getCheckouts').then((response) => {
       this.checkouts = response.data;
     });
   },
 
-  methods: {
-    checkNow() {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      const time =
-        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
-      const dateTime = date + ' ' + time;
-      this.DateNow = dateTime.toString();
-    },
-    EditMsg(object) {
-      this.isEditing = true;
-    },
-    saveCheckout(object) {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      this.checkoutDateTime = date.toString();
-
-      const inTwoWeeks = new Date();
-      const dateInTwoWeeks =
-        inTwoWeeks.getFullYear() +
-        '-' +
-        (inTwoWeeks.getMonth() + 1) +
-        '-' +
-        (inTwoWeeks.getDate() + 14);
-      this.maxAllowedDate = dateInTwoWeeks.toString();
-      this.$axios
-        .post('http://localhost:8080/saveCheckouts', {
-          usersId: object.usersId,
-          booksId: object.booksId,
-          checkoutDateTime: this.checkoutDateTime,
-          returnDateTime: '',
-          maxAllowedDate: this.maxAllowedDate,
-          fine: 0,
-          isPaid: '',
-        })
-        .then(function (response) {});
-    },
-  },
+  methods: {},
 };
 </script>
 
-<style>
-.titleColumn {
-  display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
-  font-weight: bold;
-}
-.usersContainer {
-  display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
-}
-</style>
+<style></style>
