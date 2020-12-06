@@ -68,13 +68,6 @@ export const actions = {
         context.commit('getFrontPageNotification', response.data),
       );
   },
-  saveBook(context, payload) {
-    this.$axios
-      .post('http://localhost:8080/saveBook', payload)
-      .catch((error) => {
-        console.log(error);
-      });
-  },
   addNotification({ commit }, message) {
     commit('addNotification', message);
   },
