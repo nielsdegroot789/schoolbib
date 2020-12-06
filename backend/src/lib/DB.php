@@ -312,15 +312,32 @@ class DB extends \SQLite3
 
         return $status;
     }
-    public function GetFavoriteBooks($usersId, $bookMetaId)
+    public function getFavoriteBooks($id)
     {
-        $sql = "SELECT usersId,bookMetaId, title
+        $sql = $this->prepare("SELECT usersId,bookMetaId, title
         FROM favoriteBooks
 		LEFT join bookMeta 
 		ON favoriteBooks.bookMetaId = bookMeta.Id
-        where usersId = 3"
-        ;
+        where usersId = :id");
         
+        $sql->bindvalue(':id', $id);
+        $res = $sql->execute();
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+        return $data;
+    }
+    
+    public function getFavoriteAuthors($id)
+    {
+        $sql = $this->prepare("SELECT usersId, authorsId, name
+        FROM favoriteAuthors
+		LEFT join authors 
+		ON favoriteAuthors.authorsId = authors.id
+        where usersId = :id");
+
         $res = $this->query($sql);
 
         $data = array();
@@ -330,15 +347,16 @@ class DB extends \SQLite3
 
         return $data;
     }
-    public function GetFavoriteAuthors($usersId, $bookMetaId)
+
+    
+    public function getCheckoutUser($id)
     {
-
-        $sql = "SELECT usersId, authorsId, name
-        FROM favoriteAuthors
-		LEFT join authors 
-		ON favoriteAuthors.authorsId = authors.id
-        where usersId = 1";
-
+        $sql = "SELECT checkouts.id, maxAllowedDate, fine, bookMeta.title as booksName
+        FROM checkouts        
+		left join books on books.id = checkouts.booksId
+		left join bookMeta on bookMeta.id = books.bookMetaId
+		ORDER by checkouts.maxAllowedDate DESC";
+             
         $res = $this->query($sql);
 
         $data = array();
@@ -462,23 +480,6 @@ class DB extends \SQLite3
         return $data;
     }
 
-    public function getCheckoutUser($id,$booksName,$maxAllowedDate, $fine)
-    {
-        $sql = "SELECT checkouts.id, maxAllowedDate, fine, bookMeta.title as booksName
-        FROM checkouts        
-		left join books on books.id = checkouts.booksId
-		left join bookMeta on bookMeta.id = books.bookMetaId
-		ORDER by checkouts.maxAllowedDate DESC";
-             
-        $res = $this->query($sql);
-
-        $data = array();
-        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
-            array_push($data, $row);
-        }
-
-        return $data;
-    }
 
     public function getProfilePageData($id)
     {

@@ -242,42 +242,36 @@ class UserController
         $id = $json->id;
         $this->response = $response;
         $db = new DB();
-        $data = $db->getProfilePageData($id);
+        $data = $db->getCheckoutUser($id);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
     }
-    public function GetFavoriteBooks(Request $request, Response $response, array $args) {
+    public function getFavoriteBooks(Request $request, Response $response, array $args) {
         $payloadData = $_GET['data'];
         $json = json_decode($payloadData);
         $id = $json->id;
         $this->response = $response;
         $db = new DB();
-        $data = $db->getProfilePageData($id);
+        $data = $db->getFavoriteBooks($id);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
     }
-    public function GetFavoriteAuthors(Request $request, Response $response, array $args) {
+    public function getFavoriteAuthors(Request $request, Response $response, array $args) {
         $payloadData = $_GET['data'];
         $json = json_decode($payloadData);
         $id = $json->id;
         $this->response = $response;
         $db = new DB();
-        $data = $db->getProfilePageData($id);
+        $data = $db->getFavoriteAuthors($id);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
     }
-
-
-
-
-
-
 
     public function getProfilePageData(Request $request, Response $response, array $args) {
         $payloadData = $_GET['data'];
