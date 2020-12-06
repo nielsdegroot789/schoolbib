@@ -338,17 +338,35 @@ class DB extends \SQLite3
 		ON favoriteAuthors.authorsId = authors.id
         where usersId = :id");
 
-        $res = $this->query($sql);
+        $sql->bindvalue(':id', $id);
+        $res = $sql->execute();
 
         $data = array();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($data, $row);
         }
-
         return $data;
     }
 
     
+    public function getReservationUser($id)
+    {
+        $sql =  $this->prepare("SELECT reservations.id,  bookMeta.title as booksName
+        FROM reservations        
+		left join books on books.id = reservations.booksId
+		left join bookMeta on bookMeta.id = books.bookMetaId
+		WHERE accepted = 0 AND usersId = :id");
+             
+             $sql->bindvalue(':id', $id);
+             $res = $sql->execute();
+     
+             $data = array();
+             while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+                 array_push($data, $row);
+             }
+             return $data;
+    }
+
     public function getCheckoutUser($id)
     {
         $sql =  $this->prepare("SELECT checkouts.id, usersId, maxAllowedDate, fine, bookMeta.title as booksName
@@ -356,17 +374,16 @@ class DB extends \SQLite3
 		left join books on books.id = checkouts.booksId
 		left join bookMeta on bookMeta.id = books.bookMetaId
 		WHERE usersId = :id
-		ORDER by checkouts.maxAllowedDate DESC
-        ");
+		ORDER by checkouts.maxAllowedDate DESC");
              
-        $res = $this->query($sql);
-
-        $data = array();
-        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
-            array_push($data, $row);
-        }
-
-        return $data;
+             $sql->bindvalue(':id', $id);
+             $res = $sql->execute();
+     
+             $data = array();
+             while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+                 array_push($data, $row);
+             }
+             return $data;
     }
 
     public function saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted)
