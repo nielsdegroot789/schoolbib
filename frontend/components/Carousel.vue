@@ -51,10 +51,10 @@ export default {
         touchThreshold: 5,
       },
       categories: [
-        { id: 0, value: 'adults', name: 'New Adults' },
-        { id: 1, value: 'children', name: 'New Children' },
-        { id: 2, value: 'fantasy', name: 'New Fantasy' },
-        { id: 3, value: 'fiction', name: 'New Fiction' },
+        { id: 0, value: 'Computers', name: 'Computers' },
+        { id: 1, value: 'Cooking', name: 'Cooking' },
+        { id: 2, value: 'Juvenile Nonfiction', name: 'Juvenile Nonfiction' },
+        { id: 3, value: 'Fiction', name: 'Fiction' },
       ],
       currentlyActive: 0,
       bookMeta: [],
@@ -71,9 +71,12 @@ export default {
     },
     getBookMeta() {
       this.loaded = false;
+      const params = {};
+      params.categories = this.categories[this.currentlyActive].value;
       this.$axios
         .get('http://localhost:8080/getBookMeta', {
           headers: { Authorization: `Bearer test` },
+          params,
         })
         .then((response) => {
           this.bookMeta = response.data;

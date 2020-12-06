@@ -36,6 +36,7 @@
 
       <FormulateInput type="submit" label="Save" />
     </FormulateForm>
+
     <div class="possibleBookResults section">
       <div class="buttonContainer level">
         <button
@@ -51,6 +52,7 @@
           Search by title
         </button>
       </div>
+
       <div v-if="showError" class="notification is-danger">
         <button class="delete" @click="closeError"></button>
         Make sure that the field is filled in correctly!

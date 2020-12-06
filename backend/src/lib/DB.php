@@ -177,9 +177,10 @@ class DB extends \SQLite3
             $sql = $this->prepare('select id from bookMeta where isbnCode = :isbn');
             $sql->bindValue(':isbn', $isbn);
             $res = $sql->execute();
-            if ($sql->execute()) {
-                //This bookMeta already exists in the database.
-                throw new Exception("This bookMeta already exists in the database under id " . $res->fetchArray(SQLITE3_ASSOC));
+            // needs work still
+            if (false) {
+                //TODO This bookMeta already exists in the database. this does not work
+                //throw new Exception("This bookMeta already exists in the database under id " . $res->fetchArray(SQLITE3_ASSOC));
             } else {
                 $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
                 values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
