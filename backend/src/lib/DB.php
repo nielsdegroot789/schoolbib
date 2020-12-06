@@ -351,11 +351,13 @@ class DB extends \SQLite3
     
     public function getCheckoutUser($id)
     {
-        $sql = "SELECT checkouts.id, maxAllowedDate, fine, bookMeta.title as booksName
+        $sql =  $this->prepare("SELECT checkouts.id, usersId, maxAllowedDate, fine, bookMeta.title as booksName
         FROM checkouts        
 		left join books on books.id = checkouts.booksId
 		left join bookMeta on bookMeta.id = books.bookMetaId
-		ORDER by checkouts.maxAllowedDate DESC";
+		WHERE usersId = :id
+		ORDER by checkouts.maxAllowedDate DESC
+        ");
              
         $res = $this->query($sql);
 

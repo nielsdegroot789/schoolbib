@@ -107,8 +107,8 @@ $app->post('/saveNewCheckout', \skoolBiep\Controller\UserController::class . ':s
 
 
 $app->get('/getCheckoutUser', \skoolBiep\Controller\UserController::class . ':getCheckoutUser');
-$app->get('/GetFavoriteBooks', \skoolBiep\Controller\UserController::class . ':GetFavoriteBooks');
-$app->get('/GetFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':GetFavoriteAuthors');
+$app->get('/getFavoriteBooks', \skoolBiep\Controller\UserController::class . ':getFavoriteBooks');
+$app->get('/getFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':getFavoriteAuthors');
 
 $app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
