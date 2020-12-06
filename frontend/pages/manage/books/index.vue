@@ -76,12 +76,19 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      bookMeta: [],
+    };
   },
-  computed: {
-    bookMeta() {
-      return this.$store.state.bookMeta;
-    },
+  computed: {},
+  mounted() {
+    this.$axios
+      .get('http://localhost:8080/getBookMeta', {
+        headers: { Authorization: `Bearer test` },
+      })
+      .then((response) => {
+        this.bookMeta = response.data;
+      });
   },
 };
 </script>
