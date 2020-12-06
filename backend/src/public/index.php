@@ -93,7 +93,6 @@ $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks'
 $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
 $app->get('/getBookMetaFromId', \skoolBiep\Controller\BookController::class . ':getBookMetaFromId');
 $app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':getFilterResults');
-$app->get('/getFrontpageTabs', \skoolBiep\Controller\BookController::class . ':getFrontpageTabs');
 
 // NEEDS TO BE LOGGED IN
 $app->group('/',function () use ($app) {

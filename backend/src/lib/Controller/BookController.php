@@ -70,20 +70,6 @@ class BookController
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function getFrontpageTabs(Request $request, Response $response, array $args)
-    {
-        $this->response = $response;
-        $db = new DB();
-
-        //todo Find way to set these without having to hardcode + expecting frontend to know the exact names. Make tabs dropdowns for admins?
-        $category = isset($_GET["categories"]) ? $_GET["categories"] : "%";
-
-        $data[] = $db->getFrontpageBooksFromCategory($limitNumber, $category);
-        $payload = json_encode($data);
-
-        $response->getBody()->write($payload);
-    }
-
     public function getBooks(Request $request, Response $response, array $args)
     {
         $db = new DB();
