@@ -20,8 +20,6 @@ export default {
     Navbar,
   },
   mounted() {
-    this.$store.dispatch('getBookMeta');
-    this.$store.dispatch('getBooks');
     if (!this.$store.state.jwt) {
       if (localStorage.getItem('JWT')) {
         this.$store.commit('setJWTtoken', localStorage.getItem('JWT'));

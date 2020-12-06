@@ -42,6 +42,23 @@ class BookController
             ->withHeader('Content-Type', 'application/json');
     }
 
+    public function getBookMetaFromId(Request $request, Response $response, array $args){
+        $this->response = $response;
+        $db = new DB();
+
+        $id = $_GET["id"];
+        if(!isset($id)){
+            throw "Id is not passed correctly";
+        }
+        
+        $data = $db->getBookMetaFromId($id);
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
+    
     public function getBookMetaCount(Request $request, Response $response, array $args)
     {
         $db = new DB();

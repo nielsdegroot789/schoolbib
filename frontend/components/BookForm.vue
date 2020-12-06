@@ -101,7 +101,12 @@ export default {
   },
   methods: {
     saveBook(data) {
-      this.$store.dispatch('saveBook', data);
+      this.$axios({
+        method: 'POST',
+        url: 'http://localhost:8080/saveBook',
+        headers: { Auth: this.$store.state.JWT },
+        data,
+      });
     },
 
     searchForBook(searchObj) {

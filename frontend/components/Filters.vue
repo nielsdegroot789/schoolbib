@@ -4,22 +4,15 @@
       'container-filters': true,
     }"
   >
-    <div v-if="show" class="filters__content">
-      <div class="filters__name">
-        <label>
-          Name:
-          <input v-model="bookName" type="text" />
-        </label>
-      </div>
-      <Autocomplete
-        name="Filters"
-        :disabled="fetchingInitLabel"
-        @change="searchFilter"
-        @select="updateFilterQuery"
-        @delete="deleteQuery"
-      />
-    </div>
-    <div class="filters__toggle">
+    <Autocomplete
+      v-if="show"
+      name="Filters"
+      :disabled="fetchingInitLabel"
+      @change="searchFilter"
+      @select="updateFilterQuery"
+      @delete="deleteQuery"
+    />
+    <div v-if="this.$route.path == '/books'" class="filters__toggle">
       <button class="button button-clear" @click="toggleShow">
         {{ show ? 'Hide filters' : 'Show filters' }}
       </button>
@@ -39,7 +32,6 @@ export default {
       bookName: this.$route.query['book-name']
         ? this.$route.query['book-name']
         : '',
-      nameTimeout: null,
       filterCategories: [],
       filterAuthors: [],
       show: true,
@@ -52,7 +44,7 @@ export default {
         filtered,
         batch,
       ) {
-        if (batch.type === 'categories') {
+        if (batch.type === 'Categories') {
           filtered.push(batch.value);
         }
         return filtered;
@@ -63,7 +55,7 @@ export default {
         filtered,
         batch,
       ) {
-        if (batch.type === 'authors') {
+        if (batch.type === 'Authors') {
           filtered.push(batch.value);
         }
         return filtered;
@@ -80,8 +72,8 @@ export default {
     },
   },
   created() {
-    this.queryReload(this.$route.query['filter-category'], 'categories');
-    this.queryReload(this.$route.query['filter-authors'], 'authors');
+    this.queryReload(this.$route.query['filter-category'], 'Categories');
+    this.queryReload(this.$route.query['filter-authors'], 'Authors');
   },
   methods: {
     toggleShow() {
@@ -101,7 +93,7 @@ export default {
     },
     updateFilterQuery(filterObject) {
       if (filterObject !== null) {
-        if (filterObject.type === 'categories') {
+        if (filterObject.type === 'Categories') {
           this.filterCategories.push(filterObject);
         } else {
           this.filterAuthors.push(filterObject);

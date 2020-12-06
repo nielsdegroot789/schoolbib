@@ -10,6 +10,7 @@
   box-sizing: border-box;
 }
 
+
 .wrapper {
   background-image: url('../pictures/image.jpg');
   height: 350px;
@@ -29,6 +30,11 @@
 .inner-wrapper {
   background-color: whitesmoke;
   font-size: 0;
+  width: 70%;
+  & > div {
+    margin: 0;
+    width: 100%;
+  }
 }
 
 input[type='text'] {

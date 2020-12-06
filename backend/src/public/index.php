@@ -51,7 +51,7 @@ $app = AppFactory::create();
 $app->add(TwigMiddleware::createFromContainer($app));
 
 $checkLoggedInMW = function ($request, $handler) {
-    $authHeader = $request->getHeader('Authorization');
+    $authHeader = $request->getHeader('Auth');
 
     $response = $handler->handle($request);
 
@@ -91,11 +91,12 @@ $app->post('/resetPassword', \skoolBiep\Controller\UserController::class . ':res
 
 $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
 $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
+$app->get('/getBookMetaFromId', \skoolBiep\Controller\BookController::class . ':getBookMetaFromId');
 $app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':getFilterResults');
 $app->get('/getFrontpageTabs', \skoolBiep\Controller\BookController::class . ':getFrontpageTabs');
 
 // NEEDS TO BE LOGGED IN
-
+$app->group('/',function () use ($app) {
 $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
 $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
 $app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
@@ -111,12 +112,13 @@ $app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':up
 $app->post('/addToFavoriteBookList', \skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 $app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
+})->add($checkLoggedInMW);
 
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
     return $response
         ->withHeader('Access-Control-Allow-Origin', '*')
-        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, Auth')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 

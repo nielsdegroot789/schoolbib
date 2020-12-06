@@ -2,18 +2,19 @@
   <div class="wrapper">
     <div class="container">
       <div class="inner-wrapper">
-        <input type="text" class="search" placeholder="Enter your search" />
-        <button class="searchButton">
-          <font-awesome-icon :icon="['fas', 'search']" />
-        </button>
+        <Search />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Search from '../components/Filters';
 export default {
   name: 'SearchBar',
+  components: {
+    Search,
+  },
 };
 </script>
 

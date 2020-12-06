@@ -38,12 +38,6 @@
 <script>
 export default {
   computed: {
-    isStudent() {
-      return this.$store.state.isStudent;
-    },
-    isAdmin() {
-      return this.$store.state.isAdmin;
-    },
     currentRole() {
       return +this.$store.state.currentUser.role;
     },
