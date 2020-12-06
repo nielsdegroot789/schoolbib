@@ -106,6 +106,9 @@ $app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':sav
 $app->post('/saveNewCheckout', \skoolBiep\Controller\UserController::class . ':savenewCheckout');
 
 
+$app->get('/getCheckoutUser', \skoolBiep\Controller\UserController::class . ':getCheckoutUser');
+$app->get('/GetFavoriteBooks', \skoolBiep\Controller\UserController::class . ':GetFavoriteBooks');
+$app->get('/GetFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':GetFavoriteAuthors');
 
 $app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');

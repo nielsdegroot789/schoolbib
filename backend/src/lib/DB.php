@@ -312,6 +312,42 @@ class DB extends \SQLite3
 
         return $status;
     }
+    public function GetFavoriteBooks($usersId, $bookMetaId)
+    {
+        $sql = "SELECT usersId,bookMetaId, title
+        FROM favoriteBooks
+		LEFT join bookMeta 
+		ON favoriteBooks.bookMetaId = bookMeta.Id
+        where usersId = 3"
+        ;
+        
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
+    public function GetFavoriteAuthors($usersId, $bookMetaId)
+    {
+
+        $sql = "SELECT usersId, authorsId, name
+        FROM favoriteAuthors
+		LEFT join authors 
+		ON favoriteAuthors.authorsId = authors.id
+        where usersId = 1";
+
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
 
     public function saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted)
     {
@@ -416,6 +452,24 @@ class DB extends \SQLite3
         $sql .= " limit '$limitNumber'";
         $sql .= " offset '$offsetNumber' * '$limitNumber'";
 
+        $res = $this->query($sql);
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
+
+    public function getCheckoutUser($id,$booksName,$maxAllowedDate, $fine)
+    {
+        $sql = "SELECT checkouts.id, maxAllowedDate, fine, bookMeta.title as booksName
+        FROM checkouts        
+		left join books on books.id = checkouts.booksId
+		left join bookMeta on bookMeta.id = books.bookMetaId
+		ORDER by checkouts.maxAllowedDate DESC";
+             
         $res = $this->query($sql);
 
         $data = array();

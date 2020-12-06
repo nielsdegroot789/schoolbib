@@ -5,6 +5,16 @@
         Wishlits. this could be a carousel with books that are you favorite.
       </h1>
     </header>
+    <table>
+      <tr>
+        books
+      </tr>
+    </table>
+    <table>
+      <tr>
+        authors
+      </tr>
+    </table>
   </div>
 </template>
 
