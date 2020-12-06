@@ -4,6 +4,7 @@ namespace skoolBiep;
 
 use DateInterval;
 use DateTime;
+use skoolBiep\Util\TranslateReadingLevel;
 
 class DB extends \SQLite3
 {
@@ -82,7 +83,9 @@ class DB extends \SQLite3
         $res = $query->execute();
 
         $data = array();
+        $translator = new TranslateReadingLevel();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            $row["readingLevel"] = $translator($row["readingLevel"]);
             array_push($data, $row);
         }
 
@@ -157,11 +160,10 @@ class DB extends \SQLite3
             if ($sql->execute()) {
                 //This bookMeta already exists in the database.
                 throw new Exception("This bookMeta already exists in the database under id " . $res->fetchArray(SQLITE3_ASSOC));
-            }
-            else {
+            } else {
                 $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
                 values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
-                
+
                 $sql->bindValue(':isbn', $isbn);
                 $sql->bindValue(':title', $title);
                 $sql->bindValue(':rating', $rating);
@@ -173,17 +175,17 @@ class DB extends \SQLite3
                 $sql->bindValue(':publishersId', $publisherId);
                 $authorsIds = $this->getAuthorsIds($authors);
                 $sql->bindValue(':authorsIds', $authorsIds);
-                
+
                 $status = $sql->execute();
                 $res = $status ? "Success" : "Failed";
                 //todo get the newly created id here
                 $this->setCategories($this->lastInsertRowID(), $categories);
                 return $res;
             }
-                
-            }
-            
+
         }
+
+    }
 
     public function editBook()
     {
