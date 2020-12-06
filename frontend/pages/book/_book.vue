@@ -71,7 +71,7 @@
           </span>
         </p>
       </div>
-      <div v-if="currentRole == 1" class="section box stockInfo">
+      <div class="section box stockInfo">
         <h3 class="title">Interested in reading?</h3>
         <p v-if="inStock === 0">
           There are currently no books available. Feel free to contact an
@@ -193,7 +193,7 @@ export default {
 <style language="scss">
 .bookDetails {
   display: grid;
-  grid-template-columns: 25% 40% 35%;
+  grid-template-columns: 20% 50% 30%;
 }
 .bookDetails img {
   width: 100%;
