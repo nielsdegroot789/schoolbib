@@ -71,7 +71,7 @@
           </span>
         </p>
       </div>
-      <div v-if="currentRole == 1" class="section box stockInfo">
+      <div class="section box stockInfo">
         <h3 class="title">Interested in reading?</h3>
         <p v-if="inStock === 0">
           There are currently no books available. Feel free to contact an
@@ -87,6 +87,7 @@
         <button
           class="button is-large"
           @click="
+            // this is a horrible way to show notification. Unable to change it even if something goes wrong in backend
             submitReserveData();
             saveCheckoutNotif();
           "
@@ -110,19 +111,12 @@ export default {
   data() {
     return {
       timestamp: '',
+      adminSpecificBooks: Array,
+      bookMeta: Array,
     };
   },
   computed: {
-    bookMeta() {
-      return this.$store.getters.getBookMetaById(
-        parseInt(this.$route.params.book),
-      )[0];
-    },
-    books() {
-      return this.$store.getters.getBooksByBookMetaId(
-        parseInt(this.$route.params.book),
-      );
-    },
+    // this WONT work if student opens page
     inStock() {
       return this.$store.state.adminSpecificBooks.length;
     },
@@ -130,14 +124,36 @@ export default {
       return this.$store.state.currentUser.id;
     },
     currentRole() {
-      return this.$store.state.currentUser.role;
+      return parseInt(this.$store.state.currentUser.role);
     },
   },
-  created() {
-    this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);
-  },
+  created() {},
   mounted() {
-    this.booksId = this.$route.params.books;
+    // Admin/Arch specific
+    if (this.currentRole === 3 || this.currentRole === 2) {
+      this.$axios
+        .get('http://localhost:8080/getAdminSpecificBooks', {
+          params: { id: this.$route.params.book },
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        })
+        .then((response) => {
+          this.adminSpecificBooks = response.data;
+        });
+    }
+
+    // General page
+    this.$axios
+      .get('http://localhost:8080/getBookMetaFromId', {
+        params: { id: this.$route.params.book },
+        headers: {
+          Auth: this.$store.state.JWT,
+        },
+      })
+      .then((response) => {
+        this.bookMeta = response.data[0];
+      });
   },
 
   methods: {
@@ -178,7 +194,7 @@ export default {
 <style language="scss">
 .bookDetails {
   display: grid;
-  grid-template-columns: 25% 40% 35%;
+  grid-template-columns: 20% 50% 30%;
 }
 .bookDetails img {
   width: 100%;
