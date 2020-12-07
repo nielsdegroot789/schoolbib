@@ -26,10 +26,15 @@ export const state = () => ({
 });
 
 export const actions = {
-  async getBookMeta({ commit }, { filters }) {
-    const params = {};
+  async getBookMeta({ commit, state }, filters) {
+    const params = {
+      limit: state.limit,
+    };
     if (filters['book-name']) {
       params.title = filters['book-name'];
+    }
+    if (filters.pageNumber) {
+      params.offset = (filters.pageNumber - 1) * state.limit;
     }
     if (filters['filter-category']) {
       params.categories = filters['filter-category'];
@@ -37,6 +42,7 @@ export const actions = {
     if (filters['filter-authors']) {
       params.authors = filters['filter-authors'];
     }
+
     try {
       const books = await this.$axios({
         method: 'GET',
@@ -55,8 +61,6 @@ export const actions = {
       .then((response) =>
         context.commit('getBookMetaCount', response.data[0]['count(id)']),
       );
-    // .then((response) => console.log(response.data[0]["count(id)"]));
-    // context.commit('getBookMetaCount', response.data));
   },
   getBooks(context) {
     this.$axios
