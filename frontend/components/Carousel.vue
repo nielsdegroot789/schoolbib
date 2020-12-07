@@ -54,7 +54,7 @@ export default {
         touchThreshold: 5,
       },
       categories: [
-        { id: 0, value: 'Cputers', name: 'Computers' },
+        { id: 0, value: 'Computers', name: 'Computers' },
         { id: 1, value: 'Cooking', name: 'Cooking' },
         { id: 2, value: 'Juvenile Nonfiction', name: 'Juvenile Nonfiction' },
         { id: 3, value: 'Fiction', name: 'Fiction' },
