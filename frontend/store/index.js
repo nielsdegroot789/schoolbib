@@ -119,11 +119,11 @@ export const actions = {
       })
       .then((response) => commit('handleProfileData', response));
   },
-  getAllUsers({ commit }) {
+  getAllUsers({ commit, state }) {
     this.$axios
       .get('http://localhost:8080/getAllUsers', {
         headers: {
-          Authorization: 'Bearer ' + this.$store.JWT,
+          Authorization: state.JWT,
         },
       })
       .then((response) => commit('setAllUsers', response.data));
@@ -134,6 +134,7 @@ export const actions = {
   getAdminSpecificBooks({ commit }, bookId) {
     this.$axios
       .get('http://localhost:8080/getAdminSpecificBooks', {
+        headers: { Authorization: localStorage.getItem('JWT') },
         params: { id: bookId },
       })
       .then((response) => commit('getAdminSpecificBooks', response.data));
@@ -142,6 +143,7 @@ export const actions = {
     const id = state.specificBook.id;
     this.$axios
       .delete('http://localhost:8080/handleSpecificBook', {
+        headers: { Authorization: state.JWT },
         data: { userId: id },
       })
       .then(() => commit('deleteSpecificBook', id));

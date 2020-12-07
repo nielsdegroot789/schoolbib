@@ -156,6 +156,7 @@ export default {
 
       this.$axios
         .post('http://localhost:8080/saveReservationsUser', {
+          headers: { Authorization: this.$store.JWT },
           booksId: this.$route.params.book,
           usersId: this.currentUserId,
           reservationDateTime: this.timestamp,
