@@ -104,7 +104,9 @@ class DB extends \SQLite3
         $res = $query->execute();
 
         $data = array();
+        $translator = new TranslateReadingLevel();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            $row["readingLevel"] = $translator($row["readingLevel"]);
             array_push($data, $row);
         }
         
