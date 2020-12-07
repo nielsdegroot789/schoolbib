@@ -12,7 +12,7 @@
         </li>
       </ul>
     </div>
-    <div v-if="loaded" class="carousel">
+    <div v-if="loaded && bookMeta.length > 0" class="carousel">
       <VueSlickCarousel v-bind="settings">
         <nuxt-link
           v-for="item in bookMeta"
@@ -27,7 +27,10 @@
         </nuxt-link>
       </VueSlickCarousel>
     </div>
-    <div v-if="!loaded" class="carousel level"><Loading /></div>
+    <div v-else-if="!loaded" class="carousel level"><Loading /></div>
+    <div v-else>
+      Sorry, there are currently no books available in this category
+    </div>
   </div>
 </template>
 <script>
@@ -51,7 +54,7 @@ export default {
         touchThreshold: 5,
       },
       categories: [
-        { id: 0, value: 'Computers', name: 'Computers' },
+        { id: 0, value: 'Cputers', name: 'Computers' },
         { id: 1, value: 'Cooking', name: 'Cooking' },
         { id: 2, value: 'Juvenile Nonfiction', name: 'Juvenile Nonfiction' },
         { id: 3, value: 'Fiction', name: 'Fiction' },
