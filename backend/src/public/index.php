@@ -81,6 +81,10 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 })->add($checkLoggedInMW);
 
+//Coockie
+
+setcookie('closeNotif', 'false', time() + (86400 * 30), '/getNotification'); 
+
 // DOES NOT NEED TO BE LOGGED IN
 
 $app->get('/getBookMetaCount', \skoolBiep\Controller\BookController::class . ':getBookMetaCount');

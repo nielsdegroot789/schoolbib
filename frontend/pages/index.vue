@@ -66,6 +66,8 @@ export default {
   methods: {
     hideNotification() {
       this.showNotif = false;
+      const coocckie = Vue.coockie.get('showNotif');
+      console.log(coocckie);
     },
   },
 };

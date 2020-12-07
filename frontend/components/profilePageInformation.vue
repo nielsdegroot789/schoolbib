@@ -20,27 +20,6 @@
         validation="required|email"
         input-class="input-style"
       />
-      <h2 class="profile-page-title">CHANGE PASSWORD</h2>
-      <FormulateInput
-        label="Current password"
-        type="password"
-        input-class="input-style"
-        validation="required"
-      />
-      <FormulateInput
-        label="New password"
-        input-class="input-style"
-        type="password"
-        name="password"
-        validation="required"
-      />
-      <FormulateInput
-        label="Confirm password"
-        type="password"
-        name="password_confirm"
-        validation="required|confirm"
-        validation-name="Password confirmation"
-      />
       <input type="submit" label="Save Changes" />
     </FormulateForm>
   </div>
