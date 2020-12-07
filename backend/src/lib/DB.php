@@ -115,7 +115,7 @@ class DB extends \SQLite3
 
     public function getBookMetaCount()
     {
-        $sql = "select count(id) FROM bookMeta";
+        $sql = "select count(id) FROM bookMeta ";
 
         $res = $this->query($sql);
 
