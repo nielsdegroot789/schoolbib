@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loggedIn && currentRole == 1" class="setup section">
+  <div class="setup section">
     <header class="level">
       <h1 class="level-left title">
         Wishlits. this could be a carousel with books that are you favorite.
