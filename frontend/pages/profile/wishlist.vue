@@ -1,5 +1,5 @@
 <template>
-  <div class="setup section">
+  <div v-if="loggedIn && currentRole == 1" class="setup section">
     <header class="level">
       <h1 class="level-left title">
         Wishlits. this could be a carousel with books that are you favorite.
@@ -57,6 +57,9 @@ export default {
       .get('http://localhost:8080/getFavoriteAuthors', {
         params: {
           data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
         },
       })
       .then((response) => {
@@ -67,6 +70,9 @@ export default {
       .get('http://localhost:8080/getFavoriteBooks', {
         params: {
           data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
         },
       })
       .then((response) => {

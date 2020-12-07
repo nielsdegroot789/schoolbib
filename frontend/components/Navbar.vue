@@ -6,9 +6,12 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-end">
-          <nuxt-link v-if="loggedIn && (currentRole == 3 ||
-          currentRole == 2)" class="navbar-item" to="/manage/books">
-            <div class="dropdownProfile">
+          <nuxt-link
+            v-if="loggedIn && (currentRole == 3 || currentRole == 2)"
+            class="navbar-item"
+            to="/manage/books"
+          ></nuxt-link>
+          <div v-if="loggedIn && currentRole == 1" class="dropdownProfile">
             <button class="dropbtn" @click="myFunction()">profile</button>
             <div id="myDropdown" class="dropdown-content">
               <a class="sub-item">
@@ -34,8 +37,12 @@
               </a>
             </div>
           </div>
-          <nuxt-link v-if="loggedIn" class="navbar-item" to="/manage/books"
-            >>>>>>> profile-clear >Manage books</nuxt-link
+          <nuxt-link
+            v-if="loggedIn"
+            class="navbar-item"
+            to="/manage/books"
+            profile-clear
+            >Manage books</nuxt-link
           >
           <nuxt-link
             v-if="loggedIn && (currentRole == 3 || currentRole == 2)"

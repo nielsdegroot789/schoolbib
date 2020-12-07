@@ -44,6 +44,9 @@ export default {
     return {
       dataCheck: '',
       dataRes: '',
+      headers: {
+        Auth: '',
+      },
     };
   },
   computed: {
@@ -61,6 +64,9 @@ export default {
       .get('http://localhost:8080/getCheckoutUser', {
         params: {
           data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
         },
       })
       .then((response) => {
@@ -71,6 +77,9 @@ export default {
       .get('http://localhost:8080/getReservationUser', {
         params: {
           data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
         },
       })
       .then((response) => {
