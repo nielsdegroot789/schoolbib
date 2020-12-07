@@ -5,12 +5,8 @@
       :modal-data="modalData"
       @closeModal="handleCloseModal"
     />
-    <FormulateForm
-      v-model="bookData"
-      :values="bookData"
-      class="section"
-      @submit="saveBook"
-    >
+
+    <FormulateForm v-model="currentBookData" class="section" @submit="saveBook">
       <FormulateInput v-if="currentBookData.id" type="hidden" name="id" />
       <FormulateInput
         label="isbn"
@@ -94,11 +90,17 @@ export default {
       modalData: {},
       shouldShowModal: false,
       showError: false,
+      bookMetaData: Object,
     };
   },
   computed: {
-    currentBookData() {
-      return this.bookData;
+    currentBookData: {
+      get() {
+        return this.bookData;
+      },
+      set(newValue) {
+        this.bookMetaData = newValue;
+      },
     },
   },
   methods: {
