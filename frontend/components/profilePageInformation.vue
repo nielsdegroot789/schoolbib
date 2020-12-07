@@ -1,9 +1,5 @@
 <template>
   <div class="information-container">
-    <h2 class="profile-page-title">EDIT INFORMATION</h2>
-    <img src="../assets/pictures/default.png" alt="Standaard-afbeelding" />
-    <input type="file" @change="selectPicture" />
-    <button>Upload</button>
     <h2 class="profile-page-title">ACOUNT INFORMATION</h2>
     <FormulateForm v-model="formValues" @submit="postData()">
       <FormulateInput

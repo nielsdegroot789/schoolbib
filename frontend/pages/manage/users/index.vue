@@ -1,78 +1,9 @@
 <template>
-  <div class="setup section">
-    <header class="level">
-      <h1 class="level-left title">Manage Users Books</h1>
-    </header>
-    <h2>Reservations</h2>
-    <table class="table table is-bordered is-hoverable is-fullwidth">
-      <thead>
-        <tr>
-          <th>id_user</th>
-          <th>name_user</th>
-          <th>id_book</th>
-          <th>name_book</th>
-          <th>reservation date</th>
-          <th>Accept</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in reservations" :key="index">
-          <td>{{ item.usersId }}</td>
-          <td>{{ item.usersName }}</td>
-          <td>{{ item.booksId }}</td>
-          <td>{{ item.booksName }}</td>
-          <td>{{ item.reservationDateTime }}</td>
-          <td class="checkoutBtn" @click="saveCheckout(item)">Accept!</td>
-        </tr>
-      </tbody>
-    </table>
-    <nuxt-link :to="{ path: '/manage/users/new' }" class="button level-right"
-      >new</nuxt-link
-    >
-    <h2>Checkouts</h2>
-
-    <table class="table table is-bordered is-hoverable is-fullwidth">
-      <thead>
-        <tr>
-          <th>userName</th>
-          <th>book</th>
-          <th>checkoutDateTime</th>
-          <th>maxAllowedDate</th>
-          <th>fine</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in checkouts" :key="index">
-          <td>{{ item.usersName }}</td>
-          <td>{{ item.booksName }}</td>
-          <td>{{ item.checkoutDateTime }}</td>
-          <td>{{ item.maxAllowedDate }}</td>
-          <td>{{ item.fine }}</td>
-          <td
-            class="checkoutBtn"
-            @click="returnCheckouts(item, index) in checkouts"
-          >
-            Paid - returned
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="setup section">This is page for managing the actual users</div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      reservations: '',
-      checkouts: '',
-      fine: '',
-      isEditing: false,
-      DateNow: '',
-    };
-  },
-  computed: {},
-
   created() {
     this.$axios
       .get('http://localhost:8080/getReservations', {
@@ -160,20 +91,4 @@ export default {
 };
 </script>
 
-<style>
-.titleColumn {
-  display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
-  font-weight: bold;
-}
-.usersContainer {
-  display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
-}
-</style>
+<style></style>

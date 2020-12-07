@@ -41,10 +41,6 @@
                   Forgot your password?
                 </p>
               </div>
-              <p>
-                Don't have an account?
-                <nuxt-link to="/register">Register</nuxt-link>
-              </p>
             </div>
           </div>
         </div>
