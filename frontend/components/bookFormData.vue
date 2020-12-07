@@ -70,10 +70,10 @@ export default {
   },
   methods: {
     sendChanges() {
-      this.$axios;
-      JWT.put('http://localhost:8080/handleSpecificBook', this.formValues, {
-        headers: { Authorization: localStorage.getItem('JWT') },
-      })
+      this.$axios
+        .put('http://localhost:8080/handleSpecificBook', this.formValues, {
+          headers: { Authorization: localStorage.getItem('JWT') },
+        })
         .then(() => {
           this.refreshBooks();
         })

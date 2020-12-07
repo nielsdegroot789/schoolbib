@@ -105,6 +105,7 @@ export default {
         method: 'post',
         url: 'http://localhost:8080/saveProfileData',
         data: this.formValues,
+        headers: { Authorization: this.$store.JWT },
       });
     },
   },
