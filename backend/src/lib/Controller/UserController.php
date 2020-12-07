@@ -167,6 +167,27 @@ class UserController
         $response->getBody()->write($data);
         return $response;
     }
+    public function saveNewCheckout(Request $request, Response $response, array $args)
+    {            
+        $data = json_decode(file_get_contents("php://input"), TRUE);
+        $this->response = $response;
+
+        $db = new DB();
+        $usersId = $data["usersId"];
+        $booksId = $data["booksId"];
+        $checkoutDateTime = $data["checkoutDateTime"];
+        $returnDateTime = $data["reservationDateTime"];
+        $maxAllowedDate = $data["maxAllowedDate"];
+        if($data['id']){
+            $id = $data['id'];
+            $data = $db->saveNewCheckout($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate);
+        }
+        else {
+            $data = $db->saveNewCheckout($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate);
+        }
+        $response->getBody()->write($data);
+        return $response;
+    }
 
 
     public function getReservations(Request $request, Response $response, array $args)
@@ -215,6 +236,58 @@ class UserController
             ->withHeader('Content-Type', 'application/json');
 
     }
+    public function getCheckoutUser(Request $request, Response $response, array $args) {
+        $payloadData = $_GET['data'];
+        $json = json_decode($payloadData);
+        $id = $json->id;
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->getCheckoutUser($id);
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    
+    public function getReservationUser(Request $request, Response $response, array $args) {
+        $payloadData = $_GET['data'];
+        $json = json_decode($payloadData);
+        $id = $json->id;
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->getReservationUser($id);
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function getFavoriteBooks(Request $request, Response $response, array $args) {
+        $payloadData = $_GET['data'];
+        $json = json_decode($payloadData);
+        $id = $json->id;
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->getFavoriteBooks($id);
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+    public function getFavoriteAuthors(Request $request, Response $response, array $args) {
+        $payloadData = $_GET['data'];
+        $json = json_decode($payloadData);
+        $id = $json->id;
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->getFavoriteAuthors($id);
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
     public function getProfilePageData(Request $request, Response $response, array $args) {
         $payloadData = $_GET['data'];
         $json = json_decode($payloadData);

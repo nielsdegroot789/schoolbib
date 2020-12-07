@@ -1,125 +1,88 @@
 <template>
-  <div class="setup section">
+  <div v-if="loggedIn && currentRole == 1" class="setup section">
     <header class="level">
-      <h1 class="level-left title">Manage Users</h1>
-      <button @click="checkNow">Check now Time k</button>
-      {{ this.DateNow }}
+      <h1 class="level-left title">
+        Wishlits. this could be a carousel with books that are you favorite.
+      </h1>
     </header>
-    <h2>Reservations</h2>
-    <table class="table table is-bordered is-hoverable is-fullwidth">
-      <thead>
-        <tr>
-          <th>id_user</th>
-          <th>name_user</th>
-          <th>id_book</th>
-          <th>name_book</th>
-          <th>reservation date</th>
-          <th>Accept</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in reservations" :key="index">
-          <td>{{ item.usersId }}</td>
-          <td>{{ item.usersName }}</td>
-          <td>{{ item.booksId }}</td>
-          <td>{{ item.booksName }}</td>
-          <td>{{ item.reservationDateTime }}</td>
-          <td class="checkoutBtn" @click="saveCheckout(item)">Accept!</td>
-        </tr>
-      </tbody>
-    </table>
+    <tbody>
+      <tr v-for="(item, index) in dataFavBook" :key="index">
+        <td>{{ item.title }}</td>
+        <td>{{ item.isbnCode }}</td>
+        <td>{{ item.totalPages }}</td>
+        <td>{{ item.rating }}</td>
+        <td><img :src="item.sticker" alt="Book cover image" /></td>
+        <td></td>
+        <td><button @onclick="deleteFunction()">Delete</button></td>
+      </tr>
+    </tbody>
+
+    <thead>
+      <tr>
+        <th>Authors U like</th>
+        <th>delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(item, index) in dataFavAuthor" :key="index">
+        <td>{{ item.name }}</td>
+        <td><button @onclick="deleteFunction()">Delete</button></td>
+      </tr>
+    </tbody>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
-      reservations: '',
-      checkouts: '',
-      fine: '',
-      isEditing: false,
-      DateNow: '',
+      dataFavAuthor: '',
+      dataFavBook: '',
     };
   },
-  computed: {},
+  computed: {
+    UserId() {
+      return this.$store.state.currentUser;
+    },
+    JWT() {
+      return this.$store.state.JWT;
+    },
+  },
 
   created() {
-    this.$axios
-      .get('http://localhost:8080/getReservations')
+    console.log(this.UserId);
+
+    axios
+      .get('http://localhost:8080/getFavoriteAuthors', {
+        params: {
+          data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        },
+      })
       .then((response) => {
-        this.reservations = response.data;
+        console.log(response);
+        this.dataFavAuthor = response.data;
       });
-    this.$axios.get('http://localhost:8080/getCheckouts').then((response) => {
-      this.checkouts = response.data;
-    });
+    axios
+      .get('http://localhost:8080/getFavoriteBooks', {
+        params: {
+          data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        this.dataFavBook = response.data;
+      });
   },
 
-  methods: {
-    checkNow() {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      const time =
-        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
-      const dateTime = date + ' ' + time;
-      this.DateNow = dateTime.toString();
-    },
-    EditMsg(object) {
-      this.isEditing = true;
-    },
-    saveCheckout(object) {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      this.checkoutDateTime = date.toString();
-
-      const inTwoWeeks = new Date();
-      const dateInTwoWeeks =
-        inTwoWeeks.getFullYear() +
-        '-' +
-        (inTwoWeeks.getMonth() + 1) +
-        '-' +
-        (inTwoWeeks.getDate() + 14);
-      this.maxAllowedDate = dateInTwoWeeks.toString();
-      this.$axios
-        .post('http://localhost:8080/saveCheckouts', {
-          usersId: object.usersId,
-          booksId: object.booksId,
-          checkoutDateTime: this.checkoutDateTime,
-          returnDateTime: '',
-          maxAllowedDate: this.maxAllowedDate,
-          fine: 0,
-          isPaid: '',
-        })
-        .then(function (response) {});
-    },
-  },
+  methods: {},
 };
 </script>
 
-<style>
-.titleColumn {
-  display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
-  font-weight: bold;
-}
-.usersContainer {
-  display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
-}
-</style>
+<style></style>
