@@ -314,11 +314,12 @@ class DB extends \SQLite3
     }
     public function getFavoriteBooks($id)
     {
-        $sql = $this->prepare("SELECT usersId,bookMetaId, title
+        $sql = $this->prepare("SELECT usersId,bookMetaId, title, sticker
         FROM favoriteBooks
 		LEFT join bookMeta 
 		ON favoriteBooks.bookMetaId = bookMeta.Id
-        where usersId = :id");
+        where usersId = :id AND sticker is NOT NULL
+		");
         
         $sql->bindvalue(':id', $id);
         $res = $sql->execute();

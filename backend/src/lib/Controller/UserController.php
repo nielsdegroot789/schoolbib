@@ -248,6 +248,21 @@ class UserController
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
     }
+
+    
+    public function getReservationUser(Request $request, Response $response, array $args) {
+        $payloadData = $_GET['data'];
+        $json = json_decode($payloadData);
+        $id = $json->id;
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->getReservationUser($id);
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
     public function getFavoriteBooks(Request $request, Response $response, array $args) {
         $payloadData = $_GET['data'];
         $json = json_decode($payloadData);

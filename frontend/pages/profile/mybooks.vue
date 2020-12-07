@@ -1,42 +1,36 @@
 <template>
   <div>
-    <h1>this is the list of books that you vhevked out and reserved</h1>
-    <h2>My reserved Books</h2>
+    <h1>RESERVATIONS</h1>
     <table class="table table is-bordered is-hoverable is-fullwidth">
       <thead>
         <tr>
           <th>name_book</th>
-          {{
-            bookname
-          }}
+          <th>delete</th>
         </tr>
       </thead>
       <tbody>
-        <!-- <tr v-for="(item, index) in reservations" :key="index">
+        <tr v-for="(item, index) in dataRes" :key="index">
           <td>{{ item.booksName }}</td>
-          <td>decline</td>
-          <td class="checkoutBtn" @click="saveCheckout(item)">delete</td>
-        </tr> -->
+          <td class="checkoutBtn" @click="saveCheckout(item, index) in dataRes">
+            delete
+          </td>
+        </tr>
       </tbody>
     </table>
-    <h2>Checkouts</h2>
+    <h1>CHECKOUTS</h1>
     <table class="table table is-bordered is-hoverable is-fullwidth">
       <thead>
         <tr>
           <th>booksName</th>
           <th>maxAllowedDate</th>
           <th>fine</th>
-          <th>DELETE</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in data" :key="index">
+        <tr v-for="(item, index) in dataCheck" :key="index">
           <td>{{ item.booksName }}</td>
           <td>{{ item.maxAllowedDate }}</td>
           <td>{{ item.fine }}</td>
-          <td class="checkoutBtn" @click="returnCheckouts(item, index) in data">
-            DELETE
-          </td>
         </tr>
       </tbody>
     </table>
@@ -47,7 +41,10 @@
 import axios from 'axios';
 export default {
   data() {
-    return { bookname: '', data: '' };
+    return {
+      dataCheck: '',
+      dataRes: '',
+    };
   },
   computed: {
     UserId() {
@@ -68,8 +65,17 @@ export default {
       })
       .then((response) => {
         console.log(response);
-        this.bookname = response.data[0].bookname;
-        this.data = response.data;
+        this.dataCheck = response.data;
+      });
+    axios
+      .get('http://localhost:8080/getReservationUser', {
+        params: {
+          data: this.UserId,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        this.dataRes = response.data;
       });
   },
 
@@ -77,7 +83,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .checkoutBtn {
   background: red;
 }
