@@ -71,7 +71,7 @@ export const actions = {
   saveBook({ state }, context, payload) {
     this.$axios
       .post('http://localhost:8080/saveBook', payload, {
-        headers: { Authorization: state.JWT },
+        headers: { Auth: state.JWT },
       })
       .catch((error) => {
         console.log(error);
@@ -114,7 +114,7 @@ export const actions = {
     this.$axios
       .get('http://localhost:8080/getProfilePageData', {
         headers: {
-          Authorization: 'Bearer ' + store.JWT,
+          Auth: store.JWT,
         },
       })
       .then((response) => commit('handleProfileData', response));
@@ -123,7 +123,7 @@ export const actions = {
     this.$axios
       .get('http://localhost:8080/getAllUsers', {
         headers: {
-          Authorization: state.JWT,
+          Auth: state.JWT,
         },
       })
       .then((response) => commit('setAllUsers', response.data));
@@ -134,7 +134,7 @@ export const actions = {
   getAdminSpecificBooks({ commit }, bookId) {
     this.$axios
       .get('http://localhost:8080/getAdminSpecificBooks', {
-        headers: { Authorization: localStorage.getItem('JWT') },
+        headers: { Auth: localStorage.getItem('JWT') },
         params: { id: bookId },
       })
       .then((response) => commit('getAdminSpecificBooks', response.data));
@@ -143,7 +143,7 @@ export const actions = {
     const id = state.specificBook.id;
     this.$axios
       .delete('http://localhost:8080/handleSpecificBook', {
-        headers: { Authorization: state.JWT },
+        headers: { Auth: state.JWT },
         data: { userId: id },
       })
       .then(() => commit('deleteSpecificBook', id));

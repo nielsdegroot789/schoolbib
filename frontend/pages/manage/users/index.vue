@@ -76,14 +76,14 @@ export default {
   created() {
     this.$axios
       .get('http://localhost:8080/getReservations', {
-        headers: { Authorization: localStorage.getItem('JWT') },
+        headers: { Auth: localStorage.getItem('JWT') },
       })
       .then((response) => {
         this.reservations = response.data;
       });
     this.$axios
       .get('http://localhost:8080/getCheckouts', {
-        headers: { Authorization: localStorage.getItem('JWT') },
+        headers: { Auth: localStorage.getItem('JWT') },
       })
       .then((response) => {
         this.checkouts = response.data;

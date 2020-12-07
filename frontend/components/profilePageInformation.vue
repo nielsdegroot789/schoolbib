@@ -69,15 +69,12 @@ export default {
     UserId() {
       return this.$store.state.currentUser;
     },
-    JWT() {
-      return this.$store.state.JWT;
-    },
   },
   created() {
     console.log(this.UserId);
     axios
       .get('http://localhost:8080/getProfilePageData', {
-        headers: { Authorization: localStorage.getItem('JWT') },
+        headers: { Auth: localStorage.getItem('JWT') },
         params: {
           data: this.UserId,
         },
@@ -105,7 +102,7 @@ export default {
         method: 'post',
         url: 'http://localhost:8080/saveProfileData',
         data: this.formValues,
-        headers: { Authorization: this.$store.JWT },
+        headers: { Auth: this.$store.state.JWT },
       });
     },
   },

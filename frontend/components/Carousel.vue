@@ -73,7 +73,7 @@ export default {
       this.loaded = false;
       this.$axios
         .get('http://localhost:8080/getBookMeta', {
-          headers: { Authorization: `Bearer test` },
+          headers: { Auth: `Bearer test` },
         })
         .then((response) => {
           this.bookMeta = response.data;
