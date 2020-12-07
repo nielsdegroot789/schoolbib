@@ -96,7 +96,7 @@
         </button>
       </div>
     </div>
-    <adminEditBook v-if="currentRole == 2" />
+    <adminEditBook />
   </div>
 </template>
 

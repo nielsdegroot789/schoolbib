@@ -41,11 +41,17 @@ export default {
       editNewActive: false,
       specificBook: '',
       currentId: null,
+      currentRole: null,
     };
   },
   computed: {
     adminSpecificBooks() {
       return this.$store.state.adminSpecificBooks;
+    },
+    watch: {
+      currentRole() {
+        this.currentRole = parseInt(this.$store.state.currentUser.role);
+      },
     },
   },
   created() {
