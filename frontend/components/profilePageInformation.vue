@@ -77,6 +77,7 @@ export default {
     console.log(this.UserId);
     axios
       .get('http://localhost:8080/getProfilePageData', {
+        headers: { Authorization: localStorage.getItem('JWT') },
         params: {
           data: this.UserId,
         },

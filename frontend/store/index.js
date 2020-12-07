@@ -68,9 +68,11 @@ export const actions = {
         context.commit('getFrontPageNotification', response.data),
       );
   },
-  saveBook(context, payload) {
+  saveBook({ state }, context, payload) {
     this.$axios
-      .post('http://localhost:8080/saveBook', payload)
+      .post('http://localhost:8080/saveBook', payload, {
+        headers: { Authorization: state.JWT },
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -106,15 +108,24 @@ export const actions = {
       .get('http://localhost:8080/getReservation')
       .then((response) => context.commit('getReservation', response.data));
   },
-  getProfilePageData({ commit }, data) {
+  getProfilePageData({ commit, store }, data) {
+    debugger;
     console.log(data);
     this.$axios
-      .get('http://localhost:8080/getProfilePageData', {})
+      .get('http://localhost:8080/getProfilePageData', {
+        headers: {
+          Authorization: 'Bearer ' + store.JWT,
+        },
+      })
       .then((response) => commit('handleProfileData', response));
   },
   getAllUsers({ commit }) {
     this.$axios
-      .get('http://localhost:8080/getAllUsers')
+      .get('http://localhost:8080/getAllUsers', {
+        headers: {
+          Authorization: 'Bearer ' + this.$store.JWT,
+        },
+      })
       .then((response) => commit('setAllUsers', response.data));
   },
   openEmailModal({ commit }) {
@@ -161,10 +172,10 @@ export const actions = {
     });
   },
   addBatch({ commit, state }, batch) {
-    const arr = state.batches.filter((val) => {
+    const duplicateArr = state.batches.filter((val) => {
       return val.value === batch.value;
     });
-    if (!arr[0]) {
+    if (!duplicateArr[0]) {
       commit('setBatch', batch);
     }
   },

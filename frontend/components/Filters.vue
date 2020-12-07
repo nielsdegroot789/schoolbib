@@ -119,9 +119,6 @@ export default {
       }
     },
   },
-  checkDuplicates() {
-    console.log('ba');
-  },
 };
 </script>
 
