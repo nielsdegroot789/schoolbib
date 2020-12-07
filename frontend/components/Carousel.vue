@@ -130,4 +130,8 @@ export default {
 .slick-next:focus {
   background-color: lightgray;
 }
+
+.slick-track {
+  margin: auto;
+}
 </style>
