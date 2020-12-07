@@ -3,7 +3,7 @@
     <div class="section level">
       <Filters />
     </div>
-    <Pagination class="level-right" />
+    <Pagination :page-amount="amountOfPages" class="level-right" />
     <div class="cardContainer">
       <nuxt-link
         v-for="item in bookMeta"
