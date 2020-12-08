@@ -123,9 +123,6 @@ export default {
     currentUserId() {
       return this.$store.state.currentUser.id;
     },
-    currentRole() {
-      return parseInt(this.$store.state.currentUser.role);
-    },
   },
   created() {},
   mounted() {

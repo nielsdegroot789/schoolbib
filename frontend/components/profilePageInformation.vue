@@ -20,7 +20,12 @@
         validation="required|email"
         input-class="input-style"
       />
-      <input type="submit" label="Save Changes" />
+      <div>
+        <input type="submit" label="Save Changes" />
+        <button class="reset-btn--profile" @click="resetPassword">
+          Reset password
+        </button>
+      </div>
     </FormulateForm>
   </div>
 </template>
@@ -78,6 +83,13 @@ export default {
         url: 'http://localhost:8080/saveProfileData',
         data: this.formValues,
         headers: { Auth: this.$store.state.JWT },
+      });
+    },
+    resetPassword() {
+      axios({
+        method: 'post',
+        url: 'http://localhost:8080/resetPassword',
+        params: this.formValues.email,
       });
     },
   },
