@@ -51,7 +51,6 @@ export default {
     },
   },
   created() {
-    console.log(this.UserId);
     axios
       .get('http://localhost:8080/getProfilePageData', {
         headers: { Auth: localStorage.getItem('JWT') },
@@ -59,12 +58,11 @@ export default {
           data: this.UserId,
         },
       })
-      .then((response) =>
-        (this.formValues.firstName = response.data[0].surname)(
-          (this.formValues.lastName = response.data[0].lastname),
-          (this.formValues.email = response.data[0].email),
-        ),
-      );
+      .then((response) => {
+        this.formValues.firstName = response.data[0].surname;
+        this.formValues.lastName = response.data[0].lastname;
+        this.formValues.email = response.data[0].email;
+      });
   },
   methods: {
     selectPicture(event) {
@@ -86,11 +84,7 @@ export default {
       });
     },
     resetPassword() {
-      axios({
-        method: 'post',
-        url: 'http://localhost:8080/resetPassword',
-        params: this.formValues.email,
-      });
+      this.$axios.post('http://localhost:8080/resetPassword', this.formValues);
     },
   },
 };
