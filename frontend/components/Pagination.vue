@@ -1,29 +1,49 @@
 <template>
-  <div v-if="pagesCount > 1" class="pagination-row">
-    <div class="pagination-row">
-      <n-link :to="{ path: 'books', query: { page: first } }"> first </n-link>
+  <ul class="pagination">
+    <li class="pagination-item">
+      <button type="button" :disabled="isInFirstPage" @click="onClickFirstPage">
+        First
+      </button>
+    </li>
 
-      <n-link :to="{ path: 'books', query: { page: previous } }">
-        previous
-      </n-link>
-
-      <n-link
-        v-for="page in pageButtons"
-        :key="page"
-        :to="{ path: 'books', query: { page: page } }"
+    <li class="pagination-item">
+      <button
+        type="button"
+        :disabled="isInFirstPage"
+        @click="onClickPreviousPage"
       >
-        {{ page }}
-      </n-link>
+        Previous
+      </button>
+    </li>
 
-      <n-link :to="{ path: 'books', query: { page: next } }"> next </n-link>
+    <li v-for="page in pages" :key="page.name" class="pagination-item">
+      <button
+        type="button"
+        :disabled="page.isDisabled"
+        :class="{ active: isPageActive(page.name) }"
+        @click="onClickPage(page.name)"
+      >
+        {{ page.name }}
+      </button>
+    </li>
 
-      <n-link :to="{ path: 'books', query: { page: last } }"> last </n-link>
-    </div>
-  </div>
+    <li class="pagination-item">
+      <button type="button" :disabled="isInLastPage" @click="onClickNextPage">
+        Next
+      </button>
+    </li>
+
+    <li class="pagination-item">
+      <button type="button" :disabled="isInLastPage" @click="onClickLastPage">
+        Last
+      </button>
+    </li>
+  </ul>
 </template>
 
 <script>
 export default {
+  name: 'Pagination',
   props: {
     maxVisibleButtons: {
       type: Number,
@@ -47,107 +67,82 @@ export default {
     return {};
   },
   computed: {
-    pageNumber() {
-      return parseInt(this.$route.query.page);
+    isInFirstPage() {
+      return this.currentPage === 1;
     },
-    amountOfButtons() {
-      return Math.min(this.pagesCount, 5);
+    isInLastPage() {
+      return this.currentPage === this.totalPages;
     },
-    pagesCount() {
-      return this.$store.getters.getPageCount;
-    },
-    pageButtons() {
-      const start = Math.min(
-        Math.max(1, this.pagesCount - 4),
-        Math.max(1, this.pageNumber - 2),
-      );
-      const array = [];
-      for (let i = start; i < start + this.amountOfButtons; i++) {
-        array.push(i);
+    startPage() {
+      if (this.currentPage === 1) {
+        return 1;
       }
-      return array;
+      if (this.currentPage === this.totalPages) {
+        return this.totalPages - this.maxVisibleButtons;
+      }
+      return this.currentPage - 1;
     },
+    pages() {
+      const range = [];
 
-    first() {
-      if (this.pageNumber === 1) {
-        return 1;
+      for (
+        let i = this.startPage;
+        i <=
+        Math.min(this.startPage + this.maxVisibleButtons - 1, this.totalPages);
+        i += 1
+      ) {
+        range.push({
+          name: i,
+          isDisabled: i === this.currentPage,
+        });
       }
-      return 1;
-    },
-    last() {
-      if (this.pageNumber >= this.pagesCount - 1) {
-        return this.pagesCount;
-      }
-      return this.pagesCount;
-    },
-    next() {
-      if (this.pageNumber === this.pagesCount) {
-        return false;
-      }
-      return this.pageNumber + 1;
-    },
-    previous() {
-      if (this.pageNumber === 1) {
-        return 1;
-      }
-      return this.pageNumber - 1;
+
+      return range;
     },
   },
-  watch: {
-    $route: {
-      immediate: true,
-      handler(route) {
-        const payload = {
-          pageNumber: this.pageNumber,
-        };
-        this.$store.dispatch('getBookMeta', payload);
-      },
+
+  methods: {
+    onClickFirstPage() {
+      this.$emit('pagechanged', 1);
     },
-  },
-  created() {
-    this.$store.dispatch('getBookMetaCount');
+    onClickPreviousPage() {
+      this.$emit('pagechanged', this.currentPage - 1);
+    },
+    onClickPage(page) {
+      this.$emit('pagechanged', page);
+    },
+    onClickNextPage() {
+      this.$emit('pagechanged', this.currentPage + 1);
+    },
+    onClickLastPage() {
+      this.$emit('pagechanged', this.totalPages);
+    },
+    isPageActive(page) {
+      return this.currentPage === page;
+    },
   },
 };
 </script>
 
 <style scoped>
-.disabled {
-  color: lightgrey;
-  pointer-events: none;
-}
-
-.pagination-button {
-  padding: 8px;
-  margin: 2px;
-  border-radius: 3px;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-.pagination-button .active {
-  background-color: rgb(24, 250, 250);
-  cursor: auto;
-}
-
-.pagination-button .disabled {
-  cursor: auto;
-}
 .pagination-row {
-  display: flex;
-  width: 600px;
-  justify-content: space-between;
-  text-align: center;
-  margin-bottom: 50px;
-  height: 4rem;
-  padding-left: 1rem;
-  background-color: #f9f9f9;
+  align-content: center;
+  margin: 20px;
+}
+.pagination-row .pageButton {
   color: black;
-  width: 700px;
-  border: 0;
-  border-radius: 3px;
-  border-color: black;
-  border-width: 0.5px;
-  border-style: dotted;
-  padding: 10px;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  border: 1px solid #ddd;
+}
+.pagination-row .pageButton.active {
+  background-color: #4caf50;
+  color: white;
+  border: 1px solid #4caf50;
+}
+.pagination-row .pageButton:hover:not(.active) {
+  background-color: #ddd;
 }
 </style>

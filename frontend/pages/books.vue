@@ -3,7 +3,7 @@
     <div class="section level">
       <Filters />
     </div>
-    <Pagination :page-amount="amountOfPages" class="level-right" />
+    <Pagination class="level-right" />
     <div class="cardContainer">
       <nuxt-link
         v-for="item in bookMeta"
@@ -51,7 +51,6 @@ export default {
       search: '',
       timeoutId: null,
       filterTimeOut: null,
-      amountOfPages: '',
     };
   },
   computed: {
@@ -61,15 +60,66 @@ export default {
     filters() {
       return { filters: this.$route.query };
     },
+    pagination() {
+      return { pagination: this.$route.query };
+    },
+    pageNumber() {
+      return parseInt(this.$route.query.page);
+    },
+    amountOfButtons() {
+      return Math.min(this.pagesCount, 5);
+    },
+    pagesCount() {
+      return this.$store.getters.getPageCount;
+    },
+    pageButtons() {
+      const start = Math.min(
+        Math.max(1, this.pagesCount - 4),
+        Math.max(1, this.pageNumber - 2),
+      );
+      const array = [];
+      for (let i = start; i < start + this.amountOfButtons; i++) {
+        array.push(i);
+      }
+      return array;
+    },
+    first() {
+      if (this.pageNumber === 1) {
+        return 1;
+      }
+      return 1;
+    },
+    last() {
+      if (this.pageNumber >= this.pagesCount - 1) {
+        return this.pagesCount;
+      }
+      return this.pagesCount;
+    },
+    next() {
+      if (this.pageNumber === this.pagesCount) {
+        return false;
+      }
+      return this.pageNumber + 1;
+    },
+    previous() {
+      if (this.pageNumber === 1) {
+        return 1;
+      }
+      return this.pageNumber - 1;
+    },
   },
 
   watch: {
     $route: {
       immediate: true,
       handler() {
-        this.$store.dispatch('getBookMeta', this.filters);
+        this.$store.dispatch('getBookMeta', this.filters, this.pagination);
       },
     },
+  },
+
+  created() {
+    this.$store.dispatch('getBookMetaCount');
   },
   methods: {
     toSearch() {
