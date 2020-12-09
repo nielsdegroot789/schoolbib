@@ -95,7 +95,7 @@ export default {
         },
       })
       .then((response) => {
-        // this.loadingReservation = false;
+        this.loadingReservation = false;
         this.reservations = response.data;
       });
 
@@ -107,7 +107,7 @@ export default {
         },
       })
       .then((response) => {
-        // this.loadingCheckouts = false;
+        this.loadingCheckouts = false;
         this.checkouts = response.data;
       });
   },
