@@ -80,8 +80,6 @@ export default {
       reservations: '',
       checkouts: '',
       fine: '',
-      isEditing: false,
-      DateNow: '',
     };
   },
   computed: {},
@@ -113,9 +111,6 @@ export default {
   },
 
   methods: {
-    EditMsg(object) {
-      this.isEditing = true;
-    },
     addDays(date, days) {
       const result = new Date(date);
       result.setDate(result.getDate() + days);
@@ -142,17 +137,12 @@ export default {
 
     returnCheckouts(object) {
       const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      this.returnDateTime = date.toString();
+      const returnDateTime = today.toLocaleString('en-GB');
+
       this.fine = 0;
       this.$axios
         .post('http://localhost:8080/returnCheckouts', {
-          returnDateTime: object.returnDateTime,
+          returnDateTime,
         })
         .then(function (response) {});
     },
