@@ -96,7 +96,7 @@
         </button>
       </div>
     </div>
-    <adminEditBook v-if="currentRole == 2" />
+    <adminEditBook />
   </div>
 </template>
 
@@ -122,9 +122,6 @@ export default {
     },
     currentUserId() {
       return this.$store.state.currentUser.id;
-    },
-    currentRole() {
-      return parseInt(this.$store.state.currentUser.role);
     },
   },
   created() {},

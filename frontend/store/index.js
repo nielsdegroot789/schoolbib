@@ -41,7 +41,6 @@ export const actions = {
       const books = await this.$axios({
         method: 'GET',
         url: 'http://localhost:8080/getBookMeta',
-        headers: { Authorization: `Bearer test` },
         params,
       });
       commit('getBookMeta', books.data);

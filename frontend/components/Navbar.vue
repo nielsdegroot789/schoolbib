@@ -6,6 +6,9 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-end">
+          <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
+            >Profile</nuxt-link
+          >
           <nuxt-link
             v-if="loggedIn && (currentRole == 3 || currentRole == 2)"
             class="navbar-item"
