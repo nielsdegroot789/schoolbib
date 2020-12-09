@@ -10,49 +10,50 @@
   box-sizing: border-box;
 }
 
-
-.wrapper {
-  background-image: url('../pictures/image.jpg');
-  height: 350px;
-  width: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  @include border-placeholder-style();
-}
-
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: inherit;
-}
-
-.inner-wrapper {
-  background-color: whitesmoke;
-  font-size: 0;
-  width: 70%;
-  & > div {
-    margin: 0;
+.index {
+  .wrapper {
+    background-image: url('../pictures/image.jpg');
+    height: 350px;
     width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    @include border-placeholder-style();
   }
-}
 
-input[type='text'] {
-  height: 4rem;
-  padding-left: 1rem;
-  background-color: #f9f9f9;
-  color: black;
-  width: 700px;
-  border: 0;
-  border-radius: 3px;
-}
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: inherit;
+  }
 
-.searchButton {
-  height: 4rem;
-  width: 80px;
-  border-radius: 1%;
-  border: 0;
-  @include border-placeholder-style();
+  .inner-wrapper {
+    background-color: whitesmoke;
+    font-size: 0;
+    width: 70%;
+    & > div {
+      margin: 0;
+      width: 100%;
+    }
+  }
+
+  input[type='text'] {
+    height: 4rem;
+    padding-left: 1rem;
+    background-color: #f9f9f9;
+    color: black;
+    width: 700px;
+    border: 0;
+    border-radius: 3px;
+  }
+
+  .searchButton {
+    height: 4rem;
+    width: 80px;
+    border-radius: 1%;
+    border: 0;
+    @include border-placeholder-style();
+  }
 }
 
 ::placeholder {

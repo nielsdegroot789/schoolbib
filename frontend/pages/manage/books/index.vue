@@ -9,7 +9,9 @@
     <table class="table table is-bordered is-hoverable is-fullwidth">
       <thead>
         <tr>
-          <input v-model="title" type="text" placeholder="title" />
+          <th>
+            <input v-model="title" type="text" placeholder="title" />
+          </th>
           <th>isbn</th>
           <th>publish Date</th>
           <th>rating</th>
@@ -77,26 +79,35 @@
 export default {
   data() {
     return {
-      title: String,
+      title: '',
+
       bookMeta: [],
     };
   },
   computed: {
-    params: {
-      ...(this.title !== '' ?? { title: this.title }),
+    params() {
+      const param = {
+        ...(this.title !== '' ? { title: this.title } : {}),
+      };
+      return param;
     },
   },
+  // todo add watcher to computed 'Params' that calls the function getBookMeta? misschien makkelijkere oplossing mogelijk?
+
   mounted() {
-    this.$axios
-      .get('http://localhost:8080/getBookMeta', {
-        headers: { Authorization: `Bearer test` },
-      })
-      .then((response) => {
-        this.bookMeta = response.data;
-      });
+    this.getBookMeta();
   },
-  created() {
-    this.$store.dispatch('getBookMeta');
+  methods: {
+    getBookMeta() {
+      const params = this.params;
+      this.$axios
+        .get('http://localhost:8080/getBookMeta', {
+          params,
+        })
+        .then((response) => {
+          this.bookMeta = response.data;
+        });
+    },
   },
 };
 </script>
