@@ -15,7 +15,8 @@
           <th>Accept</th>
         </tr>
       </thead>
-      <tbody>
+      <div v-if="loadingReservation"><Loading /></div>
+      <tbody v-if="!loadingReservation">
         <tr v-for="(item, index) in reservations" :key="index">
           <td>{{ item.usersId }}</td>
           <td>{{ item.usersName }}</td>
@@ -46,7 +47,8 @@
           <th>return</th>
         </tr>
       </thead>
-      <tbody>
+      <div v-if="loadingCheckouts"><Loading /></div>
+      <tbody v-if="!loadingCheckouts">
         <tr v-for="(item, index) in checkouts" :key="index">
           <td>{{ item.usersName }}</td>
           <td>{{ item.booksName }}</td>
@@ -68,9 +70,13 @@
 </template>
 
 <script>
+import Loading from '~/components/Loading';
 export default {
+  components: { Loading },
   data() {
     return {
+      loadingReservation: false,
+      loadingCheckouts: false,
       reservations: '',
       checkouts: '',
       fine: '',
@@ -81,6 +87,7 @@ export default {
   computed: {},
 
   created() {
+    this.loadingReservation = true;
     this.$axios
       .get('http://localhost:8080/getReservations', {
         headers: {
@@ -88,8 +95,11 @@ export default {
         },
       })
       .then((response) => {
+        // this.loadingReservation = false;
         this.reservations = response.data;
       });
+
+    this.loadingCheckouts = true;
     this.$axios
       .get('http://localhost:8080/getCheckouts', {
         headers: {
@@ -97,6 +107,7 @@ export default {
         },
       })
       .then((response) => {
+        // this.loadingCheckouts = false;
         this.checkouts = response.data;
       });
   },
