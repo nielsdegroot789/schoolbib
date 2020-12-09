@@ -22,7 +22,9 @@
           <td>{{ item.booksId }}</td>
           <td>{{ item.booksName }}</td>
           <td>{{ item.reservationDateTime }}</td>
-          <td class="checkoutBtn" @click="saveCheckout(item)">Accept!</td>
+          <td>
+            <button class="button" @click="saveCheckout(item)">Accept!</button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -41,6 +43,7 @@
           <th>checkoutDateTime</th>
           <th>maxAllowedDate</th>
           <th>fine</th>
+          <th>return</th>
         </tr>
       </thead>
       <tbody>
@@ -50,11 +53,13 @@
           <td>{{ item.checkoutDateTime }}</td>
           <td>{{ item.maxAllowedDate }}</td>
           <td>{{ item.fine }}</td>
-          <td
-            class="checkoutBtn"
-            @click="returnCheckouts(item, index) in checkouts"
-          >
-            Paid - returned
+          <td>
+            <button
+              class="button"
+              @click="returnCheckouts(item, index) in checkouts"
+            >
+              Paid and returned
+            </button>
           </td>
         </tr>
       </tbody>
