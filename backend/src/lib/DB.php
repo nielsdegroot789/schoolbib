@@ -395,10 +395,8 @@ class DB extends \SQLite3
     
     public function deleteReservationUser($id)
     {
-        $sql =  $this->prepare("DELETE id FROM reservations        
-		left join books on books.id = reservations.booksId
-		left join bookMeta on bookMeta.id = books.bookMetaId
-		WHERE accepted = 0 AND usersId = :id");
+        $sql =  $this->prepare("DELETE FROM reservations      
+		WHERE id = :id");
              
              $sql->bindvalue(':id', $id);
              $res = $sql->execute();
