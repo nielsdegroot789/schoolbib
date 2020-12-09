@@ -9,7 +9,7 @@
     <table class="table table is-bordered is-hoverable is-fullwidth">
       <thead>
         <tr>
-          <th>title</th>
+          <input v-model="title" type="text" placeholder="title" />
           <th>isbn</th>
           <th>publish Date</th>
           <th>rating</th>
@@ -77,10 +77,15 @@
 export default {
   data() {
     return {
+      title: String,
       bookMeta: [],
     };
   },
-  computed: {},
+  computed: {
+    params: {
+      ...(this.title !== '' ?? { title: this.title }),
+    },
+  },
   mounted() {
     this.$axios
       .get('http://localhost:8080/getBookMeta', {
