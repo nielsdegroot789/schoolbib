@@ -262,6 +262,18 @@ class UserController
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
     }
+    public function deleteReservationUser(Request $request, Response $response, array $args) {
+        $payloadData = $_POST['data'];
+        $json = json_decode($payloadData);
+        $id = $json->id;
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->deleteReservationUser($id);
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 
     public function getFavoriteBooks(Request $request, Response $response, array $args) {
         $payloadData = $_GET['data'];
