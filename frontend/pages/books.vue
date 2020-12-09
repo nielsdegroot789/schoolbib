@@ -51,6 +51,7 @@ export default {
       search: '',
       timeoutId: null,
       filterTimeOut: null,
+      amountOfPages: '',
     };
   },
   computed: {
@@ -148,5 +149,8 @@ img {
 
 .bookTitle {
   height: 50px;
+}
+.level-right {
+  justify-content: center;
 }
 </style>

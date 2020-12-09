@@ -31,8 +31,8 @@ class BookController
         $title = isset($_GET["title"]) ? $_GET["title"] . '%' : "%";
         $author = isset($_GET["authors"]) ? $_GET["authors"] : "%";
         $category = isset($_GET["categories"]) ? $_GET["categories"] : "%";
-        $limitNumber = isset($arguments["limit"]) ? $arguments["limit"] : 20;
-        $offsetNumber = isset($arguments["offset"]) ? $arguments["offset"] : 0;
+        $limitNumber = isset($_GET["limit"]) ? $_GET["limit"] : 20;
+        $offsetNumber = isset($_GET["offset"]) ? $_GET["offset"] : 0;
 
         $data = $db->getBookMeta($limitNumber, $offsetNumber, $category, $author, $title);
         $payload = json_encode($data);
