@@ -113,49 +113,27 @@ export default {
   },
 
   methods: {
-    checkNow() {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      const time =
-        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
-      const dateTime = date + ' ' + time;
-      this.DateNow = dateTime.toString();
-    },
-
     EditMsg(object) {
       this.isEditing = true;
     },
-
+    addDays(date, days) {
+      const result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    },
     saveCheckout(object) {
       const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      this.checkoutDateTime = date.toString();
+      const inTwoWeeks = this.addDays(today, 25);
+      const checkoutDateTime = today.toLocaleString('en-GB');
+      const maxAllowedDate = inTwoWeeks.toLocaleString('en-GB');
 
-      const inTwoWeeks = new Date();
-      const dateInTwoWeeks =
-        inTwoWeeks.getFullYear() +
-        '-' +
-        (inTwoWeeks.getMonth() + 1) +
-        '-' +
-        (inTwoWeeks.getDate() + 14);
-      this.maxAllowedDate = dateInTwoWeeks.toString();
       this.$axios
         .post('http://localhost:8080/saveCheckouts', {
           usersId: object.usersId,
           booksId: object.booksId,
-          checkoutDateTime: this.checkoutDateTime,
+          checkoutDateTime,
           returnDateTime: '',
-          maxAllowedDate: this.maxAllowedDate,
+          maxAllowedDate,
           fine: 0,
           isPaid: '',
         })
