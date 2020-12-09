@@ -51,7 +51,11 @@ export const actions = {
   getBookMetaCount(context) {
     this.$axios
       .get('http://localhost:8080/getBookMetaCount')
-      .then((response) => context.commit('getBookMetaCount', response.data));
+      .then((response) =>
+        context.commit('getBookMetaCount', response.data[0]['count(id)']),
+      );
+    // .then((response) => console.log(response.data[0]["count(id)"]));
+    // context.commit('getBookMetaCount', response.data));
   },
   getBooks(context) {
     this.$axios

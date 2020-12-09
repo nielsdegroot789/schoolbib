@@ -115,7 +115,7 @@ class DB extends \SQLite3
 
     public function getBookMetaCount()
     {
-        $sql = "select count(id) FROM bookMeta";
+        $sql = "select count(id) FROM bookMeta ";
 
         $res = $this->query($sql);
 
@@ -337,6 +337,80 @@ class DB extends \SQLite3
 
         return $status;
     }
+    public function getFavoriteBooks($id)
+    {
+        $sql = $this->prepare("SELECT usersId,bookMetaId, title, sticker
+        FROM favoriteBooks
+		LEFT join bookMeta 
+		ON favoriteBooks.bookMetaId = bookMeta.Id
+        where usersId = :id AND sticker is NOT NULL
+		");
+        
+        $sql->bindvalue(':id', $id);
+        $res = $sql->execute();
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+        return $data;
+    }
+    
+    public function getFavoriteAuthors($id)
+    {
+        $sql = $this->prepare("SELECT usersId, authorsId, name
+        FROM favoriteAuthors
+		LEFT join authors 
+		ON favoriteAuthors.authorsId = authors.id
+        where usersId = :id");
+
+        $sql->bindvalue(':id', $id);
+        $res = $sql->execute();
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+        return $data;
+    }
+
+    
+    public function getReservationUser($id)
+    {
+        $sql =  $this->prepare("SELECT reservations.id,  bookMeta.title as booksName
+        FROM reservations        
+		left join books on books.id = reservations.booksId
+		left join bookMeta on bookMeta.id = books.bookMetaId
+		WHERE accepted = 0 AND usersId = :id");
+             
+             $sql->bindvalue(':id', $id);
+             $res = $sql->execute();
+     
+             $data = array();
+             while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+                 array_push($data, $row);
+             }
+             return $data;
+    }
+
+    public function getCheckoutUser($id)
+    {
+        $sql =  $this->prepare("SELECT checkouts.id, usersId, maxAllowedDate, fine, bookMeta.title as booksName
+        FROM checkouts        
+		left join books on books.id = checkouts.booksId
+		left join bookMeta on bookMeta.id = books.bookMetaId
+		WHERE usersId = :id
+		ORDER by checkouts.maxAllowedDate DESC");
+             
+             $sql->bindvalue(':id', $id);
+             $res = $sql->execute();
+     
+             $data = array();
+             while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+                 array_push($data, $row);
+             }
+             return $data;
+    }
 
     public function saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted)
     {
@@ -411,20 +485,23 @@ class DB extends \SQLite3
 
     }
 
-    // public function inStock()
-    // {
+    public function saveNewCheckout($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
+    {
 
-    //     $sql = $this->prepare("select count booksId");
+        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate, fine, isPaid)
+        values (:usersId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate, :fine, :isPaid )");
 
-    //     $res = $this->query($sql);
+        $sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':booksId', $booksId, );
+        $sql->bindValue(':checkoutDateTime', $checkoutDateTime, );
+        $sql->bindValue(':returnDateTime', $returnDateTime, );
+        $sql->bindValue(':maxAllowedDate', $maxAllowedDate, );
 
-    //     while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
-    //         array_push($data, $row);
-    //         }
+        $status = $sql->execute();
+        return $status;
 
-    //      return $data;
-    // }
-
+    }
+    
     public function getCheckouts($limitNumber, $offsetNumber)
     {
         $sql = "SELECT usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName
@@ -447,6 +524,7 @@ class DB extends \SQLite3
 
         return $data;
     }
+
 
     public function getProfilePageData($id)
     {
