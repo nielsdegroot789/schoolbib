@@ -156,14 +156,9 @@ class UserController
         $returnDateTime = $data["reservationDateTime"];
         $maxAllowedDate = $data["maxAllowedDate"];
         $fine = $data["fine"];
-        $isPaid = $data["isPaid"];
-        if($data['id']){
-            $id = $data['id'];
-            $data = $db->saveCheckouts($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate, $fine, $isPaid);
-        }
-        else {
-            $data = $db->saveCheckouts($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate, $fine, $isPaid);
-        }
+        $isPaid = $data["isPaid"];     
+        $data = $db->saveCheckouts($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate, $fine, $isPaid);
+      
         $response->getBody()->write($data);
         return $response;
     }

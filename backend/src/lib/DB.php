@@ -450,9 +450,11 @@ class DB extends \SQLite3
 
         return $data;
     }
+    
     public function acceptReservation($usersId, $booksId)
     {
 
+        //TODO prevent SQL INJECTION!!! Not working SQL code in master?
         $sql = "UPDATE reservations  SET accepted = 1 FROM reservation LEFT JOIN BookMeta on booksId WHERE bookId = $booksId AND usersId = $usersId AND bookTitle = $";
         $res = $this->query($sql);
 
