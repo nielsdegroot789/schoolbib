@@ -85,32 +85,37 @@ export default {
   computed: {},
 
   created() {
-    this.loadingReservation = true;
-    this.$axios
-      .get('http://localhost:8080/getReservations', {
-        headers: {
-          Auth: this.$store.state.JWT,
-        },
-      })
-      .then((response) => {
-        this.loadingReservation = false;
-        this.reservations = response.data;
-      });
-
-    this.loadingCheckouts = true;
-    this.$axios
-      .get('http://localhost:8080/getCheckouts', {
-        headers: {
-          Auth: this.$store.state.JWT,
-        },
-      })
-      .then((response) => {
-        this.loadingCheckouts = false;
-        this.checkouts = response.data;
-      });
+    this.loadReservations();
+    this.loadCheckouts();
   },
 
   methods: {
+    loadReservations() {
+      this.loadingReservation = true;
+      this.$axios
+        .get('http://localhost:8080/getReservations', {
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        })
+        .then((response) => {
+          this.loadingReservation = false;
+          this.reservations = response.data;
+        });
+    },
+    loadCheckouts() {
+      this.loadingCheckouts = true;
+      this.$axios
+        .get('http://localhost:8080/getCheckouts', {
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        })
+        .then((response) => {
+          this.loadingCheckouts = false;
+          this.checkouts = response.data;
+        });
+    },
     addDays(date, days) {
       const result = new Date(date);
       result.setDate(result.getDate() + days);
@@ -132,7 +137,10 @@ export default {
           fine: 0,
           isPaid: '',
         })
-        .then(function (response) {});
+        .then(function (response) {
+          this.loadCheckouts();
+          this.loadReservations();
+        });
     },
 
     returnCheckouts(object) {
@@ -144,7 +152,10 @@ export default {
         .post('http://localhost:8080/returnCheckouts', {
           returnDateTime,
         })
-        .then(function (response) {});
+        .then(function (response) {
+          this.loadCheckouts();
+          this.loadReservations();
+        });
     },
   },
 };
