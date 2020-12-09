@@ -15,7 +15,7 @@
             to="/manage/books"
           ></nuxt-link>
           <div v-if="loggedIn && currentRole == 1" class="dropdownProfile">
-            <button class="dropbtn" @click="myFunction()">profile</button>
+            <button class="dropbtn" @click="myFunction">profile</button>
             <div id="myDropdown" class="dropdown-content">
               <a class="sub-item">
                 <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
@@ -86,11 +86,11 @@ export default {
       this.$store.commit('logout');
       localStorage.removeItem('JWT');
     },
-    myFunction() {
+    dropDownFunction() {
       document.getElementById('myDropdown').classList.toggle('show');
     },
 
-    function(event) {
+    outOfFocus(event) {
       if (!event.target.matches('.dropbtn')) {
         const dropdowns = document.getElementsByClassName('sub-items');
         let i;

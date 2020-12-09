@@ -56,7 +56,7 @@ class DB extends \SQLite3
         }
 
         $sql .= " limit :limit";
-        $sql .= " offset :offset * :limit";
+        $sql .= " offset :offset";
 
         $query = $this->prepare($sql);
 
