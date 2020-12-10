@@ -6,16 +6,13 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-end">
-          <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
-            >Profile</nuxt-link
-          >
           <nuxt-link
             v-if="loggedIn && (currentRole == 3 || currentRole == 2)"
             class="navbar-item"
             to="/manage/books"
           ></nuxt-link>
           <div v-if="loggedIn && currentRole == 1" class="dropdownProfile">
-            <button class="dropbtn" @click="myFunction">profile</button>
+            <button class="dropbtn" @click="dropDownFunction">profile</button>
             <div id="myDropdown" class="dropdown-content">
               <a class="sub-item">
                 <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
@@ -91,7 +88,7 @@ export default {
     },
 
     outOfFocus(event) {
-      if (!event.target.matches('.dropbtn')) {
+      if (!event.target.matches('.sub-item')) {
         const dropdowns = document.getElementsByClassName('sub-items');
         let i;
         for (i = 0; i < dropdowns.length; i++) {

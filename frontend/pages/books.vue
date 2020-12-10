@@ -55,8 +55,8 @@ export default {
       search: '',
       timeoutId: null,
       filterTimeOut: null,
-      metaCountBooks: '',
-      limit: 20,
+      metaCountBooks: 0,
+      limit: 0,
     };
   },
   computed: {
