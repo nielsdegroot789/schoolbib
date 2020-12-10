@@ -22,31 +22,31 @@
       @keyup="manualChange"
     />
     <div
-      v-if="titleList.length || categoryList.length || authorList.length"
+      v-if="titleList.length || categories.length || authors.length"
       class="autocomplete-results-container"
     >
       <h1 v-if="titleList.length" class="autocomplete-title">Title</h1>
       <nuxt-link
         v-for="result in titleList"
-        :key="result.name"
+        :key="result.id"
         :to="'/book/' + result.id"
         class="auto-complete-button"
       >
         {{ result.name }}
       </nuxt-link>
-      <h1 v-if="categoryList.length" class="autocomplete-title">Categories</h1>
+      <h1 v-if="categories.length" class="autocomplete-title">Categories</h1>
       <li
-        v-for="result in categoryList"
-        :key="result.name"
+        v-for="result in categories"
+        :key="result.id"
         class="auto-complete-button"
         @click="emitSelect(result.name, result.type)"
       >
         {{ result.name }}
       </li>
-      <h1 v-if="authorList.length" class="autocomplete-title">Authors</h1>
+      <h1 v-if="authors.length" class="autocomplete-title">Authors</h1>
       <li
-        v-for="result in authorList"
-        :key="result.name"
+        v-for="result in authors"
+        :key="result.id"
         class="auto-complete-button"
         @click="emitSelect(result.name, result.type)"
       >
@@ -60,72 +60,48 @@
 export default {
   name: 'Autocomplete',
   props: {
-    name: {
-      type: String,
-      required: true,
+    authors: {
+      required: false,
     },
-    loading: {
-      type: Boolean,
-      default: true,
+    categories: {
+      required: false,
+    },
+    batchess: {
+      required: false,
     },
   },
   data() {
     return {
       label: '',
       timeout: null,
-      labelChanged: false,
+      authorList: '',
+      titleList: '',
+      categoryList: '',
+      batches: [],
     };
   },
   computed: {
-    authorList() {
-      return this.$store.state.authorList;
-    },
-    categoryList() {
-      return this.$store.state.categoryList;
-    },
-    titleList() {
-      return this.$store.state.titleList;
-    },
-    curValue() {
-      return this.value;
-    },
     isDisabled() {
       return this.disabled;
     },
-    batches() {
-      return this.$store.state.batches;
-    },
-  },
-  mounted() {
-    document.addEventListener('click', this.emptyAutoList);
-  },
-  beforeDestroy() {
-    document.removeEventListener('click', this.emptyAutoList);
   },
   methods: {
     manualChange() {
       clearTimeout(this.timeout);
-
-      this.timeout = setTimeout(this.emitChange, 1000);
+      this.timeout = setTimeout(this.loadResults, 1000);
     },
-    emitChange() {
-      this.$store.dispatch('getAutoCompleteResults', this.label);
+    loadResults() {
+      this.$emit('loadResults', this.label);
     },
-    emitSelect(value, type) {
-      console.log(value, type);
-      this.$store.dispatch('addBatch', { value, type });
-      this.$emit('select', { value, type });
-      this.$store.dispatch('getAutoCompleteResults', '');
+    emitSelect(val, typ) {
+      this.$emit('select', { val, typ });
+    },
+    reloadBatch(batch) {
+      this.batches.push(batch);
     },
     deleteBatch(value) {
-      this.$store.dispatch('deleteBatch', value);
-      this.$emit('delete');
-    },
-    emptyAutoList(e) {
-      console.log(e.target);
-      if (!this.$el.contains(e.target)) {
-        this.$store.dispatch('getAutoCompleteResults', '');
-      }
+      debugger;
+      this.$emit('delete', value);
     },
   },
 };

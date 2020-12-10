@@ -18,19 +18,11 @@ export const state = () => ({
   specificBook: {},
   editModal: false,
   deleteModal: false,
-  autoCompleteResults: [],
-  categoryList: [],
-  authorList: [],
-  titleList: [],
-  batches: [],
 });
 
 export const actions = {
   async getBookMeta({ commit }, { filters }) {
     const params = {};
-    if (filters['book-name']) {
-      params.title = filters['book-name'];
-    }
     if (filters['filter-category']) {
       params.categories = filters['filter-category'];
     }
@@ -159,31 +151,7 @@ export const actions = {
   toggleDeleteModal({ commit }, id) {
     commit('toggleDeleteModal', id);
   },
-  getAutoCompleteResults({ commit }, search) {
-    if (search.length === 0) {
-      return commit('makeEmpty');
-    }
-    const params = {
-      searchVal: search,
-    };
-    this.$axios({
-      method: 'GET',
-      url: 'http://localhost:8080/getFilterResults',
-      params,
-    }).then((response) => {
-      commit('setAutoCompleteResults', response.data);
-    });
-  },
-  addBatch({ commit, state }, batch) {
-    const duplicateArr = state.batches.filter((val) => {
-      return val.value === batch.value;
-    });
-    if (!duplicateArr[0]) {
-      commit('setBatch', batch);
-    }
-  },
   deleteBatch({ commit }, batch) {
-    console.log(batch);
     commit('deleteBatch', batch);
   },
 };
@@ -273,30 +241,6 @@ export const mutations = {
     state.specificBook = state.adminSpecificBooks.find(
       (book) => book.id === id,
     );
-  },
-  setAutoCompleteResults(state, data) {
-    state.authorList = data.filter((result) => {
-      return result.type === 'Authors';
-    });
-    state.categoryList = data.filter((result) => {
-      return result.type === 'Categories';
-    });
-    state.titleList = data.filter((result) => {
-      return result.type === 'Title';
-    });
-  },
-  makeEmpty(state) {
-    state.categoryList = '';
-    state.authorList = '';
-    state.titleList = '';
-  },
-  setBatch(state, batch) {
-    state.batches.push(batch);
-  },
-  deleteBatch(state, batch) {
-    state.batches = state.batches.filter((item) => {
-      return item.value !== batch;
-    });
   },
 };
 

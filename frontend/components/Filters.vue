@@ -6,9 +6,14 @@
   >
     <Autocomplete
       v-if="show"
+      ref="reloadBatch"
       name="Filters"
+      :batches="batchess"
+      :authors="authorList"
+      :categories="categoryList"
       @change="searchFilter"
       @select="updateFilterQuery"
+      @loadResults="loadSearchResult"
       @delete="deleteQuery"
     />
     <div v-if="this.$route.path == '/books'" class="filters__toggle">
@@ -28,51 +33,48 @@ export default {
   },
   data() {
     return {
-      bookName: this.$route.query['book-name']
-        ? this.$route.query['book-name']
-        : '',
-      filterCategories: [],
-      filterAuthors: [],
       show: true,
+      authorList: '',
+      titleList: '',
+      categoryList: '',
+      authorFilters: this.$route.query['filter-authors']
+        ? this.$route.query['filter-authors']
+        : [],
+      categoryFilters: [],
+      batches: [],
     };
   },
   computed: {
     filterObject() {
       const query = {};
-      query['filter-category'] = this.$store.state.batches.reduce(function (
-        filtered,
-        batch,
-      ) {
-        if (batch.type === 'Categories') {
-          filtered.push(batch.value);
-        }
-        return filtered;
-      },
-      []);
+      if (this.categoryFilters) {
+        query['filter-category'] = this.categoryFilters;
+      }
 
-      query['filter-authors'] = this.$store.state.batches.reduce(function (
-        filtered,
-        batch,
-      ) {
-        if (batch.type === 'Authors') {
-          filtered.push(batch.value);
-        }
-        return filtered;
-      },
-      []);
+      if (this.authorFilters) {
+        query['filter-authors'] = this.authorFilters;
+      }
 
       return query;
     },
   },
-  watch: {
-    bookName() {
-      clearTimeout(this.nameTimeout);
-      this.nameTimeout = setTimeout(this.updateQuery, 1000);
-    },
+  mounted() {
+    document.addEventListener('click', this.emptyAutoList);
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.emptyAutoList);
   },
   created() {
-    this.queryReload(this.$route.query['filter-category'], 'Categories');
-    this.queryReload(this.$route.query['filter-authors'], 'Authors');
+    debugger;
+    // if array
+    this.authorFilters.forEach((author) => {
+      const batch = { value: author, type: 'Author' };
+      this.batches.push(batch);
+    });
+    for (const category in this.categoryFilters) {
+      const batch = { value: category, type: 'Category' };
+      this.batch.push(batch);
+    }
   },
   methods: {
     toggleShow() {
@@ -92,32 +94,54 @@ export default {
     },
     updateFilterQuery(filterObject) {
       if (filterObject !== null) {
-        if (filterObject.type === 'Categories') {
-          this.filterCategories.push(filterObject);
+        if (filterObject.typ === 'Categories') {
+          this.categoryFilters.push(filterObject.val);
         } else {
-          this.filterAuthors.push(filterObject);
+          this.authorFilters.push(filterObject.val);
         }
       }
-
+      this.emptyAutoList();
       this.updateQuery();
     },
     deleteQuery() {
       this.updateQuery();
     },
-    queryReload(routeQuery, typeQuery) {
-      if (routeQuery) {
-        if (Array.isArray(routeQuery)) {
-          routeQuery.map((val) => {
-            this.$store.dispatch('addBatch', { value: val, type: typeQuery });
-          });
-        } else {
-          this.$store.dispatch('addBatch', {
-            value: routeQuery,
-            type: typeQuery,
-          });
-        }
-      }
+    loadSearchResult(label) {
+      this.$axios({
+        method: 'GET',
+        url: 'http://localhost:8080/getFilterResults',
+        params: label,
+      }).then((response) => {
+        this.authorList = response.data.filter((book) => {
+          return book.type === 'Authors';
+        });
+        this.titleList = response.data.filter((book) => {
+          return book.type === 'Title';
+        });
+        this.categoryList = response.data.filter((book) => {
+          return book.type === 'Categories';
+        });
+      });
     },
+    emptyAutoList() {
+      this.authorList = '';
+      this.categoryList = '';
+      this.titleList = '';
+    },
+  },
+  queryReload(routeQuery, typeQuery) {
+    if (routeQuery) {
+      if (Array.isArray(routeQuery)) {
+        routeQuery.map((val) => {
+          this.$store.dispatch('addBatch', { value: val, type: typeQuery });
+        });
+      } else {
+        this.$store.dispatch('addBatch', {
+          value: routeQuery,
+          type: typeQuery,
+        });
+      }
+    }
   },
 };
 </script>
