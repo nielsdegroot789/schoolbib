@@ -392,6 +392,21 @@ class DB extends \SQLite3
              }
              return $data;
     }
+    
+    public function deleteReservationUser($id)
+    {
+        $sql =  $this->prepare("DELETE FROM reservations      
+		WHERE id = :id");
+             
+             $sql->bindvalue(':id', $id);
+             $res = $sql->execute();
+     
+             $data = array();
+             while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+                 array_push($data, $row);
+             }
+             return $data;
+    }
 
     public function getCheckoutUser($id)
     {

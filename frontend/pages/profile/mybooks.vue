@@ -11,12 +11,7 @@
           <td class="itemBlock">
             <div class="FiftyWidth">{{ item.booksName }}</div>
             <div class="FiftyWidth">
-              <p
-                class="checkoutBtn"
-                @click="saveCheckout(item, index) in dataRes"
-              >
-                delete
-              </p>
+              <p class="checkoutBtn" @click="deleteRes">delete</p>
             </div>
           </td>
         </tr>
@@ -94,7 +89,18 @@ export default {
       });
   },
 
-  methods: {},
+  methods: {
+    deleteRes(id) {
+      axios.post('http://localhost:8080/deleteReservationUser', {
+        params: {
+          data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        },
+      });
+    },
+  },
 };
 </script>
 

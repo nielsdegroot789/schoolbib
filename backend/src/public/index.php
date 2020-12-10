@@ -96,7 +96,10 @@ $app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':g
 $app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
 $app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':updatePassword');
 
+
+
 // NEEDS TO BE LOGGED IN
+$app->post('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':getReservations');
 $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
 $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
 $app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
