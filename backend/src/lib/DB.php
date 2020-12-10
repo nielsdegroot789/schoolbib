@@ -455,15 +455,18 @@ class DB extends \SQLite3
     {
 
         //TODO prevent SQL INJECTION!!! Not working SQL code in master?
-        $sql = "UPDATE reservations  SET accepted = 1 FROM reservation LEFT JOIN BookMeta on booksId WHERE bookId = $booksId AND usersId = $usersId AND bookTitle = $";
-        $res = $this->query($sql);
+        $sql = $this->prepare("UPDATE reservations  SET accepted = 1 WHERE booksId = :booksId AND usersId = :usersId");
+        $sql->bindValue(':booksId', $usersId);
+        $sql->bindValue(':usersId', $booksId);
+        $res = $sql->execute();
 
         $data = array();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($data, $row);
         }
 
-        return $data;
+        $res = $status ? "Success" : "Failed";
+        return $res;
     }
     public function saveCheckouts($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate, $fine, $isPaid)
     {
@@ -483,7 +486,8 @@ class DB extends \SQLite3
 
         $this->acceptReservation($usersId, $booksId);
 
-        return $status;
+        $res = $status ? "Success" : "Failed";
+        return $res;
 
     }
 
