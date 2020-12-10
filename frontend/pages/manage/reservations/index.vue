@@ -123,7 +123,7 @@ export default {
     },
     saveCheckout(object) {
       const today = new Date();
-      const inTwoWeeks = this.addDays(today, 25);
+      const inTwoWeeks = this.addDays(today, 14);
       const checkoutDateTime = today.toLocaleString('en-GB');
       const maxAllowedDate = inTwoWeeks.toLocaleString('en-GB');
 
@@ -132,12 +132,9 @@ export default {
           usersId: object.usersId,
           booksId: object.booksId,
           checkoutDateTime,
-          returnDateTime: '',
           maxAllowedDate,
-          fine: 0,
-          isPaid: '',
         })
-        .then(function (response) {
+        .then((response) => {
           this.loadCheckouts();
           this.loadReservations();
         });
@@ -147,12 +144,11 @@ export default {
       const today = new Date();
       const returnDateTime = today.toLocaleString('en-GB');
 
-      this.fine = 0;
       this.$axios
         .post('http://localhost:8080/returnCheckouts', {
           returnDateTime,
         })
-        .then(function (response) {
+        .then((response) => {
           this.loadCheckouts();
           this.loadReservations();
         });

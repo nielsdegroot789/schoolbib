@@ -126,20 +126,14 @@ class UserController
     {            
         $data = json_decode(file_get_contents("php://input"), TRUE);
         $this->response = $response;
-
         $db = new DB();
-        $usersId = $data["usersId"];
-        $booksId = $data["booksId"];
-        $reservationDateTime = $data["reservationDateTime"];
-        $accepted = 1;
 
-        if($data['id']){
-            $id = $data['id'];
-            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted);
-        }
-        else {
-            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted);
-        }
+        $usersId = $data['params']["usersId"];
+        $booksId = $data['params']["booksId"];
+        $reservationDateTime = $data['params']["reservationDateTime"];
+        $accepted = 0;
+        $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted);
+     
         $response->getBody()->write($data);
         return $response;
     }
@@ -153,11 +147,9 @@ class UserController
         $usersId = $data["usersId"];
         $booksId = $data["booksId"];
         $checkoutDateTime = $data["checkoutDateTime"];
-        $returnDateTime = $data["reservationDateTime"];
         $maxAllowedDate = $data["maxAllowedDate"];
-        $fine = $data["fine"];
-        $isPaid = $data["isPaid"];     
-        $data = $db->saveCheckouts($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate, $fine, $isPaid);
+
+        $data = $db->saveCheckouts($usersId,$booksId,$checkoutDateTime,$maxAllowedDate);
       
         $response->getBody()->write($data);
         return $response;

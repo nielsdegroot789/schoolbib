@@ -438,9 +438,7 @@ class DB extends \SQLite3
         $sql->bindValue(':reservationDateTime', $reservationDateTime, );
         $sql->bindValue(':accepted', $accepted, );
 
-        $status = $sql->execute();
-
-        return $status;
+        return $sql->execute() ? "Success" : "Error";
     }
 
     public function getReservations($limitNumber, $offsetNumber)
@@ -483,19 +481,15 @@ class DB extends \SQLite3
         $res = $status ? "Success" : "Failed";
         return $res;
     }
-    public function saveCheckouts($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate, $fine, $isPaid)
+    public function saveCheckouts($usersId, $booksId, $checkoutDateTime, $maxAllowedDate)
     {
-
-        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate, fine, isPaid)
-        values (:usersId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate, :fine, :isPaid )");
+        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime, maxAllowedDate)
+        values (:usersId, :booksId, :checkoutDateTime, :maxAllowedDate)");
 
         $sql->bindValue(':usersId', $usersId, );
         $sql->bindValue(':booksId', $booksId, );
         $sql->bindValue(':checkoutDateTime', $checkoutDateTime, );
-        $sql->bindValue(':returnDateTime', $returnDateTime, );
         $sql->bindValue(':maxAllowedDate', $maxAllowedDate, );
-        $sql->bindValue(':fine', $fine, );
-        $sql->bindValue(':isPaid', $isPaid, );
 
         $status = $sql->execute();
 
