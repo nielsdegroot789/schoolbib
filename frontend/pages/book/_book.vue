@@ -156,24 +156,17 @@ export default {
   methods: {
     submitReserveData() {
       const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      const time =
-        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
-      const dateTime = date + ' ' + time;
-      this.timestamp = dateTime.toString();
+      const reservationDateTime = today.toLocaleString('en-GB');
 
       this.$axios
         .post('http://localhost:8080/saveReservationsUser', {
           headers: { Auth: this.$store.state.JWT },
-          booksId: this.$route.params.book,
-          usersId: this.currentUserId,
-          reservationDateTime: this.timestamp,
-          accepted: 0,
+          params: {
+            data: this.UserId,
+            booksId: this.$route.params.book,
+            usersId: this.currentUserId,
+            reservationDateTime,
+          },
         })
         .then(function (response) {});
     },
