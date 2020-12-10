@@ -25,20 +25,11 @@
 <script>
 export default {
   props: {
-    maxVisibleButtons: {
-      type: Number,
-      required: false,
-      default: 3,
-    },
-    totalPages: {
+    totalitems: {
       type: Number,
       required: true,
     },
-    total: {
-      type: Number,
-      required: true,
-    },
-    currentPage: {
+    limit: {
       type: Number,
       required: true,
     },
@@ -47,14 +38,15 @@ export default {
     return {};
   },
   computed: {
+    pagesCount() {
+      return Math.ceil(this.totalitems / this.limit);
+    },
+
     pageNumber() {
       return parseInt(this.$route.query.page);
     },
     amountOfButtons() {
       return Math.min(this.pagesCount, 5);
-    },
-    pagesCount() {
-      return this.$store.getters.getPageCount;
     },
     pageButtons() {
       const start = Math.min(
@@ -103,9 +95,6 @@ export default {
         this.$store.dispatch('getBookMeta', payload);
       },
     },
-  },
-  created() {
-    this.$store.dispatch('getBookMetaCount');
   },
 };
 </script>

@@ -13,7 +13,7 @@
         <td>{{ item.rating }}</td>
         <td><img :src="item.sticker" alt="Book cover image" /></td>
         <td></td>
-        <td><button @onclick="deleteFunction()">Delete</button></td>
+        <td><button @onclick="deleteFunction">Delete</button></td>
       </tr>
     </tbody>
 

@@ -3,7 +3,11 @@
     <div class="section level">
       <Filters />
     </div>
-    <Pagination :page-amount="amountOfPages" class="level-right" />
+    <Pagination
+      :totalitems="metaCountBooks"
+      :limit="limit"
+      class="level-right"
+    />
     <div class="cardContainer">
       <nuxt-link
         v-for="item in bookMeta"
@@ -51,7 +55,8 @@ export default {
       search: '',
       timeoutId: null,
       filterTimeOut: null,
-      amountOfPages: '',
+      metaCountBooks: '',
+      limit: 20,
     };
   },
   computed: {
@@ -71,7 +76,17 @@ export default {
       },
     },
   },
+  created() {
+    this.getBookMetaCount();
+  },
   methods: {
+    getBookMetaCount() {
+      this.$axios
+        .get('http://localhost:8080/getBookMetaCount')
+        .then(
+          (response) => (this.metaCountBooks = response.data[0]['count(id)']),
+        );
+    },
     toSearch() {
       clearTimeout(this.filterTimeOut);
       this.filterTimeOut = setTimeout(() => {
