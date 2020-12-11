@@ -21,13 +21,11 @@ export const state = () => ({
 });
 
 export const actions = {
-  async getBookMeta({ commit, state }, filters) {
+  async getBookMeta({ commit, state }, { filters }) {
+    debugger;
     const params = {
       limit: state.limit,
     };
-    if (filters['book-name']) {
-      params.title = filters['book-name'];
-    }
     if (filters.pageNumber) {
       params.offset = (filters.pageNumber - 1) * state.limit;
     }
@@ -37,7 +35,7 @@ export const actions = {
     if (filters['filter-authors']) {
       params.authors = filters['filter-authors'];
     }
-
+    console.log(params);
     try {
       const books = await this.$axios({
         method: 'GET',
