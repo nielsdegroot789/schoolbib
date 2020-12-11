@@ -22,7 +22,6 @@ export const state = () => ({
 
 export const actions = {
   async getBookMeta({ commit, state }, { filters }) {
-    debugger;
     const params = {
       limit: state.limit,
     };
