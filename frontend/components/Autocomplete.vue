@@ -1,5 +1,5 @@
 <template>
-  <div ref="c-autocomplete" class="c-autocomplete">
+  <div class="c-autocomplete">
     <div
       v-if="batches.length && this.$route.path == '/books'"
       class="c-autocomplete__batch-container"

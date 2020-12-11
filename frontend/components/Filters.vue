@@ -6,7 +6,6 @@
   >
     <Autocomplete
       v-if="show"
-      ref="reloadBatch"
       name="Filters"
       :batches="batches"
       :authors="authorList"
@@ -116,7 +115,6 @@ export default {
           return value !== authorVal;
         });
       }
-      console.log(value);
       this.updateQuery();
     },
     loadSearchResult(label) {
