@@ -1,10 +1,4 @@
 <?php
-
-header("Access-Control-Allow-Origin: *");
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
-header("Access-Control-Allow-Headers: *");
-header("Content-Type: Application/json");
-
 use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -16,6 +10,8 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Slim\Exception\NotFoundException;
+
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -75,13 +71,8 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
 
-//routes
-$app->get('/', function (Request $request, Response $response, $args) {
-    $response->getBody()->write('Hello ');
-    return $response;
-})->add($checkLoggedInMW);
-
 // DOES NOT NEED TO BE LOGGED IN
+$app->get('/executeCronJob', \skoolBiep\Util\CronJob::class . ':start');
 
 $app->get('/getBookMetaCount', \skoolBiep\Controller\BookController::class . ':getBookMetaCount');
 $app->post('/login', \skoolBiep\Controller\UserController::class . ':login');
@@ -116,16 +107,15 @@ $app->get('/getReservationUser', \skoolBiep\Controller\UserController::class . '
 $app->get('/getFavoriteBooks', \skoolBiep\Controller\UserController::class . ':getFavoriteBooks');
 $app->get('/getFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':getFavoriteAuthors');
 $app->post('/deleteFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':deleteFavoriteAuthors');
-
-
-
-
-
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
 
 $app->post('/addToFavoriteBookList', \skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 $app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
+
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+    throw new HttpNotFoundException($request);
+});
 
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
