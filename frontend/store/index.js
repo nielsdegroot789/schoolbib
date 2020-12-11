@@ -106,7 +106,6 @@ export const actions = {
       .then((response) => context.commit('getReservation', response.data));
   },
   getProfilePageData({ commit, store }, data) {
-    debugger;
     console.log(data);
     this.$axios
       .get('http://localhost:8080/getProfilePageData', {
