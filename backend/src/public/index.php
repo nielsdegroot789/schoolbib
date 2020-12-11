@@ -99,7 +99,7 @@ $app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':up
 
 
 // NEEDS TO BE LOGGED IN
-$app->post('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':getReservations');
+$app->post('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
 $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
 $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
 $app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
@@ -115,6 +115,10 @@ $app->get('/getCheckoutUser', \skoolBiep\Controller\UserController::class . ':ge
 $app->get('/getReservationUser', \skoolBiep\Controller\UserController::class . ':getReservationUser');
 $app->get('/getFavoriteBooks', \skoolBiep\Controller\UserController::class . ':getFavoriteBooks');
 $app->get('/getFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':getFavoriteAuthors');
+$app->post('/deleteFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':deleteFavoriteAuthors');
+
+
+
 
 
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');

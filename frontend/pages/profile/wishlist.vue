@@ -5,28 +5,32 @@
         Wishlits. this could be a carousel with books that are you favorite.
       </h1>
     </header>
-    <tbody>
-      <tr v-for="(item, index) in dataFavBook" :key="index">
-        <td>{{ item.title }}</td>
-        <td>{{ item.isbnCode }}</td>
-        <td>{{ item.totalPages }}</td>
-        <td>{{ item.rating }}</td>
-        <td><img :src="item.sticker" alt="Book cover image" /></td>
-      </tr>
-    </tbody>
-
+    <table class="table table is-bordered is-hoverable is-fullwidth aboveBlock">
+      <tbody>
+        <tr v-for="(item, index) in dataFavBook" :key="index">
+          <td>{{ item.title }}</td>
+          <td>{{ item.isbnCode }}</td>
+          <td>{{ item.totalPages }}</td>
+          <td>{{ item.rating }}</td>
+          <td><img :src="item.sticker" alt="Book cover image" /></td>
+        </tr>
+      </tbody>
+    </table>
     <thead>
       <tr>
         <th>Authors U like</th>
-        <th class="deleteButton">delete</th>
       </tr>
     </thead>
-    <tbody>
-      <tr v-for="(item, index) in dataFavAuthor" :key="index">
-        <td>{{ item.name }}</td>
-        <td><button @onclick="deleteFunction">Delete</button></td>
-      </tr>
-    </tbody>
+    <table class="table table is-bordered is-hoverable is-fullwidth underBlock">
+      <tbody>
+        <tr v-for="(item, index) in dataFavAuthor" :key="index">
+          <td>
+            {{ item.name }}
+            <button class="deleteButton" @onclick="delFavAUth">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -78,11 +82,24 @@ export default {
         this.dataFavBook = response.data;
       });
   },
+  methods: {
+    delFavAUth(id) {
+      axios.post('http://localhost:8080/deleteReservationUser', {
+        params: {
+          data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        },
+      });
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
 .deleteButton {
+  margin-left: 50px;
   display: inline-block;
   padding: 0.7em 1.4em;
   margin: 0 0.3em 0.3em 0;

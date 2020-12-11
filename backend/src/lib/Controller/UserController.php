@@ -263,16 +263,25 @@ class UserController
         return $response->withHeader('Content-Type', 'application/json');
     }
     public function deleteReservationUser(Request $request, Response $response, array $args) {
-        $payloadData = $_POST['data'];
-        $json = json_decode($payloadData);
-        $id = $json->id;
+        // $payloadData = $_POST['data'];
+        // $resId = $_POST['data'];
+        // $json = json_decode($resId);
+        // $id = $json->resId;
+        // $this->response = $response;
+        // $db = new DB();
+        // $db->deleteReservationUser($id);
+
+        // return $response;
+
         $this->response = $response;
         $db = new DB();
-        $data = $db->deleteReservationUser($id);
-        $payload = json_encode($data);
+        $contents = json_decode(file_get_contents('php://input'), true);
+        $resId = $contents['data'];
+        $db->deleteReservationUser($resId);
+        return $response;
 
-        $response->getBody()->write($payload);
-        return $response->withHeader('Content-Type', 'application/json');
+
+
     }
 
     public function getFavoriteBooks(Request $request, Response $response, array $args) {
@@ -294,6 +303,19 @@ class UserController
         $this->response = $response;
         $db = new DB();
         $data = $db->getFavoriteAuthors($id);
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function deleteFavoriteAuthors(Request $request, Response $response, array $args) {
+        $payloadData = $_POST['data'];
+        $json = json_decode($payloadData);
+        $id = $json->id;
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->deleteFavoriteAuthor($id);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
