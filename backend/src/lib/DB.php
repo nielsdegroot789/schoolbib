@@ -56,7 +56,7 @@ class DB extends \SQLite3
         }
 
         $sql .= " limit :limit";
-        $sql .= " offset :offset * :limit";
+        $sql .= " offset :offset";
 
         $query = $this->prepare($sql);
 
@@ -343,8 +343,7 @@ class DB extends \SQLite3
         FROM favoriteBooks
 		LEFT join bookMeta 
 		ON favoriteBooks.bookMetaId = bookMeta.Id
-        where usersId = :id AND sticker is NOT NULL
-		");
+        where usersId = :id");
         
         $sql->bindvalue(':id', $id);
         $res = $sql->execute();
@@ -374,6 +373,14 @@ class DB extends \SQLite3
         return $data;
     }
 
+    public function deleteFavoriteAuthor($id){
+        $sql =  $this->prepare("DELETE FROM favoriteAuthors      
+		WHERE id = :id");
+             
+            $sql->bindvalue(':id', $id);
+            $sql->execute();
+    }
+
     
     public function getReservationUser($id)
     {
@@ -391,6 +398,17 @@ class DB extends \SQLite3
                  array_push($data, $row);
              }
              return $data;
+    }
+    
+    public function deleteReservationUser($id)
+    {
+        $sql =  $this->prepare("DELETE FROM reservations      
+		WHERE id = :id");
+        
+        $sql->bindValue(':id', $id);
+        $sql->execute();
+        return $id;
+             
     }
 
     public function getCheckoutUser($id)
@@ -423,9 +441,7 @@ class DB extends \SQLite3
         $sql->bindValue(':reservationDateTime', $reservationDateTime, );
         $sql->bindValue(':accepted', $accepted, );
 
-        $status = $sql->execute();
-
-        return $status;
+        return $sql->execute() ? "Success" : "Error";
     }
 
     public function getReservations($limitNumber, $offsetNumber)
@@ -450,38 +466,40 @@ class DB extends \SQLite3
 
         return $data;
     }
+    
     public function acceptReservation($usersId, $booksId)
     {
 
-        $sql = "UPDATE reservations  SET accepted = 1 FROM reservation LEFT JOIN BookMeta on booksId WHERE bookId = $booksId AND usersId = $usersId AND bookTitle = $";
-        $res = $this->query($sql);
+        //TODO prevent SQL INJECTION!!! Not working SQL code in master?
+        $sql = $this->prepare("UPDATE reservations  SET accepted = 1 WHERE booksId = :booksId AND usersId = :usersId");
+        $sql->bindValue(':booksId', $usersId);
+        $sql->bindValue(':usersId', $booksId);
+        $res = $sql->execute();
 
         $data = array();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($data, $row);
         }
 
-        return $data;
+        $res = $status ? "Success" : "Failed";
+        return $res;
     }
-    public function saveCheckouts($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate, $fine, $isPaid)
+    public function saveCheckouts($usersId, $booksId, $checkoutDateTime, $maxAllowedDate)
     {
-
-        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate, fine, isPaid)
-        values (:usersId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate, :fine, :isPaid )");
+        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime, maxAllowedDate)
+        values (:usersId, :booksId, :checkoutDateTime, :maxAllowedDate)");
 
         $sql->bindValue(':usersId', $usersId, );
         $sql->bindValue(':booksId', $booksId, );
         $sql->bindValue(':checkoutDateTime', $checkoutDateTime, );
-        $sql->bindValue(':returnDateTime', $returnDateTime, );
         $sql->bindValue(':maxAllowedDate', $maxAllowedDate, );
-        $sql->bindValue(':fine', $fine, );
-        $sql->bindValue(':isPaid', $isPaid, );
 
         $status = $sql->execute();
 
         $this->acceptReservation($usersId, $booksId);
 
-        return $status;
+        $res = $status ? "Success" : "Failed";
+        return $res;
 
     }
 

@@ -1,42 +1,50 @@
 <template>
-  <!-- <div v-if="pagesCount > 1" class="pagination-row"> -->
-  <div class="pagination-row">
-    <n-link :to="{ path: 'books', query: { page: first } }"> first </n-link>
+  <div v-if="pagesCount > 1" class="pagination-row">
+    <div class="pagination-row">
+      <n-link :to="{ path: 'books', query: { page: first } }"> first </n-link>
 
-    <n-link :to="{ path: 'books', query: { page: previous } }">
-      previous
-    </n-link>
+      <n-link :to="{ path: 'books', query: { page: previous } }">
+        previous
+      </n-link>
 
-    <n-link
-      v-for="page in pageButtons"
-      :key="page"
-      :to="{ path: 'books', query: { page: pageButtons } }"
-    >
-      {{ page }}
-    </n-link>
+      <n-link
+        v-for="page in pageButtons"
+        :key="page"
+        :to="{ path: 'books', query: { page: page } }"
+      >
+        {{ page }}
+      </n-link>
 
-    <n-link :to="{ path: 'books', query: { page: next } }"> next </n-link>
+      <n-link :to="{ path: 'books', query: { page: next } }"> next </n-link>
 
-    <n-link :to="{ path: 'books', query: { page: last } }"> last </n-link>
+      <n-link :to="{ path: 'books', query: { page: last } }"> last </n-link>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    pageCount: {
+    totalitems: {
       type: Number,
-      default: 0,
+      required: true,
+    },
+    limit: {
+      type: Number,
+      required: true,
     },
   },
   data() {
     return {};
   },
   computed: {
+    pagesCount() {
+      return Math.ceil(this.totalitems / this.limit);
+    },
+
     pageNumber() {
       return parseInt(this.$route.query.page);
     },
-
     amountOfButtons() {
       return Math.min(this.pagesCount, 5);
     },
@@ -82,7 +90,6 @@ export default {
       immediate: true,
       handler(route) {
         const payload = {
-          page: route.query.name,
           pageNumber: this.pageNumber,
         };
         this.$store.dispatch('getBookMeta', payload);

@@ -6,17 +6,19 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-end">
-          <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
-            >Profile</nuxt-link
-          >
           <nuxt-link
             v-if="loggedIn && (currentRole == 3 || currentRole == 2)"
             class="navbar-item"
             to="/manage/books"
           ></nuxt-link>
-          <div v-if="loggedIn && currentRole == 1" class="dropdownProfile">
-            <button class="dropbtn" @click="myFunction()">profile</button>
-            <div id="myDropdown" class="dropdown-content">
+
+          <div
+            v-if="loggedIn && currentRole == 1"
+            id="dropdownMenu"
+            class="dropdownProfile"
+          >
+            <button class="dropbtn" @click="visible = !visible">profile</button>
+            <div v-if="visible" id="myDropdown" class="dropdown-content">
               <a class="sub-item">
                 <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
                   >Information</nuxt-link
@@ -72,6 +74,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      visible: false,
+    };
+  },
   computed: {
     currentRole() {
       return +this.$store.state.currentUser.role;
@@ -80,26 +87,24 @@ export default {
       return !!this.$store.state.JWT;
     },
   },
+  mounted() {
+    document.addEventListener('click', this.documentClick);
+  },
   methods: {
     logout() {
       this.$store.commit('logout');
       this.$store.commit('logout');
       localStorage.removeItem('JWT');
     },
-    myFunction() {
+    dropDownFunction() {
       document.getElementById('myDropdown').classList.toggle('show');
     },
 
-    function(event) {
-      if (!event.target.matches('.dropbtn')) {
-        const dropdowns = document.getElementsByClassName('sub-items');
-        let i;
-        for (i = 0; i < dropdowns.length; i++) {
-          const openDropdown = dropdowns[i];
-          if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-          }
-        }
+    documentClick(e) {
+      const el = document.getElementById('dropdownMenu');
+      const target = e.target;
+      if (el !== target && !el.contains(target)) {
+        this.visible = false;
       }
     },
   },
@@ -120,7 +125,6 @@ export default {
 }
 
 .dropdown-content {
-  display: none;
   position: fixed;
   background-color: #f1f1f1;
   min-width: 160px;
