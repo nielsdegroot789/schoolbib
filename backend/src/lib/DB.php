@@ -339,7 +339,7 @@ class DB extends \SQLite3
     }
     public function getFavoriteBooks($id)
     {
-        $sql = $this->prepare("SELECT usersId,bookMetaId, title, sticker
+        $sql = $this->prepare("SELECT usersId,bookMetaId, title, sticker, totalPages,rating,readingLevel
         FROM favoriteBooks
 		LEFT join bookMeta 
 		ON favoriteBooks.bookMetaId = bookMeta.Id

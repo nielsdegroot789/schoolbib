@@ -19,12 +19,12 @@
           >
             <button class="dropbtn" @click="visible = !visible">profile</button>
             <div v-if="visible" id="myDropdown" class="dropdown-content">
-              <a class="sub-item">
+              <a class="sub-item" @click="visible = !visible">
                 <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
                   >Information</nuxt-link
                 >
               </a>
-              <a class="sub-item">
+              <a class="sub-item" @click="visible = !visible">
                 <nuxt-link
                   v-if="loggedIn"
                   class="navbar-item"
@@ -32,7 +32,7 @@
                   >My books</nuxt-link
                 >
               </a>
-              <a class="sub-item">
+              <a class="sub-item" @click="visible = !visible">
                 <nuxt-link
                   v-if="loggedIn"
                   class="navbar-item"
