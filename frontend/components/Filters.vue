@@ -8,7 +8,7 @@
       v-if="show"
       ref="reloadBatch"
       name="Filters"
-      :batches="batchess"
+      :batches="batches"
       :authors="authorList"
       :categories="categoryList"
       @change="searchFilter"
@@ -40,7 +40,9 @@ export default {
       authorFilters: this.$route.query['filter-authors']
         ? this.$route.query['filter-authors']
         : [],
-      categoryFilters: [],
+      categoryFilters: this.$route.query['filter-category']
+        ? this.$route.query['filter-category']
+        : [],
       batches: [],
     };
   },
@@ -65,16 +67,9 @@ export default {
     document.removeEventListener('click', this.emptyAutoList);
   },
   created() {
-    debugger;
     // if array
-    this.authorFilters.forEach((author) => {
-      const batch = { value: author, type: 'Author' };
-      this.batches.push(batch);
-    });
-    for (const category in this.categoryFilters) {
-      const batch = { value: category, type: 'Category' };
-      this.batch.push(batch);
-    }
+    this.reload(this.authorFilters, 'Author');
+    this.reload(this.categoryFilters, 'Category');
   },
   methods: {
     toggleShow() {
@@ -94,6 +89,10 @@ export default {
     },
     updateFilterQuery(filterObject) {
       if (filterObject !== null) {
+        this.batches.push({
+          value: filterObject.val,
+          type: filterObject.typ,
+        });
         if (filterObject.typ === 'Categories') {
           this.categoryFilters.push(filterObject.val);
         } else {
@@ -103,7 +102,21 @@ export default {
       this.emptyAutoList();
       this.updateQuery();
     },
-    deleteQuery() {
+    deleteQuery(value, type) {
+      debugger;
+      this.batches = this.batches.filter((batch) => {
+        return batch.value !== value;
+      });
+      if (type === 'Category') {
+        this.categoryFilters = this.categoryFilters.filter((categoryVal) => {
+          return value !== categoryVal;
+        });
+      } else {
+        this.authorFilters = this.authorFilters.filter((authorVal) => {
+          return value !== authorVal;
+        });
+      }
+      console.log(value);
       this.updateQuery();
     },
     loadSearchResult(label) {
@@ -128,20 +141,19 @@ export default {
       this.categoryList = '';
       this.titleList = '';
     },
-  },
-  queryReload(routeQuery, typeQuery) {
-    if (routeQuery) {
-      if (Array.isArray(routeQuery)) {
-        routeQuery.map((val) => {
-          this.$store.dispatch('addBatch', { value: val, type: typeQuery });
-        });
-      } else {
-        this.$store.dispatch('addBatch', {
-          value: routeQuery,
-          type: typeQuery,
-        });
+    reload(arrayFilter, type) {
+      if (arrayFilter) {
+        if (Array.isArray(arrayFilter)) {
+          arrayFilter.forEach((element) => {
+            const batch = { value: element, type };
+            this.batches.push(batch);
+          });
+        } else {
+          const batch = { value: arrayFilter, type };
+          this.batches.push(batch);
+        }
       }
-    }
+    },
   },
 };
 </script>

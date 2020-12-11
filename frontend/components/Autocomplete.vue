@@ -8,7 +8,7 @@
         v-for="item in batches"
         :key="item.value"
         class="c-autocomplete__batch"
-        @click="deleteBatch(item.value)"
+        @click="deleteBatch(item.value, item.type)"
       >
         {{ item.type + ' : ' + item.value }}
         <font-awesome-icon class="close-icon" :icon="['fas', 'times']" />
@@ -66,7 +66,7 @@ export default {
     categories: {
       required: false,
     },
-    batchess: {
+    batches: {
       required: false,
     },
   },
@@ -77,7 +77,6 @@ export default {
       authorList: '',
       titleList: '',
       categoryList: '',
-      batches: [],
     };
   },
   computed: {
@@ -99,9 +98,8 @@ export default {
     reloadBatch(batch) {
       this.batches.push(batch);
     },
-    deleteBatch(value) {
-      debugger;
-      this.$emit('delete', value);
+    deleteBatch(value, type) {
+      this.$emit('delete', value, type);
     },
   },
 };
