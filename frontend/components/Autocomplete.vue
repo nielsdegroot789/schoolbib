@@ -22,12 +22,12 @@
       @keyup="manualChange"
     />
     <div
-      v-if="titleList.length || categories.length || authors.length"
+      v-if="titles.length || categories.length || authors.length"
       class="autocomplete-results-container"
     >
-      <h1 v-if="titleList.length" class="autocomplete-title">Title</h1>
+      <h1 v-if="titles.length" class="autocomplete-title">Title</h1>
       <nuxt-link
-        v-for="result in titleList"
+        v-for="result in titles"
         :key="result.id"
         :to="'/book/' + result.id"
         class="auto-complete-button"
@@ -60,6 +60,9 @@
 export default {
   name: 'Autocomplete',
   props: {
+    titles: {
+      required: false,
+    },
     authors: {
       required: false,
     },

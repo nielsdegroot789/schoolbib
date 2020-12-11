@@ -9,6 +9,7 @@
       name="Filters"
       :batches="batches"
       :authors="authorList"
+      :titles="titleList"
       :categories="categoryList"
       @change="searchFilter"
       @select="updateFilterQuery"
@@ -82,10 +83,6 @@ export default {
         query: newQuery,
       });
     },
-    searchFilter(input) {
-      if (input.length === 0) {
-      }
-    },
     updateFilterQuery(filterObject) {
       if (filterObject !== null) {
         this.batches.push({
@@ -102,18 +99,23 @@ export default {
       this.updateQuery();
     },
     deleteQuery(value, type) {
-      debugger;
       this.batches = this.batches.filter((batch) => {
         return batch.value !== value;
       });
       if (type === 'Category') {
-        this.categoryFilters = this.categoryFilters.filter((categoryVal) => {
-          return value !== categoryVal;
-        });
-      } else {
+        if (Array.isArray(this.categoryFilters)) {
+          this.categoryFilters = this.categoryFilters.filter((categoryVal) => {
+            return value !== categoryVal;
+          });
+        } else {
+          this.categoryFilters = [];
+        }
+      } else if (Array.isArray(this.authorFilters)) {
         this.authorFilters = this.authorFilters.filter((authorVal) => {
           return value !== authorVal;
         });
+      } else {
+        this.authorFilters = [];
       }
       this.updateQuery();
     },
