@@ -92,11 +92,33 @@ export default {
   methods: {
     deleteRes(id) {
       console.log(id);
-      axios.post('http://localhost:8080/deleteReservationUser', {
-        params: {
-          data: id,
-        },
-      });
+      axios
+        .delete('http://localhost:8080/deleteReservationUser', {
+          headers: {
+            Auth: this.$store.state.JWT,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          data: { data: id },
+        })
+        .then((response) => {
+          console.log(response);
+          this.refreshBooks();
+        });
+    },
+    refreshBooks() {
+      axios
+        .get('http://localhost:8080/getReservationUser', {
+          params: {
+            data: this.UserId,
+            headers: {
+              Auth: this.$store.state.JWT,
+            },
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          this.dataRes = response.data;
+        });
     },
   },
 };
