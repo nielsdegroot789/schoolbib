@@ -25,6 +25,11 @@
 <script>
 export default {
   name: 'DeleteBook',
+  data() {
+    return {
+      active: false,
+    };
+  },
   computed: {
     active() {
       return this.$store.state.deleteModal;
@@ -38,8 +43,8 @@ export default {
       this.$store.dispatch('deleteSpecificBook');
       this.closeDeleteModal();
     },
-    closeDeleteModal() {
-      this.$store.dispatch('toggleDeleteModal');
+    toggleModal() {
+      this.active != this.active;
     },
   },
 };

@@ -1,5 +1,6 @@
 <template>
   <div class="setup section">
+    <deleteModal />
     <header class="level">
       <h1 class="level-left title">Manage Books</h1>
       <nuxt-link :to="{ path: '/manage/books/new' }" class="button level-right"
@@ -63,9 +64,7 @@
             </nuxt-link>
           </td>
           <td>
-            <nuxt-link :to="/deleteBook/ + book.id" class="button"
-              >delete</nuxt-link
-            >
+            <button class="button">delete</button>
           </td>
         </tr>
       </tbody>
@@ -74,13 +73,16 @@
 </template>
 
 <script>
+import deleteModal from '~/components/deleteBook';
 export default {
+  components: {
+    deleteModal,
+  },
   data() {
     return {
       bookMeta: [],
     };
   },
-  computed: {},
   mounted() {
     this.$axios
       .get('http://localhost:8080/getBookMeta', {
