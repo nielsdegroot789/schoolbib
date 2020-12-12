@@ -37,13 +37,13 @@
       <div class="buttonContainer level">
         <button
           class="button is-large level-item"
-          @click="searchForBook({ isbn: currentBookData.isbnCode })"
+          @click="searchForBook({ isbn: bookMetaData.isbnCode })"
         >
           Search by isbn
         </button>
         <button
           class="button is-large level-item"
-          @click="searchForBook({ title: currentBookData.title })"
+          @click="searchForBook({ title: bookMetaData.title })"
         >
           Search by title
         </button>

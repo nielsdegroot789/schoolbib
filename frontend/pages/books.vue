@@ -87,12 +87,6 @@ export default {
           (response) => (this.metaCountBooks = response.data[0]['count(id)']),
         );
     },
-    toSearch() {
-      clearTimeout(this.filterTimeOut);
-      this.filterTimeOut = setTimeout(() => {
-        this.$router.push({ path: '/catalog/', query: { name: this.search } });
-      }, 1000);
-    },
   },
 };
 </script>

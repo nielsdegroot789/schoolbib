@@ -18,21 +18,13 @@ export const state = () => ({
   specificBook: {},
   editModal: false,
   deleteModal: false,
-  autoCompleteResults: [],
-  categoryList: [],
-  authorList: [],
-  titleList: [],
-  batches: [],
 });
 
 export const actions = {
-  async getBookMeta({ commit, state }, filters) {
+  async getBookMeta({ commit, state }, { filters }) {
     const params = {
       limit: state.limit,
     };
-    if (filters['book-name']) {
-      params.title = filters['book-name'];
-    }
     if (filters.pageNumber) {
       params.offset = (filters.pageNumber - 1) * state.limit;
     }
@@ -42,7 +34,7 @@ export const actions = {
     if (filters['filter-authors']) {
       params.authors = filters['filter-authors'];
     }
-
+    console.log(params);
     try {
       const books = await this.$axios({
         method: 'GET',
@@ -114,7 +106,6 @@ export const actions = {
       .then((response) => context.commit('getReservation', response.data));
   },
   getProfilePageData({ commit, store }, data) {
-    debugger;
     console.log(data);
     this.$axios
       .get('http://localhost:8080/getProfilePageData', {
@@ -163,31 +154,7 @@ export const actions = {
   toggleDeleteModal({ commit }, id) {
     commit('toggleDeleteModal', id);
   },
-  getAutoCompleteResults({ commit }, search) {
-    if (search.length === 0) {
-      return commit('makeEmpty');
-    }
-    const params = {
-      searchVal: search,
-    };
-    this.$axios({
-      method: 'GET',
-      url: 'http://localhost:8080/getFilterResults',
-      params,
-    }).then((response) => {
-      commit('setAutoCompleteResults', response.data);
-    });
-  },
-  addBatch({ commit, state }, batch) {
-    const duplicateArr = state.batches.filter((val) => {
-      return val.value === batch.value;
-    });
-    if (!duplicateArr[0]) {
-      commit('setBatch', batch);
-    }
-  },
   deleteBatch({ commit }, batch) {
-    console.log(batch);
     commit('deleteBatch', batch);
   },
 };
@@ -277,30 +244,6 @@ export const mutations = {
     state.specificBook = state.adminSpecificBooks.find(
       (book) => book.id === id,
     );
-  },
-  setAutoCompleteResults(state, data) {
-    state.authorList = data.filter((result) => {
-      return result.type === 'Authors';
-    });
-    state.categoryList = data.filter((result) => {
-      return result.type === 'Categories';
-    });
-    state.titleList = data.filter((result) => {
-      return result.type === 'Title';
-    });
-  },
-  makeEmpty(state) {
-    state.categoryList = '';
-    state.authorList = '';
-    state.titleList = '';
-  },
-  setBatch(state, batch) {
-    state.batches.push(batch);
-  },
-  deleteBatch(state, batch) {
-    state.batches = state.batches.filter((item) => {
-      return item.value !== batch;
-    });
   },
 };
 
