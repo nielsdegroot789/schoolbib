@@ -702,4 +702,43 @@ class DB extends \SQLite3
 
         return $result;
     }
+    public function updateFines()
+    {
+        //Get all checkouts
+        $sql = $this->prepare("select * from checkouts where returnDateTime is null");
+        $data = $sql->execute();
+        $checkouts = array();
+        while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
+            array_push($checkouts, $row);
+        }
+
+        foreach($checkouts as $checkout){
+            //Parse checkouts to Unix
+            $returnDateTrimmed = strstr($checkout['maxAllowedDate'], ',', true);      
+            $returnDateYearFirstNotation = date_create_from_format("d/m/Y", $returnDateTrimmed);     
+            $returnUnix = $returnDateYearFirstNotation->getTimestamp(); 
+            $date = new DateTime();
+            $now = $date->getTimestamp(); 
+
+            //If book did not need to be returned yet
+            if($returnUnix > $now){
+                $daysUntilHandin = ($returnUnix - $now) / (60 * 60 * 24);
+                if((int)$daysUntilHandin == 3 || (int)$daysUntilHandin == 1 )
+                {
+                    //Send reminder mail
+                }
+                //Book does not need to be return yet
+                continue;
+            }
+
+            //If book needed to be returned already
+            $daysLate = ($now - $returnUnix) / (60 * 60 * 24);
+            $fine = $daysLate * 0.5 + 1;
+            $sql = $this->prepare("update checkouts set fine = :fine where id = :checkoutId");
+            $sql->bindValue(":fine", $fine);
+            $sql->bindValue(":checkoutId", $checkout['id']);
+            $data = $sql->execute();
+        }
+
+    }
 }
