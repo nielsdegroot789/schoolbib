@@ -12,7 +12,15 @@
             to="/manage/books"
           ></nuxt-link>
 
-          <div id="dropdownMenu" class="dropdownProfile">
+          <div
+            v-if="
+              (loggedIn && currentRole == 1) ||
+              currentRole == 2 ||
+              currentRole == 3
+            "
+            id="dropdownMenu"
+            class="dropdownProfile"
+          >
             <button class="dropbtn" @click="visible = !visible">profile</button>
             <div v-if="visible" id="myDropdown" class="dropdown-content">
               <a class="sub-item" @click="visible = !visible">
