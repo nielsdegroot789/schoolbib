@@ -12,7 +12,11 @@
             to="/manage/books"
           ></nuxt-link>
 
-          <div id="dropdownMenu" class="dropdownProfile">
+          <div
+            v-if="loggedIn && currentRole == 1"
+            id="dropdownMenu"
+            class="dropdownProfile"
+          >
             <button class="dropbtn" @click="visible = !visible">profile</button>
             <div v-if="visible" id="myDropdown" class="dropdown-content">
               <a class="sub-item" @click="visible = !visible">
@@ -109,7 +113,6 @@ export default {
 
 <style>
 .dropbtn {
-  background-color: #f5f5f5;
   padding: 16px;
   font-size: 16px;
   border: none;

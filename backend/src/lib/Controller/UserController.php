@@ -126,20 +126,14 @@ class UserController
     {            
         $data = json_decode(file_get_contents("php://input"), TRUE);
         $this->response = $response;
-
         $db = new DB();
-        $usersId = $data["usersId"];
-        $booksId = $data["booksId"];
-        $reservationDateTime = $data["reservationDateTime"];
-        $accepted = 1;
 
-        if($data['id']){
-            $id = $data['id'];
-            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted);
-        }
-        else {
-            $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted);
-        }
+        $usersId = $data['params']["usersId"];
+        $booksId = $data['params']["booksId"];
+        $reservationDateTime = $data['params']["reservationDateTime"];
+        $accepted = 0;
+        $data = $db->saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted);
+     
         $response->getBody()->write($data);
         return $response;
     }
@@ -153,17 +147,10 @@ class UserController
         $usersId = $data["usersId"];
         $booksId = $data["booksId"];
         $checkoutDateTime = $data["checkoutDateTime"];
-        $returnDateTime = $data["reservationDateTime"];
         $maxAllowedDate = $data["maxAllowedDate"];
-        $fine = $data["fine"];
-        $isPaid = $data["isPaid"];
-        if($data['id']){
-            $id = $data['id'];
-            $data = $db->saveCheckouts($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate, $fine, $isPaid);
-        }
-        else {
-            $data = $db->saveCheckouts($usersId,$booksId,$checkoutDateTime,$returnDateTime,$maxAllowedDate, $fine, $isPaid);
-        }
+
+        $data = $db->saveCheckouts($usersId,$booksId,$checkoutDateTime,$maxAllowedDate);
+      
         $response->getBody()->write($data);
         return $response;
     }
@@ -262,59 +249,26 @@ class UserController
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
     }
-    // public function deleteReservationUser(Request $request, Response $response, array $args) {
-    //     $payloadData = $_POST['data'];
-    //     $json = json_decode($payloadData);
-    //     $id = $json->id;
-    //     $this->response = $response;
-    //     $db = new DB();
-    //     $data = $db->deleteReservationUser($id);
-    //     $payload = json_encode($data);
-
-    //     $response->getBody()->write($payload);
-    //     return $response->withHeader('Content-Type', 'application/json');
-    // }
-
     public function deleteReservationUser(Request $request, Response $response, array $args) {
-        $this->response = $response;
-        $db = new DB();
-        if($request->getMethod() == 'DELETE') {
-            $contents = json_decode(file_get_contents('php://input'), true);
-            echo $contents;
-            $id = $contents['data'];
-            $db->deleteReservationUser($id);
-        } else {
-            $contents = json_decode(file_get_contents('php://input'), true);
-            $id = $contents['id'];
-            $db->deleteReservationUser($id);
-        }
-        return $response;
-        }
-
-    public function deleteFavoriteAuthors(Request $request, Response $response, array $args) {
         // $payloadData = $_POST['data'];
-        // $json = json_decode($payloadData);
-        // $id = $json->id;
+        // $resId = $_POST['data'];
+        // $json = json_decode($resId);
+        // $id = $json->resId;
         // $this->response = $response;
         // $db = new DB();
-        // $data = $db->deleteFavoriteAuthors($id);
-        // $payload = json_encode($data);
+        // $db->deleteReservationUser($id);
 
-        // $response->getBody()->write($payload);
-        // return $response->withHeader('Content-Type', 'application/json');
+        // return $response;
 
         $this->response = $response;
         $db = new DB();
-        if($request->getMethod() == 'DELETE') {
-            $contents = json_decode(file_get_contents('php://input'), true);
-            $id = $contents['data'];
-            $db->deleteFavoriteAuthors($id);
-        } else {
-            $contents = json_decode(file_get_contents('php://input'), true);
-            $id = $contents['id'];
-            $db->deleteFavoriteAuthors($id);
-        }
+        $contents = json_decode(file_get_contents('php://input'), true);
+        $resId = $contents['data'];
+        $db->deleteReservationUser($resId);
         return $response;
+
+
+
     }
 
     public function getFavoriteBooks(Request $request, Response $response, array $args) {
@@ -329,7 +283,6 @@ class UserController
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
     }
-
     public function getFavoriteAuthors(Request $request, Response $response, array $args) {
         $payloadData = $_GET['data'];
         $json = json_decode($payloadData);
@@ -337,6 +290,19 @@ class UserController
         $this->response = $response;
         $db = new DB();
         $data = $db->getFavoriteAuthors($id);
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function deleteFavoriteAuthors(Request $request, Response $response, array $args) {
+        $payloadData = $_POST['data'];
+        $json = json_decode($payloadData);
+        $id = $json->id;
+        $this->response = $response;
+        $db = new DB();
+        $data = $db->deleteFavoriteAuthor($id);
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
