@@ -11,7 +11,6 @@
       :authors="authorList"
       :titles="titleList"
       :categories="categoryList"
-      @change="searchFilter"
       @select="updateFilterQuery"
       @loadResults="loadSearchResult"
       @delete="deleteQuery"

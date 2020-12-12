@@ -84,7 +84,7 @@ export default {
   mounted() {
     this.$axios
       .get('http://localhost:8080/getBookMeta', {
-        headers: { Authorization: `Bearer test` },
+        headers: { Auth: this.$store.JWT },
       })
       .then((response) => {
         this.bookMeta = response.data;

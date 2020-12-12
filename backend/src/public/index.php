@@ -82,7 +82,6 @@ $app->get('/', function (Request $request, Response $response, $args) {
 })->add($checkLoggedInMW);
 
 // DOES NOT NEED TO BE LOGGED IN
-
 $app->get('/getBookMetaCount', \skoolBiep\Controller\BookController::class . ':getBookMetaCount');
 $app->post('/login', \skoolBiep\Controller\UserController::class . ':login');
 $app->get('/getNotification', \skoolBiep\Controller\CockpitController::class . ':getNotification');
@@ -99,7 +98,7 @@ $app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':up
 
 
 // NEEDS TO BE LOGGED IN
-
+$app->group('/', function () use ($app) {
 $app->post('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
 $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
 $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
@@ -110,7 +109,7 @@ $app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class 
 $app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
 $app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
 $app->post('/saveNewCheckout', \skoolBiep\Controller\UserController::class . ':savenewCheckout');
-
+})->add($checkLoggedInMW);
 
 $app->get('/getCheckoutUser', \skoolBiep\Controller\UserController::class . ':getCheckoutUser');
 $app->get('/getReservationUser', \skoolBiep\Controller\UserController::class . ':getReservationUser');
