@@ -124,7 +124,7 @@ class BookController
     public function getFilterResults(Request $request, Response $response, array $args)
     {
         $this->response = $response;
-        $searchVal ='%' . $_GET['searchVal'] . '%';
+        $searchVal ='%' . $_GET[0] . '%';
         $db = new DB();
         $searchResults = $db->searchFilters($searchVal);
         $json = json_encode($searchResults);

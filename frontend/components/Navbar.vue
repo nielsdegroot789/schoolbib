@@ -12,19 +12,15 @@
             to="/manage/books"
           ></nuxt-link>
 
-          <div
-            v-if="loggedIn && currentRole == 1"
-            id="dropdownMenu"
-            class="dropdownProfile"
-          >
+          <div id="dropdownMenu" class="dropdownProfile">
             <button class="dropbtn" @click="visible = !visible">profile</button>
             <div v-if="visible" id="myDropdown" class="dropdown-content">
-              <a class="sub-item">
+              <a class="sub-item" @click="visible = !visible">
                 <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
                   >Information</nuxt-link
                 >
               </a>
-              <a class="sub-item">
+              <a class="sub-item" @click="visible = !visible">
                 <nuxt-link
                   v-if="loggedIn"
                   class="navbar-item"
@@ -32,7 +28,7 @@
                   >My books</nuxt-link
                 >
               </a>
-              <a class="sub-item">
+              <a class="sub-item" @click="visible = !visible">
                 <nuxt-link
                   v-if="loggedIn"
                   class="navbar-item"
@@ -113,6 +109,7 @@ export default {
 
 <style>
 .dropbtn {
+  background-color: #f5f5f5;
   padding: 16px;
   font-size: 16px;
   border: none;

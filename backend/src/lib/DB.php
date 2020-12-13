@@ -339,7 +339,7 @@ class DB extends \SQLite3
     }
     public function getFavoriteBooks($id)
     {
-        $sql = $this->prepare("SELECT usersId,bookMetaId, title, sticker
+        $sql = $this->prepare("SELECT usersId,bookMetaId, title, sticker, totalPages,rating,readingLevel
         FROM favoriteBooks
 		LEFT join bookMeta 
 		ON favoriteBooks.bookMetaId = bookMeta.Id
@@ -357,7 +357,7 @@ class DB extends \SQLite3
     
     public function getFavoriteAuthors($id)
     {
-        $sql = $this->prepare("SELECT usersId, authorsId, name
+        $sql = $this->prepare("SELECT favoriteAuthors.id, usersId, authorsId, name
         FROM favoriteAuthors
 		LEFT join authors 
 		ON favoriteAuthors.authorsId = authors.id
@@ -373,7 +373,7 @@ class DB extends \SQLite3
         return $data;
     }
 
-    public function deleteFavoriteAuthor($id){
+    public function deleteFavoriteAuthors($id){
         $sql =  $this->prepare("DELETE FROM favoriteAuthors      
 		WHERE id = :id");
              
@@ -408,9 +408,7 @@ class DB extends \SQLite3
         $sql->bindValue(':id', $id);
         $sql->execute();
         return $id;
-             
     }
-
     public function getCheckoutUser($id)
     {
         $sql =  $this->prepare("SELECT checkouts.id, usersId, maxAllowedDate, fine, bookMeta.title as booksName
