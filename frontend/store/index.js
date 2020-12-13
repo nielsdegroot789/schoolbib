@@ -17,6 +17,7 @@ export const state = () => ({
   adminSpecificBooks: {},
   specificBook: {},
   editModal: false,
+  deleteModal: false,
 });
 
 export const actions = {
@@ -135,7 +136,8 @@ export const actions = {
       .then((response) => commit('getAdminSpecificBooks', response.data));
   },
   deleteSpecificBook({ commit, state }) {
-    const id = state.specificBook.id;
+    const id = state.specificBook;
+    debugger;
     this.$axios
       .delete('http://localhost:8080/handleSpecificBook', {
         headers: { Auth: state.JWT },
@@ -150,8 +152,11 @@ export const actions = {
   toggleEditModal({ commit }, id) {
     commit('toggleEditModal', id);
   },
-  deleteBatch({ commit }, batch) {
-    commit('deleteBatch', batch);
+  toggleDeleteModal({ commit }) {
+    commit('toggleDeleteModal');
+  },
+  setDeleteId({ commit }, id) {
+    commit('setDeleteId', id);
   },
 };
 
@@ -233,6 +238,12 @@ export const mutations = {
     state.specificBook = state.adminSpecificBooks.find(
       (book) => book.id === id,
     );
+  },
+  toggleDeleteModal(state) {
+    state.deleteModal = !state.deleteModal;
+  },
+  setDeleteId(state, id) {
+    state.specificBook = id;
   },
 };
 

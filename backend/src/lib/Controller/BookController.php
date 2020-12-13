@@ -132,4 +132,13 @@ class BookController
         return $response;
     }
 
+    public function deleteBookMeta(Request $request, Response $response, array $args) {
+        $this->response = $response;
+        $id = $_GET[0];
+        $db = new DB();
+        $db->deleteBookMeta($id);
+        return $response;
+        
+    }
+
 }

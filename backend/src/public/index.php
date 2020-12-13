@@ -99,6 +99,7 @@ $app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':up
 
 // NEEDS TO BE LOGGED IN
 $app->group('/', function () use ($app) {
+$app->delete('/deleteBookMeta', \skoolBiep\Controller\BookController::class . ':deleteBookMeta'); 
 $app->post('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
 $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
 $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');

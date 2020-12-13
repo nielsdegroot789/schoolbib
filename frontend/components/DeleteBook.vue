@@ -8,7 +8,7 @@
           <button
             class="delete"
             aria-label="close"
-            @click="deleteBook"
+            @click="closeDeleteModal"
           ></button>
         </header>
         <section class="modal-card-body card-body">
@@ -25,26 +25,44 @@
 <script>
 export default {
   name: 'DeleteBook',
-  data() {
-    return {
-      active: false,
-    };
+  props: {
+    books: [Array],
   },
   computed: {
     active() {
       return this.$store.state.deleteModal;
     },
-    currentBook() {
-      return this.$store.getters.specificBook;
+    bookId() {
+      return this.$store.state.specificBook;
     },
   },
   methods: {
     deleteBook() {
-      this.$store.dispatch('deleteSpecificBook');
+      if (this.$route.name === 'manage-books') {
+        const id = this.bookId;
+        console.log(this.bookId);
+        this.$axios
+          .delete('http://localhost:8080/deleteBookMeta', {
+            headers: { Auth: localStorage.getItem('JWT') },
+            params: id,
+          })
+          .then((response) => {
+            this.updateBooks();
+          });
+      } else {
+        this.$store.dispatch('deleteSpecificBook');
+      }
       this.closeDeleteModal();
     },
-    toggleModal() {
-      this.active != this.active;
+    closeDeleteModal() {
+      this.$store.dispatch('toggleDeleteModal');
+    },
+    updateBooks() {
+      const newBooks = this.books.filter((books) => {
+        return books.id !== this.bookId;
+      });
+      this.$emit('setNewBookMeta', newBooks);
+      console.log(newBooks);
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentRole.role == 2">
+  <div v-if="currentRole.role == 2 || 3">
     <editBookModal />
     <deleteModal />
     <div class="section box">
@@ -37,7 +37,6 @@ export default {
   },
   data() {
     return {
-      deleteActive: false,
       editNewActive: false,
       specificBook: '',
       currentId: null,
@@ -66,10 +65,10 @@ export default {
   methods: {
     deleteSpecificBook(id) {
       this.$store.dispatch('deleteSpecificBook', id);
-      this.showDeleteModal();
     },
     showDeleteModal(id) {
-      this.$store.dispatch('toggleDeleteModal', id);
+      this.$store.dispatch('setDeleteId', id);
+      this.$store.dispatch('toggleDeleteModal');
     },
     showEditNewModal(id) {
       this.$store.dispatch('toggleEditModal', id);

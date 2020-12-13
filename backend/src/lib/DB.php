@@ -702,4 +702,10 @@ class DB extends \SQLite3
 
         return $result;
     }
+
+    public function deleteBookMeta($id) {
+        $sql = $this->prepare("delete from bookMeta where id = :id");
+        $sql->bindValue(':id', $id);
+        $sql->execute();
+    }
 }
