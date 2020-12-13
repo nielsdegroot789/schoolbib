@@ -705,7 +705,10 @@ class DB extends \SQLite3
     public function updateFines()
     {
         //Get all checkouts
-        $sql = $this->prepare("select * from checkouts where returnDateTime is null");
+        $sql = $this->prepare("
+        select checkouts.id, booksId, maxAllowedDate, users.email as email from checkouts
+        join users on usersId = users.id
+        where returnDateTime is null");
         $data = $sql->execute();
         $checkouts = array();
         while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
@@ -723,9 +726,9 @@ class DB extends \SQLite3
             //If book did not need to be returned yet
             if($returnUnix > $now){
                 $daysUntilHandin = ($returnUnix - $now) / (60 * 60 * 24);
-                if((int)$daysUntilHandin == 3 || (int)$daysUntilHandin == 1 )
+                if((int)$daysUntilHandin == 2 || (int)$daysUntilHandin == 1 )
                 {
-                    //Send reminder mail
+                    return [$daysUntilHandin, $checkout['email']];
                 }
                 //Book does not need to be return yet
                 continue;
@@ -738,6 +741,7 @@ class DB extends \SQLite3
             $sql->bindValue(":fine", $fine);
             $sql->bindValue(":checkoutId", $checkout['id']);
             $data = $sql->execute();
+            return -1;
         }
 
     }

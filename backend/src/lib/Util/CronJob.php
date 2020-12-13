@@ -15,11 +15,17 @@ class CronJob
 
     public function start(Request $request, Response $response, array $args)
     {
-       //List of executing cronjobs
-        
-        //Send reminder to those nearing expire date 3days ahead(once)
         $db = new DB();
-        $db->updateFines();
+        $res = $db->updateFines();
+        if ($res == -1) return $response;
+
+        //Send reminder mail
+        $daysUntilHandin = $res[0];
+        $address = $res[1];
+        $body = $this->container->get('twig')->render('returnReminder.twig', ['daysUntilHandin' => $daysUntilHandin]);
+        $subject = "Return reminder";
+        $this->container->get('mailer')->sendMail($address, $body, $subject);
+
         return $response;
     }
 }
