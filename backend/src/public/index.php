@@ -119,9 +119,6 @@ $app->get('/getFavoriteAuthors', \skoolBiep\Controller\UserController::class . '
 $app->post('/deleteFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':deleteFavoriteAuthors');
 
 
-
-
-
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
 
 $app->post('/addToFavoriteBookList', \skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');

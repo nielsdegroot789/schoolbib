@@ -137,7 +137,6 @@ export const actions = {
   },
   deleteSpecificBook({ commit, state }) {
     const id = state.specificBook;
-    debugger;
     this.$axios
       .delete('http://localhost:8080/handleSpecificBook', {
         headers: { Auth: state.JWT },

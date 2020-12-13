@@ -103,7 +103,6 @@ export default {
       this.$store.dispatch('toggleDeleteModal');
     },
     newBookMeta(newBookMeta) {
-      debugger;
       this.bookMeta = newBookMeta;
     },
   },
