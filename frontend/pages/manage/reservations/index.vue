@@ -129,6 +129,7 @@ export default {
 
       this.$axios
         .post('http://localhost:8080/saveCheckouts', {
+          headers: { Auth: localStorage.getItem('JWT') },
           usersId: object.usersId,
           booksId: object.booksId,
           checkoutDateTime,
