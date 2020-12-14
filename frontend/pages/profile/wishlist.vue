@@ -6,27 +6,41 @@
       </h1>
     </header>
     <table class="table table is-bordered is-hoverable is-fullwidth aboveBlock">
+      <thead>
+        <tr>
+          <th>Title</th>
+
+          <th>Pages</th>
+          <th>level</th>
+          <th>rating</th>
+          <th>cover</th>
+        </tr>
+      </thead>
       <tbody>
         <tr v-for="(item, index) in dataFavBook" :key="index">
           <td>{{ item.title }}</td>
-          <td>{{ item.isbnCode }}</td>
+
           <td>{{ item.totalPages }}</td>
+          <td>{{ item.readingLevel }}</td>
           <td>{{ item.rating }}</td>
           <td><img :src="item.sticker" alt="Book cover image" /></td>
         </tr>
       </tbody>
     </table>
-    <thead>
-      <tr>
-        <th>Authors U like</th>
-      </tr>
-    </thead>
     <table class="table table is-bordered is-hoverable is-fullwidth underBlock">
+      <thead>
+        <tr>
+          <th>Authors U like</th>
+        </tr>
+      </thead>
+
       <tbody>
         <tr v-for="(item, index) in dataFavAuthor" :key="index">
           <td>
             {{ item.name }}
-            <button class="deleteButton" @onclick="delFavAUth">Delete</button>
+            <button class="deleteButton" @click.stop="deleteFavAuth(item.id)">
+              Delete
+            </button>
           </td>
         </tr>
       </tbody>
@@ -83,15 +97,35 @@ export default {
       });
   },
   methods: {
-    delFavAUth(id) {
-      axios.post('http://localhost:8080/deleteReservationUser', {
-        params: {
-          data: this.UserId,
+    deleteFavAuth(id) {
+      console.log(id);
+      axios
+        .delete('http://localhost:8080/deleteFavoriteAuthors', {
           headers: {
             Auth: this.$store.state.JWT,
+            'Content-Type': 'application/x-www-form-urlencoded',
           },
-        },
-      });
+          data: { data: id },
+        })
+        .then((response) => {
+          console.log(response);
+          this.refreshBooks();
+        });
+    },
+    refreshBooks() {
+      axios
+        .get('http://localhost:8080/getFavoriteAuthors', {
+          params: {
+            data: this.UserId,
+            headers: {
+              Auth: this.$store.state.JWT,
+            },
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          this.dataFavAuthor = response.data;
+        });
     },
   },
 };

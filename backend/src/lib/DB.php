@@ -339,7 +339,7 @@ class DB extends \SQLite3
     }
     public function getFavoriteBooks($id)
     {
-        $sql = $this->prepare("SELECT usersId,bookMetaId, title, sticker
+        $sql = $this->prepare("SELECT usersId,bookMetaId, title, sticker, totalPages,rating,readingLevel
         FROM favoriteBooks
 		LEFT join bookMeta 
 		ON favoriteBooks.bookMetaId = bookMeta.Id
@@ -357,7 +357,7 @@ class DB extends \SQLite3
     
     public function getFavoriteAuthors($id)
     {
-        $sql = $this->prepare("SELECT usersId, authorsId, name
+        $sql = $this->prepare("SELECT favoriteAuthors.id, usersId, authorsId, name
         FROM favoriteAuthors
 		LEFT join authors 
 		ON favoriteAuthors.authorsId = authors.id
@@ -373,7 +373,7 @@ class DB extends \SQLite3
         return $data;
     }
 
-    public function deleteFavoriteAuthor($id){
+    public function deleteFavoriteAuthors($id){
         $sql =  $this->prepare("DELETE FROM favoriteAuthors      
 		WHERE id = :id");
              
@@ -408,9 +408,7 @@ class DB extends \SQLite3
         $sql->bindValue(':id', $id);
         $sql->execute();
         return $id;
-             
     }
-
     public function getCheckoutUser($id)
     {
         $sql =  $this->prepare("SELECT checkouts.id, usersId, maxAllowedDate, fine, bookMeta.title as booksName
@@ -707,5 +705,48 @@ class DB extends \SQLite3
         $sql = $this->prepare("delete from bookMeta where id = :id");
         $sql->bindValue(':id', $id);
         $sql->execute();
+    }
+    public function updateFines()
+    {
+        //Get all checkouts
+        $sql = $this->prepare("
+        select checkouts.id, booksId, maxAllowedDate, users.email as email from checkouts
+        join users on usersId = users.id
+        where returnDateTime is null");
+        $data = $sql->execute();
+        $checkouts = array();
+        while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
+            array_push($checkouts, $row);
+        }
+
+        foreach($checkouts as $checkout){
+            //Parse checkouts to Unix
+            $returnDateTrimmed = strstr($checkout['maxAllowedDate'], ',', true);      
+            $returnDateYearFirstNotation = date_create_from_format("d/m/Y", $returnDateTrimmed);     
+            $returnUnix = $returnDateYearFirstNotation->getTimestamp(); 
+            $date = new DateTime();
+            $now = $date->getTimestamp(); 
+
+            //If book did not need to be returned yet
+            if($returnUnix > $now){
+                $daysUntilHandin = ($returnUnix - $now) / (60 * 60 * 24);
+                if((int)$daysUntilHandin == 2 || (int)$daysUntilHandin == 1 )
+                {
+                    return [$daysUntilHandin, $checkout['email']];
+                }
+                //Book does not need to be return yet
+                continue;
+            }
+
+            //If book needed to be returned already
+            $daysLate = ($now - $returnUnix) / (60 * 60 * 24);
+            $fine = $daysLate * 0.5 + 1;
+            $sql = $this->prepare("update checkouts set fine = :fine where id = :checkoutId");
+            $sql->bindValue(":fine", $fine);
+            $sql->bindValue(":checkoutId", $checkout['id']);
+            $data = $sql->execute();
+            return -1;
+        }
+
     }
 }
