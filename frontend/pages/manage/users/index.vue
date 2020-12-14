@@ -1,94 +1,118 @@
 <template>
-  <div class="setup section">This is page for managing the actual users</div>
+  <div class="setup section">
+    <header class="level">
+      <h1 class="level-left title">Manage Users</h1>
+      <nuxt-link :to="{ path: '/manage/users/new' }" class="button level-right"
+        >new</nuxt-link
+      >
+    </header>
+    <table class="table table is-bordered is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Surname</th>
+          <th>Last name</th>
+          <th>age</th>
+          <th>email</th>
+          <th>send password reset</th>
+          <th>edit</th>
+          <th>delete</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <th>Id</th>
+          <th>Surname</th>
+          <th>Last name</th>
+          <th>age</th>
+          <th>email</th>
+          <th>send password reset</th>
+          <th>edit</th>
+          <th>delete</th>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr v-for="user in users" :key="user.id">
+          <td>{{ user.id }}</td>
+          <td>{{ user.surname }}</td>
+          <td>{{ user.lastname }}</td>
+          <td>{{ user.age }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <button class="button">send PW reset</button>
+          </td>
+          <td>
+            <nuxt-link
+              :to="{ path: '/manage/users/edit/' + user.id }"
+              class="button"
+            >
+              edit
+            </nuxt-link>
+          </td>
+          <td>
+            <button class="button">delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
 export default {
-  created() {
-    this.$axios
-      .get('http://localhost:8080/getReservations', {
-        headers: { Auth: localStorage.getItem('JWT') },
-      })
-      .then((response) => {
-        this.reservations = response.data;
-      });
-    this.$axios
-      .get('http://localhost:8080/getCheckouts', {
-        headers: { Auth: localStorage.getItem('JWT') },
-      })
-      .then((response) => {
-        this.checkouts = response.data;
-      });
+  data() {
+    return {
+      users: [],
+      loadingUsers: false,
+    };
   },
-
-  methods: {
-    checkNow() {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      const time =
-        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
-      const dateTime = date + ' ' + time;
-      this.DateNow = dateTime.toString();
-    },
-
-    EditMsg(object) {
-      this.isEditing = true;
-    },
-
-    saveCheckout(object) {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      this.checkoutDateTime = date.toString();
-
-      const inTwoWeeks = new Date();
-      const dateInTwoWeeks =
-        inTwoWeeks.getFullYear() +
-        '-' +
-        (inTwoWeeks.getMonth() + 1) +
-        '-' +
-        (inTwoWeeks.getDate() + 14);
-      this.maxAllowedDate = dateInTwoWeeks.toString();
-      this.$axios
-        .post('http://localhost:8080/saveCheckouts', {
-          usersId: object.usersId,
-          booksId: object.booksId,
-          checkoutDateTime: this.checkoutDateTime,
-          returnDateTime: '',
-          maxAllowedDate: this.maxAllowedDate,
-          fine: 0,
-          isPaid: '',
-        })
-        .then(function (response) {});
-    },
-
-    returnCheckouts(object) {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      this.returnDateTime = date.toString();
-      this.fine = 0;
-      this.$axios
-        .post('http://localhost:8080/returnCheckouts', {
-          returnDateTime: object.returnDateTime,
-        })
-        .then(function (response) {});
-    },
+  computed: {},
+  mounted() {
+    this.loadingUsers = true;
+    this.$axios
+      .get('http://localhost:8080/getAllUsers', {
+        headers: {
+          Auth: this.$store.state.JWT,
+        },
+      })
+      .then((response) => {
+        this.loadingUsers = false;
+        this.users = response.data;
+      });
   },
 };
 </script>
 
-<style></style>
+<style>
+.setup {
+  margin: 0 5%;
+  box-sizing: border-box;
+  height: 100%;
+  overflow-x: auto;
+}
+
+.links {
+  padding-top: 15px;
+}
+
+.booksContainer:nth-child(odd) {
+  background-color: lightgray;
+}
+
+.headerContainer {
+  display: grid;
+  grid-template-columns: repeat(11, calc(90% / 11)) 5% 5%;
+  justify-items: center;
+  align-items: center;
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.booksContainer {
+  display: grid;
+  grid-template-columns: repeat(11, calc(90% / 11)) 5% 5%;
+  justify-items: center;
+  align-items: center;
+  margin: 5px 0;
+}
+</style>
