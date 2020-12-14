@@ -32,18 +32,18 @@
         </tr>
       </tfoot>
       <tbody>
-        <tr v-for="book in bookMeta" :key="book.id">
-          <td>{{ book.id }}</td>
-          <td>{{ book.surname }}</td>
-          <td>{{ book.lastname }}</td>
-          <td>{{ book.age }}</td>
-          <td>{{ book.email }}</td>
+        <tr v-for="user in users" :key="user.id">
+          <td>{{ user.id }}</td>
+          <td>{{ user.surname }}</td>
+          <td>{{ user.lastname }}</td>
+          <td>{{ user.age }}</td>
+          <td>{{ user.email }}</td>
           <td>
             <button class="button">send PW reset</button>
           </td>
           <td>
             <nuxt-link
-              :to="{ path: '/manage/users/edit/' + book.id }"
+              :to="{ path: '/manage/users/edit/' + user.id }"
               class="button"
             >
               edit
@@ -63,15 +63,20 @@ export default {
   data() {
     return {
       users: [],
+      loadingUsers: false,
     };
   },
   computed: {},
   mounted() {
+    this.loadingUsers = true;
     this.$axios
-      .get('http://localhost:8080/getUsers', {
-        headers: { Auth: this.$store.JWT },
+      .get('http://localhost:8080/getAllUsers', {
+        headers: {
+          Auth: this.$store.state.JWT,
+        },
       })
       .then((response) => {
+        this.loadingUsers = false;
         this.users = response.data;
       });
   },

@@ -108,7 +108,6 @@ $app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class 
 $app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
 $app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
 $app->post('/saveNewCheckout', \skoolBiep\Controller\UserController::class . ':savenewCheckout');
-})->add($checkLoggedInMW);
 
 $app->get('/getCheckoutUser', \skoolBiep\Controller\UserController::class . ':getCheckoutUser');
 $app->get('/getReservationUser', \skoolBiep\Controller\UserController::class . ':getReservationUser');
@@ -122,6 +121,7 @@ $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . '
 $app->post('/addToFavoriteBookList', \skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 $app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
+})->add($checkLoggedInMW);
 
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
     throw new HttpNotFoundException($request);
@@ -131,7 +131,7 @@ $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
     return $response
         ->withHeader('Access-Control-Allow-Origin', '*')
-        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, Auth')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, Auth, Header')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 
