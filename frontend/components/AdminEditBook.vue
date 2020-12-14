@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentRole.role == 2 || 3">
+  <div v-if="currentRole.role == 2 || currentRole.role == 3">
     <editBookModal />
     <deleteModal />
     <div class="section box">
