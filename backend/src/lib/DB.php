@@ -56,7 +56,7 @@ class DB extends \SQLite3
         }
 
         $sql .= " limit :limit";
-        $sql .= " offset :offset * :limit";
+        $sql .= " offset :offset";
 
         $query = $this->prepare($sql);
 
@@ -91,9 +91,31 @@ class DB extends \SQLite3
 
         return $data;
     }
+
+    public function getBookMetaFromId($id){
+        $sql = "select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel,
+		authors.name as authors, publishers.name as publishers,  group_concat(categories.name, ', ') as categories from bookMeta
+		join authors on authors.id = bookMeta.authorsId
+		join publishers on publishers.id = bookMeta.publishersId
+        join categoriesInBooks on bookMeta.id  = categoriesInBooks.bookMetaId
+        join categories on categories.id = categoriesInBooks.categoriesId where bookMeta.id = :id ";
+        $query = $this->prepare($sql);
+        $query->bindValue(':id', (int)$id);
+        $res = $query->execute();
+
+        $data = array();
+        $translator = new TranslateReadingLevel();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            $row["readingLevel"] = $translator($row["readingLevel"]);
+            array_push($data, $row);
+        }
+        
+        return $data;
+    }
+
     public function getBookMetaCount()
     {
-        $sql = "select count(id) FROM bookMeta";
+        $sql = "select count(id) FROM bookMeta ";
 
         $res = $this->query($sql);
 
@@ -157,9 +179,10 @@ class DB extends \SQLite3
             $sql = $this->prepare('select id from bookMeta where isbnCode = :isbn');
             $sql->bindValue(':isbn', $isbn);
             $res = $sql->execute();
-            if ($sql->execute()) {
-                //This bookMeta already exists in the database.
-                throw new Exception("This bookMeta already exists in the database under id " . $res->fetchArray(SQLITE3_ASSOC));
+            // needs work still
+            if (false) {
+                //TODO This bookMeta already exists in the database. this does not work
+                //throw new Exception("This bookMeta already exists in the database under id " . $res->fetchArray(SQLITE3_ASSOC));
             } else {
                 $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
                 values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
@@ -314,6 +337,96 @@ class DB extends \SQLite3
 
         return $status;
     }
+    public function getFavoriteBooks($id)
+    {
+        $sql = $this->prepare("SELECT usersId,bookMetaId, title, sticker, totalPages,rating,readingLevel
+        FROM favoriteBooks
+		LEFT join bookMeta 
+		ON favoriteBooks.bookMetaId = bookMeta.Id
+        where usersId = :id");
+        
+        $sql->bindvalue(':id', $id);
+        $res = $sql->execute();
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+        return $data;
+    }
+    
+    public function getFavoriteAuthors($id)
+    {
+        $sql = $this->prepare("SELECT favoriteAuthors.id, usersId, authorsId, name
+        FROM favoriteAuthors
+		LEFT join authors 
+		ON favoriteAuthors.authorsId = authors.id
+        where usersId = :id");
+
+        $sql->bindvalue(':id', $id);
+        $res = $sql->execute();
+
+        $data = array();
+        while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+            array_push($data, $row);
+        }
+        return $data;
+    }
+
+    public function deleteFavoriteAuthors($id){
+        $sql =  $this->prepare("DELETE FROM favoriteAuthors      
+		WHERE id = :id");
+             
+            $sql->bindvalue(':id', $id);
+            $sql->execute();
+    }
+
+    
+    public function getReservationUser($id)
+    {
+        $sql =  $this->prepare("SELECT reservations.id,  bookMeta.title as booksName
+        FROM reservations        
+		left join books on books.id = reservations.booksId
+		left join bookMeta on bookMeta.id = books.bookMetaId
+		WHERE accepted = 0 AND usersId = :id");
+             
+             $sql->bindvalue(':id', $id);
+             $res = $sql->execute();
+     
+             $data = array();
+             while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+                 array_push($data, $row);
+             }
+             return $data;
+    }
+    
+    public function deleteReservationUser($id)
+    {
+        $sql =  $this->prepare("DELETE FROM reservations      
+		WHERE id = :id");
+        
+        $sql->bindValue(':id', $id);
+        $sql->execute();
+        return $id;
+    }
+    public function getCheckoutUser($id)
+    {
+        $sql =  $this->prepare("SELECT checkouts.id, usersId, maxAllowedDate, fine, bookMeta.title as booksName
+        FROM checkouts        
+		left join books on books.id = checkouts.booksId
+		left join bookMeta on bookMeta.id = books.bookMetaId
+		WHERE usersId = :id
+		ORDER by checkouts.maxAllowedDate DESC");
+             
+             $sql->bindvalue(':id', $id);
+             $res = $sql->execute();
+     
+             $data = array();
+             while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+                 array_push($data, $row);
+             }
+             return $data;
+    }
 
     public function saveReservationsUser($usersId, $booksId, $reservationDateTime, $accepted)
     {
@@ -326,9 +439,7 @@ class DB extends \SQLite3
         $sql->bindValue(':reservationDateTime', $reservationDateTime, );
         $sql->bindValue(':accepted', $accepted, );
 
-        $status = $sql->execute();
-
-        return $status;
+        return $sql->execute() ? "Success" : "Error";
     }
 
     public function getReservations($limitNumber, $offsetNumber)
@@ -353,20 +464,44 @@ class DB extends \SQLite3
 
         return $data;
     }
+    
     public function acceptReservation($usersId, $booksId)
     {
 
-        $sql = "UPDATE reservations  SET accepted = 1 FROM reservation LEFT JOIN BookMeta on booksId WHERE bookId = $booksId AND usersId = $usersId AND bookTitle = $";
-        $res = $this->query($sql);
+        //TODO prevent SQL INJECTION!!! Not working SQL code in master?
+        $sql = $this->prepare("UPDATE reservations  SET accepted = 1 WHERE booksId = :booksId AND usersId = :usersId");
+        $sql->bindValue(':booksId', $usersId);
+        $sql->bindValue(':usersId', $booksId);
+        $res = $sql->execute();
 
         $data = array();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($data, $row);
         }
 
-        return $data;
+        $res = $status ? "Success" : "Failed";
+        return $res;
     }
-    public function saveCheckouts($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate, $fine, $isPaid)
+    public function saveCheckouts($usersId, $booksId, $checkoutDateTime, $maxAllowedDate)
+    {
+        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime, maxAllowedDate)
+        values (:usersId, :booksId, :checkoutDateTime, :maxAllowedDate)");
+
+        $sql->bindValue(':usersId', $usersId, );
+        $sql->bindValue(':booksId', $booksId, );
+        $sql->bindValue(':checkoutDateTime', $checkoutDateTime, );
+        $sql->bindValue(':maxAllowedDate', $maxAllowedDate, );
+
+        $status = $sql->execute();
+
+        $this->acceptReservation($usersId, $booksId);
+
+        $res = $status ? "Success" : "Failed";
+        return $res;
+
+    }
+
+    public function saveNewCheckout($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
     {
 
         $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate, fine, isPaid)
@@ -377,31 +512,12 @@ class DB extends \SQLite3
         $sql->bindValue(':checkoutDateTime', $checkoutDateTime, );
         $sql->bindValue(':returnDateTime', $returnDateTime, );
         $sql->bindValue(':maxAllowedDate', $maxAllowedDate, );
-        $sql->bindValue(':fine', $fine, );
-        $sql->bindValue(':isPaid', $isPaid, );
 
         $status = $sql->execute();
-
-        $this->acceptReservation($usersId, $booksId);
-
         return $status;
 
     }
-
-    // public function inStock()
-    // {
-
-    //     $sql = $this->prepare("select count booksId");
-
-    //     $res = $this->query($sql);
-
-    //     while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
-    //         array_push($data, $row);
-    //         }
-
-    //      return $data;
-    // }
-
+    
     public function getCheckouts($limitNumber, $offsetNumber)
     {
         $sql = "SELECT usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName
@@ -424,6 +540,7 @@ class DB extends \SQLite3
 
         return $data;
     }
+
 
     public function getProfilePageData($id)
     {
@@ -582,5 +699,54 @@ class DB extends \SQLite3
         }
 
         return $result;
+    }
+
+    public function deleteBookMeta($id) {
+        $sql = $this->prepare("delete from bookMeta where id = :id");
+        $sql->bindValue(':id', $id);
+        $sql->execute();
+    }
+    public function updateFines()
+    {
+        //Get all checkouts
+        $sql = $this->prepare("
+        select checkouts.id, booksId, maxAllowedDate, users.email as email from checkouts
+        join users on usersId = users.id
+        where returnDateTime is null");
+        $data = $sql->execute();
+        $checkouts = array();
+        while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
+            array_push($checkouts, $row);
+        }
+
+        foreach($checkouts as $checkout){
+            //Parse checkouts to Unix
+            $returnDateTrimmed = strstr($checkout['maxAllowedDate'], ',', true);      
+            $returnDateYearFirstNotation = date_create_from_format("d/m/Y", $returnDateTrimmed);     
+            $returnUnix = $returnDateYearFirstNotation->getTimestamp(); 
+            $date = new DateTime();
+            $now = $date->getTimestamp(); 
+
+            //If book did not need to be returned yet
+            if($returnUnix > $now){
+                $daysUntilHandin = ($returnUnix - $now) / (60 * 60 * 24);
+                if((int)$daysUntilHandin == 2 || (int)$daysUntilHandin == 1 )
+                {
+                    return [$daysUntilHandin, $checkout['email']];
+                }
+                //Book does not need to be return yet
+                continue;
+            }
+
+            //If book needed to be returned already
+            $daysLate = ($now - $returnUnix) / (60 * 60 * 24);
+            $fine = $daysLate * 0.5 + 1;
+            $sql = $this->prepare("update checkouts set fine = :fine where id = :checkoutId");
+            $sql->bindValue(":fine", $fine);
+            $sql->bindValue(":checkoutId", $checkout['id']);
+            $data = $sql->execute();
+            return -1;
+        }
+
     }
 }

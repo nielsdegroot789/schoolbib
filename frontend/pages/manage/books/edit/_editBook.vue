@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BookForm :book-data="bookData" @updateBookData="updateBookData" />
+    <BookForm :book-data="bookMeta" @updateBookData="updateBookData" />
   </div>
 </template>
 
@@ -12,24 +12,20 @@ export default {
   data() {
     return {
       ready: false,
-      bookData: {},
+      bookMeta: {},
     };
   },
-  computed: {
-    bookMeta() {
-      return this.$store.getters.getBookMetaById(
-        parseInt(this.$route.params.editBook),
-      );
-    },
-    books() {
-      return this.$store.getters.getBooksByBookMetaId(
-        parseInt(this.$route.params.editBook),
-      );
-    },
-  },
-  created() {
-    // check if book is already fetched
-    this.bookData = this.bookMeta[0];
+  mounted() {
+    this.$axios
+      .get('http://localhost:8080/getBookMetaFromId', {
+        params: { id: this.$route.params.editBook },
+        headers: {
+          Auth: this.$store.state.JWT,
+        },
+      })
+      .then((response) => {
+        this.bookMeta = response.data[0];
+      });
   },
   methods: {
     updateBookData(newDataObj) {

@@ -79,18 +79,25 @@
       height: 2rem;
     }
     
-
-    input[type='submit'] {
+    .reset-btn--profile {
+      margin-left: 1rem;
+    }
+    input[type='submit'], .reset-btn--profile {
       border: 1px solid #6050a8;
       background-color: #7B5EC6;
-      padding: 15px 7px;
+      padding: 1rem 2rem;
       font-weight: bold;
       color: #fff;
       text-transform: uppercase;
       border-radius: 16px;
       margin-top:10px;
-      width: 9rem;
+      width: auto;
       cursor: pointer;
+      &:hover {
+        background-color:white;
+        color: #7B5EC6;
+      }
     }
+
   }
 }

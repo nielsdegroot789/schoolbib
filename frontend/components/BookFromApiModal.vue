@@ -61,9 +61,6 @@
           </div>
           <div class="buttonContainer level">
             <button class="button level-item" @click="useData()">Use</button>
-            <button class="button level-item" @click="useDataAndExit()">
-              Use and exit
-            </button>
             <button class="button level-item" @click="closeModal">
               Cancel
             </button>
@@ -95,11 +92,6 @@ export default {
     },
     useData(id) {
       this.$emit('closeModal', this.modalData, false);
-      // todo fill in book data in form
-    },
-    useDataAndExit(id) {
-      this.$emit('closeModal', this.modalData, true);
-      // todo fill book data, save and return to main crud screen?
     },
   },
 };

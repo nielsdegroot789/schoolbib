@@ -5,12 +5,8 @@
       :modal-data="modalData"
       @closeModal="handleCloseModal"
     />
-    <FormulateForm
-      v-model="bookData"
-      :values="bookData"
-      class="section"
-      @submit="saveBook"
-    >
+
+    <FormulateForm v-model="currentBookData" class="section" @submit="saveBook">
       <FormulateInput v-if="currentBookData.id" type="hidden" name="id" />
       <FormulateInput
         label="isbn"
@@ -36,21 +32,23 @@
 
       <FormulateInput type="submit" label="Save" />
     </FormulateForm>
+
     <div class="possibleBookResults section">
       <div class="buttonContainer level">
         <button
           class="button is-large level-item"
-          @click="searchForBook({ isbn: currentBookData.isbnCode })"
+          @click="searchForBook({ isbn: bookMetaData.isbnCode })"
         >
           Search by isbn
         </button>
         <button
           class="button is-large level-item"
-          @click="searchForBook({ title: currentBookData.title })"
+          @click="searchForBook({ title: bookMetaData.title })"
         >
           Search by title
         </button>
       </div>
+
       <div v-if="showError" class="notification is-danger">
         <button class="delete" @click="closeError"></button>
         Make sure that the field is filled in correctly!
@@ -92,16 +90,27 @@ export default {
       modalData: {},
       shouldShowModal: false,
       showError: false,
+      bookMetaData: Object,
     };
   },
   computed: {
-    currentBookData() {
-      return this.bookData;
+    currentBookData: {
+      get() {
+        return this.bookData;
+      },
+      set(newValue) {
+        this.bookMetaData = newValue;
+      },
     },
   },
   methods: {
     saveBook(data) {
-      this.$store.dispatch('saveBook', data);
+      this.$axios({
+        method: 'POST',
+        url: 'http://localhost:8080/saveBook',
+        headers: { Auth: this.$store.state.JWT },
+        data,
+      });
     },
 
     searchForBook(searchObj) {

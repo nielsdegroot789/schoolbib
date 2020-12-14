@@ -1,5 +1,6 @@
 <template>
   <div class="setup section">
+    <deleteModal :books="bookMeta" @setNewBookMeta="newBookMeta" />
     <header class="level">
       <h1 class="level-left title">Manage Books</h1>
       <nuxt-link :to="{ path: '/manage/books/new' }" class="button level-right"
@@ -63,9 +64,9 @@
             </nuxt-link>
           </td>
           <td>
-            <nuxt-link :to="/deleteBook/ + book.id" class="button"
-              >delete</nuxt-link
-            >
+            <button class="button" @click="toggleDeleteModal(book.id)">
+              delete
+            </button>
           </td>
         </tr>
       </tbody>
@@ -74,13 +75,35 @@
 </template>
 
 <script>
+import deleteModal from '~/components/deleteBook';
 export default {
-  data() {
-    return {};
+  components: {
+    deleteModal,
   },
-  computed: {
-    bookMeta() {
-      return this.$store.state.bookMeta;
+  data() {
+    return {
+      bookMeta: [],
+    };
+  },
+  mounted() {
+    this.$axios
+      .get('http://localhost:8080/getBookMeta', {
+        headers: { Auth: this.$store.JWT },
+      })
+      .then((response) => {
+        this.bookMeta = response.data;
+      });
+  },
+  created() {
+    this.$store.dispatch('getBookMeta');
+  },
+  methods: {
+    toggleDeleteModal(id) {
+      this.$store.dispatch('setDeleteId', id);
+      this.$store.dispatch('toggleDeleteModal');
+    },
+    newBookMeta(newBookMeta) {
+      this.bookMeta = newBookMeta;
     },
   },
 };

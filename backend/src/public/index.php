@@ -1,10 +1,4 @@
 <?php
-
-header("Access-Control-Allow-Origin: *");
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
-header("Access-Control-Allow-Headers: *");
-header("Content-Type: Application/json");
-
 use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -16,6 +10,8 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Slim\Exception\NotFoundException;
+
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -51,7 +47,7 @@ $app = AppFactory::create();
 $app->add(TwigMiddleware::createFromContainer($app));
 
 $checkLoggedInMW = function ($request, $handler) {
-    $authHeader = $request->getHeader('Authorization');
+    $authHeader = $request->getHeader('Auth');
 
     $response = $handler->handle($request);
 
@@ -75,13 +71,8 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
 
-//routes
-$app->get('/', function (Request $request, Response $response, $args) {
-    $response->getBody()->write('Hello ');
-    return $response;
-})->add($checkLoggedInMW);
-
 // DOES NOT NEED TO BE LOGGED IN
+$app->get('/executeCronJob', \skoolBiep\Util\CronJob::class . ':start');
 
 $app->get('/getBookMetaCount', \skoolBiep\Controller\BookController::class . ':getBookMetaCount');
 $app->post('/login', \skoolBiep\Controller\UserController::class . ':login');
@@ -91,32 +82,56 @@ $app->post('/resetPassword', \skoolBiep\Controller\UserController::class . ':res
 
 $app->get('/getBooks', \skoolBiep\Controller\BookController::class . ':getBooks');
 $app->get('/getBookMeta', \skoolBiep\Controller\BookController::class . ':getBookMeta');
+$app->get('/getBookMetaFromId', \skoolBiep\Controller\BookController::class . ':getBookMetaFromId');
 $app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':getFilterResults');
+$app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
+$app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':updatePassword');
+
+// $app->map(['POST', 'DELETE'], '/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
+
+
+
+// $app->post('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
+
 
 // NEEDS TO BE LOGGED IN
-$app->group('/',function () use ($app) {
+$app->group('/', function () use ($app) {
+$app->delete('/deleteBookMeta', \skoolBiep\Controller\BookController::class . ':deleteBookMeta'); 
+$app->post('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
 $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
 $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
 $app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
+$app->delete('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
 $app->map(['POST', 'DELETE', 'PUT'], '/handleSpecificBook', \skoolBiep\Controller\UserController::class . ':handleSpecificBook');
 $app->get('/getAdminSpecificBooks', \skoolBiep\Controller\UserController::class . ':getAdminSpecificBooks');
 $app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':saveReservationsUser');
 $app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
 $app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
+$app->post('/saveNewCheckout', \skoolBiep\Controller\UserController::class . ':savenewCheckout');
+})->add($checkLoggedInMW);
 
-$app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
+$app->get('/getCheckoutUser', \skoolBiep\Controller\UserController::class . ':getCheckoutUser');
+$app->get('/getReservationUser', \skoolBiep\Controller\UserController::class . ':getReservationUser');
+$app->get('/getFavoriteBooks', \skoolBiep\Controller\UserController::class . ':getFavoriteBooks');
+$app->get('/getFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':getFavoriteAuthors');
+$app->delete('/deleteFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':deleteFavoriteAuthors');
+
+
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
-$app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':updatePassword');
+
 $app->post('/addToFavoriteBookList', \skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 $app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
-})->add($checkLoggedInMW);
+
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+    throw new HttpNotFoundException($request);
+});
 
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
     return $response
         ->withHeader('Access-Control-Allow-Origin', '*')
-        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, Auth')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 

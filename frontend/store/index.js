@@ -18,20 +18,15 @@ export const state = () => ({
   specificBook: {},
   editModal: false,
   deleteModal: false,
-  autoCompleteResults: [],
-  categoryList: [],
-  authorList: [],
-  titleList: [],
-  batches: [],
-  isAdmin: false,
-  isStudent: false,
 });
 
 export const actions = {
-  async getBookMeta({ commit }, { filters }) {
-    const params = {};
-    if (filters['book-name']) {
-      params.title = filters['book-name'];
+  async getBookMeta({ commit, state }, { filters }) {
+    const params = {
+      limit: state.limit,
+    };
+    if (filters.pageNumber) {
+      params.offset = (filters.pageNumber - 1) * state.limit;
     }
     if (filters['filter-category']) {
       params.categories = filters['filter-category'];
@@ -39,11 +34,11 @@ export const actions = {
     if (filters['filter-authors']) {
       params.authors = filters['filter-authors'];
     }
+    console.log(params);
     try {
       const books = await this.$axios({
         method: 'GET',
         url: 'http://localhost:8080/getBookMeta',
-        headers: { Authorization: `Bearer test` },
         params,
       });
       commit('getBookMeta', books.data);
@@ -54,7 +49,9 @@ export const actions = {
   getBookMetaCount(context) {
     this.$axios
       .get('http://localhost:8080/getBookMetaCount')
-      .then((response) => context.commit('getBookMetaCount', response.data));
+      .then((response) =>
+        context.commit('getBookMetaCount', response.data[0]['count(id)']),
+      );
   },
   getBooks(context) {
     this.$axios
@@ -68,9 +65,11 @@ export const actions = {
         context.commit('getFrontPageNotification', response.data),
       );
   },
-  saveBook(context, payload) {
+  saveBook({ state }, context, payload) {
     this.$axios
-      .post('http://localhost:8080/saveBook', payload)
+      .post('http://localhost:8080/saveBook', payload, {
+        headers: { Auth: state.JWT },
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -106,15 +105,23 @@ export const actions = {
       .get('http://localhost:8080/getReservation')
       .then((response) => context.commit('getReservation', response.data));
   },
-  getProfilePageData({ commit }, data) {
+  getProfilePageData({ commit, store }, data) {
     console.log(data);
     this.$axios
-      .get('http://localhost:8080/getProfilePageData', {})
+      .get('http://localhost:8080/getProfilePageData', {
+        headers: {
+          Auth: store.JWT,
+        },
+      })
       .then((response) => commit('handleProfileData', response));
   },
-  getAllUsers({ commit }) {
+  getAllUsers({ commit, state }) {
     this.$axios
-      .get('http://localhost:8080/getAllUsers')
+      .get('http://localhost:8080/getAllUsers', {
+        headers: {
+          Auth: state.JWT,
+        },
+      })
       .then((response) => commit('setAllUsers', response.data));
   },
   openEmailModal({ commit }) {
@@ -123,14 +130,16 @@ export const actions = {
   getAdminSpecificBooks({ commit }, bookId) {
     this.$axios
       .get('http://localhost:8080/getAdminSpecificBooks', {
+        headers: { Auth: localStorage.getItem('JWT') },
         params: { id: bookId },
       })
       .then((response) => commit('getAdminSpecificBooks', response.data));
   },
   deleteSpecificBook({ commit, state }) {
-    const id = state.specificBook.id;
+    const id = state.specificBook;
     this.$axios
       .delete('http://localhost:8080/handleSpecificBook', {
+        headers: { Auth: state.JWT },
         data: { userId: id },
       })
       .then(() => commit('deleteSpecificBook', id));
@@ -142,30 +151,11 @@ export const actions = {
   toggleEditModal({ commit }, id) {
     commit('toggleEditModal', id);
   },
-  toggleDeleteModal({ commit }, id) {
-    commit('toggleDeleteModal', id);
+  toggleDeleteModal({ commit }) {
+    commit('toggleDeleteModal');
   },
-  getAutoCompleteResults({ commit }, search) {
-    if (search.length === 0) {
-      return commit('makeEmpty');
-    }
-    const params = {
-      searchVal: search,
-    };
-    this.$axios({
-      method: 'GET',
-      url: 'http://localhost:8080/getFilterResults',
-      params,
-    }).then((response) => {
-      commit('setAutoCompleteResults', response.data);
-    });
-  },
-  addBatch({ commit }, batch) {
-    commit('setBatch', batch);
-  },
-  deleteBatch({ commit }, batch) {
-    console.log(batch);
-    commit('deleteBatch', batch);
+  setDeleteId({ commit }, id) {
+    commit('setDeleteId', id);
   },
 };
 
@@ -204,12 +194,6 @@ export const mutations = {
     state.currentUser.role = JSON.parse(atob(array[1])).role;
     state.currentUser.signature = array[2];
   },
-  isAdmin: (state) => {
-    state.isAdmin = true;
-  },
-  isStudent: (state) => {
-    state.isStudent = true;
-  },
   showLoginError(state) {
     state.showLoginError = true;
   },
@@ -220,17 +204,6 @@ export const mutations = {
     this.$router.push('/');
     state.JWT = null;
     state.currentUser = {};
-  },
-  CheckUserRole(state) {
-    switch (state.currentRole) {
-      case 1:
-        state.isStudent = true;
-        break;
-      case 2:
-        state.isAdmin = true;
-        break;
-    }
-    return false;
   },
   getReservations(state, reservation) {
     state.reservation = reservation;
@@ -265,46 +238,15 @@ export const mutations = {
       (book) => book.id === id,
     );
   },
-  toggleDeleteModal(state, id) {
-    console.log(id);
+  toggleDeleteModal(state) {
     state.deleteModal = !state.deleteModal;
-    state.specificBook = state.adminSpecificBooks.find(
-      (book) => book.id === id,
-    );
   },
-  setAutoCompleteResults(state, data) {
-    state.authorList = data.filter((result) => {
-      return result.type === 'Authors';
-    });
-    state.categoryList = data.filter((result) => {
-      return result.type === 'Categories';
-    });
-    state.titleList = data.filter((result) => {
-      return result.type === 'Title';
-    });
-  },
-  makeEmpty(state) {
-    state.categoryList = '';
-    state.authorList = '';
-    state.titleList = '';
-  },
-  setBatch(state, batch) {
-    state.batches.push(batch);
-  },
-  deleteBatch(state, batch) {
-    state.batches = state.batches.filter((item) => {
-      return item.value !== batch;
-    });
+  setDeleteId(state, id) {
+    state.specificBook = id;
   },
 };
 
 export const getters = {
-  getBookMetaById: (state) => (id) => {
-    return state.bookMeta.filter((bookMeta) => bookMeta.id === id);
-  },
-  getBooksByBookMetaId: (state) => (id) => {
-    return state.books.filter((books) => books.bookMetaId === id);
-  },
   getNotification: (state) => {
     return state.notification;
   },
@@ -313,8 +255,5 @@ export const getters = {
   },
   getCurrentBook: (state) => {
     return state.specificBook;
-  },
-  getPageCount(state) {
-    return Math.ceil(state.totalBookMeta / state.limit);
   },
 };

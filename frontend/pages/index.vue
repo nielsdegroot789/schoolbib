@@ -60,12 +60,20 @@ export default {
       .get('http://localhost:8080/getNotification')
       .then((response) => {
         this.frontpageNotif = response.data;
-        this.showNotif = true;
+        if (this.$cookies.get('shownotif') === false) {
+          this.showNotif = false;
+        } else {
+          this.showNotif = true;
+        }
       });
   },
   methods: {
     hideNotification() {
       this.showNotif = false;
+      this.$cookies.set('shownotif', 'false', {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7,
+      });
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="currentRole.role == 2 || 3">
     <editBookModal />
     <deleteModal />
     <div class="section box">
@@ -37,27 +37,38 @@ export default {
   },
   data() {
     return {
-      deleteActive: false,
       editNewActive: false,
       specificBook: '',
       currentId: null,
+      currentRole: '',
     };
   },
   computed: {
     adminSpecificBooks() {
       return this.$store.state.adminSpecificBooks;
     },
+    currentUserRole() {
+      return this.$store.state.currentUser;
+    },
+  },
+  watch: {
+    currentUserRole(n, o) {
+      this.currentRole = n;
+    },
   },
   created() {
     this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);
   },
+  mounted() {
+    this.currentRole = this.$store.state.currentUser;
+  },
   methods: {
     deleteSpecificBook(id) {
       this.$store.dispatch('deleteSpecificBook', id);
-      this.showDeleteModal();
     },
     showDeleteModal(id) {
-      this.$store.dispatch('toggleDeleteModal', id);
+      this.$store.dispatch('setDeleteId', id);
+      this.$store.dispatch('toggleDeleteModal');
     },
     showEditNewModal(id) {
       this.$store.dispatch('toggleEditModal', id);

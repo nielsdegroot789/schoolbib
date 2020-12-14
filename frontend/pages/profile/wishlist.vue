@@ -1,30 +1,47 @@
 <template>
   <div class="setup section">
     <header class="level">
-      <h1 class="level-left title">Manage Users</h1>
-      <button @click="checkNow">Check now Time k</button>
-      {{ this.DateNow }}
+      <h1 class="level-left title">
+        Wishlits. this could be a carousel with books that are you favorite.
+      </h1>
     </header>
-    <h2>Reservations</h2>
-    <table class="table table is-bordered is-hoverable is-fullwidth">
+    <table class="table table is-bordered is-hoverable is-fullwidth aboveBlock">
       <thead>
         <tr>
-          <th>id_user</th>
-          <th>name_user</th>
-          <th>id_book</th>
-          <th>name_book</th>
-          <th>reservation date</th>
-          <th>Accept</th>
+          <th>Title</th>
+
+          <th>Pages</th>
+          <th>level</th>
+          <th>rating</th>
+          <th>cover</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in reservations" :key="index">
-          <td>{{ item.usersId }}</td>
-          <td>{{ item.usersName }}</td>
-          <td>{{ item.booksId }}</td>
-          <td>{{ item.booksName }}</td>
-          <td>{{ item.reservationDateTime }}</td>
-          <td class="checkoutBtn" @click="saveCheckout(item)">Accept!</td>
+        <tr v-for="(item, index) in dataFavBook" :key="index">
+          <td>{{ item.title }}</td>
+
+          <td>{{ item.totalPages }}</td>
+          <td>{{ item.readingLevel }}</td>
+          <td>{{ item.rating }}</td>
+          <td><img :src="item.sticker" alt="Book cover image" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table is-bordered is-hoverable is-fullwidth underBlock">
+      <thead>
+        <tr>
+          <th>Authors U like</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr v-for="(item, index) in dataFavAuthor" :key="index">
+          <td>
+            {{ item.name }}
+            <button class="deleteButton" @click.stop="deleteFavAuth(item.id)">
+              Delete
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -32,94 +49,103 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
-      reservations: '',
-      checkouts: '',
-      fine: '',
-      isEditing: false,
-      DateNow: '',
+      dataFavAuthor: '',
+      dataFavBook: '',
     };
   },
-  computed: {},
-
-  created() {
-    this.$axios
-      .get('http://localhost:8080/getReservations')
-      .then((response) => {
-        this.reservations = response.data;
-      });
-    this.$axios.get('http://localhost:8080/getCheckouts').then((response) => {
-      this.checkouts = response.data;
-    });
+  computed: {
+    UserId() {
+      return this.$store.state.currentUser;
+    },
+    JWT() {
+      return this.$store.state.JWT;
+    },
   },
 
-  methods: {
-    checkNow() {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      const time =
-        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
-      const dateTime = date + ' ' + time;
-      this.DateNow = dateTime.toString();
-    },
-    EditMsg(object) {
-      this.isEditing = true;
-    },
-    saveCheckout(object) {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      this.checkoutDateTime = date.toString();
+  created() {
+    console.log(this.UserId);
 
-      const inTwoWeeks = new Date();
-      const dateInTwoWeeks =
-        inTwoWeeks.getFullYear() +
-        '-' +
-        (inTwoWeeks.getMonth() + 1) +
-        '-' +
-        (inTwoWeeks.getDate() + 14);
-      this.maxAllowedDate = dateInTwoWeeks.toString();
-      this.$axios
-        .post('http://localhost:8080/saveCheckouts', {
-          usersId: object.usersId,
-          booksId: object.booksId,
-          checkoutDateTime: this.checkoutDateTime,
-          returnDateTime: '',
-          maxAllowedDate: this.maxAllowedDate,
-          fine: 0,
-          isPaid: '',
+    axios
+      .get('http://localhost:8080/getFavoriteAuthors', {
+        params: {
+          data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        this.dataFavAuthor = response.data;
+      });
+    axios
+      .get('http://localhost:8080/getFavoriteBooks', {
+        params: {
+          data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        this.dataFavBook = response.data;
+      });
+  },
+  methods: {
+    deleteFavAuth(id) {
+      console.log(id);
+      axios
+        .delete('http://localhost:8080/deleteFavoriteAuthors', {
+          headers: {
+            Auth: this.$store.state.JWT,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          data: { data: id },
         })
-        .then(function (response) {});
+        .then((response) => {
+          console.log(response);
+          this.refreshBooks();
+        });
+    },
+    refreshBooks() {
+      axios
+        .get('http://localhost:8080/getFavoriteAuthors', {
+          params: {
+            data: this.UserId,
+            headers: {
+              Auth: this.$store.state.JWT,
+            },
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          this.dataFavAuthor = response.data;
+        });
     },
   },
 };
 </script>
 
-<style>
-.titleColumn {
-  display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
-  font-weight: bold;
-}
-.usersContainer {
-  display: grid;
-  grid-template-columns: repeat(7, calc(90% / 7));
-  justify-items: center;
-  align-items: center;
-  margin: 5px 0;
+<style scoped>
+.deleteButton {
+  margin-left: 50px;
+  display: inline-block;
+  padding: 0.7em 1.4em;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 0.15em;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  color: #ffffff;
+  background-color: #3369ff;
+  box-shadow: inset 0 -0.6em 0 -0.35em rgba(0, 0, 0, 0.17);
+  text-align: center;
+  position: relative;
 }
 </style>

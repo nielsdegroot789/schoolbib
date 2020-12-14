@@ -71,7 +71,9 @@ export default {
   methods: {
     sendChanges() {
       this.$axios
-        .put('http://localhost:8080/handleSpecificBook', this.formValues)
+        .put('http://localhost:8080/handleSpecificBook', this.formValues, {
+          headers: { Auth: localStorage.getItem('JWT') },
+        })
         .then(() => {
           this.refreshBooks();
         })
@@ -84,7 +86,9 @@ export default {
     newBook() {
       this.formValues.bookMetaId = this.getBookMeta;
       this.$axios
-        .post('http://localhost:8080/handleSpecificBook', this.formValues)
+        .post('http://localhost:8080/handleSpecificBook', this.formValues, {
+          headers: { Auth: localStorage.getItem('JWT') },
+        })
         .then(() => {
           this.refreshBooks();
         });

@@ -20,28 +20,12 @@
         validation="required|email"
         input-class="input-style"
       />
-      <h2 class="profile-page-title">CHANGE PASSWORD</h2>
-      <FormulateInput
-        label="Current password"
-        type="password"
-        input-class="input-style"
-        validation="required"
-      />
-      <FormulateInput
-        label="New password"
-        input-class="input-style"
-        type="password"
-        name="password"
-        validation="required"
-      />
-      <FormulateInput
-        label="Confirm password"
-        type="password"
-        name="password_confirm"
-        validation="required|confirm"
-        validation-name="Password confirmation"
-      />
-      <input type="submit" label="Save Changes" />
+      <div>
+        <input type="submit" label="Save Changes" />
+        <button class="reset-btn--profile" @click="resetPassword">
+          Reset password
+        </button>
+      </div>
     </FormulateForm>
   </div>
 </template>
@@ -65,24 +49,20 @@ export default {
     UserId() {
       return this.$store.state.currentUser;
     },
-    JWT() {
-      return this.$store.state.JWT;
-    },
   },
   created() {
-    console.log(this.UserId);
     axios
       .get('http://localhost:8080/getProfilePageData', {
+        headers: { Auth: localStorage.getItem('JWT') },
         params: {
           data: this.UserId,
         },
       })
-      .then((response) =>
-        (this.formValues.firstName = response.data[0].surname)(
-          (this.formValues.lastName = response.data[0].lastname),
-          (this.formValues.email = response.data[0].email),
-        ),
-      );
+      .then((response) => {
+        this.formValues.firstName = response.data[0].surname;
+        this.formValues.lastName = response.data[0].lastname;
+        this.formValues.email = response.data[0].email;
+      });
   },
   methods: {
     selectPicture(event) {
@@ -100,7 +80,11 @@ export default {
         method: 'post',
         url: 'http://localhost:8080/saveProfileData',
         data: this.formValues,
+        headers: { Auth: this.$store.state.JWT },
       });
+    },
+    resetPassword() {
+      this.$axios.post('http://localhost:8080/resetPassword', this.formValues);
     },
   },
 };

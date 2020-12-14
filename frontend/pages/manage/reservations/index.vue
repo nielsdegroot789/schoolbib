@@ -15,14 +15,17 @@
           <th>Accept</th>
         </tr>
       </thead>
-      <tbody>
+      <div v-if="loadingReservation"><Loading /></div>
+      <tbody v-if="!loadingReservation">
         <tr v-for="(item, index) in reservations" :key="index">
           <td>{{ item.usersId }}</td>
           <td>{{ item.usersName }}</td>
           <td>{{ item.booksId }}</td>
           <td>{{ item.booksName }}</td>
           <td>{{ item.reservationDateTime }}</td>
-          <td class="checkoutBtn" @click="saveCheckout(item)">Accept!</td>
+          <td>
+            <button class="button" @click="saveCheckout(item)">Accept!</button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -41,20 +44,24 @@
           <th>checkoutDateTime</th>
           <th>maxAllowedDate</th>
           <th>fine</th>
+          <th>return</th>
         </tr>
       </thead>
-      <tbody>
+      <div v-if="loadingCheckouts"><Loading /></div>
+      <tbody v-if="!loadingCheckouts">
         <tr v-for="(item, index) in checkouts" :key="index">
           <td>{{ item.usersName }}</td>
           <td>{{ item.booksName }}</td>
           <td>{{ item.checkoutDateTime }}</td>
           <td>{{ item.maxAllowedDate }}</td>
           <td>{{ item.fine }}</td>
-          <td
-            class="checkoutBtn"
-            @click="returnCheckouts(item, index) in checkouts"
-          >
-            Paid - returned
+          <td>
+            <button
+              class="button"
+              @click="returnCheckouts(item, index) in checkouts"
+            >
+              Paid and returned
+            </button>
           </td>
         </tr>
       </tbody>
@@ -63,94 +70,89 @@
 </template>
 
 <script>
+import Loading from '~/components/Loading';
 export default {
+  components: { Loading },
   data() {
     return {
+      loadingReservation: false,
+      loadingCheckouts: false,
       reservations: '',
       checkouts: '',
       fine: '',
-      isEditing: false,
-      DateNow: '',
     };
   },
   computed: {},
 
   created() {
-    this.$axios
-      .get('http://localhost:8080/getReservations')
-      .then((response) => {
-        this.reservations = response.data;
-      });
-    this.$axios.get('http://localhost:8080/getCheckouts').then((response) => {
-      this.checkouts = response.data;
-    });
+    this.loadReservations();
+    this.loadCheckouts();
   },
 
   methods: {
-    checkNow() {
-      const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      const time =
-        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
-      const dateTime = date + ' ' + time;
-      this.DateNow = dateTime.toString();
+    loadReservations() {
+      this.loadingReservation = true;
+      this.$axios
+        .get('http://localhost:8080/getReservations', {
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        })
+        .then((response) => {
+          this.loadingReservation = false;
+          this.reservations = response.data;
+        });
     },
-
-    EditMsg(object) {
-      this.isEditing = true;
+    loadCheckouts() {
+      this.loadingCheckouts = true;
+      this.$axios
+        .get('http://localhost:8080/getCheckouts', {
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        })
+        .then((response) => {
+          this.loadingCheckouts = false;
+          this.checkouts = response.data;
+        });
     },
-
+    addDays(date, days) {
+      const result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    },
     saveCheckout(object) {
       const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      this.checkoutDateTime = date.toString();
+      const inTwoWeeks = this.addDays(today, 14);
+      const checkoutDateTime = today.toLocaleString('en-GB');
+      const maxAllowedDate = inTwoWeeks.toLocaleString('en-GB');
 
-      const inTwoWeeks = new Date();
-      const dateInTwoWeeks =
-        inTwoWeeks.getFullYear() +
-        '-' +
-        (inTwoWeeks.getMonth() + 1) +
-        '-' +
-        (inTwoWeeks.getDate() + 14);
-      this.maxAllowedDate = dateInTwoWeeks.toString();
       this.$axios
         .post('http://localhost:8080/saveCheckouts', {
+          headers: { Auth: localStorage.getItem('JWT') },
           usersId: object.usersId,
           booksId: object.booksId,
-          checkoutDateTime: this.checkoutDateTime,
-          returnDateTime: '',
-          maxAllowedDate: this.maxAllowedDate,
-          fine: 0,
-          isPaid: '',
+          checkoutDateTime,
+          maxAllowedDate,
         })
-        .then(function (response) {});
+        .then((response) => {
+          this.loadCheckouts();
+          this.loadReservations();
+        });
     },
 
     returnCheckouts(object) {
       const today = new Date();
-      const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-      this.returnDateTime = date.toString();
-      this.fine = 0;
+      const returnDateTime = today.toLocaleString('en-GB');
+
       this.$axios
         .post('http://localhost:8080/returnCheckouts', {
-          returnDateTime: object.returnDateTime,
+          returnDateTime,
         })
-        .then(function (response) {});
+        .then((response) => {
+          this.loadCheckouts();
+          this.loadReservations();
+        });
     },
   },
 };
