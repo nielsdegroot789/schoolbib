@@ -55,8 +55,8 @@ export default {
       search: '',
       timeoutId: null,
       filterTimeOut: null,
-      metaCountBooks: 0,
-      limit: 0,
+      metaCountBooks: 500,
+      limit: 20,
     };
   },
   computed: {
@@ -66,6 +66,9 @@ export default {
     filters() {
       return { filters: this.$route.query };
     },
+    filteredBookMeta() {
+      return this.$store.state.bookMeta;
+    },
   },
 
   watch: {
@@ -74,18 +77,6 @@ export default {
       handler() {
         this.$store.dispatch('getBookMeta', this.filters);
       },
-    },
-  },
-  created() {
-    this.getBookMetaCount();
-  },
-  methods: {
-    getBookMetaCount() {
-      this.$axios
-        .get('http://localhost:8080/getBookMetaCount')
-        .then(
-          (response) => (this.metaCountBooks = response.data[0]['count(id)']),
-        );
     },
   },
 };

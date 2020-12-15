@@ -24,6 +24,9 @@
           <td>{{ item.readingLevel }}</td>
           <td>{{ item.rating }}</td>
           <td><img :src="item.sticker" alt="Book cover image" /></td>
+          <button class="deleteButton" @click.stop="deleteFavBooks(item.id)">
+            Delete
+          </button>
         </tr>
       </tbody>
     </table>
@@ -109,10 +112,25 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          this.refreshAuth();
+        });
+    },
+    deleteFavBooks(id) {
+      console.log(id);
+      axios
+        .delete('http://localhost:8080/deleteFavoriteBooks', {
+          headers: {
+            Auth: this.$store.state.JWT,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          data: { data: id },
+        })
+        .then((response) => {
+          console.log(response);
           this.refreshBooks();
         });
     },
-    refreshBooks() {
+    refreshAuth() {
       axios
         .get('http://localhost:8080/getFavoriteAuthors', {
           params: {
@@ -125,6 +143,21 @@ export default {
         .then((response) => {
           console.log(response);
           this.dataFavAuthor = response.data;
+        });
+    },
+    refreshBooks() {
+      axios
+        .get('http://localhost:8080/getFavoriteBooks', {
+          params: {
+            data: this.UserId,
+            headers: {
+              Auth: this.$store.state.JWT,
+            },
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          this.dataFavBook = response.data;
         });
     },
   },

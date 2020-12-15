@@ -1,11 +1,11 @@
 <template>
-  <div v-if="pagesCount > 1" class="pagination-row">
-    <div class="pagination-row">
-      <n-link :to="{ path: 'books', query: { page: first } }"> first </n-link>
-
-      <n-link :to="{ path: 'books', query: { page: previous } }">
-        previous
+  <div v-if="pagesCount > 1">
+    <div class="pagination">
+      <n-link :to="{ path: 'books', query: { page: first } }">
+        &lt; &lt;
       </n-link>
+
+      <n-link :to="{ path: 'books', query: { page: previous } }"> &lt; </n-link>
 
       <n-link
         v-for="page in pageButtons"
@@ -15,9 +15,13 @@
         {{ page }}
       </n-link>
 
-      <n-link :to="{ path: 'books', query: { page: next } }"> next </n-link>
+      <n-link class="next" :to="{ path: 'books', query: { page: next } }">
+        &gt;
+      </n-link>
 
-      <n-link :to="{ path: 'books', query: { page: last } }"> last </n-link>
+      <n-link :to="{ path: 'books', query: { page: last } }">
+        &gt; &gt;
+      </n-link>
     </div>
   </div>
 </template>
@@ -92,6 +96,7 @@ export default {
         const payload = {
           pageNumber: this.pageNumber,
         };
+        console.log(this.pageNumber);
         this.$store.dispatch('getBookMeta', payload);
       },
     },
@@ -100,43 +105,17 @@ export default {
 </script>
 
 <style scoped>
-.disabled {
-  color: lightgrey;
-  pointer-events: none;
+.pagination {
+  display: inline-block;
+  margin: 20px;
 }
 
-.pagination-button {
-  padding: 8px;
-  margin: 2px;
-  border-radius: 3px;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-.pagination-button .active {
-  background-color: rgb(24, 250, 250);
-  cursor: auto;
-}
-
-.pagination-button .disabled {
-  cursor: auto;
-}
-.pagination-row {
-  display: flex;
-  width: 600px;
-  justify-content: space-between;
-  text-align: center;
-  margin-bottom: 50px;
-  height: 4rem;
-  padding-left: 1rem;
-  background-color: #f9f9f9;
+.pagination * {
   color: black;
-  width: 700px;
-  border: 0;
-  border-radius: 3px;
-  border-color: black;
-  border-width: 0.5px;
-  border-style: dotted;
-  padding: 10px;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  border: 0.5px rgb(119, 118, 118) solid;
+  border-radius: 0.5px;
 }
 </style>
