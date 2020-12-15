@@ -53,7 +53,9 @@ $checkLoggedInMW = function ($request, $handler) {
     }
     
     $jwtString = $authHeader[0];
-    $userId = (new ValidateJWT($jwtString))();
+    $jwtValidator = new ValidateJWT($jwtString);
+    $userId = $jwtValidator->getUserId();
+    $role = $jwtValidator->getUserRole();
     
     if (empty($userId)) {
         return $response->withStatus(401);
