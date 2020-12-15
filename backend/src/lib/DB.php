@@ -567,6 +567,19 @@ class DB extends \SQLite3
         return $res;
     }
 
+    public function createProfileData($surname, $lastname, $email)
+    {
+        $sql = $this->prepare("insert into users(surname, lastname, email, password) values (:surname, :lastname, :email, :tempPassword)");
+        $sql->bindValue(':surname', $surname);
+        $sql->bindValue(':lastname', $lastname);
+        $sql->bindValue(':email', $email);
+        $tempPassword="notBeenResetYet";
+        $sql->bindValue(':tempPassword', $tempPassword);
+
+        $res = $sql->execute();
+        return $res;
+    }
+
     public function getAllUsers()
     {
         $sql = 'select id,surname,lastname,age,email from users';

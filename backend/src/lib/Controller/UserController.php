@@ -325,12 +325,23 @@ class UserController
     public function saveProfileData(Request $request, Response $response, array $args) {
         $this->response = $response;
         $contents = json_decode(file_get_contents('php://input'), true);
-        $firstName = $contents['firstName'];
-        $lastName = $contents['lastName'];
-        $email = $contents['email'];
         $id = $contents['currentUser'];
-        $db = new DB();
-        $db->saveProfileData($id,$firstName,$lastName,$email);
+        if($id)
+        {
+            $firstName = $contents['firstName'];
+            $lastName = $contents['lastName'];
+            $email = $contents['email'];
+            $db = new DB();
+            $db->saveProfileData($id,$firstName,$lastName,$email);
+        }
+        else {
+            $firstName = $contents['firstName'];
+            $lastName = $contents['lastName'];
+            $email = $contents['email'];
+            $db = new DB();
+            $db->createProfileData($firstName,$lastName,$email);
+            //send email telling person to select forgot password option
+        }
         return $response;
     }
     public function getAllUsers(Request $request, Response $response, array $args) {

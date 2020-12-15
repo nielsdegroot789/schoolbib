@@ -17,19 +17,37 @@ export default {
   },
   mounted() {
     this.$axios
-      .get('getUserFromId', {
-        params: { id: this.$route.params.editUser },
-        headers: {
-          Auth: this.$store.state.JWT,
+      .get('getProfilePageData', {
+        headers: { Auth: localStorage.getItem('JWT') },
+        params: {
+          data: { id: +this.$route.params.editUser },
         },
       })
       .then((response) => {
         this.userMeta = response.data[0];
+        this.userMeta.id = this.$route.params.editUser;
       });
   },
   methods: {
     updateUserData(newDataObj) {
-      this.userData = newDataObj;
+      const headers = {
+        Auth: localStorage.getItem('JWT'),
+      };
+      const { id, surname, lastname, email } = newDataObj;
+      this.$axios
+        .post(
+          'saveProfileData',
+          {
+            currentUser: id,
+            firstName: surname,
+            lastName: lastname,
+            email,
+          },
+          {
+            headers,
+          },
+        )
+        .then((response) => {});
     },
   },
 };

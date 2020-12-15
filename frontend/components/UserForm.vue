@@ -11,17 +11,10 @@
       <FormulateInput
         label="last name"
         type="text"
-        name="last name"
+        name="lastname"
         validation="required"
       />
-      <FormulateInput label="age" type="text" name="age" />
-      <FormulateInput
-        label="role"
-        :options="{ 1: 'student', 2: 'admin', 3: 'arch' }"
-        default="1"
-        type="select"
-        name="role"
-      />
+      <FormulateInput label="email" type="text" name="email" />
       <FormulateInput type="submit" label="Save" />
     </FormulateForm>
 
@@ -61,13 +54,8 @@ export default {
     },
   },
   methods: {
-    saveUser(data) {
-      this.$axios({
-        method: 'POST',
-        url: 'saveUser',
-        headers: { Auth: this.$store.state.JWT },
-        data,
-      });
+    saveUser() {
+      this.$emit('updateUserData', this.userMetaData);
     },
 
     closeError() {
