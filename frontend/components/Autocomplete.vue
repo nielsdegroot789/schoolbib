@@ -27,8 +27,8 @@
     >
       <h1 v-if="titles.length" class="autocomplete-title">Title</h1>
       <nuxt-link
-        v-for="result in titles"
-        :key="result.id"
+        v-for="(result, index) in titles"
+        :key="'title' + index"
         :to="'/book/' + result.id"
         class="auto-complete-button"
       >
@@ -36,8 +36,8 @@
       </nuxt-link>
       <h1 v-if="categories.length" class="autocomplete-title">Categories</h1>
       <li
-        v-for="result in categories"
-        :key="result.id"
+        v-for="(result, index) in categories"
+        :key="'category' + index"
         class="auto-complete-button"
         @click="emitSelect(result.name, result.type)"
       >
@@ -45,8 +45,8 @@
       </li>
       <h1 v-if="authors.length" class="autocomplete-title">Authors</h1>
       <li
-        v-for="result in authors"
-        :key="result.id"
+        v-for="(result, index) in authors"
+        :key="'author' + index"
         class="auto-complete-button"
         @click="emitSelect(result.name, result.type)"
       >
