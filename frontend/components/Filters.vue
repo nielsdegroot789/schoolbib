@@ -119,21 +119,25 @@ export default {
       this.updateQuery();
     },
     loadSearchResult(label) {
-      this.$axios({
-        method: 'GET',
-        url: 'getFilterResults',
-        params: label,
-      }).then((response) => {
-        this.authorList = response.data.filter((book) => {
-          return book.type === 'Authors';
+      if (label !== '') {
+        this.$axios({
+          method: 'GET',
+          url: 'getFilterResults',
+          params: label,
+        }).then((response) => {
+          this.authorList = response.data.filter((book) => {
+            return book.type === 'Authors';
+          });
+          this.titleList = response.data.filter((book) => {
+            return book.type === 'Title';
+          });
+          this.categoryList = response.data.filter((book) => {
+            return book.type === 'Categories';
+          });
         });
-        this.titleList = response.data.filter((book) => {
-          return book.type === 'Title';
-        });
-        this.categoryList = response.data.filter((book) => {
-          return book.type === 'Categories';
-        });
-      });
+      } else {
+        this.emptyAutoList();
+      }
     },
     emptyAutoList() {
       this.authorList = '';
