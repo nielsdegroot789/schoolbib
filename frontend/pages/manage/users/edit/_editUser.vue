@@ -17,13 +17,14 @@ export default {
   },
   mounted() {
     this.$axios
-      .get('getUserFromId', {
-        params: { id: this.$route.params.editUser },
-        headers: {
-          Auth: this.$store.state.JWT,
+      .get('getProfilePageData', {
+        headers: { Auth: localStorage.getItem('JWT') },
+        params: {
+          data: { id: +this.$route.params.editUser },
         },
       })
       .then((response) => {
+        debugger;
         this.userMeta = response.data[0];
       });
   },

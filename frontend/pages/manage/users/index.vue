@@ -31,6 +31,7 @@
           <th>delete</th>
         </tr>
       </tfoot>
+      <div v-if="loadingUsers"><loading /></div>
       <tbody>
         <tr v-for="user in users" :key="user.id">
           <td>{{ user.id }}</td>
@@ -59,7 +60,10 @@
 </template>
 
 <script>
+import Loading from '~/components/Loading.vue';
+
 export default {
+  components: { Loading },
   data() {
     return {
       users: [],
@@ -72,7 +76,7 @@ export default {
     this.$axios
       .get('getAllUsers', {
         headers: {
-          Auth: this.$store.state.JWT,
+          Auth: localStorage.getItem('JWT'),
         },
       })
       .then((response) => {

@@ -11,17 +11,10 @@
       <FormulateInput
         label="last name"
         type="text"
-        name="last name"
+        name="lastname"
         validation="required"
       />
-      <FormulateInput label="age" type="text" name="age" />
-      <FormulateInput
-        label="role"
-        :options="{ 1: 'student', 2: 'admin', 3: 'arch' }"
-        default="1"
-        type="select"
-        name="role"
-      />
+      <FormulateInput label="email" type="text" name="email" />
       <FormulateInput type="submit" label="Save" />
     </FormulateForm>
 
