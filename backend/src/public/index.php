@@ -46,7 +46,8 @@ $app = AppFactory::create();
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::createFromContainer($app));
 
-$checkLoggedInMW = function ($request, $handler) {
+//LoggedInAsAdmin/arch
+$checkLoggedInAdminArchMW = function ($request, $handler) {
     $authHeader = $request->getHeader('Auth');
     if (empty($authHeader)) {
         return $response->withStatus(401);
@@ -56,7 +57,32 @@ $checkLoggedInMW = function ($request, $handler) {
     $jwtValidator = new ValidateJWT($jwtString);
     $userId = $jwtValidator->getUserId();
     $role = $jwtValidator->getUserRole();
+
+    //Check that student does not access admin stuff
+    // if(!($role == 2 || $role == 3)){
+    //     return $response->withStatus(401);
+    // }
     
+    if (empty($userId)) {
+        return $response->withStatus(401);
+    }
+    
+    $response = $handler->handle($request);
+    // $request->withAttribute('user', $user);
+    return $response;
+};
+
+// Basic logged in middleware
+$checkLoggedInMW = function ($request, $handler) {
+    $authHeader = $request->getHeader('Auth');
+    if (empty($authHeader)) {
+        return $response->withStatus(401);
+    }
+    
+    $jwtString = $authHeader[0];
+    $jwtValidator = new ValidateJWT($jwtString);
+    $userId = $jwtValidator->getUserId();
+   
     if (empty($userId)) {
         return $response->withStatus(401);
     }
