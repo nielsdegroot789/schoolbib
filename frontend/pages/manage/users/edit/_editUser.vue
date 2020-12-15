@@ -24,13 +24,30 @@ export default {
         },
       })
       .then((response) => {
-        debugger;
         this.userMeta = response.data[0];
+        this.userMeta.id = this.$route.params.editUser;
       });
   },
   methods: {
     updateUserData(newDataObj) {
-      this.userData = newDataObj;
+      const headers = {
+        Auth: localStorage.getItem('JWT'),
+      };
+      const { id, surname, lastname, email } = newDataObj;
+      this.$axios
+        .post(
+          'saveProfileData',
+          {
+            currentUser: id,
+            firstName: surname,
+            lastName: lastname,
+            email,
+          },
+          {
+            headers,
+          },
+        )
+        .then((response) => {});
     },
   },
 };

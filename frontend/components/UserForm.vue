@@ -54,13 +54,8 @@ export default {
     },
   },
   methods: {
-    saveUser(data) {
-      this.$axios({
-        method: 'POST',
-        url: 'saveUser',
-        headers: { Auth: this.$store.state.JWT },
-        data,
-      });
+    saveUser() {
+      this.$emit('updateUserData', this.userMetaData);
     },
 
     closeError() {
