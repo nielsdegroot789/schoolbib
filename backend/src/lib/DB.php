@@ -478,7 +478,7 @@ class DB extends \SQLite3
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($data, $row);
         }
-
+        
         $res = $status ? "Success" : "Failed";
         return $res;
     }

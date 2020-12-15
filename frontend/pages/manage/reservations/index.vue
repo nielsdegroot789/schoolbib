@@ -95,7 +95,7 @@ export default {
       this.$axios
         .get('http://localhost:8080/getReservations', {
           headers: {
-            Auth: this.$store.state.JWT,
+            Auth: localStorage.getItem('JWT'),
           },
         })
         .then((response) => {
@@ -108,7 +108,7 @@ export default {
       this.$axios
         .get('http://localhost:8080/getCheckouts', {
           headers: {
-            Auth: this.$store.state.JWT,
+            Auth: localStorage.getItem('JWT'),
           },
         })
         .then((response) => {
