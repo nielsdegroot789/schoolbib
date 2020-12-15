@@ -1,23 +1,23 @@
 <template>
   <div>
-    <BookForm :book-data="bookData" @updateBookData="updateBookData" />
+    <UserForm :user-data="userData" @updateUserData="updateUserData" />
   </div>
 </template>
 
 <script>
-import BookForm from '~/components/BookForm.vue';
+import UserForm from '~/components/UserForm.vue';
 export default {
   name: 'New',
-  components: { BookForm },
+  components: { UserForm },
   data() {
     return {
       ready: false,
-      bookData: {},
+      userData: {},
     };
   },
   methods: {
-    updateBookData(newDataObj) {
-      this.bookData = newDataObj;
+    updateUserData(newDataObj) {
+      this.userData = newDataObj;
     },
   },
 };
