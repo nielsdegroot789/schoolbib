@@ -70,7 +70,7 @@ export default {
   mounted() {
     this.loadingUsers = true;
     this.$axios
-      .get('http://localhost:8080/getAllUsers', {
+      .get('getAllUsers', {
         headers: {
           Auth: this.$store.state.JWT,
         },

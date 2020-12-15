@@ -57,8 +57,11 @@ export default {
   },
   methods: {
     saveCheckout(data) {
+      const headers = {
+        Auth: localStorage.getItem('JWT'),
+      };
       this.axios
-        .post('http://localhost:8080/getCheckouts', this.checkoutData)
+        .post('getCheckouts', this.checkoutData, { headers })
         .then((result) => {
           console.warn(result);
         });

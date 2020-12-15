@@ -55,17 +55,14 @@ export default {
     },
   },
   created() {
-    // todo create system that only loads this one for the first time until new notif is made
-    this.$axios
-      .get('http://localhost:8080/getNotification')
-      .then((response) => {
-        this.frontpageNotif = response.data;
-        if (this.$cookies.get('shownotif') === false) {
-          this.showNotif = false;
-        } else {
-          this.showNotif = true;
-        }
-      });
+    this.$axios.get('getNotification').then((response) => {
+      this.frontpageNotif = response.data;
+      if (this.$cookies.get('shownotif') === false) {
+        this.showNotif = false;
+      } else {
+        this.showNotif = true;
+      }
+    });
   },
   methods: {
     hideNotification() {

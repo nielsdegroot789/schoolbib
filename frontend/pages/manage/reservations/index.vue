@@ -93,7 +93,7 @@ export default {
     loadReservations() {
       this.loadingReservation = true;
       this.$axios
-        .get('http://localhost:8080/getReservations', {
+        .get('getReservations', {
           headers: {
             Auth: localStorage.getItem('JWT'),
           },
@@ -106,7 +106,7 @@ export default {
     loadCheckouts() {
       this.loadingCheckouts = true;
       this.$axios
-        .get('http://localhost:8080/getCheckouts', {
+        .get('getCheckouts', {
           headers: {
             Auth: localStorage.getItem('JWT'),
           },
@@ -116,6 +116,7 @@ export default {
           this.checkouts = response.data;
         });
     },
+
     addDays(date, days) {
       const result = new Date(date);
       result.setDate(result.getDate() + days);
@@ -127,27 +128,47 @@ export default {
       const checkoutDateTime = today.toLocaleString('en-GB');
       const maxAllowedDate = inTwoWeeks.toLocaleString('en-GB');
 
+      const headers = {
+        Auth: localStorage.getItem('JWT'),
+      };
+
       this.$axios
-        .post('http://localhost:8080/saveCheckouts', {
-          headers: { Auth: localStorage.getItem('JWT') },
-          usersId: object.usersId,
-          booksId: object.booksId,
-          checkoutDateTime,
-          maxAllowedDate,
-        })
+        .post(
+          'saveCheckouts',
+          {
+            usersId: object.usersId,
+            booksId: object.booksId,
+            checkoutDateTime,
+            maxAllowedDate,
+          },
+          {
+            headers,
+          },
+        )
         .then((response) => {
           this.loadCheckouts();
           this.loadReservations();
         });
     },
+
     returnCheckouts(object) {
       const today = new Date();
       const returnDateTime = today.toLocaleString('en-GB');
 
+      const headers = {
+        Auth: localStorage.getItem('JWT'),
+      };
+
       this.$axios
-        .post('http://localhost:8080/returnCheckouts', {
-          returnDateTime,
-        })
+        .post(
+          'returnCheckouts',
+          {
+            returnDateTime,
+          },
+          {
+            headers,
+          },
+        )
         .then((response) => {
           this.loadCheckouts();
           this.loadReservations();

@@ -42,7 +42,7 @@ export default {
         const id = this.bookId;
         console.log(this.bookId);
         this.$axios
-          .delete('http://localhost:8080/deleteBookMeta', {
+          .delete('deleteBookMeta', {
             headers: { Auth: localStorage.getItem('JWT') },
             params: id,
           })

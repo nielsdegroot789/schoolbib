@@ -82,7 +82,7 @@ export default {
   methods: {
     getBookMetaCount() {
       this.$axios
-        .get('http://localhost:8080/getBookMetaCount')
+        .get('getBookMetaCount')
         .then(
           (response) => (this.metaCountBooks = response.data[0]['count(id)']),
         );

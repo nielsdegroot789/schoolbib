@@ -63,7 +63,12 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/style-resources', '@nuxtjs/axios', '@nuxtjs/auth','cookie-universal-nuxt'],
+  modules: [
+    '@nuxtjs/style-resources',
+    '@nuxtjs/axios',
+    '@nuxtjs/auth',
+    'cookie-universal-nuxt',
+  ],
 
   auth: {
     strategies: {
@@ -89,7 +94,7 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   axios: {
-    baseURL: 'http://localhost:3000/api',
+    baseURL: 'http://localhost:8080',
   },
   build: {
     extend(config, ctx) {

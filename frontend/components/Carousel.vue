@@ -77,8 +77,7 @@ export default {
       const params = {};
       params.categories = this.categories[this.currentlyActive].value;
       this.$axios
-        .get('http://localhost:8080/getBookMeta', {
-          headers: { Authorization: `Bearer test` },
+        .get('getBookMeta', {
           params,
         })
         .then((response) => {

@@ -52,13 +52,11 @@ export default {
     };
   },
   created() {
-    this.$axios
-      .get('http://localhost:8080/getCockpitFooterData')
-      .then((response) => {
-        this.privacyPolicy = response.data[1].text;
-        this.openingHours = response.data[0].text;
-        this.contactInformation = response.data[2].text;
-      });
+    this.$axios.get('getCockpitFooterData').then((response) => {
+      this.privacyPolicy = response.data[1].text;
+      this.openingHours = response.data[0].text;
+      this.contactInformation = response.data[2].text;
+    });
   },
   methods: {
     setModalVisibility(bool) {

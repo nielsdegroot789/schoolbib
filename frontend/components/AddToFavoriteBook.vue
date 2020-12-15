@@ -34,11 +34,20 @@ export default {
   },
   methods: {
     addToFavoriteBookList() {
+      const headers = {
+        Auth: localStorage.getItem('JWT'),
+      };
       this.$axios
-        .post('http://localhost:8080/addToFavoriteBookList', {
-          usersId: this.currentUserId,
-          bookMetaId: this.$route.params.book,
-        })
+        .post(
+          'addToFavoriteBookList',
+          {
+            usersId: this.currentUserId,
+            bookMetaId: this.$route.params.book,
+          },
+          {
+            headers,
+          },
+        )
         .then(function (response) {});
     },
 

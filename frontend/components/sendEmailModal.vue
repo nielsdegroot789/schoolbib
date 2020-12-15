@@ -59,7 +59,7 @@ export default {
     successCloseModal() {
       this.$store.dispatch('openEmailModal');
       this.$axios
-        .post('http://localhost:8080/resetPassword', this.formValues)
+        .post('resetPassword', this.formValues)
         .then((response) =>
           this.$store.dispatch('addNotification', {
             type: 'success',

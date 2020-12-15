@@ -62,7 +62,7 @@ export default {
   created() {
     console.log(this.UserId);
     axios
-      .get('http://localhost:8080/getCheckoutUser', {
+      .get('getCheckoutUser', {
         params: {
           data: this.UserId,
           headers: {
@@ -75,7 +75,7 @@ export default {
         this.dataCheck = response.data;
       });
     axios
-      .get('http://localhost:8080/getReservationUser', {
+      .get('getReservationUser', {
         params: {
           data: this.UserId,
           headers: {
@@ -93,7 +93,7 @@ export default {
     deleteRes(id) {
       console.log(id);
       axios
-        .delete('http://localhost:8080/deleteReservationUser', {
+        .delete('deleteReservationUser', {
           headers: {
             Auth: this.$store.state.JWT,
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -107,7 +107,7 @@ export default {
     },
     refreshBooks() {
       axios
-        .get('http://localhost:8080/getReservationUser', {
+        .get('getReservationUser', {
           params: {
             data: this.UserId,
             headers: {

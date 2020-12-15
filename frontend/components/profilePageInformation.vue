@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   name: 'Profileinformation',
   data() {
@@ -51,8 +50,8 @@ export default {
     },
   },
   created() {
-    axios
-      .get('http://localhost:8080/getProfilePageData', {
+    this.$axios
+      .get('getProfilePageData', {
         headers: { Auth: localStorage.getItem('JWT') },
         params: {
           data: this.UserId,
@@ -76,15 +75,15 @@ export default {
     },
     postData() {
       this.formValues.currentUser = this.UserId.id;
-      axios({
+      this.axios({
         method: 'post',
-        url: 'http://localhost:8080/saveProfileData',
+        url: 'saveProfileData',
         data: this.formValues,
         headers: { Auth: this.$store.state.JWT },
       });
     },
     resetPassword() {
-      this.$axios.post('http://localhost:8080/resetPassword', this.formValues);
+      this.$axios.post('resetPassword', this.formValues);
     },
   },
 };

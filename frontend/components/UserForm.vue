@@ -64,7 +64,7 @@ export default {
     saveUser(data) {
       this.$axios({
         method: 'POST',
-        url: 'http://localhost:8080/saveUser',
+        url: 'saveUser',
         headers: { Auth: this.$store.state.JWT },
         data,
       });

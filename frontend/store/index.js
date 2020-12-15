@@ -38,7 +38,7 @@ export const actions = {
     try {
       const books = await this.$axios({
         method: 'GET',
-        url: 'http://localhost:8080/getBookMeta',
+        url: 'getBookMeta',
         params,
       });
       commit('getBookMeta', books.data);
@@ -48,26 +48,26 @@ export const actions = {
   },
   getBookMetaCount(context) {
     this.$axios
-      .get('http://localhost:8080/getBookMetaCount')
+      .get('getBookMetaCount')
       .then((response) =>
         context.commit('getBookMetaCount', response.data[0]['count(id)']),
       );
   },
   getBooks(context) {
     this.$axios
-      .get('http://localhost:8080/getBooks')
+      .get('getBooks')
       .then((response) => context.commit('getBooks', response.data));
   },
   getFrontPageNotification(context) {
     this.$axios
-      .get('http://localhost:8080/getNotification')
+      .get('getNotification')
       .then((response) =>
         context.commit('getFrontPageNotification', response.data),
       );
   },
   saveBook({ state }, context, payload) {
     this.$axios
-      .post('http://localhost:8080/saveBook', payload, {
+      .post('saveBook', payload, {
         headers: { Auth: state.JWT },
       })
       .catch((error) => {
@@ -84,7 +84,7 @@ export const actions = {
 
   login(context, payload) {
     this.$axios
-      .post('http://localhost:8080/login', payload)
+      .post('login', payload)
       .then((response) => {
         localStorage.setItem('JWT', response.data);
         context.commit('setJWTtoken', response.data);
@@ -102,13 +102,13 @@ export const actions = {
   },
   getReservation(context) {
     this.$axios
-      .get('http://localhost:8080/getReservation')
+      .get('getReservation')
       .then((response) => context.commit('getReservation', response.data));
   },
   getProfilePageData({ commit, store }, data) {
     console.log(data);
     this.$axios
-      .get('http://localhost:8080/getProfilePageData', {
+      .get('getProfilePageData', {
         headers: {
           Auth: store.JWT,
         },
@@ -117,7 +117,7 @@ export const actions = {
   },
   getAllUsers({ commit, state }) {
     this.$axios
-      .get('http://localhost:8080/getAllUsers', {
+      .get('getAllUsers', {
         headers: {
           Auth: state.JWT,
         },
@@ -129,7 +129,7 @@ export const actions = {
   },
   getAdminSpecificBooks({ commit }, bookId) {
     this.$axios
-      .get('http://localhost:8080/getAdminSpecificBooks', {
+      .get('getAdminSpecificBooks', {
         headers: { Auth: localStorage.getItem('JWT') },
         params: { id: bookId },
       })
@@ -138,7 +138,7 @@ export const actions = {
   deleteSpecificBook({ commit, state }) {
     const id = state.specificBook;
     this.$axios
-      .delete('http://localhost:8080/handleSpecificBook', {
+      .delete('handleSpecificBook', {
         headers: { Auth: state.JWT },
         data: { userId: id },
       })

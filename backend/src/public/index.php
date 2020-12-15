@@ -48,20 +48,18 @@ $app->add(TwigMiddleware::createFromContainer($app));
 
 $checkLoggedInMW = function ($request, $handler) {
     $authHeader = $request->getHeader('Auth');
-
-    $response = $handler->handle($request);
-
     if (empty($authHeader)) {
         return $response->withStatus(401);
     }
-
+    
     $jwtString = $authHeader[0];
     $userId = (new ValidateJWT($jwtString))();
-
+    
     if (empty($userId)) {
         return $response->withStatus(401);
     }
-
+    
+    $response = $handler->handle($request);
     // $request->withAttribute('user', $user);
     return $response;
 };
@@ -127,7 +125,7 @@ $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
     return $response
         ->withHeader('Access-Control-Allow-Origin', '*')
-        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, Auth, Header')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Auth')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 

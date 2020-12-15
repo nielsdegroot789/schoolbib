@@ -47,19 +47,17 @@ export default {
   created() {
     const token = this.$route.query.token;
     console.log(token);
-    axios
-      .get('http://localhost:8080/checkToken', { params: token })
-      .then((response) => {
-        console.log(response);
-        this.tokenValid = response.data.message;
-        this.userId = response.data.userId;
-      });
+    axios.get('checkToken', { params: token }).then((response) => {
+      console.log(response);
+      this.tokenValid = response.data.message;
+      this.userId = response.data.userId;
+    });
   },
 
   methods: {
     resetPassword() {
       axios
-        .post('http://localhost:8080/updatePassword', {
+        .post('updatePassword', {
           password: this.password,
           id: this.userId,
         })

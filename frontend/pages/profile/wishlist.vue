@@ -70,7 +70,7 @@ export default {
     console.log(this.UserId);
 
     axios
-      .get('http://localhost:8080/getFavoriteAuthors', {
+      .get('getFavoriteAuthors', {
         params: {
           data: this.UserId,
           headers: {
@@ -83,7 +83,7 @@ export default {
         this.dataFavAuthor = response.data;
       });
     axios
-      .get('http://localhost:8080/getFavoriteBooks', {
+      .get('getFavoriteBooks', {
         params: {
           data: this.UserId,
           headers: {
@@ -100,7 +100,7 @@ export default {
     deleteFavAuth(id) {
       console.log(id);
       axios
-        .delete('http://localhost:8080/deleteFavoriteAuthors', {
+        .delete('deleteFavoriteAuthors', {
           headers: {
             Auth: this.$store.state.JWT,
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -114,7 +114,7 @@ export default {
     },
     refreshBooks() {
       axios
-        .get('http://localhost:8080/getFavoriteAuthors', {
+        .get('getFavoriteAuthors', {
           params: {
             data: this.UserId,
             headers: {

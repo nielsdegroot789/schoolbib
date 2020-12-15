@@ -17,7 +17,7 @@ export default {
   },
   mounted() {
     this.$axios
-      .get('http://localhost:8080/getUserFromId', {
+      .get('getUserFromId', {
         params: { id: this.$route.params.editUser },
         headers: {
           Auth: this.$store.state.JWT,

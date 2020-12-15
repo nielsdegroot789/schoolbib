@@ -87,7 +87,7 @@ export default {
   },
   mounted() {
     this.$axios
-      .get('http://localhost:8080/getBookMeta', {
+      .get('getBookMeta', {
         Auth: this.$store.JWT,
       })
       .then((response) => {

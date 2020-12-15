@@ -17,7 +17,7 @@ export default {
   },
   mounted() {
     this.$axios
-      .get('http://localhost:8080/getBookMetaFromId', {
+      .get('getBookMetaFromId', {
         params: { id: this.$route.params.editBook },
         headers: {
           Auth: this.$store.state.JWT,

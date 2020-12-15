@@ -107,9 +107,9 @@ export default {
     saveBook(data) {
       this.$axios({
         method: 'POST',
-        url: 'http://localhost:8080/saveBook',
-        headers: { Auth: this.$store.state.JWT },
+        url: 'saveBook',
         data,
+        headers: { Auth: this.$store.state.JWT },
       });
     },
 

@@ -121,7 +121,7 @@ export default {
     loadSearchResult(label) {
       this.$axios({
         method: 'GET',
-        url: 'http://localhost:8080/getFilterResults',
+        url: 'getFilterResults',
         params: label,
       }).then((response) => {
         this.authorList = response.data.filter((book) => {

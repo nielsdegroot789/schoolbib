@@ -129,7 +129,7 @@ export default {
     // Admin/Arch specific
     if (this.currentRole === 3 || this.currentRole === 2) {
       this.$axios
-        .get('http://localhost:8080/getAdminSpecificBooks', {
+        .get('getAdminSpecificBooks', {
           params: { id: this.$route.params.book },
           headers: {
             Auth: this.$store.state.JWT,
@@ -142,7 +142,7 @@ export default {
 
     // General page
     this.$axios
-      .get('http://localhost:8080/getBookMetaFromId', {
+      .get('getBookMetaFromId', {
         params: { id: this.$route.params.book },
         headers: {
           Auth: this.$store.state.JWT,
@@ -157,17 +157,22 @@ export default {
     submitReserveData() {
       const today = new Date();
       const reservationDateTime = today.toLocaleString('en-GB');
-
+      const headers = {
+        Auth: localStorage.getItem('JWT'),
+      };
       this.$axios
-        .post('http://localhost:8080/saveReservationsUser', {
-          headers: { Auth: this.$store.state.JWT },
-          params: {
-            data: this.UserId,
-            booksId: this.$route.params.book,
-            usersId: this.currentUserId,
-            reservationDateTime,
+        .post(
+          'saveReservationsUser',
+          {
+            params: {
+              data: this.UserId,
+              booksId: this.$route.params.book,
+              usersId: this.currentUserId,
+              reservationDateTime,
+            },
           },
-        })
+          { headers },
+        )
         .then(function (response) {});
     },
 
