@@ -49,6 +49,11 @@ export default {
       type: Function,
     },
   },
+  data() {
+    return {
+      formValues: '',
+    };
+  },
   computed: {
     editModal() {
       return this.$store.state.editModal;
@@ -56,8 +61,10 @@ export default {
     getBookMeta() {
       return this.$store.state.adminSpecificBooks[0].bookMetaId;
     },
-    formValues() {
-      return this.book[0];
+  },
+  watch: {
+    book(val) {
+      this.formValues = this.book[0];
     },
   },
   methods: {
@@ -76,18 +83,18 @@ export default {
       this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);
     },
     newBook() {
-      this.formValues.bookMetaId = this.getBookMeta;
+      this.formValues.id = this.getBookMeta;
+      const headers = {
+        Auth: localStorage.getItem('JWT'),
+      };
       this.$axios
-        .post('http://localhost:8080/handleSpecificBook', this.formValues, {
-          headers: { Auth: localStorage.getItem('JWT') },
-        })
-        .then(() => {
+        .post('handleSpecificBook', this.formValues, { headers })
+        .then((response) => {
           this.refreshBooks();
         });
       this.closeModal();
     },
     closeModal() {
-      debugger;
       this.toggle();
     },
   },

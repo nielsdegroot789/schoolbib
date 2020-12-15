@@ -675,7 +675,7 @@ class DB extends \SQLite3
     }
 
     public function newBook($stock, $qrCode, $status, $bookMetaId)
-    {
+    {   
         $sql = $this->prepare("insert into books (stock, qrCode, status, bookMetaId) values(:stock, :qrCode, :status, :bookMetaId)");
         $sql->bindValue(':stock', $stock);
         $sql->bindValue(':qrCode', $qrCode);
@@ -749,4 +749,5 @@ class DB extends \SQLite3
         }
 
     }
+
 }

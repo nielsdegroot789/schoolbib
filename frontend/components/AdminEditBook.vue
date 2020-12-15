@@ -82,7 +82,6 @@ export default {
       //  this.$store.dispatch('toggleEditModal', id);
     },
     toggleEditNewModal() {
-      debugger;
       this.active = !this.active;
     },
   },

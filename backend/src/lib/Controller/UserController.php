@@ -387,8 +387,8 @@ class UserController
          $stock = $contents['stock'];
          $qrCode = $contents['qrCode'];
          $status = $contents['status'];
-         if($request->getMethod() == 'POST') { 
-            $bookMetaId = $contents['bookMetaId'];
+         if($request->getMethod() == 'POST') {
+            $bookMetaId = $contents['id'];
             $db->newBook($stock, $qrCode, $status, $bookMetaId);
          } else {
         $id = $contents['id'];
