@@ -29,11 +29,48 @@
         </tr>
       </tbody>
     </table>
-    <nuxt-link
-      :to="{ path: '/manage/reservations/new' }"
-      class="button level-right"
-      >new</nuxt-link
-    >
+    <button class="button" @click="modelStatus(true)">New checkout</button>
+    <div v-if="modalStatus" class="modal is-active">
+      <div class="modal-background" @click="modelStatus(false)"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">New checkout</p>
+          <button
+            class="delete"
+            aria-label="close"
+            @click="modelStatus(false)"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <FormulateForm @submit="saveNewCheckout">
+            <FormulateInput
+              v-model="newCheckoutData.usersId"
+              type="text"
+              label="Student id"
+              placeholder="Student id"
+              validation="required"
+            />
+            <FormulateInput
+              v-model="newCheckoutData.booksId"
+              type="text"
+              label="Book Id"
+              placeholder="Book Id"
+              validation="required"
+            />
+            <FormulateInput
+              type="submit"
+              label="Save"
+              @submit="saveNewCheckout"
+              @click="saveCheckoutNotif"
+            />
+          </FormulateForm>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button" @click="modelStatus(false)">Close</button>
+        </footer>
+      </div>
+    </div>
+
     <h2>Checkouts</h2>
 
     <table class="table table is-bordered is-hoverable is-fullwidth">
@@ -80,6 +117,14 @@ export default {
       reservations: '',
       checkouts: '',
       fine: '',
+      // everything for model Down
+      modalStatus: false,
+      newCheckoutData: {
+        usersId: null,
+        booksId: null,
+        checkoutDateTime: null,
+        maxAllowedDate: null,
+      },
     };
   },
   computed: {},
@@ -90,6 +135,9 @@ export default {
   },
 
   methods: {
+    modelStatus(bool) {
+      this.modalStatus = bool;
+    },
     loadReservations() {
       this.loadingReservation = true;
       this.$axios
@@ -174,6 +222,25 @@ export default {
           this.loadReservations();
         });
     },
+    saveNewCheckout() {
+      const today = new Date();
+      const inTwoWeeks = this.addDays(today, 14);
+      const checkoutDateTime = today.toLocaleString('en-GB');
+      const maxAllowedDate = inTwoWeeks.toLocaleString('en-GB');
+
+      this.$axios.post('http://localhost:8080/saveCheckouts', {
+        usersId: this.newCheckoutData.usersId,
+        booksId: this.newCheckoutData.booksId,
+        checkoutDateTime,
+        maxAllowedDate,
+      });
+    },
+    saveCheckoutNotif() {
+      this.$store.dispatch('addNotification', {
+        type: 'success',
+        message: 'Checkout has been added',
+      });
+    },
   },
 };
 </script>
@@ -193,5 +260,8 @@ export default {
   justify-items: center;
   align-items: center;
   margin: 5px 0;
+}
+.modal-card-body {
+  overflow: hidden;
 }
 </style>

@@ -339,7 +339,7 @@ class DB extends \SQLite3
     }
     public function getFavoriteBooks($id)
     {
-        $sql = $this->prepare("SELECT usersId,bookMetaId, title, sticker, totalPages,rating,readingLevel
+        $sql = $this->prepare("SELECT favoriteBooks.id, usersId,bookMetaId, title, sticker, totalPages,rating,readingLevel
         FROM favoriteBooks
 		LEFT join bookMeta 
 		ON favoriteBooks.bookMetaId = bookMeta.Id
@@ -353,6 +353,14 @@ class DB extends \SQLite3
             array_push($data, $row);
         }
         return $data;
+    }
+    public function deleteFavoriteBooks($id){
+        $sql =  $this->prepare("DELETE FROM favoriteBooks    
+		WHERE id = :id");
+             
+             $sql->bindValue(':id', $id);
+             $sql->execute();
+             return $id;
     }
     
     public function getFavoriteAuthors($id)
@@ -377,8 +385,9 @@ class DB extends \SQLite3
         $sql =  $this->prepare("DELETE FROM favoriteAuthors      
 		WHERE id = :id");
              
-            $sql->bindvalue(':id', $id);
-            $sql->execute();
+             $sql->bindValue(':id', $id);
+             $sql->execute();
+             return $id;
     }
 
     
@@ -498,23 +507,6 @@ class DB extends \SQLite3
 
         $res = $status ? "Success" : "Failed";
         return $res;
-
-    }
-
-    public function saveNewCheckout($usersId, $booksId, $checkoutDateTime, $returnDateTime, $maxAllowedDate)
-    {
-
-        $sql = $this->prepare("INSERT INTO checkouts (usersId,  booksId, checkoutDateTime,returnDateTime, maxAllowedDate, fine, isPaid)
-        values (:usersId,:booksId,:checkoutDateTime, :returnDateTime, :maxAllowedDate, :fine, :isPaid )");
-
-        $sql->bindValue(':usersId', $usersId, );
-        $sql->bindValue(':booksId', $booksId, );
-        $sql->bindValue(':checkoutDateTime', $checkoutDateTime, );
-        $sql->bindValue(':returnDateTime', $returnDateTime, );
-        $sql->bindValue(':maxAllowedDate', $maxAllowedDate, );
-
-        $status = $sql->execute();
-        return $status;
 
     }
     

@@ -1,6 +1,5 @@
 export const state = () => ({
   bookMeta: [],
-  totalBookMeta: 0,
   books: [],
   users: [],
   currentUser: {},
@@ -45,13 +44,6 @@ export const actions = {
     } catch (error) {
       console.log(error);
     }
-  },
-  getBookMetaCount(context) {
-    this.$axios
-      .get('getBookMetaCount')
-      .then((response) =>
-        context.commit('getBookMetaCount', response.data[0]['count(id)']),
-      );
   },
   getBooks(context) {
     this.$axios
@@ -165,9 +157,6 @@ export const mutations = {
   },
   getBooks(state, data) {
     state.books = data;
-  },
-  getBookMetaCount(state, totalBookMeta) {
-    state.totalBookMeta = totalBookMeta;
   },
   getFrontPageNotification(state, data) {
     state.frontPageNotification = data;
