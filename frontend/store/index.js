@@ -234,9 +234,13 @@ export const mutations = {
   },
   toggleEditModal(state, id) {
     state.editModal = !state.editModal;
-    state.specificBook = state.adminSpecificBooks.find(
-      (book) => book.id === id,
-    );
+    if (id === 'no-id') {
+      console.log('noid');
+    } else {
+      state.specificBook = state.adminSpecificBooks.find(
+        (book) => book.id === id,
+      );
+    }
   },
   toggleDeleteModal(state) {
     state.deleteModal = !state.deleteModal;

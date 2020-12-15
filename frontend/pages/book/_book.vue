@@ -126,20 +126,6 @@ export default {
   },
   created() {},
   mounted() {
-    // Admin/Arch specific
-    if (this.currentRole === 3 || this.currentRole === 2) {
-      this.$axios
-        .get('http://localhost:8080/getAdminSpecificBooks', {
-          params: { id: this.$route.params.book },
-          headers: {
-            Auth: this.$store.state.JWT,
-          },
-        })
-        .then((response) => {
-          this.adminSpecificBooks = response.data;
-        });
-    }
-
     // General page
     this.$axios
       .get('http://localhost:8080/getBookMetaFromId', {
