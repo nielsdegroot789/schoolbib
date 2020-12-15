@@ -149,6 +149,10 @@ export default {
         .then((response) => {
           this.loadingReservation = false;
           this.reservations = response.data;
+        })
+        .catch((error) => {
+          debugger;
+          console.log(error);
         });
     },
     loadCheckouts() {

@@ -64,4 +64,14 @@ class ValidateJWT
         $userId = $this->token->getClaim('userId');
         return $userId;
     }
+
+    public function getUserRole()
+    {
+        if (!$this->validateToken()) {
+            return false;
+        }
+
+        $userId = $this->token->getClaim('role');
+        return $userId;
+    }
 }
