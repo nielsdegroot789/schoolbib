@@ -140,7 +140,6 @@ export default {
           this.loadReservations();
         });
     },
-
     returnCheckouts(object) {
       const today = new Date();
       const returnDateTime = today.toLocaleString('en-GB');

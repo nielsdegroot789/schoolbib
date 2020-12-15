@@ -123,10 +123,6 @@ $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook
 $app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
 })->add($checkLoggedInMW);
 
-$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
-    throw new HttpNotFoundException($request);
-});
-
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
     return $response

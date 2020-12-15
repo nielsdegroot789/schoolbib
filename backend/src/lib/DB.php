@@ -470,15 +470,15 @@ class DB extends \SQLite3
 
         //TODO prevent SQL INJECTION!!! Not working SQL code in master?
         $sql = $this->prepare("UPDATE reservations  SET accepted = 1 WHERE booksId = :booksId AND usersId = :usersId");
-        $sql->bindValue(':booksId', $usersId);
-        $sql->bindValue(':usersId', $booksId);
+        $sql->bindValue(':booksId', $booksId);
+        $sql->bindValue(':usersId', $usersId);
         $res = $sql->execute();
 
         $data = array();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
             array_push($data, $row);
         }
-        
+
         $res = $status ? "Success" : "Failed";
         return $res;
     }
