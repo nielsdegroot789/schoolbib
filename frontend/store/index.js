@@ -116,14 +116,25 @@ export const actions = {
       })
       .then((response) => commit('setAllUsers', response.data));
   },
-  getCheckoutUser({ commit, state }) {
+  getCheckoutUser({ commit, state }, data) {
+    console.log(data);
     this.$axios
       .get('getCheckoutUser', {
         headers: {
           Auth: state.JWT,
         },
       })
-      .then((response) => commit('getCheckoutUser', response.data));
+      .then((response) => commit('getCheckoutUser', response));
+  },
+  getReservationUser({ commit, state }, data) {
+    console.log(data);
+    this.$axios
+      .get('getReservationUser', {
+        headers: {
+          Auth: state.JWT,
+        },
+      })
+      .then((response) => commit('getReservationUser', response));
   },
   openEmailModal({ commit }) {
     commit('openEmailModal');
