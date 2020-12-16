@@ -57,20 +57,31 @@ export default {
   data() {
     return {
       formValues: '',
+      bookMetaId: '',
     };
   },
+
   computed: {
     editModal() {
       return this.$store.state.editModal;
-    },
-    getBookMeta() {
-      return this.$store.state.adminSpecificBooks[0].bookMetaId;
     },
   },
   watch: {
     book(val) {
       this.formValues = this.book[0];
     },
+  },
+  mounted() {
+    this.$axios
+      .get('getBookMetaFromId', {
+        params: { id: this.$route.params.book },
+        headers: {
+          Auth: this.$store.state.JWT,
+        },
+      })
+      .then((response) => {
+        this.bookMetaId = response.data[0].id;
+      });
   },
   methods: {
     sendChanges() {
@@ -89,7 +100,7 @@ export default {
       this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);
     },
     newBook() {
-      this.formValues.id = this.getBookMeta;
+      this.formValues.id = this.bookMetaId;
       const headers = {
         Auth: localStorage.getItem('JWT'),
       };
@@ -105,6 +116,18 @@ export default {
       if (this.book) {
         this.clear();
       }
+    },
+    getBookMetaId() {
+      this.$axios
+        .get('getBookMetaFromId', {
+          params: { id: this.$route.params.book },
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        })
+        .then((response) => {
+          this.bookMeta = response.data[0];
+        });
     },
   },
 };
