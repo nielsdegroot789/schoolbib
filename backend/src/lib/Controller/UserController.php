@@ -313,6 +313,11 @@ class UserController
             $db = new DB();
             $db->createProfileData($firstName,$lastName,$email);
             //send email telling person to select forgot password option
+            $address = $email;
+            $body = $this->container->get('twig')->render('newAccount.twig');
+            $subject = "Active acount";
+            $this->container->get('mailer')->sendMail($address, $body, $subject);
+            
         }
         return $response;
     }
