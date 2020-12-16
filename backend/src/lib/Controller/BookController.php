@@ -103,9 +103,9 @@ class BookController
 
         if ($data['id']) {
             $id = $data['id'];
-            $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories, $id);
+            $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories, $publishDate, $id);
         } else {
-            $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories);
+            $data = $db->saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories, $publishDate);
         }
         $response->getBody()->write($data);
         return $response;

@@ -143,7 +143,7 @@ class DB extends \SQLite3
         return $data;
     }
 
-    public function saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories, $id = -1)
+    public function saveBook($title, $isbn, $rating, $totalPages, $sticker, $language, $readingLevel, $authors, $publishers, $categories, $publishDate, $id = -1)
     {
         if ($id != -1) {
             //update
@@ -151,7 +151,7 @@ class DB extends \SQLite3
             $sql = $this->prepare(
                 "UPDATE bookMeta
                 SET isbnCode = :isbn, title = :title, rating = :rating, totalPages = :totalPages, language = :language,
-                sticker = :sticker, readingLevel = :readingLevel, publishersId = :publishersId, authorsId = :authorsIds
+                sticker = :sticker, readingLevel = :readingLevel, publishersId = :publishersId, authorsId = :authorsIds, publishDate = :publishDate
                 WHERE id = :id");
 
             $sql->bindValue(':isbn', $isbn);
@@ -166,6 +166,7 @@ class DB extends \SQLite3
             $sql->bindValue(':publishersId', $publisherId);
             $authorsIds = $this->getAuthorsIds($authors);
             $sql->bindValue(':authorsIds', $authorsIds);
+            $sql->bindValue(':publishDate', $publishDate);
 
             $status = $sql->execute();
             $categoriesArr = explode(',', $categories);
@@ -198,6 +199,7 @@ class DB extends \SQLite3
                 $sql->bindValue(':publishersId', $publisherId);
                 $authorsIds = $this->getAuthorsIds($authors);
                 $sql->bindValue(':authorsIds', $authorsIds);
+                $sql->bindValue(':publishDate', $publishDate);
 
                 $status = $sql->execute();
                 $res = $status ? "Success" : "Failed";

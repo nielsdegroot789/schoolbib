@@ -14,9 +14,15 @@
               <span class="level-left"> Isbn:</span>
               <span class="level-right">
                 {{
-                  modalData.industryIdentifiers[1]
-                    ? modalData.industryIdentifiers[1].identifier
-                    : modalData.industryIdentifiers[0].identifier
+                  modalData.industryIdentifiers
+                    ? modalData.industryIdentifiers[1]
+                      ? {
+                          isbnCode: modalData.industryIdentifiers[1].identifier,
+                        }
+                      : {
+                          isbnCode: modalData.industryIdentifiers[0].identifier,
+                        }
+                    : { isbnCode: 'No isbn available' }
                 }}</span
               >
             </p>
