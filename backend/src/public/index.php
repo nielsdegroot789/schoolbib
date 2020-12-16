@@ -46,6 +46,33 @@ $app = AppFactory::create();
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::createFromContainer($app));
 
+//LoggedInAsAdmin/arch
+$checkLoggedInAdminArchMW = function ($request, $handler) {
+    $authHeader = $request->getHeader('Auth');
+    if (empty($authHeader)) {
+        return $response->withStatus(401);
+    }
+    
+    $jwtString = $authHeader[0];
+    $jwtValidator = new ValidateJWT($jwtString);
+    $userId = $jwtValidator->getUserId();
+    $role = $jwtValidator->getUserRole();
+
+    //Check that student does not access admin stuff
+    // if(!($role == 2 || $role == 3)){
+    //     return $response->withStatus(401);
+    // }
+    
+    if (empty($userId)) {
+        return $response->withStatus(401);
+    }
+    
+    $response = $handler->handle($request);
+    // $request->withAttribute('user', $user);
+    return $response;
+};
+
+// Basic logged in middleware
 $checkLoggedInMW = function ($request, $handler) {
     $authHeader = $request->getHeader('Auth');
     if (empty($authHeader)) {
@@ -53,8 +80,9 @@ $checkLoggedInMW = function ($request, $handler) {
     }
     
     $jwtString = $authHeader[0];
-    $userId = (new ValidateJWT($jwtString))();
-    
+    $jwtValidator = new ValidateJWT($jwtString);
+    $userId = $jwtValidator->getUserId();
+   
     if (empty($userId)) {
         return $response->withStatus(401);
     }
@@ -85,33 +113,27 @@ $app->get('/getFilterResults', \skoolBiep\Controller\BookController::class . ':g
 $app->get('/checkToken', \skoolBiep\Controller\UserController::class . ':checkToken');
 $app->post('/updatePassword', \skoolBiep\Controller\UserController::class . ':updatePassword');
 
-// $app->map(['POST', 'DELETE'], '/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
-
-
-
-// $app->post('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
-
 
 // NEEDS TO BE LOGGED IN
 $app->group('/', function () use ($app) {
 $app->delete('/deleteBookMeta', \skoolBiep\Controller\BookController::class . ':deleteBookMeta'); 
-$app->post('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
 $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
 $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
 $app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
-$app->delete('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
 $app->map(['POST', 'DELETE', 'PUT'], '/handleSpecificBook', \skoolBiep\Controller\UserController::class . ':handleSpecificBook');
 $app->get('/getAdminSpecificBooks', \skoolBiep\Controller\UserController::class . ':getAdminSpecificBooks');
 $app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':saveReservationsUser');
 $app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
 $app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
-$app->post('/saveNewCheckout', \skoolBiep\Controller\UserController::class . ':savenewCheckout');
 
 $app->get('/getCheckoutUser', \skoolBiep\Controller\UserController::class . ':getCheckoutUser');
 $app->get('/getReservationUser', \skoolBiep\Controller\UserController::class . ':getReservationUser');
 $app->get('/getFavoriteBooks', \skoolBiep\Controller\UserController::class . ':getFavoriteBooks');
 $app->get('/getFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':getFavoriteAuthors');
 $app->delete('/deleteFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':deleteFavoriteAuthors');
+$app->delete('/deleteFavoriteBooks', \skoolBiep\Controller\UserController::class . ':deleteFavoriteBooks');
+$app->delete('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
+
 
 
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');

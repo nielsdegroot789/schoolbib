@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BookForm :book-data="bookMeta" @updateBookData="updateBookData" />
+    <BookForm :book-data="bookData" @updateBookData="updateBookData" />
   </div>
 </template>
 
@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       ready: false,
-      bookMeta: {},
+      bookData: {},
     };
   },
   mounted() {
@@ -24,11 +24,12 @@ export default {
         },
       })
       .then((response) => {
-        this.bookMeta = response.data[0];
+        this.bookData = response.data[0];
       });
   },
   methods: {
     updateBookData(newDataObj) {
+      debugger;
       this.bookData = newDataObj;
     },
   },

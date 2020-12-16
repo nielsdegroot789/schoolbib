@@ -13,20 +13,40 @@
             <p class="level">
               <span class="level-left"> Isbn:</span>
               <span class="level-right">
-                {{ modalData.industryIdentifiers[1].identifier }}</span
+                {{
+                  modalData.industryIdentifiers
+                    ? modalData.industryIdentifiers[1]
+                      ? {
+                          isbnCode: modalData.industryIdentifiers[1].identifier,
+                        }
+                      : {
+                          isbnCode: modalData.industryIdentifiers[0].identifier,
+                        }
+                    : { isbnCode: 'No isbn available' }
+                }}</span
               >
             </p>
             <p class="level">
               <span class="level-left">Publish Date:</span>
-              <span class="level-right">{{ modalData.publishedDate }}</span>
+              <span class="level-right">{{
+                modalData.publishedDate
+                  ? modalData.publishedDate
+                  : 'Unavailable'
+              }}</span>
             </p>
             <p class="level">
               <span class="level-left"> Rating:</span>
-              <span class="level-right">{{ modalData.averageRating }}</span>
+              <span class="level-right">{{
+                modalData.averageRating
+                  ? modalData.averageRating
+                  : 'Unavailable'
+              }}</span>
             </p>
             <p class="level">
               <span class="level-left"> Amount of pages:</span>
-              <span class="level-right">{{ modalData.pageCount }}</span>
+              <span class="level-right">{{
+                modalData.pageCount ? modalData.pageCount : 'Unavailable'
+              }}</span>
             </p>
             <p class="level">
               <span class="level-left">sticker: </span>
@@ -40,23 +60,37 @@
             </p>
             <p class="level">
               <span class="level-left">language:</span>
-              <span class="level-right">{{ modalData.language }}</span>
+              <span class="level-right">{{
+                modalData.language ? modalData.language : 'Unavailable'
+              }}</span>
             </p>
             <p class="level">
               <span class="level-left">authors:</span>
-              <span class="level-right">{{ modalData.authors }}</span>
+              <span class="level-right">{{
+                modalData.authors ? modalData.authors : 'Unavailable'
+              }}</span>
             </p>
             <p class="level">
               <span class="level-left"> reading level:</span>
-              <span class="level-right">{{ modalData.maturityRating }}</span>
+              <span class="level-right">{{
+                modalData.maturityRating
+                  ? modalData.maturityRating
+                  : 'Unavailable'
+              }}</span>
             </p>
             <p class="level">
               <span class="level-left"> publisher:</span>
-              <span class="level-right">{{ modalData.publisher }}</span>
+              <span class="level-right">{{
+                modalData.publisher ? modalData.publisher : 'Unavailable'
+              }}</span>
             </p>
             <p class="level">
-              <span class="level-left">categories:</span>
-              <span class="level-right"> {{ modalData.categories }}</span>
+              <span class="level-left">category:</span>
+              <span class="level-right">
+                {{
+                  modalData.categories ? modalData.categories : 'Unavailable'
+                }}</span
+              >
             </p>
           </div>
           <div class="buttonContainer level">

@@ -6,8 +6,13 @@
       @closeModal="handleCloseModal"
     />
 
-    <FormulateForm v-model="currentBookData" class="section" @submit="saveBook">
-      <FormulateInput v-if="currentBookData.id" type="hidden" name="id" />
+    <FormulateForm
+      v-model="currentBookData"
+      :values="bookData"
+      class="section"
+      @submit="saveBook"
+    >
+      <FormulateInput v-if="bookData.id" type="hidden" name="id" />
       <FormulateInput
         label="isbn"
         type="text"
@@ -105,6 +110,7 @@ export default {
   },
   methods: {
     saveBook(data) {
+      debugger;
       this.$axios({
         method: 'POST',
         url: 'saveBook',
@@ -139,6 +145,7 @@ export default {
     },
 
     showModal(info) {
+      this.modalData = {};
       this.modalData = info;
       this.shouldShowModal = true;
     },
@@ -146,32 +153,57 @@ export default {
       this.shouldShowModal = false;
       if (modalData) {
         const newDataObj = {
+          // Id
           ...(this.bookData.id && { id: this.bookData.id }),
-          ...(modalData.authors && { authors: modalData.authors.join() }),
-          ...(modalData.categories && {
-            categories: modalData.categories.join(),
-          }),
-          ...(modalData.industryIdentifiers[1] && {
-            isbnCode: modalData.industryIdentifiers[1].identifier,
-          }),
+          // Author
+          ...(modalData.authors
+            ? { authors: modalData.authors.join() }
+            : { authors: 'Unavailable' }),
+          // Category
+          ...(modalData.categories
+            ? { categories: modalData.categories.join() }
+            : { categories: 'Unavailable' }),
+          // Publisher
+          ...(modalData.publisher
+            ? { publishers: modalData.publisher }
+            : { publishers: 'Unavailable' }),
+          // ISBN
+          ...(modalData.industryIdentifiers
+            ? modalData.industryIdentifiers[1]
+              ? { isbnCode: modalData.industryIdentifiers[1].identifier }
+              : { isbnCode: modalData.industryIdentifiers[0].identifier }
+            : { isbnCode: 'No isbn available' }),
+          // Language
           ...(modalData.language && { language: modalData.language }),
+          // Publish Date
           ...(modalData.publishedDate && {
             publishDate: modalData.publishedDate,
           }),
-          ...(modalData.publisher && { publishers: modalData.publisher }),
+          // Avarage Rating
           ...(modalData.averageRating && { rating: modalData.averageRating }),
+          // Maturity Rating
           ...(modalData.maturityRating && {
             readingLevel: modalData.maturityRating,
           }),
-          ...(modalData.imageLinks.smallThumbnail && {
-            sticker: modalData.imageLinks.smallThumbnail,
-          }),
+          // Thumbnail
+          ...(modalData.imageLinks
+            ? modalData.imageLinks.smallThumbnail
+              ? { sticker: modalData.imageLinks.smallThumbnail }
+              : {
+                  sticker:
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png',
+                }
+            : {
+                sticker:
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png',
+              }),
+          // Title
           ...(modalData.title && { title: modalData.title }),
+          // Page count
           ...(modalData.pageCount && { totalPages: modalData.pageCount }),
         };
         this.$emit('updateBookData', newDataObj);
       }
-      console.log(shouldRerouteDirectly);
     },
   },
 };
