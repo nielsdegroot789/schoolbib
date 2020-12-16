@@ -51,6 +51,7 @@ export default {
   mounted() {
     axios
       .get('http://localhost:8080/getCheckoutUser', {
+        data: this.UserId,
         headers: {
           Auth: localStorage.getItem('JWT'),
         },
@@ -62,13 +63,14 @@ export default {
 
     axios
       .get('http://localhost:8080/getReservationUser', {
+        data: this.UserId,
         headers: {
           Auth: localStorage.getItem('JWT'),
         },
       })
       .then((response) => {
         console.log(response);
-        this.dataRes = response.data;
+        this.dataRes = response;
       });
   },
 
@@ -76,7 +78,7 @@ export default {
     deleteRes(id) {
       console.log(id);
       axios
-        .delete('deleteReservationUser', {
+        .delete('http://localhost:8080/deleteReservationUser', {
           headers: {
             Auth: this.$store.state.JWT,
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -90,7 +92,7 @@ export default {
     },
     refreshBooks() {
       axios
-        .get('getReservationUser', {
+        .get('http://localhost:8080/getReservationUser', {
           params: {
             data: this.UserId,
             headers: {

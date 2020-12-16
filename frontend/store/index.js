@@ -116,6 +116,15 @@ export const actions = {
       })
       .then((response) => commit('setAllUsers', response.data));
   },
+  getCheckoutUser({ commit, state }) {
+    this.$axios
+      .get('getCheckoutUser', {
+        headers: {
+          Auth: state.JWT,
+        },
+      })
+      .then((response) => commit('getCheckoutUser', response.data));
+  },
   openEmailModal({ commit }) {
     commit('openEmailModal');
   },
