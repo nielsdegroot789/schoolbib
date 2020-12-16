@@ -718,7 +718,15 @@ class DB extends \SQLite3
 
     public function deleteBookMeta($id) {
         $sql = $this->prepare("delete from bookMeta where id = :id");
+        $sql2 = $this->prepare('delete from books where bookMetaId = :id');
+        $sql3 = $this->prepare('delete from reservations where booksId = :id');
+
         $sql->bindValue(':id', $id);
+        $sql2->bindValue(':id', $id);
+        $sql3->bindValue(':id', $id);
+
+        $sql3->execute();
+        $sql2->execute();
         $sql->execute();
     }
     public function StockCount($id) {
