@@ -571,8 +571,14 @@ class DB extends \SQLite3
         $sql->bindValue(':email', $email);
         $tempPassword="notBeenResetYet";
         $sql->bindValue(':tempPassword', $tempPassword);
-
         $res = $sql->execute();
+
+        $usersId = $this->lastInsertRowID();
+        $sql = $this->prepare("insert into userRoles(rolesId, usersId) values (:rolesId, :usersId)");
+        $sql->bindValue(':rolesId', 1);
+        $sql->bindValue(':usersId', $usersId);
+        $res = $sql->execute();
+
         return $res;
     }
 
