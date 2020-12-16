@@ -30,6 +30,10 @@ export default {
         href:
           'https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css',
       },
+      {
+        rel: "stylesheet",
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat&display=swap',
+      },
     ],
   },
   /*
