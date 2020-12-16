@@ -5,7 +5,9 @@
       <div class="modal-card">
         <header class="modal-card-head">
           <p v-if="!book" class="modal-card-title">Add book</p>
-          <p v-if="book" class="modal-card-title">Update book id:</p>
+          <p v-if="book" class="modal-card-title">
+            Update book id: {{ book[0].id }}
+          </p>
           <button
             class="delete"
             aria-label="close"
@@ -48,6 +50,9 @@ export default {
     toggle: {
       type: Function,
     },
+    clear: {
+      type: Function,
+    },
   },
   data() {
     return {
@@ -75,6 +80,7 @@ export default {
         })
         .then(() => {
           this.refreshBooks();
+          this.clear();
         })
         .catch((err) => console.log(err));
       this.closeModal();
@@ -96,6 +102,9 @@ export default {
     },
     closeModal() {
       this.toggle();
+      if (this.book) {
+        this.clear();
+      }
     },
   },
 };

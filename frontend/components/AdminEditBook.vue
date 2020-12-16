@@ -1,6 +1,11 @@
 <template>
   <div v-if="currentRole.role == 2 || currentRole.role == 3">
-    <editBookModal :active="active" :book="book" :toggle="toggleEditNewModal" />
+    <editBookModal
+      :active="active"
+      :book="book"
+      :toggle="toggleEditNewModal"
+      :clear="clearBookProp"
+    />
     <deleteModal />
     <div class="section box">
       <div class="grid-books">
@@ -72,17 +77,18 @@ export default {
       this.$store.dispatch('toggleDeleteModal');
     },
     showEditNewModal(id) {
-      if (id === 'no-id') {
-      } else {
+      if (id !== 'no-id') {
         this.book = this.adminSpecificBooks.filter((book) => {
           return book.id === id;
         });
       }
-      this.active = !this.active;
-      //  this.$store.dispatch('toggleEditModal', id);
+      this.toggleEditNewModal();
     },
     toggleEditNewModal() {
       this.active = !this.active;
+    },
+    clearBookProp() {
+      this.book = '';
     },
   },
 };
