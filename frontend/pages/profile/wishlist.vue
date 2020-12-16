@@ -108,9 +108,9 @@ export default {
       this.axios
         .delete('deleteFavoriteBooks', {
           headers: { Auth: localStorage.getItem('JWT') },
-        params: {
-          data: this.UserId,
-        },,
+          params: {
+            data: this.UserId,
+          },
         })
         .then((response) => {
           this.refreshBooks();
