@@ -92,18 +92,18 @@
           <td>{{ item.maxAllowedDate }}</td>
           <td>{{ item.fine }}</td>
           <td>
-            <button class="button" @click="returnCheckouts(item.id)">
+            <button class="button" @click.stop="returnCheckouts(item.booksId)">
               Only returned
             </button>
           </td>
-          <td>
+          <!-- <td>
             <button
               class="button"
-              @click="returnPaidCheckouts(item, index) in checkouts"
+              @click.stop="returnPaidCheckouts(item, index)"
             >
               Paid and returned
             </button>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>
@@ -186,6 +186,7 @@ export default {
 
       const headers = {
         Auth: localStorage.getItem('JWT'),
+        'Access-Control-Allow-Origin': '*',
       };
 
       this.$axios
@@ -197,9 +198,7 @@ export default {
             checkoutDateTime,
             maxAllowedDate,
           },
-          {
-            headers,
-          },
+          headers,
         )
         .then((response) => {
           this.loadCheckouts();
@@ -214,6 +213,8 @@ export default {
       const headers = {
         Auth: localStorage.getItem('JWT'),
       };
+
+      console.log(id);
 
       this.$axios
         .post(
@@ -231,32 +232,32 @@ export default {
           this.loadReservations();
         });
     },
-    returnPaidCheckouts(id) {
-      const today = new Date();
-      const returnDateTime = today.toLocaleString('en-GB');
-      const paidDate = today.toLocaleString('en-GB');
-      const headers = {
-        Auth: localStorage.getItem('JWT'),
-      };
+    // returnPaidCheckouts(id) {
+    //   const today = new Date();
+    //   const returnDateTime = today.toLocaleString('en-GB');
+    //   const paidDate = today.toLocaleString('en-GB');
+    //   const headers = {
+    //     Auth: localStorage.getItem('JWT'),
+    //   };
 
-      this.$axios
-        .post(
-          'returnCheckouts',
-          {
-            data: { data: id },
-            returnDateTime,
-            fine: 0,
-            paidDate,
-          },
-          {
-            headers,
-          },
-        )
-        .then((response) => {
-          this.loadCheckouts();
-          this.loadReservations();
-        });
-    },
+    //   this.$axios
+    //     .post(
+    //       'returnCheckouts',
+    //       {
+    //         data: { data: id },
+    //         returnDateTime,
+    //         fine: 0,
+    //         paidDate,
+    //       },
+    //       {
+    //         headers,
+    //       },
+    //     )
+    //     .then((response) => {
+    //       this.loadCheckouts();
+    //       this.loadReservations();
+    //     });
+    // },
     saveNewCheckout() {
       const today = new Date();
       const inTwoWeeks = this.addDays(today, 14);
