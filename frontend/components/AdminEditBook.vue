@@ -7,13 +7,13 @@
       :clear="clearBookProp"
     />
     <deleteModal />
-    <div class="section box">
+    <div class="section box container--admin-edit">
       <div class="grid-books">
         <div
           v-for="item in adminSpecificBooks"
           :key="item.id"
           :specificBook="item"
-          class="div level-box"
+          class="book-container--admin-edit"
         >
           <h1>id : {{ item.id }}</h1>
           <h1>status: {{ item.status }}</h1>
@@ -26,7 +26,12 @@
           </button>
         </div>
       </div>
-      <button class="button" @click="showEditNewModal('no-id')">New</button>
+      <button
+        class="button new-button--admin"
+        @click="showEditNewModal('no-id')"
+      >
+        New
+      </button>
     </div>
   </div>
 </template>
@@ -105,5 +110,14 @@ export default {
 .grid-books {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+.book-container--admin-edit {
+  margin-top: 2rem;
+}
+.container--admin-edit {
+  padding-top: 1rem;
+}
+.new-button--admin {
+  margin-top: 2rem;
 }
 </style>

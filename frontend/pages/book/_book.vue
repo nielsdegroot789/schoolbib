@@ -1,6 +1,6 @@
 <template>
   <div class="section pageSetup">
-    <div class="level box">
+    <div class="level box nav-admin--edit">
       <div v-if="bookMeta" class="url level-left">
         <n-link to="/">Home</n-link> > <n-link to="/books">books</n-link> >
         {{ bookMeta.title }}
@@ -15,13 +15,9 @@
       </div>
       <div class="section box">
         <!-- specifics -->
-        <h1 class="title">Book Details</h1>
-        <p class="level">
-          <span class="level-left"> Title:</span>
-          <span v-if="bookMeta" class="level-right">
-            {{ bookMeta.title ? bookMeta.title : 'Unavailable' }}
-          </span>
-        </p>
+        <h1 class="title">
+          {{ bookMeta.title ? bookMeta.title : 'Unavailable' }}
+        </h1>
         <p class="level">
           <span class="level-left"> Category:</span>
           <span v-if="bookMeta" class="level-right">
@@ -78,7 +74,7 @@
           employee.
         </p>
         <p v-else-if="stockCount === 1">
-          There is currently <b> {{ istockCount }} </b> available.
+          There is currently <b> {{ stockCount }} </b> available.
         </p>
         <p v-else>
           There are currently <b> {{ stockCount }} </b> available.
@@ -211,5 +207,9 @@ export default {
 
 .stockInfo .button {
   margin-top: 1.5rem;
+}
+
+.nav-admin--edit {
+  box-shadow: none;
 }
 </style>
