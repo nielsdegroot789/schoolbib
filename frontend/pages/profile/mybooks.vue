@@ -28,10 +28,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in dataCheck" :key="index">
-          <td>{{ item.booksName }}</td>
-          <td>{{ item.maxAllowedDate }}</td>
-          <td>{{ item.fine }}</td>
+        <tr v-for="data in dataCheck" :key="data.id">
+          <td>{{ data.booksName }}</td>
+          <td>{{ data.maxAllowedDate }}</td>
+          <td>{{ data.fine }}</td>
         </tr>
       </tbody>
     </table>
@@ -43,44 +43,27 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      dataCheck: '',
-      dataRes: '',
-      headers: {
-        Auth: '',
-      },
+      dataCheck: [],
+      dataRes: [],
     };
   },
-  computed: {
-    UserId() {
-      return this.$store.state.currentUser;
-    },
-    JWT() {
-      return this.$store.state.JWT;
-    },
-  },
 
-  created() {
-    console.log(this.UserId);
+  mounted() {
     axios
-      .get('getCheckoutUser', {
-        params: {
-          data: this.UserId,
-          headers: {
-            Auth: this.$store.state.JWT,
-          },
+      .get('http://localhost:8080/getCheckoutUser', {
+        headers: {
+          Auth: localStorage.getItem('JWT'),
         },
       })
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
         this.dataCheck = response.data;
       });
+
     axios
-      .get('getReservationUser', {
-        params: {
-          data: this.UserId,
-          headers: {
-            Auth: this.$store.state.JWT,
-          },
+      .get('http://localhost:8080/getReservationUser', {
+        headers: {
+          Auth: localStorage.getItem('JWT'),
         },
       })
       .then((response) => {

@@ -17,9 +17,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in dataFavBook" :key="index">
+        <tr v-for="item in dataFavBook" :key="item.id">
           <td>{{ item.title }}</td>
-
           <td>{{ item.totalPages }}</td>
           <td>{{ item.readingLevel }}</td>
           <td>{{ item.rating }}</td>
@@ -56,8 +55,8 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      dataFavAuthor: '',
-      dataFavBook: '',
+      dataFavAuthor: [],
+      dataFavBook: [],
     };
   },
   computed: {
@@ -69,41 +68,32 @@ export default {
     },
   },
 
-  created() {
-    console.log(this.UserId);
-
+  mounted() {
     axios
-      .get('getFavoriteAuthors', {
-        params: {
-          data: this.UserId,
-          headers: {
-            Auth: this.$store.state.JWT,
-          },
+      .get('http://localhost:8080/getFavoriteAuthors', {
+        headers: {
+          Auth: localStorage.getItem('JWT'),
         },
       })
       .then((response) => {
         console.log(response);
-        this.dataFavAuthor = response.data;
+        this.dataFavAuthor = response;
       });
     axios
-      .get('getFavoriteBooks', {
-        params: {
-          data: this.UserId,
-          headers: {
-            Auth: this.$store.state.JWT,
-          },
+      .get('http://localhost:8080/getFavoriteBooks', {
+        headers: {
+          Auth: localStorage.getItem('JWT'),
         },
       })
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
         this.dataFavBook = response.data;
       });
   },
   methods: {
     deleteFavAuth(id) {
-      console.log(id);
       axios
-        .delete('deleteFavoriteAuthors', {
+        .delete('http://localhost:8080/deleteFavoriteAuthors', {
           headers: {
             Auth: this.$store.state.JWT,
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -111,12 +101,10 @@ export default {
           data: { data: id },
         })
         .then((response) => {
-          console.log(response);
           this.refreshAuth();
         });
     },
     deleteFavBooks(id) {
-      console.log(id);
       axios
         .delete('http://localhost:8080/deleteFavoriteBooks', {
           headers: {
@@ -126,7 +114,6 @@ export default {
           data: { data: id },
         })
         .then((response) => {
-          console.log(response);
           this.refreshBooks();
         });
     },
@@ -141,7 +128,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
           this.dataFavAuthor = response.data;
         });
     },
@@ -156,7 +142,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
           this.dataFavBook = response.data;
         });
     },
