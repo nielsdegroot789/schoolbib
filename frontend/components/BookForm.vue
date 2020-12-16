@@ -110,13 +110,25 @@ export default {
   },
   methods: {
     saveBook(data) {
-      debugger;
       this.$axios({
         method: 'POST',
         url: 'saveBook',
         data,
         headers: { Auth: this.$store.state.JWT },
-      });
+      })
+        .then((response) => {
+          this.$store.dispatch('addNotification', {
+            type: 'success',
+            message: 'Book has been saved',
+          });
+        })
+        .catch((error) => {
+          this.$store.dispatch('addNotification', {
+            type: 'fail',
+            message: 'Something went wrong',
+          });
+          console.log(error);
+        });
     },
 
     searchForBook(searchObj) {

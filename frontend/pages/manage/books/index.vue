@@ -42,7 +42,8 @@
           <th>delete</th>
         </tr>
       </tfoot>
-      <tbody>
+      <div v-if="!loaded" class="carousel level"><Loading /></div>
+      <tbody v-else>
         <tr v-for="book in bookMeta" :key="book.id">
           <td>{{ book.title }}</td>
           <td>{{ book.isbnCode }}</td>
@@ -76,21 +77,26 @@
 
 <script>
 import deleteModal from '~/components/deleteBook';
+import Loading from '~/components/Loading';
 export default {
   components: {
     deleteModal,
+    Loading,
   },
   data() {
     return {
       bookMeta: [],
+      loaded: true,
     };
   },
   mounted() {
+    this.loaded = false;
     this.$axios
       .get('getBookMeta', {
         Auth: this.$store.JWT,
       })
       .then((response) => {
+        this.loaded = true;
         this.bookMeta = response.data;
       });
   },

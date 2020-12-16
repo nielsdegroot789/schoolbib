@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   data() {
     return {
@@ -47,7 +46,8 @@ export default {
   created() {
     const token = this.$route.query.token;
     console.log(token);
-    axios.get('checkToken', { params: token }).then((response) => {
+    this.$axios.get('checkToken', { params: token }).then((response) => {
+      debugger;
       console.log(response);
       this.tokenValid = response.data.message;
       this.userId = response.data.userId;
@@ -56,7 +56,7 @@ export default {
 
   methods: {
     resetPassword() {
-      axios
+      this.$axios
         .post('updatePassword', {
           password: this.password,
           id: this.userId,

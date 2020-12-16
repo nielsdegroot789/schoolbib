@@ -462,8 +462,7 @@ class DB extends \SQLite3
         $sql = "SELECT usersId,booksId, reservationDateTime, accepted , users.surname as usersName, bookMeta.title as booksName
         FROM reservations
         left join users on users.id = reservations.usersId
-		left join books on books.id = reservations.booksId
-		left join bookMeta on bookMeta.id = books.bookMetaId
+		left join bookMeta on bookMeta.id = reservations.booksId
         WHERE accepted = 0
         GROUP by reservations.id ORDER by reservations.reservationDateTime DESC";
 
@@ -521,8 +520,7 @@ class DB extends \SQLite3
         $sql = "SELECT usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName
         FROM checkouts
         left join users on users.id = checkouts.usersId
-		left join books on books.id = checkouts.booksId
-		left join bookMeta on bookMeta.id = books.bookMetaId
+		left join bookMeta on bookMeta.id = checkouts.booksId
         WHERE returnDateTime IS NULL
 		ORDER by checkouts.maxAllowedDate DESC";
 
@@ -573,8 +571,14 @@ class DB extends \SQLite3
         $sql->bindValue(':email', $email);
         $tempPassword="notBeenResetYet";
         $sql->bindValue(':tempPassword', $tempPassword);
-
         $res = $sql->execute();
+
+        $usersId = $this->lastInsertRowID();
+        $sql = $this->prepare("insert into userRoles(rolesId, usersId) values (:rolesId, :usersId)");
+        $sql->bindValue(':rolesId', 1);
+        $sql->bindValue(':usersId', $usersId);
+        $res = $sql->execute();
+
         return $res;
     }
 

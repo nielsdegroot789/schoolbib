@@ -6,16 +6,13 @@
         <div class="columns">
           <div class="column is-6 is-offset-4">
             <h2 class="title has-text-centered">Welcome back!</h2>
-
-            <div class="field">
-              <label class="label">Name</label>
-              <div class="control">
+            <form action="" @submit.prevent="login({ email, password })">
+              <div class="field">
+                <label class="label">Email</label>
                 <input v-model="email" type="text" class="input" name="email" />
               </div>
-            </div>
-            <div class="field">
-              <label class="label">Password</label>
-              <div class="control">
+              <div class="field">
+                <label class="label">Password</label>
                 <input
                   v-model="password"
                   type="password"
@@ -23,15 +20,10 @@
                   name="password"
                 />
               </div>
-            </div>
-            <div class="control">
-              <button
-                class="button is-dark is-fullwidth"
-                @click="login({ email: email, password: password })"
-              >
-                Log In
-              </button>
-            </div>
+              <div class="field">
+                <input type="submit" class="button is-dark is-fullwidth" />
+              </div>
+            </form>
             <div class="has-text-centered" style="margin-top: 20px">
               <div v-if="showError" class="errorMessage">
                 Error: This combination is not found.
@@ -95,7 +87,7 @@ export default {
     },
   },
   methods: {
-    login(data) {
+    login(data, event) {
       this.$store.dispatch('login', data);
     },
     openEmailModal() {

@@ -33,7 +33,6 @@ export const actions = {
     if (filters['filter-authors']) {
       params.authors = filters['filter-authors'];
     }
-    console.log(params);
     try {
       const books = await this.$axios({
         method: 'GET',

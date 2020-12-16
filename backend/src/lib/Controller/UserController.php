@@ -127,7 +127,8 @@ class UserController
         $data = json_decode(file_get_contents("php://input"), TRUE);
         $this->response = $response;
         $db = new DB();
-
+        // Reworked Benno's reservation to an atleast presentable demo, not working fully.
+        // The reservation of actual books does not work. (only book metas)
         $usersId = $data['params']["usersId"];
         $booksId = $data['params']["booksId"];
         $reservationDateTime = $data['params']["reservationDateTime"];
@@ -312,6 +313,11 @@ class UserController
             $db = new DB();
             $db->createProfileData($firstName,$lastName,$email);
             //send email telling person to select forgot password option
+            $address = $email;
+            $body = $this->container->get('twig')->render('newAccount.twig');
+            $subject = "Active acount";
+            $this->container->get('mailer')->sendMail($address, $body, $subject);
+            
         }
         return $response;
     }
