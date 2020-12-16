@@ -520,8 +520,7 @@ class DB extends \SQLite3
         $sql = "SELECT usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName
         FROM checkouts
         left join users on users.id = checkouts.usersId
-		left join books on books.id = checkouts.booksId
-		left join bookMeta on bookMeta.id = books.bookMetaId
+		left join bookMeta on bookMeta.id = checkouts.booksId
         WHERE returnDateTime IS NULL
 		ORDER by checkouts.maxAllowedDate DESC";
 
