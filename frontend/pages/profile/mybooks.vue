@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   data() {
     return {
@@ -49,7 +48,7 @@ export default {
   },
 
   mounted() {
-    axios
+    this.axios
       .get('http://localhost:8080/getCheckoutUser', {
         headers: { Auth: localStorage.getItem('JWT') },
         params: {
@@ -61,7 +60,7 @@ export default {
         this.dataCheck = response.data;
       });
 
-    axios
+    this.axios
       .get('http://localhost:8080/getReservationUser', {
         headers: { Auth: localStorage.getItem('JWT') },
         params: {
@@ -77,7 +76,7 @@ export default {
   methods: {
     deleteRes(id) {
       console.log(id);
-      axios
+      this.axios
         .delete('http://localhost:8080/deleteReservationUser', {
           headers: { Auth: localStorage.getItem('JWT') },
           params: {
@@ -90,7 +89,7 @@ export default {
         });
     },
     refreshBooks() {
-      axios
+      this.axios
         .get('http://localhost:8080/getReservationUser', {
           headers: { Auth: localStorage.getItem('JWT') },
           params: {

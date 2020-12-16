@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   data() {
     return {
@@ -68,21 +67,23 @@ export default {
     },
   },
 
-  mounted() {
-    axios
-      .get('http://localhost:8080/getFavoriteAuthors', {
-        headers: {
-          Auth: localStorage.getItem('JWT'),
+  created() {
+    this.$axios
+      .get('getFavoriteAuthors', {
+        headers: { Auth: localStorage.getItem('JWT') },
+        params: {
+          data: this.UserId,
         },
       })
       .then((response) => {
-        console.log(response);
-        this.dataFavAuthor = response;
+        console.log(response.data);
+        this.dataFavAuthor = response.data;
       });
-    axios
-      .get('http://localhost:8080/getFavoriteBooks', {
-        headers: {
-          Auth: localStorage.getItem('JWT'),
+    this.$axios
+      .get('getFavoriteBooks', {
+        headers: { Auth: localStorage.getItem('JWT') },
+        params: {
+          data: this.UserId,
         },
       })
       .then((response) => {
@@ -92,33 +93,31 @@ export default {
   },
   methods: {
     deleteFavAuth(id) {
-      axios
-        .delete('http://localhost:8080/deleteFavoriteAuthors', {
-          headers: {
-            Auth: this.$store.state.JWT,
-            'Content-Type': 'application/x-www-form-urlencoded',
+      this.axios
+        .delete('deleteFavoriteAuthors', {
+          headers: { Auth: localStorage.getItem('JWT') },
+          params: {
+            data: this.UserId,
           },
-          data: { data: id },
         })
         .then((response) => {
           this.refreshAuth();
         });
     },
     deleteFavBooks(id) {
-      axios
-        .delete('http://localhost:8080/deleteFavoriteBooks', {
-          headers: {
-            Auth: this.$store.state.JWT,
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          data: { data: id },
+      this.axios
+        .delete('deleteFavoriteBooks', {
+          headers: { Auth: localStorage.getItem('JWT') },
+        params: {
+          data: this.UserId,
+        },,
         })
         .then((response) => {
           this.refreshBooks();
         });
     },
     refreshAuth() {
-      axios
+      this.axios
         .get('getFavoriteAuthors', {
           params: {
             data: this.UserId,
@@ -132,8 +131,8 @@ export default {
         });
     },
     refreshBooks() {
-      axios
-        .get('http://localhost:8080/getFavoriteBooks', {
+      this.axios
+        .get('getFavoriteBooks', {
           params: {
             data: this.UserId,
             headers: {
