@@ -185,6 +185,7 @@ class UserController
         $data = $db->returnCheckouts($id, $returnCheckouts);
       
         $response->getBody()->write($data);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
     }
 
@@ -231,6 +232,7 @@ class UserController
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response
             ->withHeader('Content-Type', 'application/json');
 
@@ -245,6 +247,7 @@ class UserController
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response->withHeader('Content-Type', 'application/json');
     }
 
