@@ -28,10 +28,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in dataCheck" :key="index">
-          <td>{{ item.booksName }}</td>
-          <td>{{ item.maxAllowedDate }}</td>
-          <td>{{ item.fine }}</td>
+        <tr v-for="data in dataCheck" :key="data.id">
+          <td>{{ data.booksName }}</td>
+          <td>{{ data.maxAllowedDate }}</td>
+          <td>{{ data.fine }}</td>
         </tr>
       </tbody>
     </table>
@@ -39,65 +39,57 @@
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   data() {
     return {
-      dataCheck: '',
-      dataRes: '',
-      headers: {
-        Auth: '',
-      },
+      dataCheck: [],
+      dataRes: [],
     };
   },
   computed: {
     UserId() {
-      return this.$store.state.currentUser;
+      return this.$store.state.currentUser.id;
     },
     JWT() {
       return this.$store.state.JWT;
     },
   },
 
-  created() {
-    console.log(this.UserId);
-    axios
+  mounted() {
+    this.$axios
       .get('getCheckoutUser', {
+        headers: { Auth: localStorage.getItem('JWT') },
         params: {
-          data: this.UserId,
-          headers: {
-            Auth: this.$store.state.JWT,
-          },
+          id: this.UserId,
         },
       })
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
         this.dataCheck = response.data;
       });
-    axios
+
+    this.$axios
       .get('getReservationUser', {
+        headers: { Auth: localStorage.getItem('JWT') },
         params: {
-          data: this.UserId,
-          headers: {
-            Auth: this.$store.state.JWT,
-          },
+          id: this.UserId,
         },
       })
       .then((response) => {
         console.log(response);
-        this.dataRes = response.data;
+        this.dataRes = response;
       });
   },
 
   methods: {
     deleteRes(id) {
       console.log(id);
-      axios
+      this.$axios
         .delete('deleteReservationUser', {
-          headers: {
-            Auth: this.$store.state.JWT,
+          headers: { Auth: localStorage.getItem('JWT') },
+          params: {
+            id: this.UserId,
           },
-          data: { data: id },
         })
         .then((response) => {
           console.log(response);
@@ -105,13 +97,11 @@ export default {
         });
     },
     refreshBooks() {
-      axios
+      this.$axios
         .get('getReservationUser', {
+          headers: { Auth: localStorage.getItem('JWT') },
           params: {
-            data: this.UserId,
-            headers: {
-              Auth: this.$store.state.JWT,
-            },
+            id: this.UserId,
           },
         })
         .then((response) => {
