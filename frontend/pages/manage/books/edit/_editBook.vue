@@ -29,6 +29,7 @@ export default {
   },
   methods: {
     updateBookData(newDataObj) {
+      debugger;
       this.bookData = newDataObj;
     },
   },

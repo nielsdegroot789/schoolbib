@@ -83,9 +83,7 @@ class DB extends \SQLite3
         $res = $query->execute();
 
         $data = array();
-        $translator = new TranslateReadingLevel();
         while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
-            $row["readingLevel"] = $translator($row["readingLevel"]);
             array_push($data, $row);
         }
 
@@ -160,6 +158,8 @@ class DB extends \SQLite3
             $sql->bindValue(':totalPages', $totalPages);
             $sql->bindValue(':language', $language);
             $sql->bindValue(':sticker', $sticker);
+            $translator = new TranslateReadingLevel();
+            $readingLevel = $translator($readingLevel);
             $sql->bindValue(':readingLevel', $readingLevel);
             $sql->bindValue(':id', $id);
             $publisherId = $this->getPublisherId($publishers);
@@ -176,17 +176,20 @@ class DB extends \SQLite3
             return $res;
         } else {
             //check if this bookmeta does not already exist.
-
             $sql = $this->prepare('select id from bookMeta where isbnCode = :isbn');
             $sql->bindValue(':isbn', $isbn);
             $res = $sql->execute();
-            // needs work still
-            if (false) {
+            $data = array();
+            while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+                array_push($data, $row);
+            }
+
+            if (!empty($data)) {
                 //TODO This bookMeta already exists in the database. this does not work
-                //throw new Exception("This bookMeta already exists in the database under id " . $res->fetchArray(SQLITE3_ASSOC));
+                throw new Exception("This bookMeta already exists in the database under id " . $res->fetchArray(SQLITE3_ASSOC));
             } else {
-                $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishersId)
-                values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishersId)');
+                $sql = $this->prepare('insert into bookMeta (isbnCode, title, rating, totalPages, language, sticker, readingLevel, authorsId, publishDate, publishersId)
+                values (:isbn, :title, :rating, :totalPages, :language, :sticker, :readingLevel, :authorsIds, :publishDate , :publishersId)');
 
                 $sql->bindValue(':isbn', $isbn);
                 $sql->bindValue(':title', $title);
@@ -194,6 +197,8 @@ class DB extends \SQLite3
                 $sql->bindValue(':totalPages', $totalPages);
                 $sql->bindValue(':language', $language);
                 $sql->bindValue(':sticker', $sticker);
+                $translator = new TranslateReadingLevel();
+                $readingLevel = $translator($readingLevel);
                 $sql->bindValue(':readingLevel', $readingLevel);
                 $publisherId = $this->getPublisherId($publishers);
                 $sql->bindValue(':publishersId', $publisherId);
@@ -203,7 +208,6 @@ class DB extends \SQLite3
 
                 $status = $sql->execute();
                 $res = $status ? "Success" : "Failed";
-                //todo get the newly created id here
                 $this->setCategories($this->lastInsertRowID(), $categories);
                 return $res;
             }

@@ -6,8 +6,13 @@
       @closeModal="handleCloseModal"
     />
 
-    <FormulateForm v-model="currentBookData" class="section" @submit="saveBook">
-      <FormulateInput v-if="currentBookData.id" type="hidden" name="id" />
+    <FormulateForm
+      v-model="currentBookData"
+      :values="bookData"
+      class="section"
+      @submit="saveBook"
+    >
+      <FormulateInput v-if="bookData.id" type="hidden" name="id" />
       <FormulateInput
         label="isbn"
         type="text"
@@ -105,6 +110,7 @@ export default {
   },
   methods: {
     saveBook(data) {
+      debugger;
       this.$axios({
         method: 'POST',
         url: 'saveBook',
