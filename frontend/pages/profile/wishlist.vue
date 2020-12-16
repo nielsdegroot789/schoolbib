@@ -135,7 +135,7 @@ export default {
       this.axios
         .get('getFavoriteBooks', {
           params: {
-            data: this.UserId,
+            id: this.UserId,
             headers: {
               Auth: this.$store.state.JWT,
             },

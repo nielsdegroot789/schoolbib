@@ -101,7 +101,7 @@ export default {
         .get('getReservationUser', {
           headers: { Auth: localStorage.getItem('JWT') },
           params: {
-            data: this.UserId,
+            id: this.UserId,
           },
         })
         .then((response) => {
