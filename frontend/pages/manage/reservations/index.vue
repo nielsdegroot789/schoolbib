@@ -29,50 +29,50 @@
         </tr>
       </tbody>
     </table>
-    <button class="button" @click="modelStatus(true)">New checkout</button>
-    <div v-if="modalStatus" class="modal is-active">
-      <div class="modal-background" @click="modelStatus(false)"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">New checkout</p>
-          <button
-            class="delete"
-            aria-label="close"
-            @click="modelStatus(false)"
-          ></button>
-        </header>
-        <section class="modal-card-body">
-          <FormulateForm @submit="saveNewCheckout">
-            <FormulateInput
-              v-model="newCheckoutData.usersId"
-              type="text"
-              label="Student id"
-              placeholder="Student id"
-              validation="required"
-            />
-            <FormulateInput
-              v-model="newCheckoutData.booksId"
-              type="text"
-              label="Book Id"
-              placeholder="Book Id"
-              validation="required"
-            />
-            <FormulateInput
-              type="submit"
-              label="Save"
-              @submit="saveNewCheckout"
-              @click="saveCheckoutNotif"
-            />
-          </FormulateForm>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button" @click="modelStatus(false)">Close</button>
-        </footer>
+    <div class="checkoutPlus">
+      <h1>Checkouts</h1>
+      <button class="button" @click="modelStatus(true)">+</button>
+      <div v-if="modalStatus" class="modal is-active">
+        <div class="modal-background" @click="modelStatus(false)"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">New checkout</p>
+            <button
+              class="delete"
+              aria-label="close"
+              @click="modelStatus(false)"
+            ></button>
+          </header>
+          <section class="modal-card-body">
+            <FormulateForm @submit="saveNewCheckout">
+              <FormulateInput
+                v-model="newCheckoutData.usersId"
+                type="text"
+                label="Student id"
+                placeholder="Student id"
+                validation="required"
+              />
+              <FormulateInput
+                v-model="newCheckoutData.booksId"
+                type="text"
+                label="Book Id"
+                placeholder="Book Id"
+                validation="required"
+              />
+              <FormulateInput
+                type="submit"
+                label="Save"
+                @submit="saveNewCheckout"
+                @click="saveCheckoutNotif"
+              />
+            </FormulateForm>
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button" @click="modelStatus(false)">Close</button>
+          </footer>
+        </div>
       </div>
     </div>
-
-    <h2>Checkouts</h2>
-
     <table class="table table is-bordered is-hoverable is-fullwidth">
       <thead>
         <tr>
@@ -81,7 +81,6 @@
           <th>checkoutDateTime</th>
           <th>maxAllowedDate</th>
           <th>fine</th>
-          <th>return</th>
         </tr>
       </thead>
       <div v-if="loadingCheckouts"><Loading /></div>
@@ -93,9 +92,14 @@
           <td>{{ item.maxAllowedDate }}</td>
           <td>{{ item.fine }}</td>
           <td>
+            <button class="button" @click="returnCheckouts(item.id)">
+              Only returned
+            </button>
+          </td>
+          <td>
             <button
               class="button"
-              @click="returnCheckouts(item, index) in checkouts"
+              @click="returnPaidCheckouts(item, index) in checkouts"
             >
               Paid and returned
             </button>
@@ -203,7 +207,7 @@ export default {
         });
     },
 
-    returnCheckouts(object) {
+    returnCheckouts(id) {
       const today = new Date();
       const returnDateTime = today.toLocaleString('en-GB');
 
@@ -215,7 +219,34 @@ export default {
         .post(
           'returnCheckouts',
           {
+            id,
             returnDateTime,
+          },
+          {
+            headers,
+          },
+        )
+        .then((response) => {
+          this.loadCheckouts();
+          this.loadReservations();
+        });
+    },
+    returnPaidCheckouts(id) {
+      const today = new Date();
+      const returnDateTime = today.toLocaleString('en-GB');
+      const paidDate = today.toLocaleString('en-GB');
+      const headers = {
+        Auth: localStorage.getItem('JWT'),
+      };
+
+      this.$axios
+        .post(
+          'returnCheckouts',
+          {
+            data: { data: id },
+            returnDateTime,
+            fine: 0,
+            paidDate,
           },
           {
             headers,
@@ -267,5 +298,11 @@ export default {
 }
 .modal-card-body {
   overflow: hidden;
+}
+.checkoutPlus {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  width: 120px;
 }
 </style>

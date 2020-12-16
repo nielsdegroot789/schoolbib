@@ -509,7 +509,7 @@ class DB extends \SQLite3
 
         $status = $sql->execute();
 
-        $this->acceptReservation($usersId, $booksId);
+        $this->saveCheckouts($usersId, $booksId);
 
         $res = $status ? "Success" : "Failed";
         return $res;
@@ -643,6 +643,7 @@ class DB extends \SQLite3
         }
         return $answer;
     }
+    
     public function updatePassword($password, $id)
     {
 
@@ -652,6 +653,7 @@ class DB extends \SQLite3
         $sql->execute();
         return 'password succesfully updated';
     }
+
     public function getAdminSpecificBooks($id)
     {
         $sql = $this->prepare('select * from books where bookMetaId = :id');
@@ -671,7 +673,15 @@ class DB extends \SQLite3
         $sql->bindValue(':id', $id);
         $res = $sql->execute();
         return $res;
-
+    }
+    
+    public function returnCheckouts($id, $returnDateTime)
+    {
+        $sql = $this->prepare('update checkouts set returnDateTime =: returnDateTime');
+        $sql->bindValue(':id', $id);
+        $sql->bindValue(':returnDateTime', $returnDateTime);
+        $res = $sql->execute();
+        return $res;
     }
 
     public function updateSpecificBook($id, $stock, $qrCode, $status)

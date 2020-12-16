@@ -96,7 +96,6 @@ export default {
         .delete('deleteReservationUser', {
           headers: {
             Auth: this.$store.state.JWT,
-            'Content-Type': 'application/x-www-form-urlencoded',
           },
           data: { data: id },
         })

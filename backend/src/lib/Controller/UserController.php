@@ -154,6 +154,39 @@ class UserController
         $response->getBody()->write($data);
         return $response;
     }
+    
+    public function returnPaidCheckouts(Request $request, Response $response, array $args)
+    {            
+        $data = json_decode(file_get_contents("php://input"), TRUE);
+        $this->response = $response;
+
+        $db = new DB();
+        $id = $data["id"];
+        $returnCheckouts = $data["returnCheckouts"];
+        $returnCheckouts = $data["returnCheckouts"];
+        $returnCheckouts = $data["returnCheckouts"];
+
+        $data = $db->returnCheckouts($id, $returnCheckouts);
+      
+        $response->getBody()->write($data);
+        return $response;
+    }
+
+
+    public function returnCheckouts(Request $request, Response $response, array $args)
+    {            
+        $data = json_decode(file_get_contents("php://input"), TRUE);
+        $this->response = $response;
+
+        $db = new DB();
+        $id = $data["id"];
+        $returnCheckouts = $data["returnCheckouts"];
+
+        $data = $db->returnCheckouts($id, $returnCheckouts);
+      
+        $response->getBody()->write($data);
+        return $response;
+    }
 
 
     public function getReservations(Request $request, Response $response, array $args)
