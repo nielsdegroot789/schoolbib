@@ -462,8 +462,7 @@ class DB extends \SQLite3
         $sql = "SELECT usersId,booksId, reservationDateTime, accepted , users.surname as usersName, bookMeta.title as booksName
         FROM reservations
         left join users on users.id = reservations.usersId
-		left join books on books.id = reservations.booksId
-		left join bookMeta on bookMeta.id = books.bookMetaId
+		left join bookMeta on bookMeta.id = reservations.booksId
         WHERE accepted = 0
         GROUP by reservations.id ORDER by reservations.reservationDateTime DESC";
 

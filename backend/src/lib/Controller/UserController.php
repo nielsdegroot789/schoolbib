@@ -127,7 +127,8 @@ class UserController
         $data = json_decode(file_get_contents("php://input"), TRUE);
         $this->response = $response;
         $db = new DB();
-
+        // Reworked Benno's reservation to an atleast presentable demo, not working fully.
+        // The reservation of actual books does not work. (only book metas)
         $usersId = $data['params']["usersId"];
         $booksId = $data['params']["booksId"];
         $reservationDateTime = $data['params']["reservationDateTime"];
