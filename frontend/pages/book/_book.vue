@@ -84,14 +84,7 @@
           There are currently <b> {{ stockCount }} </b> available.
         </p>
         <!-- todo change this to only show when logged in otherwise go to login -->
-        <button
-          class="button is-large"
-          @click="
-            // this is a horrible way to show notification. Unable to change it even if something goes wrong in backend
-            submitReserveData();
-            saveCheckoutNotif();
-          "
-        >
+        <button class="button is-large" @click="submitReserveData()">
           Reserve now!
         </button>
       </div>
@@ -170,7 +163,9 @@ export default {
           },
           { headers },
         )
-        .then(function (response) {});
+        .then(function (response) {
+          this.saveCheckoutNotif();
+        });
     },
 
     saveCheckoutNotif() {
