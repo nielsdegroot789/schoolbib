@@ -6,12 +6,6 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-end">
-          <nuxt-link
-            v-if="loggedIn && (currentRole == 3 || currentRole == 2)"
-            class="navbar-item"
-            to="/manage/books"
-          ></nuxt-link>
-
           <div
             v-if="
               loggedIn &&
@@ -20,14 +14,16 @@
             id="dropdownMenu"
             class="dropdownProfile"
           >
-            <button class="dropbtn" @click="visible = !visible">profile</button>
+            <button class="dropbtn navbar-item" @click="visible = !visible">
+              profile
+            </button>
             <div v-if="visible" id="myDropdown" class="dropdown-content">
-              <a class="sub-item" @click="visible = !visible">
+              <a class="sub-item navbar-item" @click="visible = !visible">
                 <nuxt-link v-if="loggedIn" class="navbar-item" to="/profile"
                   >Information</nuxt-link
                 >
               </a>
-              <a class="sub-item" @click="visible = !visible">
+              <a class="sub-item navbar-item" @click="visible = !visible">
                 <nuxt-link
                   v-if="loggedIn"
                   class="navbar-item"
@@ -35,7 +31,7 @@
                   >My books</nuxt-link
                 >
               </a>
-              <a class="sub-item" @click="visible = !visible">
+              <a class="sub-item navbar-item" @click="visible = !visible">
                 <nuxt-link
                   v-if="loggedIn"
                   class="navbar-item"
@@ -46,7 +42,7 @@
             </div>
           </div>
           <nuxt-link
-            v-if="loggedIn"
+            v-if="loggedIn && (currentRole == 3 || currentRole == 2)"
             class="navbar-item"
             to="/manage/books"
             profile-clear
@@ -115,6 +111,10 @@ export default {
 </script>
 
 <style>
+.navbar-item:hover {
+  cursor: pointer;
+  background-color: rgb(230, 230, 230);
+}
 .dropbtn {
   background-color: #f5f5f5;
   padding: 16px;
@@ -137,13 +137,13 @@ export default {
 }
 
 .dropdown-content a {
-  color: black;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
 }
 
 .show {
+  border: none;
   display: block;
 }
 </style>
