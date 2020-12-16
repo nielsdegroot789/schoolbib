@@ -46,13 +46,21 @@ export default {
       dataRes: [],
     };
   },
+  computed: {
+    UserId() {
+      return this.$store.state.currentUser.id;
+    },
+    JWT() {
+      return this.$store.state.JWT;
+    },
+  },
 
   mounted() {
-    this.axios
-      .get('http://localhost:8080/getCheckoutUser', {
+    this.$axios
+      .get('getCheckoutUser', {
         headers: { Auth: localStorage.getItem('JWT') },
         params: {
-          data: this.UserId,
+          id: this.UserId,
         },
       })
       .then((response) => {
@@ -60,11 +68,11 @@ export default {
         this.dataCheck = response.data;
       });
 
-    this.axios
-      .get('http://localhost:8080/getReservationUser', {
+    this.$axios
+      .get('getReservationUser', {
         headers: { Auth: localStorage.getItem('JWT') },
         params: {
-          data: this.UserId,
+          id: this.UserId,
         },
       })
       .then((response) => {
@@ -76,11 +84,11 @@ export default {
   methods: {
     deleteRes(id) {
       console.log(id);
-      this.axios
-        .delete('http://localhost:8080/deleteReservationUser', {
+      this.$axios
+        .delete('deleteReservationUser', {
           headers: { Auth: localStorage.getItem('JWT') },
           params: {
-            data: this.UserId,
+            id: this.UserId,
           },
         })
         .then((response) => {
@@ -89,8 +97,8 @@ export default {
         });
     },
     refreshBooks() {
-      this.axios
-        .get('http://localhost:8080/getReservationUser', {
+      this.$axios
+        .get('getReservationUser', {
           headers: { Auth: localStorage.getItem('JWT') },
           params: {
             data: this.UserId,

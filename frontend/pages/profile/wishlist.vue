@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     UserId() {
-      return this.$store.state.currentUser;
+      return this.$store.state.currentUser.id;
     },
     JWT() {
       return this.$store.state.JWT;
@@ -72,7 +72,7 @@ export default {
       .get('getFavoriteAuthors', {
         headers: { Auth: localStorage.getItem('JWT') },
         params: {
-          data: this.UserId,
+          id: this.UserId,
         },
       })
       .then((response) => {
@@ -83,7 +83,7 @@ export default {
       .get('getFavoriteBooks', {
         headers: { Auth: localStorage.getItem('JWT') },
         params: {
-          data: this.UserId,
+          id: this.UserId,
         },
       })
       .then((response) => {
@@ -97,7 +97,7 @@ export default {
         .delete('deleteFavoriteAuthors', {
           headers: { Auth: localStorage.getItem('JWT') },
           params: {
-            data: this.UserId,
+            id: this.UserId,
           },
         })
         .then((response) => {
@@ -109,7 +109,7 @@ export default {
         .delete('deleteFavoriteBooks', {
           headers: { Auth: localStorage.getItem('JWT') },
           params: {
-            data: this.UserId,
+            id: this.UserId,
           },
         })
         .then((response) => {
@@ -120,7 +120,8 @@ export default {
       this.axios
         .get('getFavoriteAuthors', {
           params: {
-            data: this.UserId,
+            id: this.UserId,
+
             headers: {
               Auth: this.$store.state.JWT,
             },
