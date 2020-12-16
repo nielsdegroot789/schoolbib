@@ -137,7 +137,7 @@ $app->delete('/deleteReservationUser', \skoolBiep\Controller\UserController::cla
 
 
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
-
+$app->get('/stockCount', \skoolBiep\Controller\BookController::class . ':stockCount');
 $app->post('/addToFavoriteBookList', \skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 $app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');

@@ -73,15 +73,15 @@
       </div>
       <div class="section box stockInfo">
         <h3 class="title">Interested in reading?</h3>
-        <p v-if="inStock === 0">
+        <p v-if="stockCount === 0">
           There are currently no books available. Feel free to contact an
           employee.
         </p>
-        <p v-else-if="inStock === 1">
-          There is currently <b> {{ inStock }} </b> available.
+        <p v-else-if="stockCount === 1">
+          There is currently <b> {{ istockCount }} </b> available.
         </p>
         <p v-else>
-          There are currently <b> {{ inStock }} </b> available.
+          There are currently <b> {{ stockCount }} </b> available.
         </p>
         <!-- todo change this to only show when logged in otherwise go to login -->
         <button
@@ -113,13 +113,11 @@ export default {
       timestamp: '',
       adminSpecificBooks: Array,
       bookMeta: Array,
+      stockCount: '',
     };
   },
   computed: {
     // this WONT work if student opens page
-    inStock() {
-      return this.$store.state.adminSpecificBooks.length;
-    },
     currentUserId() {
       return this.$store.state.currentUser.id;
     },
@@ -127,6 +125,8 @@ export default {
   created() {},
   mounted() {
     // General page
+    // route naar stock count met params van deze erbij
+
     this.$axios
       .get('getBookMetaFromId', {
         params: { id: this.$route.params.book },
@@ -136,6 +136,17 @@ export default {
       })
       .then((response) => {
         this.bookMeta = response.data[0];
+      });
+
+    this.$axios
+      .get('stockCount', {
+        params: { id: this.$route.params.book },
+        headers: {
+          Auth: localStorage.getItem('JWT'),
+        },
+      })
+      .then((response) => {
+        this.stockCount = response.data[0].count;
       });
   },
 

@@ -717,6 +717,18 @@ class DB extends \SQLite3
         $sql->bindValue(':id', $id);
         $sql->execute();
     }
+    public function StockCount($id) {
+        //
+        $sql = $this->prepare("select count(id) as count from books where bookMetaId = :id");
+        $sql->bindValue(":id", $id);
+        $data = $sql->execute();
+        
+        $res = array();
+        while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
+            array_push($res, $row);
+        }
+        return $res;
+    }
     public function updateFines()
     {
         //Get all checkouts

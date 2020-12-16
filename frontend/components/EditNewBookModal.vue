@@ -100,6 +100,8 @@ export default {
       this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);
     },
     newBook() {
+      debugger;
+      console.log(this.$route.path);
       this.formValues.id = this.bookMetaId;
       const headers = {
         Auth: localStorage.getItem('JWT'),
