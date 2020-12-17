@@ -62,7 +62,6 @@ export default {
     document.removeEventListener('click', this.emptyAutoList);
   },
   created() {
-    // if array
     this.reload(this.authorFilters, 'Author');
     this.reload(this.categoryFilters, 'Category');
   },
