@@ -90,6 +90,7 @@ $checkLoggedInMW = function ($request, $handler) {
         return $response->withStatus(401);
     }
     
+    $jwtString = $authHeader[0];
     try{
         $jwtValidator = new ValidateJWT($jwtString);
         $userId = $jwtValidator->getUserId();
