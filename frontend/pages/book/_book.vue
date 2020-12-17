@@ -16,7 +16,7 @@
       <div class="section box flex-container-book--admin-edit">
         <div class="section box book-info--admin-edit">
           <!-- specifics -->
-          <h1 class="title">
+          <h1 class="title title-admin--edit">
             {{ bookMeta.title ? bookMeta.title : 'Unavailable' }}
           </h1>
           <p class="level">
@@ -72,10 +72,7 @@
         </div>
         <div class="section box stockInfo">
           <h3 class="title">Interested in reading?</h3>
-          <p v-if="stockCount === 0">
-            There are currently no books available. Feel free to contact an
-            employee.
-          </p>
+          <p v-if="stockCount === 0">There are currently no books available.</p>
           <p v-else-if="stockCount === 1" class="stock-p--admin-edit">
             There is currently <b> {{ stockCount }} </b> available.
           </p>
@@ -196,10 +193,11 @@ export default {
 .stockInfo {
   text-align: center;
   background-color: #28528a;
-  height: 50%;
+  height: fit-content;
   margin: 1rem;
   margin-top: 0;
   color: white;
+  width: fit-content;
 }
 
 .stockInfo .title {
@@ -235,5 +233,13 @@ export default {
   box-shadow: none;
   margin-top: 0;
   padding-top: 0;
+}
+.title-admin--edit {
+  word-wrap: break-word;
+}
+@media only screen and (max-width: 1215px) {
+  .flex-container-book--admin-edit {
+    flex-direction: column;
+  }
 }
 </style>

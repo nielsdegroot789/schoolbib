@@ -109,7 +109,7 @@ export default {
 }
 .grid-books {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(5, 1fr);
 }
 .book-container--admin-edit {
   margin-top: 2rem;
@@ -119,5 +119,23 @@ export default {
 }
 .new-button--admin {
   margin-top: 2rem;
+}
+
+@media only screen and (max-width: 940px) {
+  .grid-books {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .grid-books {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media only screen and (max-width: 565px) {
+  .grid-books {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>
