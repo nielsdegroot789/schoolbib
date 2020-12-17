@@ -9,7 +9,7 @@
     </header>
     <table class="table table is-bordered is-hoverable is-fullwidth">
       <thead>
-        <tr>
+        <tr style="background-color: rgb(155, 178, 221)">
           <th>title</th>
           <th>isbn</th>
           <th>publish Date</th>
@@ -26,7 +26,7 @@
         </tr>
       </thead>
       <tfoot>
-        <tr>
+        <tr style="background-color: rgb(155, 178, 221)">
           <th>title</th>
           <th>isbn</th>
           <th>publish Date</th>
