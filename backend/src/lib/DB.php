@@ -515,9 +515,22 @@ class DB extends \SQLite3
 
     }
     
+    public function returnCheckouts($id, $returnDateTime)
+    {
+        $sql = $this->prepare("UPDATE checkouts set returnDateTime = :returnDateTime where id = :id ");
+
+        $sql->bindValue(':id', $id, );
+        $sql->bindValue(':returnDateTime', $returnDateTime, );
+
+        $status = $sql->execute();
+
+        $res = $status ? "Success" : "Failed";
+        return $res;
+    }
+
     public function getCheckouts($limitNumber, $offsetNumber)
     {
-        $sql = "SELECT usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName
+        $sql = "SELECT checkouts.id, usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName
         FROM checkouts
         left join users on users.id = checkouts.usersId
 		left join bookMeta on bookMeta.id = checkouts.booksId
