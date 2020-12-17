@@ -15,11 +15,7 @@
       @loadResults="loadSearchResult"
       @delete="deleteQuery"
     />
-    <div v-if="this.$route.path == '/books'" class="filters__toggle">
-      <button class="button button-clear" @click="toggleShow">
-        {{ show ? 'Hide filters' : 'Show filters' }}
-      </button>
-    </div>
+    <div v-if="this.$route.path == '/books'" class="filters__toggle"></div>
   </div>
 </template>
 
@@ -66,14 +62,10 @@ export default {
     document.removeEventListener('click', this.emptyAutoList);
   },
   created() {
-    // if array
     this.reload(this.authorFilters, 'Author');
-    this.reload(this.categoryFilters, 'Category');
+    this.reload(this.categoryFilters, 'Categories');
   },
   methods: {
-    toggleShow() {
-      this.show = !this.show;
-    },
     updateQuery() {
       const newQuery = this.filterObject;
       this.$router.push({
@@ -100,7 +92,8 @@ export default {
       this.batches = this.batches.filter((batch) => {
         return batch.value !== value;
       });
-      if (type === 'Category') {
+      debugger;
+      if (type === 'Categories') {
         if (Array.isArray(this.categoryFilters)) {
           this.categoryFilters = this.categoryFilters.filter((categoryVal) => {
             return value !== categoryVal;
