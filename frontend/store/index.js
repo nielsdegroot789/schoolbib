@@ -24,8 +24,8 @@ export const actions = {
     const params = {
       limit: state.limit,
     };
-    if (filters.pageNumber) {
-      params.offset = (filters.pageNumber - 1) * state.limit;
+    if (filters.page) {
+      params.offset = (filters.page - 1) * state.limit;
     }
     if (filters['filter-category']) {
       params.categories = filters['filter-category'];
