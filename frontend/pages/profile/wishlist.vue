@@ -87,9 +87,9 @@ export default {
       .get('getFavoriteBooks', {
         params: {
           data: this.UserId,
-          headers: {
-            Auth: this.$store.state.JWT,
-          },
+        },
+        headers: {
+          Auth: this.$store.state.JWT,
         },
       })
       .then((response) => {
@@ -119,7 +119,6 @@ export default {
         .delete('http://localhost:8080/deleteFavoriteBooks', {
           headers: {
             Auth: this.$store.state.JWT,
-            'Content-Type': 'application/x-www-form-urlencoded',
           },
           data: { data: id },
         })
@@ -133,9 +132,9 @@ export default {
         .get('getFavoriteAuthors', {
           params: {
             data: this.UserId,
-            headers: {
-              Auth: this.$store.state.JWT,
-            },
+          },
+          headers: {
+            Auth: this.$store.state.JWT,
           },
         })
         .then((response) => {
@@ -148,9 +147,9 @@ export default {
         .get('http://localhost:8080/getFavoriteBooks', {
           params: {
             data: this.UserId,
-            headers: {
-              Auth: this.$store.state.JWT,
-            },
+          },
+          headers: {
+            Auth: this.$store.state.JWT,
           },
         })
         .then((response) => {

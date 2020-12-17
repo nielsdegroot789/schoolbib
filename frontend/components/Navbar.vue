@@ -190,7 +190,7 @@ export default {
 }
 .nav__nav-item--active,
 .nav__nav-item:hover {
-  background-color: #464646;
+  background-color: rgb(104, 147, 228);
 }
 .nav__nav-item--active > a,
 .nav__nav-item:hover > a,
