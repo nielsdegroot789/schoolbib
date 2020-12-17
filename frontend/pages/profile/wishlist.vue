@@ -68,8 +68,6 @@ export default {
   },
 
   created() {
-    console.log(this.UserId);
-
     axios
       .get('getFavoriteAuthors', {
         params: {
@@ -80,7 +78,6 @@ export default {
         },
       })
       .then((response) => {
-        console.log(response);
         this.dataFavAuthor = response.data;
       });
     axios
@@ -93,13 +90,11 @@ export default {
         },
       })
       .then((response) => {
-        console.log(response);
         this.dataFavBook = response.data;
       });
   },
   methods: {
     deleteFavAuth(id) {
-      console.log(id);
       axios
         .delete('deleteFavoriteAuthors', {
           headers: {
@@ -109,12 +104,10 @@ export default {
           data: { data: id },
         })
         .then((response) => {
-          console.log(response);
           this.refreshAuth();
         });
     },
     deleteFavBooks(id) {
-      console.log(id);
       axios
         .delete('http://localhost:8080/deleteFavoriteBooks', {
           headers: {
@@ -123,7 +116,6 @@ export default {
           data: { data: id },
         })
         .then((response) => {
-          console.log(response);
           this.refreshBooks();
         });
     },
@@ -138,7 +130,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
           this.dataFavAuthor = response.data;
         });
     },
@@ -153,7 +144,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
           this.dataFavBook = response.data;
         });
     },

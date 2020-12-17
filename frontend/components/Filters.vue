@@ -68,7 +68,6 @@ export default {
   methods: {
     updateQuery() {
       const newQuery = this.filterObject;
-      console.log(newQuery);
       this.$router.push({
         path: '/books',
         query: newQuery,

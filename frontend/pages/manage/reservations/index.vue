@@ -151,7 +151,6 @@ export default {
           this.reservations = response.data;
         })
         .catch((error) => {
-          debugger;
           console.log(error);
         });
     },

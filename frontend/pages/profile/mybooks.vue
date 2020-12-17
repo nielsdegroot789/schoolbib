@@ -60,7 +60,6 @@ export default {
   },
 
   created() {
-    console.log(this.UserId);
     axios
       .get('getCheckoutUser', {
         params: {
@@ -71,7 +70,6 @@ export default {
         },
       })
       .then((response) => {
-        console.log(response);
         this.dataCheck = response.data;
       });
     axios
@@ -84,14 +82,12 @@ export default {
         },
       })
       .then((response) => {
-        console.log(response);
         this.dataRes = response.data;
       });
   },
 
   methods: {
     deleteRes(id) {
-      console.log(id);
       axios
         .delete('deleteReservationUser', {
           headers: {
@@ -101,7 +97,6 @@ export default {
           data: { data: id },
         })
         .then((response) => {
-          console.log(response);
           this.refreshBooks();
         });
     },
@@ -116,7 +111,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
           this.dataRes = response.data;
         });
     },

@@ -96,7 +96,6 @@ export default {
         const payload = {
           pageNumber: this.pageNumber,
         };
-        console.log(this.pageNumber);
         this.$store.dispatch('getBookMeta', payload);
       },
     },

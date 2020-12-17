@@ -13,7 +13,35 @@
       </ul>
     </div>
     <div v-if="loaded && bookMeta.length > 0" class="carousel">
-      <VueSlickCarousel v-bind="settings">
+      <VueSlickCarousel v-bind="smallSettings" class="smallCarousel">
+        <nuxt-link
+          v-for="item in bookMeta"
+          :key="item.id"
+          :to="'/book/' + item.id"
+          class="column"
+        >
+          <p class="carouselTitle subtitle">
+            {{ item.title }}
+          </p>
+          <img :src="item.sticker" />
+        </nuxt-link>
+      </VueSlickCarousel>
+
+      <VueSlickCarousel v-bind="mediumSettings" class="mediumCarousel">
+        <nuxt-link
+          v-for="item in bookMeta"
+          :key="item.id"
+          :to="'/book/' + item.id"
+          class="column"
+        >
+          <p class="carouselTitle subtitle">
+            {{ item.title }}
+          </p>
+          <img :src="item.sticker" />
+        </nuxt-link>
+      </VueSlickCarousel>
+
+      <VueSlickCarousel v-bind="largeSettings" class="largeCarousel">
         <nuxt-link
           v-for="item in bookMeta"
           :key="item.id"
@@ -44,9 +72,27 @@ export default {
   components: { VueSlickCarousel, Loading },
   data() {
     return {
-      settings: {
+      smallSettings: {
         arrows: true,
-        dots: true,
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        touchThreshold: 5,
+      },
+      mediumSettings: {
+        arrows: true,
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        touchThreshold: 5,
+      },
+      largeSettings: {
+        arrows: true,
+        dots: false,
         infinite: true,
         speed: 500,
         slidesToShow: 7,
@@ -93,7 +139,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 70%;
+  width: 100%;
   color: black;
 }
 
@@ -104,7 +150,18 @@ export default {
 .slick-prev,
 .slick-next {
   height: 60px;
-  background-color: lightgray;
+  background-color: #9bb2dd;
+  width: 30px;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+  background-color: rgb(104, 147, 228) !important;
+}
+
+.slick-prev:focus,
+.slick-next:focus {
+  background-color: rgb(104, 147, 228) !important;
 }
 
 .slick-prev:before,
@@ -113,24 +170,52 @@ export default {
   font-family: unset;
   font-size: 30px;
   background-color: transparent;
+  float: unset;
+  margin: auto;
 }
-
-.slick-prev:before {
-  float: left;
-}
-
-.slick-next:before {
-  float: right;
-}
-
-.slick-prev:hover,
-.slick-prev:focus,
-.slick-next:hover,
-.slick-next:focus {
-  background-color: lightgray;
-}
-
 .slick-track {
   margin: auto;
+}
+
+@media only screen and (min-width: 410px) {
+  .smallCarousel {
+    display: block !important;
+  }
+
+  .mediumCarousel {
+    display: none !important;
+  }
+
+  .largeCarousel {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 570px) {
+  .smallCarousel {
+    display: none !important;
+  }
+
+  .mediumCarousel {
+    display: block !important;
+  }
+
+  .largeCarousel {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 880px) {
+  .smallCarousel {
+    display: none !important;
+  }
+
+  .mediumCarousel {
+    display: none !important;
+  }
+
+  .largeCarousel {
+    display: block !important;
+  }
 }
 </style>
