@@ -211,7 +211,7 @@ export default {
         .post(
           'returnCheckouts',
           {
-            resId: object.id,
+            id: object.id,
             returnDateTime,
           },
           {
@@ -220,7 +220,6 @@ export default {
         )
         .then((response) => {
           this.loadCheckouts();
-          this.loadReservations();
         });
     },
     saveNewCheckout() {
