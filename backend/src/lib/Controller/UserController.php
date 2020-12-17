@@ -281,8 +281,8 @@ class UserController
         $this->response = $response;
         $db = new DB();
         $contents = json_decode(file_get_contents('php://input'), true);
-        $resId = $contents['data'];
-        $db->deleteFavoriteAuthors($resId);
+        $id = $contents['data'];
+        $db->deleteFavoriteAuthors($id);
         return $response;
     }
 

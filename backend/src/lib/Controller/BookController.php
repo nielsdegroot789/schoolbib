@@ -141,6 +141,15 @@ class BookController
         
     }
 
+    public function deleteUser(Request $request, Response $response, array $args) {
+        $this->response = $response;
+        $id = $_GET["id"];
+        $db = new DB();
+        $db->deleteUser($id);
+        return $response;
+        
+    }
+
     public function stockCount(Request $request, Response $response, array $args) {
         $this->response = $response;
         $db = new DB;

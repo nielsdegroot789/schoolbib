@@ -228,6 +228,11 @@ export default {
   display: grid;
   grid-template-columns: 50% 50%;
   position: relative;
+  overflow: hidden;
+}
+
+.formulate-form {
+  overflow: hidden;
 }
 
 .box {

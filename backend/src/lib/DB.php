@@ -742,6 +742,30 @@ class DB extends \SQLite3
         $sql2->execute();
         $sql->execute();
     }
+
+    public function deleteUser($id) {
+        $sql6 = $this->prepare('delete from favoriteAuthors where usersId = :id');
+        $sql5 = $this->prepare('delete from favoriteBooks where usersId = :id');
+        $sql4 = $this->prepare('delete from reservations where usersId = :id');
+        $sql3 = $this->prepare('delete from checkouts where usersId = :id');
+        $sql2 = $this->prepare('delete from userRoles where usersId = :id');
+        $sql = $this->prepare("delete from users where id = :id");
+
+        $sql6->bindValue(':id', $id);
+        $sql5->bindValue(':id', $id);
+        $sql4->bindValue(':id', $id);
+        $sql3->bindValue(':id', $id);
+        $sql2->bindValue(':id', $id);
+        $sql->bindValue(':id', $id);
+
+        $sql6->execute();
+        $sql5->execute();
+        $sql4->execute();
+        $sql3->execute();
+        $sql2->execute();
+        $sql->execute();
+    }
+
     public function StockCount($id) {
         //
         $sql = $this->prepare("select count(id) as count from books where bookMetaId = :id");

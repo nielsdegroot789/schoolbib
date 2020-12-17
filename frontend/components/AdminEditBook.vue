@@ -1,5 +1,8 @@
 <template>
-  <div v-if="currentRole.role == 2 || currentRole.role == 3">
+  <div
+    v-if="currentRole.role == 2 || currentRole.role == 3"
+    class="adminEditBook"
+  >
     <editBookModal
       :active="active"
       :book="book"
@@ -101,43 +104,45 @@ export default {
 };
 </script>
 
-<style>
-.card-width {
-  max-width: 35%;
-}
-.card-body {
-  display: flex;
-  justify-content: space-around;
-}
-.grid-books {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-}
-.book-container--admin-edit {
-  margin-top: 2rem;
-}
-.container--admin-edit {
-  padding-top: 1rem;
-}
-.new-button--admin {
-  margin-top: 2rem;
-}
-
-@media only screen and (max-width: 940px) {
-  .grid-books {
-    grid-template-columns: repeat(4, 1fr);
+<style lang="scss">
+.adminEditBook {
+  .card-width {
+    max-width: 35%;
   }
-}
-
-@media only screen and (max-width: 800px) {
-  .grid-books {
-    grid-template-columns: repeat(3, 1fr);
+  .card-body {
+    display: flex;
+    justify-content: space-around;
   }
-}
-
-@media only screen and (max-width: 580px) {
   .grid-books {
-    grid-template-columns: repeat(2, 1fr);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .book-container--admin-edit {
+    margin-top: 2rem;
+  }
+  .container--admin-edit {
+    padding-top: 1rem;
+  }
+  .new-button--admin {
+    margin-top: 2rem;
+  }
+
+  @media only screen and (max-width: 940px) {
+    .grid-books {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media only screen and (max-width: 800px) {
+    .grid-books {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media only screen and (max-width: 580px) {
+    .grid-books {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }
 </style>

@@ -80,6 +80,7 @@
             There are currently <b> {{ stockCount }} </b> available.
           </p>
           <button
+            v-if="currentUserId"
             class="button is-large button-reserve--admin-edit"
             @click="submitReserveData()"
           >
@@ -109,7 +110,6 @@ export default {
     };
   },
   computed: {
-    // this WONT work if student opens page
     currentUserId() {
       return this.$store.state.currentUser.id;
     },
