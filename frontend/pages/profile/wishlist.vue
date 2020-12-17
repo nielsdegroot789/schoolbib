@@ -102,7 +102,7 @@ export default {
     deleteFavAuth(object) {
       this.$axios
         .delete('deleteFavoriteAuthors', {
-          id: object.id,
+          data: { id: object.id },
           headers: {
             Auth: localStorage.getItem('JWT'),
           },
@@ -117,13 +117,9 @@ export default {
           headers: {
             Auth: localStorage.getItem('JWT'),
           },
-          id: object.id,
+          data: { id: object.id },
         })
         .then((response) => {
-          console.log(this.id);
-          console.log(this.object);
-          console.log(object);
-          console.log(id);
           this.getFavoriteBooks();
         });
     },
