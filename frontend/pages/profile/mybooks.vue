@@ -39,11 +39,15 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
       dataCheck: '',
       dataRes: '',
+      headers: {
+        Auth: '',
+      },
     };
   },
   computed: {
@@ -56,52 +60,58 @@ export default {
   },
 
   created() {
-    this.getCheckoutUser();
-    this.getReservationUser();
-  },
-  methods: {
-    getCheckoutUser() {
-      this.$axios
-        .get('getCheckoutUser', {
-          params: {
-            data: this.UserId,
-          },
+    axios
+      .get('getCheckoutUser', {
+        params: {
+          data: this.UserId,
           headers: {
-            Auth: localStorage.getItem('JWT'),
+            Auth: this.$store.state.JWT,
           },
+        },
+      })
+      .then((response) => {
+        this.dataCheck = response.data;
+      });
+    axios
+      .get('getReservationUser', {
+        params: {
+          data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        },
+      })
+      .then((response) => {
+        this.dataRes = response.data;
+      });
+  },
+
+  methods: {
+    deleteRes(id) {
+      axios
+        .delete('deleteReservationUser', {
+          headers: {
+            Auth: this.$store.state.JWT,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          data: { data: id },
         })
         .then((response) => {
-          console.log(response);
-          this.dataCheck = response.data;
+          this.refreshBooks();
         });
     },
-    getReservationUser() {
-      this.$axios
+    refreshBooks() {
+      axios
         .get('getReservationUser', {
           params: {
             data: this.UserId,
-          },
-          headers: {
-            Auth: localStorage.getItem('JWT'),
+            headers: {
+              Auth: this.$store.state.JWT,
+            },
           },
         })
         .then((response) => {
           this.dataRes = response.data;
-        });
-    },
-    deleteRes(id) {
-      this.$axios
-        .delete('deleteReservationUser', {
-          params: {
-            data: this.UserId,
-          },
-          headers: {
-            Auth: localStorage.getItem('JWT'),
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          this.getReservationUser();
         });
     },
   },

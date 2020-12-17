@@ -1,12 +1,13 @@
 <template>
   <div class="setup section">
     <header class="level">
-      <h1 class="level-left title">wishlist</h1>
+      <h1 class="level-left title">WhishList</h1>
     </header>
     <table class="table table is-bordered is-hoverable is-fullwidth aboveBlock">
       <thead>
         <tr>
           <th>Title</th>
+
           <th>Pages</th>
           <th>level</th>
           <th>rating</th>
@@ -16,6 +17,7 @@
       <tbody>
         <tr v-for="(item, index) in dataFavBook" :key="index">
           <td>{{ item.title }}</td>
+
           <td>{{ item.totalPages }}</td>
           <td>{{ item.readingLevel }}</td>
           <td>{{ item.rating }}</td>
@@ -48,6 +50,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -65,61 +68,83 @@ export default {
   },
 
   created() {
-    this.getFavoriteAuthors();
-    this.getFavoriteBooks();
+    axios
+      .get('getFavoriteAuthors', {
+        params: {
+          data: this.UserId,
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+        },
+      })
+      .then((response) => {
+        this.dataFavAuthor = response.data;
+      });
+    axios
+      .get('getFavoriteBooks', {
+        params: {
+          data: this.UserId,
+        },
+        headers: {
+          Auth: this.$store.state.JWT,
+        },
+      })
+      .then((response) => {
+        this.dataFavBook = response.data;
+      });
   },
-
   methods: {
-    getFavoriteAuthors() {
-      this.$axios
+    deleteFavAuth(id) {
+      axios
+        .delete('deleteFavoriteAuthors', {
+          headers: {
+            Auth: this.$store.state.JWT,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          data: { data: id },
+        })
+        .then((response) => {
+          this.refreshAuth();
+        });
+    },
+    deleteFavBooks(id) {
+      axios
+        .delete('http://localhost:8080/deleteFavoriteBooks', {
+          headers: {
+            Auth: this.$store.state.JWT,
+          },
+          data: { data: id },
+        })
+        .then((response) => {
+          this.refreshBooks();
+        });
+    },
+    refreshAuth() {
+      axios
         .get('getFavoriteAuthors', {
           params: {
             data: this.UserId,
           },
           headers: {
-            Auth: localStorage.getItem('JWT'),
+            Auth: this.$store.state.JWT,
           },
         })
         .then((response) => {
           this.dataFavAuthor = response.data;
         });
     },
-    getFavoriteBooks() {
-      this.$axios
-        .get('getFavoriteBooks', {
+    refreshBooks() {
+      axios
+        .get('http://localhost:8080/getFavoriteBooks', {
           params: {
             data: this.UserId,
           },
           headers: {
-            Auth: localStorage.getItem('JWT'),
+            Auth: this.$store.state.JWT,
           },
         })
         .then((response) => {
           this.dataFavBook = response.data;
-        });
-    },
-    deleteFavAuth(object) {
-      this.$axios
-        .delete('deleteFavoriteAuthors', {
-          id: object.id,
-          headers: {
-            Auth: localStorage.getItem('JWT'),
-          },
-        })
-        .then((response) => {
-          this.getFavoriteAuthors();
-        });
-    },
-    deleteFavBooks(object) {
-      this.$axios
-        .delete('deleteFavoriteBooks', {
-          id: object.id,
-          headers: {
-            Auth: localStorage.getItem('JWT'),
-          },
-        })
-        .then((response) => {
-          this.getFavoriteBooks();
         });
     },
   },
