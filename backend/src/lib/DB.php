@@ -678,21 +678,19 @@ class DB extends \SQLite3
 
     }
 
-    public function updateSpecificBook($id, $stock, $qrCode, $status)
+    public function updateSpecificBook($id, $qrCode, $status)
     {
-        $sql = $this->prepare("Update books set stock = :stock, qrCode = :qrCode, status = :status where id = :id");
+        $sql = $this->prepare("Update books set stock = qrCode = :qrCode, status = :status where id = :id");
         $sql->bindValue(':id', $id);
-        $sql->bindValue(':stock', $stock);
         $sql->bindValue(':qrCode', $qrCode);
         $sql->bindValue(':status', $status);
         $res = $sql->execute();
         return $res;
     }
 
-    public function newBook($stock, $qrCode, $status, $bookMetaId)
+    public function newBook($qrCode, $status, $bookMetaId)
     {   
-        $sql = $this->prepare("insert into books (stock, qrCode, status, bookMetaId) values(:stock, :qrCode, :status, :bookMetaId)");
-        $sql->bindValue(':stock', $stock);
+        $sql = $this->prepare("insert into books (qrCode, status, bookMetaId) values(:qrCode, :status, :bookMetaId)");
         $sql->bindValue(':qrCode', $qrCode);
         $sql->bindValue(':status', $status);
         $sql->bindValue(':bookMetaId', $bookMetaId);

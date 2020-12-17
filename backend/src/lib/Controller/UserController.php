@@ -101,27 +101,6 @@ class UserController
         return $this->user;
     }
 
-    public function addToFavoriteBookList(Request $request, Response $response, array $args)
-    {            
-        $data = json_decode(file_get_contents("php://input"), TRUE);
-        $this->response = $response;
-
-        $db = new DB();
-        $usersId = $data["usersId"];
-        $bookMetaId = $data["bookMetaId"];
-        
-
-        if($data['id']){
-            $id = $data['id'];
-            $data = $db->addToFavoriteBookList($usersId, $bookMetaId);
-        }
-        else {
-            $data = $db->addToFavoriteBookList($usersId, $bookMetaId);
-        }
-        $response->getBody()->write($data);
-        return $response;
-    }
-
     public function saveReservationsUser(Request $request, Response $response, array $args)
     {            
         $data = json_decode(file_get_contents("php://input"), TRUE);
@@ -348,40 +327,6 @@ class UserController
         $hashed_pass = password_hash($newPassword, CRYPT_SHA256);
         $db = new DB();
         $db->updatePassword($hashed_pass, $id);
-        return $response;
-    }
-    public function getAdminSpecificBooks(Request $request, Response $response, array $args) {
-        $this->response = $response;
-        $id = $_GET['id'];
-
-        $db = new DB();
-        $data = $db->getAdminSpecificBooks($id);
-        $result = json_encode($data);
-        $response->getBody()->write($result);
-        return $response->withHeader('Content-Type', 'application/json');
-
-    }
-
-    public function handleSpecificBook(Request $request, Response $response, array $args) {
-        $this->response = $response;
-        $db = new DB();
-        if($request->getMethod() == 'DELETE') {
-            $contents = json_decode(file_get_contents('php://input'), true);
-            $id = $contents['userId'];
-            $db->deleteSpecificBook($id);
-        }
-        $contents = json_decode(file_get_contents('php://input'), true);
-         
-         $stock = $contents['stock'];
-         $qrCode = $contents['qrCode'];
-         $status = $contents['status'];
-         if($request->getMethod() == 'POST') {
-            $bookMetaId = $contents['id'];
-            $db->newBook($stock, $qrCode, $status, $bookMetaId);
-         } else {
-        $id = $contents['id'];
-         $db->updateSpecificBook($id,$stock,$qrCode,$status);
-        }
         return $response;
     }
 }
