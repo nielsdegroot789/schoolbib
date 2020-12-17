@@ -78,7 +78,7 @@ export default {
         infinite: true,
         speed: 500,
         slidesToShow: 2,
-        slidesToScroll: 3,
+        slidesToScroll: 2,
         touchThreshold: 5,
       },
       mediumSettings: {
@@ -87,7 +87,7 @@ export default {
         infinite: true,
         speed: 500,
         slidesToShow: 4,
-        slidesToScroll: 3,
+        slidesToScroll: 1,
         touchThreshold: 5,
       },
       largeSettings: {
@@ -95,8 +95,8 @@ export default {
         dots: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 7,
+        slidesToShow: 7,
+        slidesToScroll: 1,
         touchThreshold: 5,
       },
       categories: [
@@ -177,7 +177,7 @@ export default {
   margin: auto;
 }
 
-@media only screen and (max-width: 410px) {
+@media only screen and (min-width: 410px) {
   .smallCarousel {
     display: block !important;
   }
@@ -191,13 +191,13 @@ export default {
   }
 }
 
-@media only screen and (max-width: 570px) {
+@media only screen and (min-width: 570px) {
   .smallCarousel {
     display: none !important;
   }
 
   .mediumCarousel {
-    display: none !important;
+    display: block !important;
   }
 
   .largeCarousel {
@@ -205,7 +205,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 880px) {
+@media only screen and (min-width: 880px) {
   .smallCarousel {
     display: none !important;
   }
@@ -215,7 +215,7 @@ export default {
   }
 
   .largeCarousel {
-    display: none !important;
+    display: block !important;
   }
 }
 </style>
