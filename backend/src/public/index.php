@@ -116,17 +116,32 @@ $app->get('/stockCount', \skoolBiep\Controller\BookController::class . ':stockCo
 
 // NEEDS TO BE LOGGED IN
 $app->group('/', function () use ($app) {
-    $app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':saveReservationsUser');
-    $app->get('/getFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':getFavoriteAuthors');
-    $app->get('/getFavoriteBooks', \skoolBiep\Controller\UserController::class . ':getFavoriteBooks');
-    $app->get('/getCheckoutUser', \skoolBiep\Controller\UserController::class . ':getCheckoutUser');
-    $app->get('/getReservationUser', \skoolBiep\Controller\UserController::class . ':getReservationUser');
-    $app->delete('/deleteFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':deleteFavoriteAuthors');
-    $app->delete('/deleteFavoriteBooks', \skoolBiep\Controller\UserController::class . ':deleteFavoriteBooks');
-    $app->delete('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
-    $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
-    $app->post('/addToFavoriteBookList', \skoolBiep\Controller\BookController::class . ':addToFavoriteBookList');
-    $app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
+$app->delete('/deleteBookMeta', \skoolBiep\Controller\BookController::class . ':deleteBookMeta'); 
+$app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
+$app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
+$app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
+$app->map(['POST', 'DELETE', 'PUT'], '/handleSpecificBook', \skoolBiep\Controller\UserController::class . ':handleSpecificBook');
+$app->get('/getAdminSpecificBooks', \skoolBiep\Controller\UserController::class . ':getAdminSpecificBooks');
+$app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':saveReservationsUser');
+$app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
+$app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
+
+$app->post('/returnCheckouts', \skoolBiep\Controller\UserController::class . ':returnCheckouts');
+$app->get('/getCheckoutUser', \skoolBiep\Controller\UserController::class . ':getCheckoutUser');
+$app->get('/getReservationUser', \skoolBiep\Controller\UserController::class . ':getReservationUser');
+$app->get('/getFavoriteBooks', \skoolBiep\Controller\UserController::class . ':getFavoriteBooks');
+$app->get('/getFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':getFavoriteAuthors');
+$app->delete('/deleteFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':deleteFavoriteAuthors');
+$app->delete('/deleteFavoriteBooks', \skoolBiep\Controller\UserController::class . ':deleteFavoriteBooks');
+$app->delete('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
+
+
+
+$app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
+$app->get('/stockCount', \skoolBiep\Controller\BookController::class . ':stockCount');
+$app->post('/addToFavoriteBookList', \skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
+$app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
+$app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
 })->add($checkLoggedInMW);
 
 $app->group('/', function () use ($app) {
