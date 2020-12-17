@@ -93,10 +93,7 @@
           <td>{{ item.maxAllowedDate }}</td>
           <td>{{ item.fine }}</td>
           <td>
-            <button
-              class="button"
-              @click="returnCheckouts(item, index) in checkouts"
-            >
+            <button class="button" @click="returnCheckouts(item)">
               Paid and returned
             </button>
           </td>
@@ -149,10 +146,6 @@ export default {
         .then((response) => {
           this.loadingReservation = false;
           this.reservations = response.data;
-        })
-        .catch((error) => {
-          debugger;
-          console.log(error);
         });
     },
     loadCheckouts() {
@@ -215,6 +208,7 @@ export default {
         .post(
           'returnCheckouts',
           {
+            id: object.id,
             returnDateTime,
           },
           {
@@ -232,7 +226,7 @@ export default {
       const checkoutDateTime = today.toLocaleString('en-GB');
       const maxAllowedDate = inTwoWeeks.toLocaleString('en-GB');
 
-      this.$axios.post('http://localhost:8080/saveCheckouts', {
+      this.$axios.post('saveCheckouts', {
         usersId: this.newCheckoutData.usersId,
         booksId: this.newCheckoutData.booksId,
         checkoutDateTime,

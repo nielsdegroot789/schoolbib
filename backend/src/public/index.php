@@ -126,6 +126,7 @@ $app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class 
 $app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
 $app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
 
+$app->post('/returnCheckouts', \skoolBiep\Controller\UserController::class . ':returnCheckouts');
 $app->get('/getCheckoutUser', \skoolBiep\Controller\UserController::class . ':getCheckoutUser');
 $app->get('/getReservationUser', \skoolBiep\Controller\UserController::class . ':getReservationUser');
 $app->get('/getFavoriteBooks', \skoolBiep\Controller\UserController::class . ':getFavoriteBooks');

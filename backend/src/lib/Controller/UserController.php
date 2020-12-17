@@ -155,6 +155,21 @@ class UserController
         $response->getBody()->write($data);
         return $response;
     }
+    public function returnCheckouts(Request $request, Response $response, array $args)
+    {            
+        $data = json_decode(file_get_contents("php://input"), TRUE);
+        $this->response = $response;
+
+        $db = new DB();
+        $id = $data["id"];
+        $returnDateTime = $data["returnDateTime"];
+        
+
+        $data = $db->returnCheckouts($id, $returnDateTime);
+      
+        $response->getBody()->write($data);
+        return $response;
+    }
 
 
     public function getReservations(Request $request, Response $response, array $args)
