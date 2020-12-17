@@ -133,7 +133,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 565px) {
+@media only screen and (max-width: 580px) {
   .grid-books {
     grid-template-columns: repeat(2, 1fr);
   }
