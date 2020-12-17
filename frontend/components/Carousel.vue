@@ -177,7 +177,15 @@ export default {
   margin: auto;
 }
 
-@media only screen and (min-width: 410px) {
+@media only screen and (min-width: 200px) {
+  .carouselTitle {
+    font-size: 0.75rem !important;
+  }
+
+  .tabs {
+    font-size: 0.75rem;
+  }
+
   .smallCarousel {
     display: block !important;
   }
@@ -192,6 +200,13 @@ export default {
 }
 
 @media only screen and (min-width: 570px) {
+  .carouselTitle {
+    font-size: 1rem !important;
+  }
+
+  .tabs {
+    font-size: 1rem;
+  }
   .smallCarousel {
     display: none !important;
   }
@@ -206,6 +221,13 @@ export default {
 }
 
 @media only screen and (min-width: 880px) {
+  .carouselTitle {
+    font-size: 1rem !important;
+  }
+
+  .tabs {
+    font-size: 1.2rem;
+  }
   .smallCarousel {
     display: none !important;
   }
