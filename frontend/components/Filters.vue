@@ -67,7 +67,7 @@ export default {
   },
   created() {
     this.reload(this.authorFilters, 'Author');
-    this.reload(this.categoryFilters, 'Category');
+    this.reload(this.categoryFilters, 'Categories');
   },
   methods: {
     toggleShow() {
@@ -100,6 +100,7 @@ export default {
       this.batches = this.batches.filter((batch) => {
         return batch.value !== value;
       });
+      debugger;
       if (type === 'Categories') {
         if (Array.isArray(this.categoryFilters)) {
           this.categoryFilters = this.categoryFilters.filter((categoryVal) => {
