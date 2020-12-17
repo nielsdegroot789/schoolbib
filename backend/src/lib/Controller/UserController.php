@@ -133,6 +133,14 @@ class UserController
         $maxAllowedDate = $data["maxAllowedDate"];
 
         $data = $db->saveCheckouts($usersId,$booksId,$checkoutDateTime,$maxAllowedDate);
+        $mailData = $db->getEmailData($usersId, $booksId);
+        $name = $mailData[0]['surname'];
+        $email= $mailData[0]['email'];
+        $title = $mailData[0]['title'];
+        $author = $mailData[0]['author'];
+        $body = $this->container->get('twig')->render('confirmation.twig', ['name' => $name, 'title' => $title, 'author' => $author]);
+        $subject = "Confirmation book";
+        $this->container->get('mailer')->sendMail($email, $body, $subject);
       
         $response->getBody()->write($data);
         return $response;

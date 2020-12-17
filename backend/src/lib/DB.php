@@ -482,7 +482,6 @@ class DB extends \SQLite3
     public function acceptReservation($usersId, $booksId)
     {
 
-        //TODO prevent SQL INJECTION!!! Not working SQL code in master?
         $sql = $this->prepare("UPDATE reservations  SET accepted = 1 WHERE booksId = :booksId AND usersId = :usersId");
         $sql->bindValue(':booksId', $booksId);
         $sql->bindValue(':usersId', $usersId);
@@ -511,6 +510,7 @@ class DB extends \SQLite3
         $this->acceptReservation($usersId, $booksId);
 
         $res = $status ? "Success" : "Failed";
+       
         return $res;
 
     }
@@ -799,6 +799,26 @@ class DB extends \SQLite3
             array_push($results, -1);
         }
         return $results;
+    }
+    public function getEmailData($userId, $bookId) {
+        $sql = $this->prepare('select id, surname, email from users where id = :id');
+        $sql->bindValue(":id", $userId);
+
+        $data = $sql->execute();
+
+
+        $result = array();
+        while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
+            array_push($result, $row);
+        }
+
+        $book = $this->getBookMetaFromId($bookId);
+        $bookName = $book[0]['title'];
+        $bookAuthor = $book[0]['authors'];
+        $result[0]['title'] = $bookName;
+        $result[0]['author'] = $bookAuthor;
+
+        return $result;
     }
 
 }
