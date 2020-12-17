@@ -745,8 +745,9 @@ class DB extends \SQLite3
     {
         //Get all checkouts
         $sql = $this->prepare("
-        select checkouts.id, booksId, maxAllowedDate, users.email as email from checkouts
+        select checkouts.id, booksId, maxAllowedDate, users.email as email, users.surname as name, bookMeta.title as title from checkouts
         join users on usersId = users.id
+        join bookMeta on bookMeta.id = booksId
         where returnDateTime is null");
         $data = $sql->execute();
         $checkouts = array();
@@ -769,8 +770,7 @@ class DB extends \SQLite3
                 $daysUntilHandin = ($returnUnix - $now) / (60 * 60 * 24);
                 if((int)$daysUntilHandin == 3 || (int)$daysUntilHandin == 1 )
                 {
-                    array_push($results, [$daysUntilHandin, $checkout['email']]);
-
+                    array_push($results, [$daysUntilHandin, $checkout['email'], $checkout['name'], $checkout['title']]);
                 }
                 //Book does not need to be return yet
                 continue;

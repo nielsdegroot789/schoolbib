@@ -22,7 +22,9 @@ class CronJob
             //Send reminder mail
             $daysUntilHandin = $res[0];
             $address = $res[1];
-            $body = $this->container->get('twig')->render('returnReminder.twig', ['daysUntilHandin' => $daysUntilHandin]);
+            $name = $res[2];
+            $title = $res[3];
+            $body = $this->container->get('twig')->render('returnReminder.twig', ['daysUntilHandin' => $daysUntilHandin, 'name'=> $name, "bookName"=> $title]);
             $subject = "Return reminder";
             $this->container->get('mailer')->sendMail($address, $body, $subject);
         }
