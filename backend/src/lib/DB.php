@@ -515,9 +515,22 @@ class DB extends \SQLite3
 
     }
     
+    public function returnCheckouts($id, $returnDateTime)
+    {
+        $sql = $this->prepare("UPDATE checkouts set returnDateTime = :returnDateTime where id = :id ");
+
+        $sql->bindValue(':id', $id, );
+        $sql->bindValue(':returnDateTime', $returnDateTime, );
+
+        $status = $sql->execute();
+
+        $res = $status ? "Success" : "Failed";
+        return $res;
+    }
+
     public function getCheckouts($limitNumber, $offsetNumber)
     {
-        $sql = "SELECT usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName
+        $sql = "SELECT checkouts.id, usersId,booksId, checkoutDateTime, returnDateTime ,maxAllowedDate, fine, isPaid ,paidDate, users.surname as usersName, bookMeta.title as booksName
         FROM checkouts
         left join users on users.id = checkouts.usersId
 		left join bookMeta on bookMeta.id = checkouts.booksId
@@ -745,14 +758,17 @@ class DB extends \SQLite3
     {
         //Get all checkouts
         $sql = $this->prepare("
-        select checkouts.id, booksId, maxAllowedDate, users.email as email from checkouts
+        select checkouts.id, booksId, maxAllowedDate, users.email as email, users.surname as name, bookMeta.title as title from checkouts
         join users on usersId = users.id
+        join bookMeta on bookMeta.id = booksId
         where returnDateTime is null");
         $data = $sql->execute();
         $checkouts = array();
         while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
             array_push($checkouts, $row);
         }
+
+        $results = [];
 
         foreach($checkouts as $checkout){
             //Parse checkouts to Unix
@@ -765,9 +781,9 @@ class DB extends \SQLite3
             //If book did not need to be returned yet
             if($returnUnix > $now){
                 $daysUntilHandin = ($returnUnix - $now) / (60 * 60 * 24);
-                if((int)$daysUntilHandin == 2 || (int)$daysUntilHandin == 1 )
+                if((int)$daysUntilHandin == 3 || (int)$daysUntilHandin == 1 )
                 {
-                    return [$daysUntilHandin, $checkout['email']];
+                    array_push($results, [$daysUntilHandin, $checkout['email'], $checkout['name'], $checkout['title']]);
                 }
                 //Book does not need to be return yet
                 continue;
@@ -777,12 +793,12 @@ class DB extends \SQLite3
             $daysLate = ($now - $returnUnix) / (60 * 60 * 24);
             $fine = $daysLate * 0.5 + 1;
             $sql = $this->prepare("update checkouts set fine = :fine where id = :checkoutId");
-            $sql->bindValue(":fine", $fine);
+            $sql->bindValue(":fine", round($fine, 2));
             $sql->bindValue(":checkoutId", $checkout['id']);
             $data = $sql->execute();
-            return -1;
+            array_push($results, -1);
         }
-
+        return $results;
     }
 
 }

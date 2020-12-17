@@ -1,3 +1,23 @@
-<div>
-    Hello there, this is a reminder that you need to bring back your book in {{daysUntilHandin}} days!.
+<style>
+    .smallhead{
+        padding-left:20%;
+        padding-right:20%;
+        align-items: center;
+        width: auto;
+        background-color:grey   
+        font-family: sans-serif; 
+    }
+    .introduction {
+        font-size: 17px;
+    }
+</style>
+
+<div class="smallhead">
+    <p class="introduction"><b>Hi {{name}},</b></p>
+
+    This is a reminder that you need to bring back your book: "<b> {{bookName}} </b>" in {{daysUntilHandin}} days! <br/>
+    We hereby want to remind you that there is a base fine of 1 euro which is increased by 0.50 euro for each day till return.
+
+    <p>Thanks,</p>
+    <p>the Skoolbieb team</p>
 </div>
