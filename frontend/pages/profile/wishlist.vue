@@ -39,7 +39,7 @@
         <tr v-for="(item, index) in dataFavAuthor" :key="index">
           <td>
             {{ item.name }}
-            <button class="deleteButton" @click.stop="deleteFavAuth(item)">
+            <button class="deleteButton" @click="deleteFavAuth(item)">
               Delete
             </button>
           </td>
@@ -102,10 +102,10 @@ export default {
     deleteFavAuth(object) {
       this.$axios
         .delete('deleteFavoriteAuthors', {
-          headers: {
-            Auth: this.$store.state.JWT,
-          },
           id: object.id,
+          headers: {
+            Auth: localStorage.getItem('JWT'),
+          },
         })
         .then((response) => {
           this.getFavoriteAuthors();
@@ -120,6 +120,10 @@ export default {
           id: object.id,
         })
         .then((response) => {
+          console.log(this.id);
+          console.log(this.object);
+          console.log(object);
+          console.log(id);
           this.getFavoriteBooks();
         });
     },
