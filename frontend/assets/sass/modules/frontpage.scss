@@ -61,21 +61,16 @@ input[type='text'] {
 }
 
 .footer {
-  background-color: #474c66;
+  background-color:rgb(46, 70, 114);
   color: white;
   width: 100%;
   display: flex;
   justify-content: space-around;
-  & > div {
-    padding-left: 20px;
-    width: 40%;
-    margin-left: 15%;
-  }
 }
 
 .frontpageNotif {
   border-radius: 3px;
-  background-color: lightskyblue;
+  background-color: $base-color;
   margin-left: 10%;
   margin-right: 10%;
   padding: 5px 10px;
@@ -104,7 +99,7 @@ input[type='text'] {
     }
     li:hover::after {
       content: '';
-      background-color: #48748a;
+      background-color: $base-color;
       position: absolute;
       bottom: -4px;
       left: 0;
@@ -129,7 +124,7 @@ input[type='text'] {
   .carousel-new-suggestions .carousel-link {
     display: flex;
     flex-direction: row;
-    background-color: hotpink;
+    background-color: $base-color;
   }
 }
 .carousel-container {
@@ -143,7 +138,7 @@ input[type='text'] {
   height: fit-content;
 
   .carousel-book {
-    background-color: hotpink;
+    background-color:$base-color;
     width: 120px;
     height: 140px;
     border: black solid 1px;
@@ -174,7 +169,7 @@ input[type='text'] {
     border-radius: 3px;
     margin-top: -3rem;
     height: 3rem;
-    background-color: #414660;
+    background-color: rgb(155, 178, 221);
     h2 {
       letter-spacing: 0.3rem;
       text-align: center;

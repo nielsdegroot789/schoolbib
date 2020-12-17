@@ -141,4 +141,20 @@ class BookController
         
     }
 
+    public function stockCount(Request $request, Response $response, array $args) {
+        $this->response = $response;
+        $db = new DB;
+        $id = $_GET["id"];
+        if(!isset($id)){
+            throw "Id is not passed correctly";
+        }
+
+        $data = $db->stockCount($id);
+
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
+
 }

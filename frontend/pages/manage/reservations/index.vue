@@ -6,7 +6,7 @@
     <h2>Reservations</h2>
     <table class="table table is-bordered is-hoverable is-fullwidth">
       <thead>
-        <tr>
+        <tr style="background-color: rgb(155, 178, 221)">
           <th>id_user</th>
           <th>name_user</th>
           <th>id_book</th>
@@ -29,7 +29,7 @@
         </tr>
       </tbody>
     </table>
-    <button class="button" @click="modelStatus(true)">New checkout</button>
+    <button class="button" @click="modelStatus(true)">+</button>
     <div v-if="modalStatus" class="modal is-active">
       <div class="modal-background" @click="modelStatus(false)"></div>
       <div class="modal-card">
@@ -75,7 +75,7 @@
 
     <table class="table table is-bordered is-hoverable is-fullwidth">
       <thead>
-        <tr>
+        <tr style="background-color: rgb(155, 178, 221)">
           <th>userName</th>
           <th>book</th>
           <th>checkoutDateTime</th>

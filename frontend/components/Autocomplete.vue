@@ -93,7 +93,9 @@ export default {
       this.timeout = setTimeout(this.loadResults, 1000);
     },
     loadResults() {
-      this.$emit('loadResults', this.label);
+      if (this.label.length > 2) {
+        this.$emit('loadResults', this.label);
+      }
     },
     emitSelect(val, typ) {
       this.$emit('select', { val, typ });

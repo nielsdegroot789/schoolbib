@@ -71,4 +71,12 @@ export default {
   color: white;
   text-align: left;
 }
+@media only screen and (max-width: 600px) {
+  .manageOverlay {
+    display: none;
+  }
+  .books {
+    display: none;
+  }
+}
 </style>

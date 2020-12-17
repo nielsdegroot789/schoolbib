@@ -1,9 +1,7 @@
 <template>
   <div class="setup section">
     <header class="level">
-      <h1 class="level-left title">
-        Wishlits. this could be a carousel with books that are you favorite.
-      </h1>
+      <h1 class="level-left title">WhishList</h1>
     </header>
     <table class="table table is-bordered is-hoverable is-fullwidth aboveBlock">
       <thead>
