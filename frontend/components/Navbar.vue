@@ -6,11 +6,6 @@
       </div>
     </div>
     <div>
-      <button class="nav-hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
       <nav class="nav__nav">
         <div class="nav__nav-item books">
           <nuxt-link class="nuxt-link-active" to="/books?page=1"
@@ -144,32 +139,7 @@ export default {
   position: relative;
   display: flex;
 }
-.nav-hamburger {
-  display: none;
-  height: 5rem;
-  width: 5rem;
-  background-color: transparent;
-  border-radius: 0;
-  border: none;
-  padding: 1.2rem;
-  margin: 0;
-  flex-direction: column;
-  justify-content: space-around;
-}
-.nav-hamburger:hover,
-.nav-hamburger:focus {
-  background-color: #464646;
-}
-.nav-hamburger:hover span,
-.nav-hamburger:focus span {
-  background-color: #fff;
-}
-.nav-hamburger span {
-  background-color: #464646;
-  width: 100%;
-  height: 0.2rem;
-  border-radius: 0.1rem;
-}
+
 .nav__nav-sub {
   transform-origin: top;
   transform: scaleY(0);
