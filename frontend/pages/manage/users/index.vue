@@ -1,5 +1,10 @@
 <template>
   <div class="setup section">
+    <DeleteUser
+      :id="selectedId"
+      :active="isModalActive"
+      @closeModal="closeDeleteModal"
+    />
     <header class="level">
       <h1 class="level-left title">Manage Users</h1>
       <nuxt-link :to="{ path: '/manage/users/new' }" class="button level-right"
@@ -43,7 +48,9 @@
             </nuxt-link>
           </td>
           <td>
-            <button class="button">delete</button>
+            <button class="button" @click="setDeleteUserModal(user.id)">
+              delete
+            </button>
           </td>
         </tr>
       </tbody>
@@ -53,13 +60,16 @@
 
 <script>
 import Loading from '~/components/Loading.vue';
+import DeleteUser from '~/components/DeleteUser.vue';
 
 export default {
-  components: { Loading },
+  components: { Loading, DeleteUser },
   data() {
     return {
       users: [],
       loadingUsers: false,
+      isModalActive: false,
+      selectedId: -1,
     };
   },
   computed: {},
@@ -75,6 +85,16 @@ export default {
         this.loadingUsers = false;
         this.users = response.data;
       });
+  },
+  methods: {
+    setDeleteUserModal(id) {
+      this.selectedId = id;
+      this.isModalActive = true;
+    },
+    closeDeleteModal() {
+      this.isModalActive = false;
+      this.selectedId = -1;
+    },
   },
 };
 </script>

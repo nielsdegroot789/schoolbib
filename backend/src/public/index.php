@@ -157,6 +157,7 @@ $app->group('/', function () use ($app) {
     $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
     $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
     $app->delete('/deleteBookMeta', \skoolBiep\Controller\BookController::class . ':deleteBookMeta'); 
+    $app->delete('/deleteUser', \skoolBiep\Controller\BookController::class . ':deleteUser'); 
     $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 })->add($checkLoggedInAdminArchMW);
 
