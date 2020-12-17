@@ -52,6 +52,7 @@ export default {
       currentId: null,
       currentRole: '',
       active: false,
+      loaderActive: false,
     };
   },
   computed: {
@@ -67,11 +68,12 @@ export default {
       this.currentRole = n;
     },
   },
-  created() {
-    this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);
-  },
   mounted() {
     this.currentRole = this.$store.state.currentUser;
+    if (this.currentUserRole) {
+      this.$store.dispatch('getAdminSpecificBooks', this.$route.params.book);
+      this.loaderActive = true;
+    }
   },
   methods: {
     deleteSpecificBook(id) {

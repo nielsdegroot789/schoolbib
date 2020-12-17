@@ -20,7 +20,7 @@
         validation="required|email"
         input-class="input-style"
       />
-      <div>
+      <div class="profile-buttons--edit">
         <input type="submit" label="Save Changes" />
         <button class="reset-btn--profile" @click="resetPassword">
           Reset password
