@@ -11,7 +11,7 @@
   display: inline-block;
   width: 25%;
   height: 500px;
-  border: 7px solid #28528a;
+  border: 7px solid $base-color;
 
   .dashboard-link {
     position: relative;
@@ -21,10 +21,10 @@
     align-items: center;
     display: flex;
     &:hover .fa-icon {
-      color: #28528a;
+      color: $base-color;
     }
     &:hover nuxt-link {
-      color: #28528a;
+      color: $base-color;
     }
     .fa-icon {
       position: absolute;
@@ -43,7 +43,7 @@
   min-height: 500px;
   margin-left: 2rem;
   padding: 20px 5px;
-  border: 7px solid #28528a;
+  border: 7px solid rgb(89, 129, 202);
   .information-container {
     padding-left: 4rem;
     padding-top: 1rem;
