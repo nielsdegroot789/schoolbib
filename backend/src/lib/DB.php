@@ -235,7 +235,7 @@ class DB extends \SQLite3
         $sql = $this->prepare('SELECT users.id, users.surname ,users.password, roles.id as role from users
                                 join userRoles on userRoles.usersId = users.id
                                 join roles on roles.id = userRoles.rolesId
-                                where users.email = :email;');
+                                where users.email = :email');
 
         $sql->bindValue(':email', $formEmail);
         $res = $sql->execute();
@@ -597,7 +597,7 @@ class DB extends \SQLite3
 
     public function checkAdress($email)
     {
-        $sql = $this->prepare('select id from users where email = :email');
+        $sql = $this->prepare('select id, surname from users where email = :email');
         $sql->bindValue(':email', $email);
 
         $res = $sql->execute();
@@ -614,6 +614,8 @@ class DB extends \SQLite3
             $now->add(new DateInterval("PT1H"));
             $expireDate = $now->format('Y-m-d H:i:s');
             $token = md5(uniqid(rand(), true));}
+            $data['token'] = $token;
+            $data['name'] = $idArray['0']['surname'];
 
         $sql = $this->prepare("insert into tokens (users_id, expireDate, token) values(:id, :expireDate, :token)");
         $sql->bindValue(':id', $id);
@@ -621,7 +623,7 @@ class DB extends \SQLite3
         $sql->bindValue('token', $token);
         $sql->execute();
 
-        return $token;
+        return $data;
     }
     public function checkToken($token)
     {

@@ -64,9 +64,6 @@ export default {
       });
   },
   methods: {
-    selectPicture(event) {
-      this.selectedFile = event.target.file[0]; // vuex store sturen
-    },
     save() {
       this.$store.dispatch('addNotification', {
         type: 'success',
@@ -75,7 +72,7 @@ export default {
     },
     postData() {
       this.formValues.currentUser = this.UserId.id;
-      this.axios({
+      this.$axios({
         method: 'post',
         url: 'saveProfileData',
         data: this.formValues,
