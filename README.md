@@ -14,6 +14,8 @@ To run execute following commands in different terminals.
 
 The database is already within the project (backend/src/db/db.sqlite).
 
+If this is not the case the Db can be found [here](https://drive.google.com/file/d/1ePCwcL7kM8c86KaaXjNW9Xa5BG463IeZ/view?usp=sharing) and needs to be placed in the route mentioned above.
+
 # How to operate
 
 In the project there are 3 different of roles
