@@ -83,8 +83,8 @@
       margin-left: 1rem;
     }
     input[type='submit'], .reset-btn--profile {
-      border: 1px solid #6050a8;
-      background-color: #7B5EC6;
+      border: 1px solid #28528a;
+      background-color: #3369b2;
       padding: 1rem 2rem;
       font-weight: bold;
       color: #fff;
@@ -95,9 +95,11 @@
       cursor: pointer;
       &:hover {
         background-color:white;
-        color: #7B5EC6;
+        color: #3369b2;
       }
     }
-
+    .profile-buttons--edit {
+      margin-top: 1rem;
+    }
   }
 }
