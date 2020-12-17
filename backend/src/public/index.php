@@ -120,8 +120,8 @@ $app->delete('/deleteBookMeta', \skoolBiep\Controller\BookController::class . ':
 $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');
 $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
 $app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
-$app->map(['POST', 'DELETE', 'PUT'], '/handleSpecificBook', \skoolBiep\Controller\UserController::class . ':handleSpecificBook');
-$app->get('/getAdminSpecificBooks', \skoolBiep\Controller\UserController::class . ':getAdminSpecificBooks');
+$app->map(['POST', 'DELETE', 'PUT'], '/handleSpecificBook', \skoolBiep\Controller\BookController::class . ':handleSpecificBook');
+$app->get('/getAdminSpecificBooks', \skoolBiep\Controller\BookController::class . ':getAdminSpecificBooks');
 $app->post('/saveReservationsUser', \skoolBiep\Controller\UserController::class . ':saveReservationsUser');
 $app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
 $app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
@@ -138,7 +138,7 @@ $app->delete('/deleteReservationUser', \skoolBiep\Controller\UserController::cla
 
 $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
 $app->get('/stockCount', \skoolBiep\Controller\BookController::class . ':stockCount');
-$app->post('/addToFavoriteBookList', \skoolBiep\Controller\UserController::class . ':addToFavoriteBookList');
+$app->post('/addToFavoriteBookList', \skoolBiep\Controller\BookController::class . ':addToFavoriteBookList');
 $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 $app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
 })->add($checkLoggedInMW);

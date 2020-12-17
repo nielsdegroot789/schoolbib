@@ -18,7 +18,6 @@
           <div class="field">
             <div class="control">
               <FormulateForm v-model="formValues">
-                <FormulateInput type="text" name="stock" label="Stock" />
                 <FormulateInput type="text" name="qrCode" label="qr-code" />
                 <FormulateInput type="text" name="status" label="status" />
               </FormulateForm>
