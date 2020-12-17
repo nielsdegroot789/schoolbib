@@ -66,7 +66,6 @@ export default {
     document.removeEventListener('click', this.emptyAutoList);
   },
   created() {
-    // if array
     this.reload(this.authorFilters, 'Author');
     this.reload(this.categoryFilters, 'Category');
   },
@@ -101,7 +100,7 @@ export default {
       this.batches = this.batches.filter((batch) => {
         return batch.value !== value;
       });
-      if (type === 'Category') {
+      if (type === 'Categories') {
         if (Array.isArray(this.categoryFilters)) {
           this.categoryFilters = this.categoryFilters.filter((categoryVal) => {
             return value !== categoryVal;
