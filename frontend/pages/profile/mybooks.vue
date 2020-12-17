@@ -24,7 +24,7 @@
         <tr>
           <th>booksName</th>
           <th>maxAllowedDate</th>
-          <th>fine</th>
+          <th>fin</th>
         </tr>
       </thead>
       <tbody>
