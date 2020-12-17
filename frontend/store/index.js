@@ -97,7 +97,6 @@ export const actions = {
       .then((response) => context.commit('getReservation', response.data));
   },
   getProfilePageData({ commit, store }, data) {
-    console.log(data);
     this.$axios
       .get('getProfilePageData', {
         headers: {
@@ -136,7 +135,6 @@ export const actions = {
       .then(() => commit('deleteSpecificBook', id));
   },
   setSpecificBook({ commit }, values) {
-    console.log(values);
     commit('setSpecificBook', values);
   },
   toggleEditModal({ commit }, id) {

@@ -45,10 +45,7 @@ export default {
   },
   created() {
     const token = this.$route.query.token;
-    console.log(token);
     this.$axios.get('checkToken', { params: token }).then((response) => {
-      debugger;
-      console.log(response);
       this.tokenValid = response.data.message;
       this.userId = response.data.userId;
     });

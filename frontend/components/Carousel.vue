@@ -46,11 +46,11 @@ export default {
     return {
       settings: {
         arrows: true,
-        dots: true,
+        dots: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 7,
-        slidesToScroll: 1,
+        slidesToShow: 3,
+        slidesToScroll: 3,
         touchThreshold: 5,
       },
       categories: [
@@ -93,7 +93,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 70%;
+  width: 100%;
   color: black;
 }
 
@@ -104,7 +104,18 @@ export default {
 .slick-prev,
 .slick-next {
   height: 60px;
-  background-color: lightgray;
+  background-color: #9bb2dd;
+  width: 30px;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+  background-color: rgb(104, 147, 228) !important;
+}
+
+.slick-prev:focus,
+.slick-next:focus {
+  background-color: rgb(104, 147, 228) !important;
 }
 
 .slick-prev:before,
@@ -113,24 +124,15 @@ export default {
   font-family: unset;
   font-size: 30px;
   background-color: transparent;
+  float: unset;
+  margin: auto;
 }
-
-.slick-prev:before {
-  float: left;
-}
-
-.slick-next:before {
-  float: right;
-}
-
-.slick-prev:hover,
-.slick-prev:focus,
-.slick-next:hover,
-.slick-next:focus {
-  background-color: lightgray;
-}
-
 .slick-track {
   margin: auto;
+}
+
+@media only screen and (max-width: 1215px) {
+  .flex-container-book--admin-edit {
+  }
 }
 </style>

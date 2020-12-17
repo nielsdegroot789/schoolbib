@@ -40,7 +40,6 @@ export default {
     deleteBook() {
       if (this.$route.name === 'manage-books') {
         const id = this.bookId;
-        console.log(this.bookId);
         this.$axios
           .delete('deleteBookMeta', {
             headers: { Auth: localStorage.getItem('JWT') },
@@ -62,7 +61,6 @@ export default {
         return books.id !== this.bookId;
       });
       this.$emit('setNewBookMeta', newBooks);
-      console.log(newBooks);
     },
   },
 };
