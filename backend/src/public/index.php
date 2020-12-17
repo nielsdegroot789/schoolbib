@@ -2,6 +2,7 @@
 use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Psr7\Response as psr7Response;
 use skoolBiep\DB;
 use skoolBiep\Util\Mailer;
 use skoolBiep\Util\ValidateJWT;
@@ -50,20 +51,29 @@ $app->add(TwigMiddleware::createFromContainer($app));
 $checkLoggedInAdminArchMW = function ($request, $handler) {
     $authHeader = $request->getHeader('Auth');
     if (empty($authHeader)) {
+        $response = new psr7Response();
         return $response->withStatus(401);
     }
     
     $jwtString = $authHeader[0];
-    $jwtValidator = new ValidateJWT($jwtString);
-    $userId = $jwtValidator->getUserId();
-    $role = $jwtValidator->getUserRole();
+    try{
+        $jwtValidator = new ValidateJWT($jwtString);
+        $userId = $jwtValidator->getUserId();
+        $role = $jwtValidator->getUserRole();
+    } catch(Exception $e){
+        $response = new psr7Response();
+        $response->getBody()->write('Caught exception: ' . $e->getMessage() . "\n");
+        return $response->withStatus(401);
+    }
 
     //Check that student does not access admin stuff
     if(!($role == 2 || $role == 3)){
+        $response = new psr7Response();
         return $response->withStatus(401);
     }
     
     if (empty($userId)) {
+        $response = new psr7Response();
         return $response->withStatus(401);
     }
     
@@ -76,14 +86,21 @@ $checkLoggedInAdminArchMW = function ($request, $handler) {
 $checkLoggedInMW = function ($request, $handler) {
     $authHeader = $request->getHeader('Auth');
     if (empty($authHeader)) {
+        $response = new psr7Response();
         return $response->withStatus(401);
     }
     
-    $jwtString = $authHeader[0];
-    $jwtValidator = new ValidateJWT($jwtString);
-    $userId = $jwtValidator->getUserId();
+    try{
+        $jwtValidator = new ValidateJWT($jwtString);
+        $userId = $jwtValidator->getUserId();
+    } catch(Exception $e){
+        $response = new psr7Response();
+        $response->getBody()->write('Caught exception: ' . $e->getMessage() . "\n");
+        return $response->withStatus(401);
+    }
    
     if (empty($userId)) {
+        $response = new psr7Response();
         return $response->withStatus(401);
     }
     
