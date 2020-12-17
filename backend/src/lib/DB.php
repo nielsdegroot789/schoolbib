@@ -752,6 +752,8 @@ class DB extends \SQLite3
             array_push($checkouts, $row);
         }
 
+        $results = [];
+
         foreach($checkouts as $checkout){
             //Parse checkouts to Unix
             $returnDateTrimmed = strstr($checkout['maxAllowedDate'], ',', true);      
@@ -763,9 +765,10 @@ class DB extends \SQLite3
             //If book did not need to be returned yet
             if($returnUnix > $now){
                 $daysUntilHandin = ($returnUnix - $now) / (60 * 60 * 24);
-                if((int)$daysUntilHandin == 2 || (int)$daysUntilHandin == 1 )
+                if((int)$daysUntilHandin == 3 || (int)$daysUntilHandin == 1 )
                 {
-                    return [$daysUntilHandin, $checkout['email']];
+                    array_push($results, [$daysUntilHandin, $checkout['email']]);
+
                 }
                 //Book does not need to be return yet
                 continue;
@@ -775,12 +778,12 @@ class DB extends \SQLite3
             $daysLate = ($now - $returnUnix) / (60 * 60 * 24);
             $fine = $daysLate * 0.5 + 1;
             $sql = $this->prepare("update checkouts set fine = :fine where id = :checkoutId");
-            $sql->bindValue(":fine", $fine);
+            $sql->bindValue(":fine", round($fine, 2));
             $sql->bindValue(":checkoutId", $checkout['id']);
             $data = $sql->execute();
-            return -1;
+            array_push($results, -1);
         }
-
+        return $results;
     }
 
 }

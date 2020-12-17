@@ -16,15 +16,16 @@ class CronJob
     public function start(Request $request, Response $response, array $args)
     {
         $db = new DB();
-        $res = $db->updateFines();
-        if ($res == -1) return $response;
-
-        //Send reminder mail
-        $daysUntilHandin = $res[0];
-        $address = $res[1];
-        $body = $this->container->get('twig')->render('returnReminder.twig', ['daysUntilHandin' => $daysUntilHandin]);
-        $subject = "Return reminder";
-        $this->container->get('mailer')->sendMail($address, $body, $subject);
+        $results = $db->updateFines();
+        foreach($results as $res){
+            if ($res == -1) continue;
+            //Send reminder mail
+            $daysUntilHandin = $res[0];
+            $address = $res[1];
+            $body = $this->container->get('twig')->render('returnReminder.twig', ['daysUntilHandin' => $daysUntilHandin]);
+            $subject = "Return reminder";
+            $this->container->get('mailer')->sendMail($address, $body, $subject);
+        }
 
         return $response;
     }
