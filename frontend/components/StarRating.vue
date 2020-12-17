@@ -18,7 +18,7 @@ export default {
   props: {
     rating: {
       type: Number,
-      default: 1,
+      default: 0,
     },
   },
   data() {
@@ -43,7 +43,7 @@ export default {
   methods: {
     fillLower(index) {
       this.stars = this.stars.map((star, i) => {
-        if (i <= index) {
+        if (i < index) {
           star.fill = 'goldenrod';
         } else star.fill = 'white';
         return star;
