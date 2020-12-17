@@ -13,7 +13,35 @@
       </ul>
     </div>
     <div v-if="loaded && bookMeta.length > 0" class="carousel">
-      <VueSlickCarousel v-bind="settings">
+      <VueSlickCarousel v-bind="smallSettings" class="smallCarousel">
+        <nuxt-link
+          v-for="item in bookMeta"
+          :key="item.id"
+          :to="'/book/' + item.id"
+          class="column"
+        >
+          <p class="carouselTitle subtitle">
+            {{ item.title }}
+          </p>
+          <img :src="item.sticker" />
+        </nuxt-link>
+      </VueSlickCarousel>
+
+      <VueSlickCarousel v-bind="mediumSettings" class="mediumCarousel">
+        <nuxt-link
+          v-for="item in bookMeta"
+          :key="item.id"
+          :to="'/book/' + item.id"
+          class="column"
+        >
+          <p class="carouselTitle subtitle">
+            {{ item.title }}
+          </p>
+          <img :src="item.sticker" />
+        </nuxt-link>
+      </VueSlickCarousel>
+
+      <VueSlickCarousel v-bind="largeSettings" class="largeCarousel">
         <nuxt-link
           v-for="item in bookMeta"
           :key="item.id"
@@ -44,13 +72,31 @@ export default {
   components: { VueSlickCarousel, Loading },
   data() {
     return {
-      settings: {
+      smallSettings: {
+        arrows: true,
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 2,
+        slidesToScroll: 3,
+        touchThreshold: 5,
+      },
+      mediumSettings: {
+        arrows: true,
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 3,
+        touchThreshold: 5,
+      },
+      largeSettings: {
         arrows: true,
         dots: false,
         infinite: true,
         speed: 500,
         slidesToShow: 3,
-        slidesToScroll: 3,
+        slidesToScroll: 7,
         touchThreshold: 5,
       },
       categories: [
@@ -131,8 +177,45 @@ export default {
   margin: auto;
 }
 
-@media only screen and (max-width: 1215px) {
-  .flex-container-book--admin-edit {
+@media only screen and (max-width: 410px) {
+  .smallCarousel {
+    display: block !important;
+  }
+
+  .mediumCarousel {
+    display: none !important;
+  }
+
+  .largeCarousel {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 570px) {
+  .smallCarousel {
+    display: none !important;
+  }
+
+  .mediumCarousel {
+    display: none !important;
+  }
+
+  .largeCarousel {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 880px) {
+  .smallCarousel {
+    display: none !important;
+  }
+
+  .mediumCarousel {
+    display: none !important;
+  }
+
+  .largeCarousel {
+    display: none !important;
   }
 }
 </style>
