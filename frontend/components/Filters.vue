@@ -15,11 +15,7 @@
       @loadResults="loadSearchResult"
       @delete="deleteQuery"
     />
-    <div v-if="this.$route.path == '/books'" class="filters__toggle">
-      <button class="button button-clear" @click="toggleShow">
-        {{ show ? 'Hide filters' : 'Show filters' }}
-      </button>
-    </div>
+    <div v-if="this.$route.path == '/books'" class="filters__toggle"></div>
   </div>
 </template>
 
@@ -70,9 +66,6 @@ export default {
     this.reload(this.categoryFilters, 'Categories');
   },
   methods: {
-    toggleShow() {
-      this.show = !this.show;
-    },
     updateQuery() {
       const newQuery = this.filterObject;
       console.log(newQuery);

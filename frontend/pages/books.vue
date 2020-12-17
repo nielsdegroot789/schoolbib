@@ -97,8 +97,8 @@ export default {
 .cardContainer {
   display: grid;
   margin: 0 auto;
-  grid-template-columns: repeat(4, 24%);
-  column-gap: 1%;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 1rem;
   row-gap: 50px;
 }
 
@@ -152,5 +152,28 @@ img {
 }
 .level-right {
   justify-content: center;
+}
+.card:hover {
+  transform: scale(1.05);
+}
+.card {
+  transition: 300ms linear;
+}
+
+@media screen and (max-width: 1339px) {
+  .cardContainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .cardContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width: 680px) {
+  .cardContainer {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
