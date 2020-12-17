@@ -12,9 +12,7 @@
           <th>Id</th>
           <th>Surname</th>
           <th>Last name</th>
-          <th>age</th>
           <th>email</th>
-          <th>send password reset</th>
           <th>edit</th>
           <th>delete</th>
         </tr>
@@ -24,9 +22,7 @@
           <th>Id</th>
           <th>Surname</th>
           <th>Last name</th>
-          <th>age</th>
           <th>email</th>
-          <th>send password reset</th>
           <th>edit</th>
           <th>delete</th>
         </tr>
@@ -37,11 +33,7 @@
           <td>{{ user.id }}</td>
           <td>{{ user.surname }}</td>
           <td>{{ user.lastname }}</td>
-          <td>{{ user.age }}</td>
           <td>{{ user.email }}</td>
-          <td>
-            <button class="button">send PW reset</button>
-          </td>
           <td>
             <nuxt-link
               :to="{ path: '/manage/users/edit/' + user.id }"
