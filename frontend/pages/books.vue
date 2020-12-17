@@ -153,4 +153,10 @@ img {
 .level-right {
   justify-content: center;
 }
+.card:hover {
+  transform: scale(1.05);
+}
+.card {
+  transition: 300ms linear;
+}
 </style>
