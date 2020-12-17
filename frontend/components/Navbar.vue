@@ -158,7 +158,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 5rem;
   box-sizing: border-box;
   padding: 1rem 2rem;
   font-size: 1.2rem;
