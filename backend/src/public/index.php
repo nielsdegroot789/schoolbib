@@ -151,8 +151,8 @@ $app->group('/', function () use ($app) {
     $app->post('/saveCheckoutAdmin', \skoolBiep\Controller\UserController::class . ':saveCheckoutAdmin');
     $app->post('/returnCheckouts', \skoolBiep\Controller\UserController::class . ':returnCheckouts');
     $app->post('/saveCheckouts', \skoolBiep\Controller\UserController::class . ':saveCheckouts');
-    $app->get('/getAdminSpecificBooks', \skoolBiep\Controller\UserController::class . ':getAdminSpecificBooks');
-    $app->map(['POST', 'DELETE', 'PUT'], '/handleSpecificBook', \skoolBiep\Controller\UserController::class . ':handleSpecificBook');
+    $app->get('/getAdminSpecificBooks', \skoolBiep\Controller\BookController::class . ':getAdminSpecificBooks');
+    $app->map(['POST', 'DELETE', 'PUT'], '/handleSpecificBook', \skoolBiep\Controller\BookController::class . ':handleSpecificBook');
     $app->get('/getCheckouts', \skoolBiep\Controller\UserController::class . ':getCheckouts');
     $app->get('/getAllUsers', \skoolBiep\Controller\UserController::class . ':getAllUsers');
     $app->get('/getReservations', \skoolBiep\Controller\UserController::class . ':getReservations');

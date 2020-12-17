@@ -56,7 +56,7 @@ export const actions = {
         context.commit('getFrontPageNotification', response.data),
       );
   },
-  saveBook({ state }, context, payload) {
+  saveBook({ state }, payload) {
     this.$axios
       .post('saveBook', payload, {
         headers: { Auth: state.JWT },

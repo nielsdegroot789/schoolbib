@@ -15,6 +15,7 @@
         padding:10px;
         background-color: #3369b2;
         width: fit-content;
+        border-radius:3px;
     }
     .introduction {
         font-size: 17px;
@@ -23,7 +24,7 @@
 
 
 <div class="smallhead">
-    <p class="introduction"><b>Hi {{name}},</b>
+    <p class="introduction"><b>Hi {{name}},</b></p>
     <p>You recently requested to reset your password for your Skoolbieb account.Click the button below to reset it.</p>
 
     <a class="reset-link-button" href='http://localhost:3000/resetPassword?token={{token}}'>Reset your password</a>
