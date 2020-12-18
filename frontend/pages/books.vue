@@ -55,19 +55,20 @@ export default {
       search: '',
       timeoutId: null,
       filterTimeOut: null,
-      metaCountBooks: 500,
-      limit: 20,
     };
   },
   computed: {
+    limit() {
+      return 5;
+    },
     bookMeta() {
       return this.$store.state.bookMeta;
     },
     filters() {
       return { filters: this.$route.query };
     },
-    filteredBookMeta() {
-      return this.$store.state.bookMeta;
+    metaCountBooks() {
+      return this.$store.state.bookMeta.length;
     },
   },
 

@@ -15,7 +15,10 @@
       @loadResults="loadSearchResult"
       @delete="deleteQuery"
     />
-    <div v-if="this.$route.path == '/books'" class="filters__toggle"></div>
+    <div
+      v-if="this.$route.path == '/books?page=1'"
+      class="filters__toggle"
+    ></div>
   </div>
 </template>
 

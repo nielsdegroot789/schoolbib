@@ -93,7 +93,10 @@ export default {
     deleteRes(object) {
       this.$axios
         .delete('deleteReservationUser', {
-          id: object.id,
+          params: {
+            data: { id: object.id },
+          },
+
           headers: {
             Auth: localStorage.getItem('JWT'),
           },

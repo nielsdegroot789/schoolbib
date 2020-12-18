@@ -232,7 +232,7 @@ class UserController
         $contents = json_decode(file_get_contents('php://input'), true);
         $resId = $contents['data'];
         $db->deleteReservationUser($resId);
-        return $response;
+        return $contents;
     }
 
     public function getFavoriteBooks(Request $request, Response $response, array $args) {
@@ -273,8 +273,8 @@ class UserController
         $this->response = $response;
         $db = new DB();
         $contents = json_decode(file_get_contents('php://input'), true);
-        $id = $contents['data'];
-        $db->deleteFavoriteAuthors($id);
+        $resId = $contents['data'];
+        $db->deleteFavoriteAuthors($resId);
         return $response;
     }
 

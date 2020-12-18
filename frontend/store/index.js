@@ -1,5 +1,6 @@
 export const state = () => ({
   bookMeta: [],
+  bookCount: null,
   books: [],
   users: [],
   currentUser: {},
@@ -8,7 +9,7 @@ export const state = () => ({
   notifications: [],
   JWT: null,
   showLoginError: false,
-  limit: 20,
+  limit: 5,
   reservation: [],
   profilePageData: {},
   getUsers: {},
@@ -22,7 +23,7 @@ export const state = () => ({
 export const actions = {
   async getBookMeta({ commit, state }, { filters }) {
     const params = {
-      limit: state.limit,
+      // limit: state.limit,
     };
     if (filters.page) {
       params.offset = (filters.page - 1) * state.limit;
@@ -33,6 +34,8 @@ export const actions = {
     if (filters['filter-authors']) {
       params.authors = filters['filter-authors'];
     }
+    console.log(filters);
+    console.log(params);
     try {
       const books = await this.$axios({
         method: 'GET',
@@ -48,6 +51,10 @@ export const actions = {
     this.$axios
       .get('getBooks')
       .then((response) => context.commit('getBooks', response.data));
+  },
+  getBookCount({ state, commit }) {
+    console.log(state.books.length);
+    commit('getBookCount', state.books.length);
   },
   getFrontPageNotification(context) {
     this.$axios
@@ -151,6 +158,9 @@ export const actions = {
 export const mutations = {
   getBookMeta(state, bookMeta) {
     state.bookMeta = bookMeta;
+  },
+  getBookCount(state, bookCount) {
+    state.bookCount = bookCount;
   },
   getBooks(state, data) {
     state.books = data;

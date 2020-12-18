@@ -19,7 +19,7 @@ class DB extends \SQLite3
         return $this->tableName;
     }
 
-    public function getBookMeta($limitNumber, $offsetNumber, $category, $author, $title)
+    public function getBookMeta($offsetNumber, $category, $author, $title)
     {
         $sql = "
         select bookMeta.id, isbnCode, title, publishDate, rating, totalPages, language, sticker, readingLevel,
@@ -55,12 +55,12 @@ class DB extends \SQLite3
             $sql .= " categories.name like :category order by bookMeta.id";
         }
 
-        $sql .= " limit :limit";
+        // $sql .= " limit :limit";
         $sql .= " offset :offset";
 
         $query = $this->prepare($sql);
 
-        $query->bindValue(':limit', $limitNumber);
+        // $query->bindValue(':limit', $limitNumber);
         $query->bindValue(':offset', $offsetNumber);
         $query->bindValue(':title', $title);
 
@@ -365,8 +365,8 @@ class DB extends \SQLite3
 		WHERE id = :id");
              
              $sql->bindValue(':id', $id);
-             $sql->execute();
-             return $id;
+             $res = $sql->execute();
+             return $res;
     }
     
     public function getFavoriteAuthors($id)
@@ -415,14 +415,14 @@ class DB extends \SQLite3
              return $data;
     }
     
-    public function deleteReservationUser($id)
+    public function deleteReservationUser($resId)
     {
-        $sql =  $this->prepare("DELETE FROM reservations      
-		WHERE id = :id");
+        $sql =  $this->prepare('DELETE FROM reservations      
+		WHERE id = :id');
         
-        $sql->bindValue(':id', $id);
-        $sql->execute();
-        return $id;
+        $sql->bindValue(':id', $$resId);
+        $res = $sql->execute();
+        return $res;
     }
     public function getCheckoutUser($id)
     {
@@ -457,7 +457,7 @@ class DB extends \SQLite3
         return $sql->execute() ? "Success" : "Error";
     }
 
-    public function getReservations($limitNumber, $offsetNumber)
+    public function getReservations()
     {
         $sql = "SELECT usersId,booksId, reservationDateTime, accepted , users.surname as usersName, bookMeta.title as booksName
         FROM reservations
@@ -466,8 +466,6 @@ class DB extends \SQLite3
         WHERE accepted = 0
         GROUP by reservations.id ORDER by reservations.reservationDateTime DESC";
 
-        $sql .= " limit '$limitNumber'";
-        $sql .= " offset '$offsetNumber' * '$limitNumber'";
 
         $res = $this->query($sql);
 
@@ -482,10 +480,11 @@ class DB extends \SQLite3
     public function acceptReservation($usersId, $booksId)
     {
 
-        //TODO prevent SQL INJECTION!!! Not working SQL code in master?
-        $sql = $this->prepare("UPDATE reservations  SET accepted = 1 WHERE booksId = :booksId AND usersId = :usersId");
-        $sql->bindValue(':booksId', $booksId);
-        $sql->bindValue(':usersId', $usersId);
+        $sql = $this->prepare("UPDATE reservations  SET accepted = :acceptBool WHERE booksId = :booksId AND usersId = :usersId");
+        $sql->bindParam(':booksId', $booksId);
+        $sql->bindParam(':usersId', $usersId);
+        $sql->bindParam(':acceptBool', $acceptBool);
+        $acceptBool = 1;
         $res = $sql->execute();
 
         $data = array();
@@ -537,7 +536,7 @@ class DB extends \SQLite3
         WHERE returnDateTime IS NULL
 		ORDER by checkouts.maxAllowedDate DESC";
 
-        $sql .= " limit '$limitNumber'";
+        // $sql .= " limit '$limitNumber'";
         $sql .= " offset '$offsetNumber' * '$limitNumber'";
 
         $res = $this->query($sql);

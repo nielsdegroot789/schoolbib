@@ -102,7 +102,7 @@ export default {
     deleteFavAuth(object) {
       this.$axios
         .delete('deleteFavoriteAuthors', {
-          data: { id: object.id },
+          id: object.id,
           headers: {
             Auth: localStorage.getItem('JWT'),
           },
