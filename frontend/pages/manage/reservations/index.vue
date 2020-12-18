@@ -220,6 +220,7 @@ export default {
         )
         .then((response) => {
           this.loadCheckouts();
+          this.loadReservations();
         });
     },
     saveNewCheckout() {
