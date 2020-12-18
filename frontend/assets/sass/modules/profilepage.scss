@@ -45,11 +45,7 @@
   padding: 20px 5px;
   border: 7px solid rgb(89, 129, 202);
   .information-container {
-    padding-left: 4rem;
-    padding-top: 1rem;
-    width: 90%;
-    height: 90%;
-
+    padding: 1rem 4rem 0 4rem;
     h2 {
       padding: 20px 0;
     }
@@ -64,25 +60,24 @@
       font-weight: bold;
       color: #28528a;
     }
-    .input-style  {
+    .input-style {
       border: #a8a8a8 1px solid;
       border-radius: 3px;
+      width: 100%;
+      max-width: 500px;
     }
-    .formulate-input-label {
-      margin-top: 15%; 
-    }
- 
-    input[type="password"] {
+    input[type='password'] {
       border: #a8a8a8 1px solid;
       border-radius: 3px;
       width: 72%;
       height: 2rem;
     }
-    
+
     .reset-btn--profile {
       margin-left: 1rem;
     }
-    input[type='submit'], .reset-btn--profile {
+    input[type='submit'],
+    .reset-btn--profile {
       border: 1px solid #28528a;
       background-color: #3369b2;
       padding: 1rem 2rem;
@@ -90,16 +85,26 @@
       color: #fff;
       text-transform: uppercase;
       border-radius: 16px;
-      margin-top:10px;
+      margin-top: 10px;
       width: auto;
       cursor: pointer;
       &:hover {
-        background-color:white;
+        background-color: white;
         color: #3369b2;
       }
     }
     .profile-buttons--edit {
       margin-top: 1rem;
+    }
+  }
+
+  @media screen and (max-width: 769px) {
+    .profile-buttons--edit {
+      display: flex;
+      flex-direction: column;
+      .reset-btn--profile {
+        margin-left: 0;
+      }
     }
   }
 }
