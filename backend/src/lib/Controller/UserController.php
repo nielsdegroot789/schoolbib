@@ -235,11 +235,13 @@ class UserController
         return $response->withHeader('Content-Type', 'application/json');
     }
     public function deleteReservationUser(Request $request, Response $response, array $args) {
+
         $this->response = $response;
         $db = new DB();
         $contents = json_decode(file_get_contents('php://input'), true);
-        $resId = $contents['data'];
-        $db->deleteReservationUser($resId);
+        $resId = $contents['userId'];
+        $db->deleteFavoriteBooks($resId);
+        $response->getBody()->write($contents);
         return $response;
     }
 
@@ -259,8 +261,9 @@ class UserController
         $this->response = $response;
         $db = new DB();
         $contents = json_decode(file_get_contents('php://input'), true);
-        $resId = $contents['data'];
+        $resId = $contents['userId'];
         $db->deleteFavoriteBooks($resId);
+        $response->getBody()->write($contents);
         return $response;
     }
 
@@ -281,8 +284,9 @@ class UserController
         $this->response = $response;
         $db = new DB();
         $contents = json_decode(file_get_contents('php://input'), true);
-        $id = $contents['data'];
-        $db->deleteFavoriteAuthors($id);
+        $resId = $contents['userId'];
+        $db->deleteFavoriteAuthors($resId);
+        $response->getBody()->write($contents);
         return $response;
     }
 

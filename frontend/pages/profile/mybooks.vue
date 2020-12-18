@@ -11,7 +11,7 @@
           <td class="itemBlock">
             <div class="FiftyWidth">{{ item.booksName }}</div>
             <div class="FiftyWidth">
-              <p class="checkoutBtn" @click.stop="deleteRes(item)">delete</p>
+              <p class="checkoutBtn" @click.stop="deleteRes(item.id)">delete</p>
             </div>
           </td>
         </tr>
@@ -90,17 +90,18 @@ export default {
         });
     },
 
-    deleteRes(object) {
+    deleteRes(selectedId) {
       this.$axios
         .delete('deleteReservationUser', {
-          id: object.id,
           headers: {
             Auth: localStorage.getItem('JWT'),
           },
+          data: { userId: selectedId },
         })
         .then((response) => {
           this.getReservationUser();
-        });
+        })
+        .catch((err) => console.log(err));
     },
   },
 };

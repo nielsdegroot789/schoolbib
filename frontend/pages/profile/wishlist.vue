@@ -1,7 +1,7 @@
 <template>
   <div class="setup section">
     <header class="level">
-      <h1 class="level-left title">WhishList</h1>
+      <h1 class="level-left title">WishList</h1>
     </header>
     <table class="table table is-bordered is-hoverable is-fullwidth aboveBlock">
       <thead>
@@ -22,7 +22,7 @@
           <td>{{ item.readingLevel }}</td>
           <td>{{ item.rating }}</td>
           <td><img :src="item.sticker" alt="Book cover image" /></td>
-          <button class="deleteButton" @click.stop="deleteFavBooks(item)">
+          <button class="deleteButton" @click.stop="deleteFavBooks(item.id)">
             Delete
           </button>
         </tr>
@@ -39,7 +39,7 @@
         <tr v-for="(item, index) in dataFavAuthor" :key="index">
           <td>
             {{ item.name }}
-            <button class="deleteButton" @click="deleteFavAuth(item)">
+            <button class="deleteButton" @click="deleteFavAuth(item.id)">
               Delete
             </button>
           </td>
@@ -99,29 +99,31 @@ export default {
           this.dataFavAuthor = response.data;
         });
     },
-    deleteFavAuth(object) {
+    deleteFavAuth(selectedId) {
       this.$axios
         .delete('deleteFavoriteAuthors', {
-          data: { id: object.id },
           headers: {
             Auth: localStorage.getItem('JWT'),
           },
+          data: { userId: selectedId },
         })
         .then((response) => {
           this.getFavoriteAuthors();
-        });
+        })
+        .catch((err) => console.log(err));
     },
-    deleteFavBooks(object) {
+    deleteFavBooks(selectedId) {
       this.$axios
         .delete('deleteFavoriteBooks', {
           headers: {
             Auth: localStorage.getItem('JWT'),
           },
-          data: { id: object.id },
+          data: { userId: selectedId },
         })
         .then((response) => {
           this.getFavoriteBooks();
-        });
+        })
+        .catch((err) => console.log(err));
     },
   },
 };

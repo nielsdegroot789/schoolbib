@@ -1,4 +1,6 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+
 use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -15,6 +17,7 @@ use Slim\Exception\NotFoundException;
 
 
 require __DIR__ . '/../vendor/autoload.php';
+
 
 Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
 
@@ -111,9 +114,9 @@ $checkLoggedInMW = function ($request, $handler) {
 };
 
 // $app->add($checkLoggedInMW);
-$app->options('/{routes:.+}', function ($request, $response, $args) {
-    return $response;
-});
+
+
+
 
 // DOES NOT NEED TO BE LOGGED IN
 $app->get('/executeCronJob', \skoolBiep\Util\CronJob::class . ':start');
@@ -139,9 +142,9 @@ $app->group('/', function () use ($app) {
     $app->get('/getFavoriteBooks', \skoolBiep\Controller\UserController::class . ':getFavoriteBooks');
     $app->get('/getCheckoutUser', \skoolBiep\Controller\UserController::class . ':getCheckoutUser');
     $app->get('/getReservationUser', \skoolBiep\Controller\UserController::class . ':getReservationUser');
-    $app->delete('/deleteFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':deleteFavoriteAuthors');
-    $app->delete('/deleteFavoriteBooks', \skoolBiep\Controller\UserController::class . ':deleteFavoriteBooks');
-    $app->delete('/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
+    $app->map(['DELETE','PATCH'],'/deleteFavoriteAuthors', \skoolBiep\Controller\UserController::class . ':deleteFavoriteAuthors');
+    $app->map(['DELETE','PATCH'],'/deleteFavoriteBooks', \skoolBiep\Controller\UserController::class . ':deleteFavoriteBooks');
+    $app->map(['DELETE','PATCH'],'/deleteReservationUser', \skoolBiep\Controller\UserController::class . ':deleteReservationUser');
     $app->get('/getProfilePageData', \skoolBiep\Controller\UserController::class . ':getProfilePageData');
     $app->post('/addToFavoriteBookList', \skoolBiep\Controller\BookController::class . ':addToFavoriteBookList');
     $app->post('/saveProfileData', \skoolBiep\Controller\UserController::class . ':saveProfileData');
@@ -161,11 +164,15 @@ $app->group('/', function () use ($app) {
     $app->post('/saveBook', \skoolBiep\Controller\BookController::class . ':saveBook');
 })->add($checkLoggedInAdminArchMW);
 
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
 
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
+
     return $response
-        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
         ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Auth')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
