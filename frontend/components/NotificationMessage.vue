@@ -1,7 +1,10 @@
 <template>
   <div :class="typeClass" class="notification-message-container">
     <button class="close-button" @click="deleteNotification()">
-      <font-awesome-icon :icon="['fa', 'times']" />
+      <font-awesome-icon
+        class="close-btn--notification"
+        :icon="['fa', 'times']"
+      />
     </button>
     <p class="notification-text">{{ notification.message }}</p>
   </div>
@@ -54,7 +57,7 @@ export default {
 }
 
 .notification-message-container {
-  border-radius: 1em;
+  border-radius: 3px;
   width: 300px;
   height: 70px;
   display: flex;
@@ -62,12 +65,17 @@ export default {
   align-items: center;
 }
 .alert-success {
-  background-color: rgb(50, 205, 50);
+  background-color: rgb(3, 119, 3);
 }
 .alert-fail {
-  background-color: rgb(205, 92, 92);
+  background-color: rgb(126, 15, 15);
 }
 .alert-normal {
   background-color: blue;
+}
+
+.close-btn--notification {
+  margin-bottom: 1rem;
+  margin-left: 1rem;
 }
 </style>

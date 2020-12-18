@@ -107,4 +107,14 @@
       }
     }
   }
+
+  @media screen and (max-width: 700px) {
+    .main-profile-container {
+      display: block;
+      margin-left: 3rem;
+    }
+    .profile-navigation-container {
+      width: 100%;
+    }
+  }
 }

@@ -9,7 +9,12 @@
             <form action="" @submit.prevent="login({ email, password })">
               <div class="field">
                 <label class="label">Email</label>
-                <input v-model="email" type="text" class="input" name="email" />
+                <input
+                  v-model="email"
+                  type="text"
+                  class="input input-fix--login"
+                  name="email"
+                />
               </div>
               <div class="field">
                 <label class="label">Password</label>
@@ -57,19 +62,16 @@
 .hide {
   display: none;
 }
+.input-fix--login {
+  background-color: white !important;
+  height: 2.25rem !important;
+  border-radius: 3px;
+}
 </style>
 
 <script>
 import emailModal from '../components/sendEmailModal';
 export default {
-  /* middleware({ store, redirect }) {
-    // If the user is not authenticated
-    if (store.state.JWT) {
-      return redirect('/');
-    }
-  },
-  */
-  // middleware: 'auth',
   components: {
     emailModal,
   },

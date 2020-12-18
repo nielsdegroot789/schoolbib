@@ -10,7 +10,6 @@
   box-sizing: border-box;
 }
 
-
 .wrapper {
   background-image: url('../pictures/image.jpg');
   height: 350px;
@@ -61,11 +60,26 @@ input[type='text'] {
 }
 
 .footer {
-  background-color:rgb(46, 70, 114);
+  background-color: rgb(46, 70, 114);
   color: white;
   width: 100%;
   display: flex;
   justify-content: space-around;
+}
+
+@media screen and (max-width: 734px) {
+  .footer {
+    flex-flow: row wrap;
+  }
+}
+
+@media screen and (max-width: 677px) {
+  .privacy-policy--footer {
+    margin-top: 1rem;
+  }
+  .footer {
+    padding: 3rem 1rem 6rem;
+  }
 }
 
 .frontpageNotif {
@@ -138,7 +152,7 @@ input[type='text'] {
   height: fit-content;
 
   .carousel-book {
-    background-color:$base-color;
+    background-color: $base-color;
     width: 120px;
     height: 140px;
     border: black solid 1px;

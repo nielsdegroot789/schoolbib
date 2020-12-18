@@ -5,11 +5,11 @@
         <h1 class="subtitle">Contact information</h1>
         <p v-html="contactInformation"></p>
       </div>
-      <div>
+      <div class="opening-hours--footer">
         <h1 class="subtitle">Opening hours</h1>
         <p v-html="openingHours"></p>
       </div>
-      <div>
+      <div class="privacy-policy--footer">
         <button class="button" @click="setModalVisibility(true)">
           View our privacy policy
         </button>
